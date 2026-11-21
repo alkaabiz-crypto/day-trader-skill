@@ -43,3 +43,23 @@ AM, stop $358.32, target $370.04, the same numbers as the README's example.
 
 Not financial advice. A simulated profit is not a promise of a real one, and
 most people who day trade lose money.
+
+## Momentum forward test
+
+`paper/momentum.py` is a second, slower test: one decision a month instead of
+day trading. It holds the 10 stocks of a frozen 100-stock list
+(`paper/forward/universe.json`, the most traded on 2026-11-20) with the best
+return from 12 months ago to 1 month ago, equal weight, rebalanced at the
+close of each month's first trading day, with 0.05 % costs. A simulated
+$5,000 in SPY bought the same day is the benchmark.
+
+```bash
+python3 paper/momentum.py backtest   # the same rule on 10 years of history
+python3 paper/momentum.py daily      # mark to market; rebalances when a new month begins
+python3 paper/momentum.py status     # holdings and the score against SPY
+```
+
+The ledger, `paper/forward/momentum.json`, is committed so the test survives
+a wiped machine. The backtest uses today's most traded stocks, the last
+decade's winners, so it flatters the rule; only the forward record is free of
+that bias, and it needs many months before it means anything.

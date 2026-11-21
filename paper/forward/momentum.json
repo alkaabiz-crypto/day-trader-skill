@@ -1,0 +1,106 @@
+{
+  "simulated": true,
+  "rule": "top 10 by 12-1 month return, monthly, 0.05% costs",
+  "started": "2026-11-20",
+  "starting_cash": 5000.0,
+  "cash": -0.0,
+  "holdings": {
+    "MRNA": {
+      "shares": 2.562821,
+      "last_price": 195.0
+    },
+    "DELL": {
+      "shares": 1.797533,
+      "last_price": 278.0199890136719
+    },
+    "MU": {
+      "shares": 0.840608,
+      "last_price": 594.510009765625
+    },
+    "LITE": {
+      "shares": 1.085139,
+      "last_price": 460.5400085449219
+    },
+    "MRVL": {
+      "shares": 4.086933,
+      "last_price": 122.27999877929688
+    },
+    "OKTA": {
+      "shares": 2.610206,
+      "last_price": 191.4600067138672
+    },
+    "STX": {
+      "shares": 1.093521,
+      "last_price": 457.010009765625
+    },
+    "INTC": {
+      "shares": 9.745517,
+      "last_price": 51.279998779296875
+    },
+    "WDC": {
+      "shares": 1.913945,
+      "last_price": 261.1099853515625
+    },
+    "AMD": {
+      "shares": 1.177573,
+      "last_price": 424.3900146484375
+    }
+  },
+  "benchmark": {
+    "symbol": "SPY",
+    "shares": 7.248373,
+    "price": 689.8099975585938
+  },
+  "rebalances": [
+    {
+      "date": "2026-11-20",
+      "picks": [
+        "MRNA",
+        "DELL",
+        "MU",
+        "LITE",
+        "MRVL",
+        "OKTA",
+        "STX",
+        "INTC",
+        "WDC",
+        "AMD"
+      ],
+      "sold": [],
+      "bought": [
+        "AMD",
+        "DELL",
+        "INTC",
+        "LITE",
+        "MRNA",
+        "MRVL",
+        "MU",
+        "OKTA",
+        "STX",
+        "WDC"
+      ],
+      "value_before": 5000.0,
+      "costs": 2.5,
+      "scores": {
+        "MRNA": 738.0,
+        "DELL": 283.4,
+        "MU": 279.5,
+        "LITE": 179.8,
+        "MRVL": 175.3,
+        "OKTA": 151.4,
+        "STX": 149.3,
+        "INTC": 143.5,
+        "WDC": 130.5,
+        "AMD": 127.2
+      }
+    }
+  ],
+  "marks": [
+    {
+      "date": "2026-11-20",
+      "value": 4997.5,
+      "spy_value": 5000.0
+    }
+  ],
+  "last_rebalance": "2026-11-20"
+}
