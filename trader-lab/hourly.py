@@ -202,6 +202,72 @@ def h_gapfh(S, k, ctx, p):
     return at_close(side, B[1]["o"], B[6]["c"])
 
 
+def daily_bars(S, k, n):
+    """The n sessions before k as daily OHLC dicts (from the hourly bars)."""
+    out = []
+    for j in range(max(0, k - n), k):
+        B = S[j][1]
+        out.append({"o": B[0]["o"], "h": max(b["h"] for b in B), "l": min(b["l"] for b in B), "c": B[-1]["c"]})
+    return out
+
+
+def run_stop_entry(B, side, e, sl, worst):
+    """Stop entry at e, stop-loss sl, out at the close, on hourly bars. Inside the entry bar the order is
+    unknown: worst=True counts a touch of sl in that bar as stopped, worst=False ignores it."""
+    for j in range(len(B)):
+        b = B[j]
+        if (side > 0 and b["h"] >= e) or (side < 0 and b["l"] <= e):
+            px = max(e, b["o"]) if side > 0 else min(e, b["o"])
+            if sl is not None:
+                hit = b["l"] <= sl if side > 0 else b["h"] >= sl
+                if hit and (worst or px == b["o"]):
+                    return [(side, px, sl)]
+                for m in range(j + 1, len(B)):
+                    if (side > 0 and B[m]["l"] <= sl) or (side < 0 and B[m]["h"] >= sl):
+                        return [(side, px, min(sl, B[m]["o"]) if side > 0 else max(sl, B[m]["o"]))]
+            return [(side, px, B[-1]["c"])]
+    return []
+
+
+def h_gsv(S, k, ctx, p):
+    """Larry Williams greatest swing value, on hourly bars (daily levels, hourly execution)."""
+    Dl = daily_bars(S, k, 30)
+    sw = [d["h"] - d["o"] for i, d in enumerate(Dl[1:], 1) if d["c"] < Dl[i - 1]["c"]][-4:]
+    if len(sw) < 4:
+        return []
+    g = sum(sw) / 4.0
+    B = S[k][1]
+    e = B[0]["o"] + p["m"] * g
+    return run_stop_entry(B, 1, e, e - 1.5 * g if p["sl"] else None, p["worst"])
+
+
+def h_stretch(S, k, ctx, p):
+    """Crabel stretch on hourly bars: stop entry at open + m x 10-day mean of min(H-O, O-L)."""
+    Dl = daily_bars(S, k, 10)
+    if len(Dl) < 10:
+        return []
+    st = p["m"] * sum(min(d["h"] - d["o"], d["o"] - d["l"]) for d in Dl) / 10.0
+    if st <= 0:
+        return []
+    B = S[k][1]
+    o = B[0]["o"]
+    return run_stop_entry(B, 1, o + st, (o - st) if p["sl"] else None, p["worst"])
+
+
+def h_8020(S, k, ctx, p):
+    """Raschke 80-20 on hourly bars: yesterday opened in its top 20% and closed in its bottom 20%,
+    today opens below yesterday's low: buy stop at yesterday's low, stop at today's low so far (the open)."""
+    y = daily_bars(S, k, 1)
+    if not y:
+        return []
+    y = y[0]
+    r = y["h"] - y["l"]
+    B = S[k][1]
+    if r <= 0 or not ((y["o"] - y["l"]) / r >= 0.8 and (y["c"] - y["l"]) / r <= 0.2 and B[0]["o"] < y["l"]):
+        return []
+    return run_stop_entry(B, 1, y["l"], (B[0]["o"] - 0.001 * B[0]["o"]) if p["sl"] else None, p["worst"])
+
+
 def grid(d):
     return daily.grid(d)
 
@@ -217,6 +283,12 @@ RULES = {
               "grid": {"dir": ["both", "candle"], "stop": ["range", "mid"]}},
     "hour": {"fn": h_hour, "source": "time-of-day seasonality control", "grid": {"slot": list(range(BARS))}},
     "lunch": {"fn": h_lunch, "source": "Quantpedia lunch effect", "grid": {"x": [1]}},
+    "gsv": {"fn": h_gsv, "source": "Larry Williams greatest swing value (daily levels, hourly fills)",
+            "grid": {"m": [1.0, 1.8], "sl": [True, False], "worst": [True, False]}},
+    "stretch": {"fn": h_stretch, "source": "Crabel stretch (daily levels, hourly fills)",
+                "grid": {"m": [1.0, 2.0], "sl": [True, False], "worst": [True, False]}},
+    "8020": {"fn": h_8020, "source": "Raschke 80-20 (daily levels, hourly fills)",
+             "grid": {"sl": [True, False], "worst": [True, False]}},
     "gapfh": {"fn": h_gapfh, "source": "gap + first hour: fill or extend",
               "grid": {"min": [0.5, 1.0], "mode": ["fill", "extend"]}},
 }

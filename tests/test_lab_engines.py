@@ -111,6 +111,35 @@ class SwingState(unittest.TestCase):
         daily.VIX.clear()
 
 
+class AuditFixes(unittest.TestCase):
+    def test_wilder_rsi(self):
+        out = daily.wilder_series([1, 2, 3, 2], 2)
+        self.assertEqual(out[2], 100.0)
+        self.assertAlmostEqual(out[3], 50.0)
+        self.assertAlmostEqual(daily.rsi([1, 2, 3, 2], 4, 2), 50.0)   # known before day 4
+
+    def test_daily_stop_with_stop_loss_is_worst_case(self):
+        # an up day that touched both the stop-loss and the entry: counted as stopped (daily bars
+        # cannot order them; the low-first guess invented a fake edge)
+        D = series([(100, 101, 99, 100), (100, 103, 97, 102)])
+        sig = {"side": 1, "hold": "stop", "entry": 101, "sl": 98}
+        self.assertEqual(daily.fill(D, 1, sig), (101, 98))
+
+    def test_close_fills_and_daily_stop_losses_cannot_pass(self):
+        mk = lambda rule, hold, params: {"rule": rule, "hold": hold, "params": params}
+        self.assertTrue(daily.unrealistic(mk("s_r3", "mc", {"exit": "rsi"})))              # default = close
+        self.assertTrue(daily.unrealistic(mk("s_r3", "mc", {"exit": "rsi", "fill": "close"})))
+        self.assertFalse(daily.unrealistic(mk("s_r3", "mc", {"exit": "rsi", "fill": "open"})))
+        self.assertTrue(daily.unrealistic(mk("ibs", "cc", {"x": 0.2, "side": 1, "hold": "cc"})))
+        self.assertTrue(daily.unrealistic(mk("gsv", "stop", {"m": 1.0})))
+        self.assertFalse(daily.unrealistic(mk("wvb", "stop", {"k": 0.3, "side": 1})))
+
+    def test_placebo_needed_for_long_exposure_only(self):
+        self.assertTrue(daily.needs_placebo({"hold": "mc", "params": {}}))
+        self.assertTrue(daily.needs_placebo({"hold": "cc", "params": {"side": 1}}))
+        self.assertFalse(daily.needs_placebo({"hold": "oc", "params": {}}))
+
+
 class Statistics(unittest.TestCase):
     def test_norm_ppf_round_trip(self):
         for p in (0.01, 0.2, 0.5, 0.9, 0.999):

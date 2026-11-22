@@ -51,9 +51,14 @@ python3 "${CLAUDE_SKILL_DIR}/hourly.py" fetch                   # 60-minute bars
 python3 "${CLAUDE_SKILL_DIR}/hourly.py" backtest --write        # time-of-day rules on ~700 sessions
 ```
 
+`audit.py` re-implements the passing rules from scratch and runs the checks that caught real
+errors on 2026-11-22: random-entry placebos, ETFs only (survivorship), costs, a one-day signal
+delay, and Wilder vs simple RSI. Run it before trusting any "PASS".
+
 `daily.py` splits the dates IS to 2014, OOS 2015 to 2021 and HOLDOUT 2022 onward, and
-passes a rule only with IS t >= 2, positive OOS and HOLDOUT, and t >= 3 on everything after
-IS (Harvey, Liu & Zhu 2016). It also reports the deflated Sharpe ratio (Bailey & Lopez de
+passes a rule only with IS t >= 2, positive OOS and HOLDOUT, t >= 3 on everything after
+IS (Harvey, Liu & Zhu 2016), a realistic fill (no entry at a close nobody knows in advance), and,
+for rules long across a close, beating random-entry placebos (Bonferroni across rules). It also reports the deflated Sharpe ratio (Bailey & Lopez de
 Prado 2014). Multi-day rules can fill at the signal close or the next open; prefer the
 next-open result, since nobody knows the close in advance.
 

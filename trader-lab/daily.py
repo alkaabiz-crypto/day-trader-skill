@@ -141,20 +141,37 @@ def sma(c, i, n):
     return sum(c[i - n:i]) / float(n)
 
 
+_RSI_CACHE = {}
+
+
+def wilder_series(c, n):
+    """Wilder's RSI (as Connors uses): seed with simple averages of the first n changes, then smooth
+    with alpha = 1/n. out[i] uses closes up to and including i."""
+    out = [None] * len(c)
+    if len(c) <= n:
+        return out
+    ag = sum(max(c[i] - c[i - 1], 0) for i in range(1, n + 1)) / float(n)
+    al = sum(max(c[i - 1] - c[i], 0) for i in range(1, n + 1)) / float(n)
+    for i in range(n, len(c)):
+        if i > n:
+            ch = c[i] - c[i - 1]
+            ag = (ag * (n - 1) + max(ch, 0)) / n
+            al = (al * (n - 1) + max(-ch, 0)) / n
+        out[i] = 100.0 if al == 0 else 100.0 - 100.0 / (1 + ag / al)
+    return out
+
+
 def rsi(c, i, n):
-    """Wilder-style RSI over the n closes up to i-1, simple average version (Connors uses this for RSI(2))."""
-    if i < n + 1:
+    """Wilder RSI(n) of the closes up to i-1 (known before day i). Cached per series."""
+    if i < n + 1 or i > len(c):
         return None
-    up = dn = 0.0
-    for j in range(i - n, i):
-        ch = c[j] - c[j - 1]
-        if ch > 0:
-            up += ch
-        else:
-            dn -= ch
-    if up + dn == 0:
-        return 50.0
-    return 100.0 * up / (up + dn)
+    key = (id(c), n, len(c))
+    ser = _RSI_CACHE.get(key)
+    if ser is None:
+        if len(_RSI_CACHE) > 400:
+            _RSI_CACHE.clear()
+        ser = _RSI_CACHE[key] = wilder_series(c, n)
+    return ser[i - 1]
 
 
 def ibs(D, j):
@@ -560,6 +577,7 @@ def run_swing(D, entry, p, cost_bps):
     (or after max_days). -> ({date: bps}, trades). Cost is charged on the exit day."""
     out = {}
     n_tr = 0
+    trades = []
     ex = EXITS[p["exit"]]
     maxd = p.get("max_days", 10)
     c = D["c"]
@@ -571,14 +589,17 @@ def run_swing(D, entry, p, cost_bps):
             continue
         n_tr += 1
         k = j + 1
+        px = D["o"][j + 1] if p.get("fill") == "open" else c[j]
         while k < N:
-            base = D["o"][k] if (k == j + 1 and p.get("fill") == "open") else c[k - 1]
+            base = px if k == j + 1 else c[k - 1]
             out[D["d"][k]] = (c[k] / base - 1) * 1e4
             if ex(D, k, p, j) or k - j >= maxd:
                 out[D["d"][k]] -= cost_bps
                 break
             k += 1
+        trades.append((j, min(k, N - 1), (c[min(k, N - 1)] / px - 1) * 1e4 - cost_bps))
         j = k
+    run_swing.last_trades = trades
     return out, n_tr
 
 
@@ -716,16 +737,16 @@ SWING = {
     "s_crsi2": {"fn": sw_crsi2, "source": "Connors & Alvarez 2009: cumulative RSI(2)",
                 "grid": {"x": [35, 50], "exit": ["rsi"], "out": [65], "fill": ["close", "open"]}},
     "s_r3": {"fn": sw_r3, "source": "Connors 2009, High Probability ETF Trading: R3",
-             "grid": {"exit": ["rsi"]}},
-    "s_mdd": {"fn": sw_mdd, "source": "Connors 2009: multiple days down", "grid": {"exit": ["sma5"]}},
-    "s_3hl": {"fn": sw_3hl, "source": "Connors & Alvarez: 3-day high/low", "grid": {"exit": ["sma5"]}},
+             "grid": {"fill": ["close", "open"], "exit": ["rsi"]}},
+    "s_mdd": {"fn": sw_mdd, "source": "Connors 2009: multiple days down", "grid": {"fill": ["close", "open"], "exit": ["sma5"]}},
+    "s_3hl": {"fn": sw_3hl, "source": "Connors & Alvarez: 3-day high/low", "grid": {"fill": ["close", "open"], "exit": ["sma5"]}},
     "s_d7": {"fn": sw_d7, "source": "Connors & Alvarez: Double 7s", "grid": {"exit": ["high7"], "max_days": [30], "fill": ["close", "open"]}},
     "s_bb": {"fn": sw_bb, "source": "Bollinger lower-band reversion",
-             "grid": {"k": [1.5, 2.0], "trend": [True, False], "exit": ["mid", "up"]}},
+             "grid": {"fill": ["close", "open"], "k": [1.5, 2.0], "trend": [True, False], "exit": ["mid", "up"]}},
     "s_ibs": {"fn": sw_ibs, "source": "IBS < x, exit on the first up close",
               "grid": {"x": [0.1, 0.2], "exit": ["up"], "fill": ["close", "open"]}},
     "s_donch": {"fn": sw_donchian, "source": "Donchian breakout (trend following)",
-                "grid": {"n": [20, 55], "exit": ["donch"], "x": [10, 20], "max_days": [60]}},
+                "grid": {"fill": ["close", "open"], "n": [20, 55], "exit": ["donch"], "x": [10, 20], "max_days": [60]}},
 }
 
 
@@ -749,10 +770,12 @@ def fill(D, i, sig):
                 return None
             px = min(e, o)
         sl = sig.get("sl")
-        if sl is not None:
-            # daily bars hide the order of the high and the low: count a day that touched both as stopped
-            if (s > 0 and l <= sl) or (s < 0 and h >= sl):
-                return px, sl
+        if sl is not None and (l <= sl if s > 0 else h >= sl):
+            # Daily bars hide whether the low came before or after the entry. Counted as stopped
+            # (worst case). The "fair path" guess (up days go low first) was tried on 2026-11-22 and
+            # invented a large fake edge, so rules with a stop-loss are NOT judged on daily bars:
+            # see INTRADAY_ONLY and hourly.py.
+            return px, sl
         return px, c
     if hold == "target":
         t = sig["target"]
@@ -764,6 +787,24 @@ def fill(D, i, sig):
     if hold == "co":  # bought at the close of i-1, out at the open of i
         return D["c"][i - 1], o
     raise LabError("unknown hold %s" % hold)
+
+
+def stopped_after_entry(s, o, h, l, c, px, sl):
+    """Daily bars hide whether the high or the low came first. Standard path assumption: an up day
+    (close >= open) went open -> low -> high -> close, a down day open -> high -> low -> close.
+    A stop counts only if price reached it AFTER the entry on that path."""
+    up_day = c >= o
+    if s > 0:
+        if px == o:                      # filled at the open: everything after counts
+            return l <= sl
+        if up_day:                       # O -> L -> H -> C: entry on the way up, then only the close leg
+            return c <= sl
+        return l <= sl                   # O -> H (entry) -> L -> C
+    if px == o:
+        return h >= sl
+    if not up_day:                       # O -> H -> L (entry on the way down) -> C
+        return c >= sl
+    return h >= sl                       # O -> L (entry) -> H -> C
 
 
 def run_rule(D, fn, p, cost_bps):
@@ -887,7 +928,10 @@ def backtest(universe, cost_bps=COST_BPS, only=None):
             continue
         for p in grid(spec["grid"]):
             if swing:
-                runs = {s: run_swing(D, spec["fn"], p, cost_bps) for s, D in universe.items()}
+                runs, tlist = {}, {}
+                for s_, D in universe.items():
+                    runs[s_] = run_swing(D, spec["fn"], p, cost_bps)
+                    tlist[s_] = run_swing.last_trades
                 per_sym = {s: r[0] for s, r in runs.items()}
                 n_tr = sum(r[1] for r in runs.values())
                 hold = "mc"
@@ -898,9 +942,15 @@ def backtest(universe, cost_bps=COST_BPS, only=None):
                              {"ontrend": "co", "eom": "cc"}.get(name, "oc"))
             series = portfolio(per_sym, all_dates)
             days = [r for t in per_sym.values() for r in t.values()]
+            if swing:
+                tr_ret = [t[2] for ts in tlist.values() for t in ts]
+            else:
+                tr_ret = days
             row = {"rule": name, "params": p, "source": spec["source"], "hold": hold,
-                   "trades": n_tr, "win": (sum(1 for r in days if r > 0) / len(days)) if days else 0,
-                   "avg_trade_bps": (sum(days) / n_tr) if n_tr else 0.0}
+                   "trades": n_tr, "win": (sum(1 for r in tr_ret if r > 0) / len(tr_ret)) if tr_ret else 0,
+                   "avg_trade_bps": (sum(days) / n_tr) if n_tr else 0.0,
+                   "_trades": ({s_: [(t[0], t[1]) for t in ts] for s_, ts in tlist.items()} if swing else None),
+                   "_counts": {s_: len(t) for s_, t in per_sym.items()}}
             for part in ("is", "oos", "ho"):
                 row[part] = stats([r for d, r in series if period_of(d) == part])
             row["_post"] = [r for d, r in series if period_of(d) != "is"]
@@ -911,30 +961,114 @@ def backtest(universe, cost_bps=COST_BPS, only=None):
     var = robust_var(srs)
     for r in variants:
         r["dsr"] = deflated_sharpe(r.pop("_post"), len(variants), var)
+    chosen = choose(variants, universe, all_dates, cost_bps)
+    for r in variants:
+        r.pop("_trades", None)
+        r.pop("_counts", None)
     return {"periods": {"is_end": IS_END, "oos_end": OOS_END}, "cost_bps": cost_bps,
             "n_variants": len(variants), "symbols": sorted(universe), "variants": variants,
-            "chosen": choose(variants)}
+            "chosen": chosen}
 
 
-def choose(variants):
-    """Per rule and kind (day trade or overnight swing): the variant with the best IS Sharpe.
-    It passes only if IS t >= 2, OOS mean > 0, HOLDOUT mean > 0 and t >= 3 on OOS + HOLDOUT."""
+# signal-based rules that enter AT the close of the signal day: nobody knows that close in advance
+CLOSE_SIGNAL_RULES = ("ibs", "rsi2", "down", "lowx", "tuesday", "ontrend")
+PLACEBO_REPS = 100
+PLACEBO_P = 0.05
+
+
+# stop-entry rules with a stop-loss inside the day: daily bars cannot order the high and the low,
+# so these are reported but can only pass on intraday data (hourly.py)
+INTRADAY_ONLY = ("gsv", "stretch", "8020", "soup", "smash", "nr")
+
+
+def unrealistic(r):
+    if r["hold"] == "mc" and r["params"].get("fill", "close") == "close":
+        return True   # multi-day rules default to entering at the signal close
+    if r["rule"] in INTRADAY_ONLY and r["params"].get("sl", True) and r["rule"] != "nr":
+        return True
+    if r["rule"] in ("nr", "smash", "8020") and r["params"].get("sl"):
+        return True
+    return r["rule"] in CLOSE_SIGNAL_RULES and r["hold"] in ("cc", "co")
+
+
+def needs_placebo(r):
+    """Rules that are long the market across a close carry its drift; zero is the wrong benchmark."""
+    if r["hold"] == "mc":
+        return True
+    return r["hold"] in ("cc", "co") and r["params"].get("side", 1) > 0
+
+
+def placebo_t(r, universe, all_dates, cost_bps, reps=PLACEBO_REPS, seed=11):
+    """Post-IS t-stats of random-entry copies of the rule: per symbol the same number of trades and,
+    for multi-day rules, the same holding lengths and fill, at random days."""
+    import random
+    rnd = random.Random(seed)
+    out = []
+    fill_open = r["params"].get("fill") == "open"
+    for _ in range(reps):
+        per = {}
+        for sym, D in universe.items():
+            c, o, d = D["c"], D["o"], D["d"]
+            n = len(c)
+            res = {}
+            if r["hold"] == "mc":
+                for j, k in r["_trades"].get(sym, []):
+                    L = max(1, k - j)
+                    if n - L - 2 <= 201:
+                        continue
+                    j2 = rnd.randrange(201, n - L - 1)
+                    px = o[j2 + 1] if fill_open else c[j2]
+                    for t in range(j2 + 1, j2 + L + 1):
+                        base = px if t == j2 + 1 else c[t - 1]
+                        res[d[t]] = res.get(d[t], 0.0) + (c[t] / base - 1) * 1e4 - (cost_bps if t == j2 + L else 0)
+            else:
+                for _k in range(r["_counts"].get(sym, 0)):
+                    i = rnd.randrange(201, n)
+                    e, x = (c[i - 1], c[i]) if r["hold"] == "cc" else (c[i - 1], o[i])
+                    res[d[i]] = (x / e - 1) * 1e4 - cost_bps
+            per[sym] = res
+        ser = [v for dd, v in portfolio(per, all_dates) if period_of(dd) != "is"]
+        out.append(stats(ser)["t"])
+    return out
+
+
+def choose(variants, universe=None, all_dates=None, cost_bps=COST_BPS):
+    """Per rule and kind (day trade or swing): the REALISTIC variant (no entry at a close nobody knows
+    in advance) with the best IS Sharpe. It passes only if IS t >= 2, OOS and HOLDOUT means > 0,
+    t >= 3 after IS, and, for rules that hold across a close long, its post-IS t beats 95% of
+    random-entry placebos with the same trade count and holding times."""
     best = {}
     for r in variants:
+        if unrealistic(r):
+            continue
         key = (r["rule"], "day" if r["hold"] in ("oc", "stop") else ("multi" if r["hold"] == "mc" else "swing"))
         if key not in best or r["is"]["sharpe"] > best[key]["is"]["sharpe"]:
             best[key] = r
     out = []
+    # the placebo test is run on every rule that clears the other gates; Bonferroni across them
+    cands = [r for r in best.values() if needs_placebo(r) and r["is"]["t"] >= MIN_IS_T
+             and r["oos"]["mean"] > 0 and r["ho"]["mean"] > 0 and r["post"]["t"] >= POST_T]
+    alpha = PLACEBO_P / max(1, len(cands))
+    reps = max(PLACEBO_REPS, int(math.ceil(5.0 / alpha)))
     for (rule, kind), r in best.items():
         ok = (r["is"]["t"] >= MIN_IS_T and r["oos"]["mean"] > 0 and r["ho"]["mean"] > 0
               and r["post"]["t"] >= POST_T)
+        pl_p = pl_med = None
+        if universe is not None and needs_placebo(r) and r["post"]["t"] >= 1.5:
+            ts = placebo_t(r, universe, all_dates, cost_bps, reps=reps if ok else PLACEBO_REPS)
+            pl_p = sum(1 for t in ts if t >= r["post"]["t"]) / float(len(ts))
+            pl_med = sorted(ts)[len(ts) // 2]
+            ok = ok and pl_p < alpha
+        elif needs_placebo(r):
+            ok = False
         out.append({"rule": rule, "kind": kind, "params": r["params"], "hold": r["hold"],
                     "trades": r["trades"], "win": r["win"], "avg_trade_bps": r["avg_trade_bps"],
                     "is_t": r["is"]["t"], "is_sharpe": r["is"]["sharpe"],
                     "oos_sharpe": r["oos"]["sharpe"], "oos_mean": r["oos"]["mean"], "oos_t": r["oos"]["t"],
                     "ho_sharpe": r["ho"]["sharpe"], "ho_mean": r["ho"]["mean"], "ho_t": r["ho"]["t"],
                     "post_t": r["post"]["t"], "post_sharpe": r["post"]["sharpe"],
-                    "dsr": r["dsr"], "pass": ok, "source": r["source"]})
+                    "dsr": r["dsr"], "placebo_p": pl_p, "placebo_median_t": pl_med,
+                    "pass": ok, "source": r["source"]})
     return sorted(out, key=lambda c: (not c["pass"], -c["post_t"]))
 
 
@@ -974,18 +1108,21 @@ def report(res):
         "Chosen variant per rule (best IS Sharpe), and whether it passed every gate:", "",
         "%-7s %-5s %-34s %7s %5s %6s | %5s | %6s %6s | %6s %6s | %6s %5s" % (
             "rule", "kind", "params", "trades", "win", "avg bp", "IS t", "OOS Sh", "OOS t", "HO Sh", "HO t",
-            "post t", "DSR"),
+            "post t", "plac p"),
         "-" * 118]
     for c in res["chosen"]:
         p = ",".join("%s=%s" % kv for kv in sorted(c["params"].items()))
         L.append("%-7s %-5s %-34s %7d %4.0f%% %6.1f | %5.2f | %6.2f %6.2f | %6.2f %6.2f | %6.2f %5.3f %s" % (
             c["rule"], c["kind"], p[:34], c["trades"], c["win"] * 100, c["avg_trade_bps"], c["is_t"],
-            c["oos_sharpe"], c["oos_t"], c["ho_sharpe"], c["ho_t"], c["post_t"], c["dsr"],
+            c["oos_sharpe"], c["oos_t"], c["ho_sharpe"], c["ho_t"], c["post_t"],
+            c["placebo_p"] if c.get("placebo_p") is not None else float("nan"),
             "PASS" if c["pass"] else ""))
-    L += ["", "PASS = IS t >= %.1f, OOS and HOLDOUT both positive, and t >= %.1f on all data after %s"
+    L += ["", "PASS = IS t >= %.1f, OOS and HOLDOUT both positive, t >= %.1f on all data after %s"
           % (MIN_IS_T, POST_T, IS_END),
-          "(Harvey, Liu & Zhu 2016). DSR = deflated Sharpe (Bailey & Lopez de Prado 2014) charged for all",
-          "%d variants; 0.95+ would be strong. Research, not financial advice." % res["n_variants"]]
+          "(Harvey, Liu & Zhu 2016), and for rules long across a close, beating random-entry placebos at",
+          "p < %.2f / (number of rules placebo-tested) (nan = not needed or not run). Only realistic fills:" % PLACEBO_P,
+          "entering at a close you could not know in advance is shown nowhere here. %d variants." % res["n_variants"],
+          "Research, not financial advice."]
     return "\n".join(L)
 
 

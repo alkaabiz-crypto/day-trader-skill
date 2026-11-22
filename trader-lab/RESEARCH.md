@@ -28,6 +28,9 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Idea queue (top first)
 
+0. **Survivorship-free test of R3**: add stocks that fell hard or were delisted (e.g. from an
+   S&P 500 membership history), or test on many more ETFs and country funds. Until then R3 is
+   unproven.
 1. **Portfolio of the passers**: combine RSI(2), cumulative RSI(2) and Double 7s with next-open fills, check overlap, drawdown and exposure against buy-and-hold; size by volatility.
 2. **VIX regime filter** on the passers and on the 5-minute momentum rules (Quantpedia; Zarattini et al.: better when VIX > 20). Needs ^VIX daily from Yahoo.
 3. **Pre-registered forward test**: freeze today's passing rules and parameters; judge them only on sessions after 2026-11-22.
@@ -37,6 +40,51 @@ result after costs, and whether it was kept. Failures stay in the record.
 7. **Earnings-day drift and the earnings announcement premium** for single stocks (needs an earnings calendar from trader-analyst).
 
 ## Log
+
+### 2026-11-22 (fourth run): AUDIT. The earlier "passed" results were wrong
+
+Asked to quadruple-check everything, I audited the daily engine with `audit.py`, an
+independent re-implementation, and found real problems. **The conclusions of the third run
+are withdrawn**; the table below replaces them.
+
+What was wrong, and what was fixed:
+
+1. **Wrong benchmark (the big one).** Long-only rules were tested against zero. In a rising
+   market any long exposure beats zero. The right benchmark is random entries with the same
+   number of trades and the same holding times. Double 7s: real post-2014 t 3.11, placebo
+   median 3.09 (49% of random copies did as well). RSI(2), IBS, cumulative RSI(2), 3-day
+   high/low, multiple days down: all indistinguishable from random entry. Fix: a placebo gate
+   (Bonferroni across the rules tested) for every rule that is long across a close.
+2. **Wrong RSI.** Connors uses Wilder's RSI; the engine used a simple-average (Cutler) RSI,
+   which fires about 2.5x as often. Fixed to Wilder.
+3. **Unknowable fills.** Rules that buy AT the signal close passed. Nobody knows the close in
+   advance. Multi-day rules also defaulted to the close fill silently. Fix: only next-open
+   fills (or calendar rules) can pass.
+4. **Stop-loss inside a daily bar.** Daily bars cannot say whether the low came before or after
+   a stop entry. The worst-case rule condemned these rules; the "fair path" guess I tried next
+   (up days go low first) invented a huge fake edge (GSV post t +9.6 vs -6.5 with no stop).
+   Fix: stop-loss rules are not judged on daily bars. On hourly bars (2023-2026), Williams'
+   GSV, Crabel's stretch and Raschke's 80-20 all lose even in the best case.
+5. **Undocumented 10-day time stop** on multi-day rules (default `max_days`). Harmless but
+   now stated; the pure Connors R3 exit gives t 3.58 instead of 4.02.
+6. **Win rate** for multi-day rules was per day held, not per trade. Fixed.
+
+What the audit confirmed: the data is clean (every big jump is a real event, no duplicate or
+unsorted dates, one 6-day gap = 9/11), and the engine matches the independent code exactly
+(Double 7s: 9,528 trades, t 3.089 in both; RSI(2): 19,955 trades, t 2.979 in both).
+
+**Result after the fixes:** exactly one rule clears every gate, Connors' **R3** (RSI(2) down
+3 days from below 60 to under 10, above the 200-day; out when RSI(2) > 70; next-open fill):
+3,382 trades, IS t 4.24, OOS t 3.07, holdout t 2.60, post t 4.02, placebo p 0.007 over 1,000
+draws, t 3.56 at 10 bps and 2.98 at 20 bps, positive in 27 of 31 years (2008: -194 bp a
+trade). **But on the 19 ETFs alone it fails: t 1.53, placebo p 0.31.** ETFs cannot go
+bankrupt; our 40 stocks are today's survivors. Buying deep dips looks brilliant in stocks
+known to have recovered from every dip. So R3 is **not proven**: it needs a survivorship-free
+stock universe, which free data does not have.
+
+**Honest verdict:** after quadruple-checking, no rule in this lab has a proven edge. No pure
+day trade works after costs; the dip-buying family is mostly market exposure; R3 is the one
+open question.
 
 ### 2026-11-22 (third run): the big sweep, 30 years of daily bars and 3 years of hourly
 
