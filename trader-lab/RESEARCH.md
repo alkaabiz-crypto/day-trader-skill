@@ -24,17 +24,59 @@ result after costs, and whether it was kept. Failures stay in the record.
 | imom | sign of prev close to 10:00 return, held 15:00 or 15:30 to the close | entry time, min move |
 | vwap | side of VWAP at 10:00 or 10:30, exit on a close through VWAP | decision time |
 | gap | gap over 0.5% or 1%: fade it or go with it, stop at the first bar's extreme | size, mode |
+| sip | stocks in play: only today's top names by first-5-min relative volume (vs 14 days) trade the 5-min ORB, entering on a break of the first bar's high/low | top 5/10, rvol 1.0/1.5, stop 10% of ATR14 or the first bar's range |
 
 ## Idea queue (top first)
 
-1. **Stocks in play filter**: rank the universe by first-5-minute volume vs its 14-day average, run orb5 only on the top names (Zarattini, Barbon & Aziz 2024). Needs a wider universe.
-2. **Volatility-scaled stops**: orb5 with the stop at 10% of the 14-day ATR, target 10R (the paper's actual exit).
+1. **Volatility regime gate**: trade momentum rules (orb5, noise) only when the 14-day average range is above its own median (Gao et al. 2018 find stronger predictability on volatile days). Aimed straight at the choppy-to-trending problem.
+2. **Last-half-hour reversal (pre-registered)**: imom lost with OOS t = -3.57 on 2026-10-28 to 11-20. The mirror rule (fade the morning into the close) is now a hypothesis. It is judged ONLY on data after 2026-11-20, because picking it after seeing that result would be data snooping.
 3. **RSI(2) intraday mean reversion**: Connors' RSI(2) on 5-minute bars in the direction of the daily trend.
 4. **First-hour reversal on gap days**: Lou, Polk & Skouras (2019) overnight vs intraday returns.
-5. **Volatility regime gate**: trade momentum rules only when the 14-day average range is above its median (Gao et al. find stronger predictability on volatile days).
+5. **Stocks in play, revisited** once the store has 120+ sessions and a wider universe (the paper used 7,000 stocks; 40 is too few to rank).
 6. **Day-of-week and turn-of-month effects** as gates, not strategies.
 
 ## Log
+
+### 2026-11-22 (second run): stocks in play, wider universe
+
+Tested idea 1 from the queue: Zarattini, Barbon & Aziz (2024), [A Profitable
+Day Trading Strategy for the U.S. Equity Market](https://www.alexandria.unisg.ch/server/api/core/bitstreams/3c2989c4-688d-4d78-8a71-f02690990d51/content).
+Their rules: relative volume = first-5-minute volume / its 14-day average,
+at least 100%, top 20 by that each day; enter on a break of the first
+5-minute bar's high (green bar) or low (red bar); stop at 10% of the 14-day
+ATR; out at the close. They report a 2.81 Sharpe on 7,000+ stocks 2016 to
+2023; a trader running it live warns that slippage at the open is large.
+
+Changes: universe widened from 20 to 40 symbols (added 20 high-volume,
+higher-beta names: PLTR, COIN, MSTR, SMCI, ...), stop-entry orders added to
+the simulator, and a bug fixed: a stop hit in the same bar as the entry now
+fills at the stop, not at that bar's open (which came before the entry).
+
+60 sessions (2026-08-28 to 2026-11-20), 40 symbols, 3 bps round trip.
+
+| strategy | chosen variant | IS Sharpe | OOS Sharpe | OOS bp/day | OOS t | verdict |
+| --- | --- | --- | --- | --- | --- | --- |
+| noise | lookback 10, k 1.5 | 0.96 | 5.41 | 17.4 | 1.45 | KEEP (weight 0.40) |
+| orb5 | no stop | 1.43 | 0.58 | 3.2 | 0.16 | KEEP (weight 0.60) |
+| sip | top 5, rvol 1.0, bar stop | -0.73 | -1.28 | -12.8 | -0.34 | drop |
+| orb | 30-min range, opposite stop | -0.76 | 2.76 | 17.6 | 0.74 | drop |
+| vwap | 10:30 | -2.94 | 2.78 | 13.9 | 0.74 | drop |
+| gap | fade, 0.5% | 2.00 | -0.15 | -0.3 | -0.04 | drop |
+| imom | 15:30, 25 bp | -2.72 | -13.35 | -12.8 | -3.57 | drop |
+
+Reading it: stocks in play failed in both halves with every variant. The
+10%-of-ATR stop wins only 8 to 12% of trades; at 3 bps of cost per trade a
+stop that tight is mostly paying the spread. With 40 names the "top 5 by
+relative volume" is not the same animal as the paper's top 20 of 7,000, so
+this is "not shown on our data", not "refuted". It goes back in the queue
+for when the store is bigger.
+
+The wider universe changed the picture: noise now survives, orb5 barely
+does (OOS t 0.16), and the gap fade that looked fine before now fails out
+of sample. That instability is itself the finding: with 60 sessions, which
+rules "work" depends on which stocks you test. Nothing has an OOS t near
+2.5. The one strong number is a negative one: imom lost money with
+t = -3.57 out of sample.
 
 ### 2026-11-22: first run
 

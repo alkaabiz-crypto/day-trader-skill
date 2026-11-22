@@ -32,6 +32,9 @@ through, and every position is flat by the close):
   vwap     VWAP trend (Zarattini & Aziz 2023 QQQ VWAP study): side of VWAP at a
            decision time, exit on a close through VWAP.
   gap      Overnight gap fade or follow-through, by gap size.
+  sip      Zarattini, Barbon & Aziz (2024), "A Profitable Day Trading Strategy for the
+           U.S. Equity Market": the 5-min ORB only on today's top "stocks in play" by
+           first-5-minute relative volume, stop at 10% of the 14-day ATR.
 
 This is research, not financial advice. Most day traders lose money
 (Chague, De-Losso & Giovannetti 2020: 97% of Brazilian futures day traders who
@@ -61,7 +64,9 @@ SESSION_BARS = 78
 OPEN_MIN = 9 * 60 + 30
 EPOCH = datetime.datetime(1970, 1, 1)
 UNIVERSE = ["SPY", "QQQ", "IWM", "DIA", "SMH", "XLF", "XLK", "XLE", "TLT", "GLD",
-            "AAPL", "MSFT", "NVDA", "AMZN", "META", "GOOGL", "TSLA", "AMD", "AVGO", "NFLX"]
+            "AAPL", "MSFT", "NVDA", "AMZN", "META", "GOOGL", "TSLA", "AMD", "AVGO", "NFLX",
+            "PLTR", "COIN", "MSTR", "SMCI", "UBER", "SHOP", "CRWD", "MU", "INTC", "ORCL",
+            "CRM", "ARM", "BA", "JPM", "XOM", "LLY", "UNH", "WMT", "COST", "NKE"]
 COST_BPS = 3.0      # round trip: spread + slippage + fees, liquid US names
 OOS_FRAC = 0.30     # the last 30% of the dates are never used to choose a variant
 KEEP_IS_SHARPE = 0.5
@@ -223,13 +228,27 @@ class Book:
         self.entry_slot = None
         self.stop = None
         self.pending = None  # (side) to open at next bar's open, 0 = close at next open
+        self.armed = None    # (side, trigger, stop_dist): enter when price trades through trigger
 
     def open_next(self, side, stop=None):
         self.pending = (side, stop)
 
+    def arm(self, side, trigger, stop_dist):
+        """A stop-entry order: long when the high reaches trigger, short when the low does.
+        Fills at the trigger, or at the bar's open if it gapped through. Stop = fill -+ stop_dist."""
+        self.armed = (side, trigger, stop_dist)
+
     def step(self, i):
-        """Apply pending orders at bar i's open, then the stop inside bar i."""
+        """Apply pending orders at bar i's open, a stop-entry inside bar i, then the stop inside bar i."""
         b = self.bars[i]
+        if self.armed is not None and not self.pos:
+            side, trig, dist = self.armed
+            hit = b["h"] >= trig if side > 0 else b["l"] <= trig
+            if hit:
+                px = max(trig, b["o"]) if side > 0 else min(trig, b["o"])
+                self.armed = None
+                self.pos, self.entry, self.entry_slot = side, px, i
+                self.stop = (px - side * dist) if dist else None
         if self.pending is not None:
             side, stop = self.pending
             self.pending = None
@@ -238,10 +257,12 @@ class Book:
             if side and not self.pos:
                 self.pos, self.entry, self.entry_slot, self.stop = side, b["o"], i, stop
         if self.pos and self.stop is not None:
+            # the open can only gap past the stop if we held the position before this bar opened
+            gap = self.entry_slot < i or (self.entry_slot == i and self.entry == b["o"])
             if self.pos > 0 and b["l"] <= self.stop:
-                self._close(i, min(self.stop, b["o"]))
+                self._close(i, min(self.stop, b["o"]) if gap else self.stop)
             elif self.pos < 0 and b["h"] >= self.stop:
-                self._close(i, max(self.stop, b["o"]))
+                self._close(i, max(self.stop, b["o"]) if gap else self.stop)
 
     def _close(self, i, px):
         self.trades.append({"side": self.pos, "entry": self.entry, "exit": px,
@@ -257,6 +278,9 @@ class Book:
             live = {"side": self.pos, "entry": self.entry, "entry_slot": self.entry_slot, "stop": self.stop}
         elif self.pending and self.pending[0]:
             live = {"side": self.pending[0], "entry": None, "entry_slot": None, "stop": self.pending[1]}
+        elif self.armed and not full:
+            live = {"side": self.armed[0], "entry": None, "entry_slot": None, "stop": None,
+                    "trigger": self.armed[1]}
         return self.trades, live
 
 
@@ -361,6 +385,27 @@ def s_gap(book, i, bars, ctx, p):
     book.open_next(side, bars[0]["h"] if side < 0 else bars[0]["l"])
 
 
+def s_sip(book, i, bars, ctx, p):
+    """Stocks in play: only today's top names by opening relative volume trade the 5-min ORB,
+    entering on a break of the first bar's high (green bar) or low (red bar)."""
+    if i != 0:
+        return
+    rv, rank, atr = ctx.get("rvol"), ctx.get("rvol_rank"), ctx.get("atr14")
+    if rv is None or rank is None or rv < p["min_rvol"] or rank > p["top"]:
+        return
+    b = bars[0]
+    if b["c"] == b["o"]:
+        return
+    side = 1 if b["c"] > b["o"] else -1
+    if p["stop"] == "atr10":
+        if not atr:
+            return
+        dist = 0.10 * atr
+    else:
+        dist = b["h"] - b["l"]
+    book.arm(side, b["h"] if side > 0 else b["l"], dist)
+
+
 def grid(d):
     keys = sorted(d)
     out = [{}]
@@ -372,6 +417,8 @@ def grid(d):
 STRATEGIES = {
     "orb5": {"fn": s_orb5, "source": "Zarattini & Aziz 2023, SSRN 4416622",
              "grid": {"stop": ["bar", "none"]}},
+    "sip": {"fn": s_sip, "source": "Zarattini, Barbon & Aziz 2024, SFI 24-98, ORB on stocks in play",
+            "grid": {"top": [5, 10], "min_rvol": [1.0, 1.5], "stop": ["atr10", "bar"]}},
     "orb": {"fn": s_orb, "source": "Crabel 1990, opening range breakout",
             "grid": {"bars": [3, 6], "stop": ["mid", "opposite"], "last": [23]}},
     "noise": {"fn": s_noise, "source": "Zarattini, Aziz & Barbon 2024, SFI 24-97",
@@ -393,8 +440,50 @@ def sigma_table(sessions, k, lookback):
     return [sum(abs(D[i]["c"] / D[0]["o"] - 1) for D in past) / len(past) for i in range(SESSION_BARS)]
 
 
-def contexts(sessions, k):
-    ctx = {"prev_close": None}
+def first_bar_rvol(sessions, k, lookback=14):
+    """Today's first 5-min volume / the average first 5-min volume of the previous `lookback` sessions."""
+    if not sessions[k][1]:
+        return None
+    past = [b[0]["v"] for _, b in sessions[max(0, k - lookback):k] if b]
+    if len(past) < lookback or sum(past) <= 0:
+        return None
+    return sessions[k][1][0]["v"] / (sum(past) / len(past))
+
+
+def atr14(sessions, k, lookback=14):
+    """Average daily true range of the `lookback` full sessions before k, in dollars."""
+    trs = []
+    for j in range(max(1, k - lookback), k):
+        prev, cur = sessions[j - 1][1], sessions[j][1]
+        if len(prev) != SESSION_BARS or len(cur) != SESSION_BARS:
+            continue
+        pc = prev[-1]["c"]
+        hi = max(b["h"] for b in cur)
+        lo = min(b["l"] for b in cur)
+        trs.append(max(hi, pc) - min(lo, pc))
+    return (sum(trs) / len(trs)) if len(trs) >= lookback // 2 else None
+
+
+def cross_section(universe_sessions):
+    """{(sym, date): {"rvol", "rvol_rank", "atr14"}}: rank 1 = the highest relative volume that day.
+    Uses only the first 5-minute bar of the day, so it is known at 9:35."""
+    by_date = {}
+    out = {}
+    for sym, ss in universe_sessions.items():
+        for k, (d, bars) in enumerate(ss):
+            rv = first_bar_rvol(ss, k)
+            out[(sym, d)] = {"rvol": rv, "rvol_rank": None, "atr14": atr14(ss, k)}
+            if rv is not None:
+                by_date.setdefault(d, []).append((rv, sym))
+    for d, rows in by_date.items():
+        for n, (_, sym) in enumerate(sorted(rows, reverse=True)):
+            out[(sym, d)]["rvol_rank"] = n + 1
+    return out
+
+
+def contexts(sessions, k, extra=None):
+    ctx = dict(extra or {})
+    ctx["prev_close"] = None
     if k > 0 and sessions[k - 1][1]:
         prev = sessions[k - 1][1]
         if len(prev) == SESSION_BARS:
@@ -415,6 +504,7 @@ def backtest(universe_sessions, cost_bps=COST_BPS, oos_frac=OOS_FRAC, only=None)
     if len(dates) < 25:
         raise LabError("only %d full sessions in the store; need 25+ (run fetch first)" % len(dates))
     cut = dates[int(len(dates) * (1 - oos_frac))]
+    xs = cross_section(universe_sessions)
     results = []
     for name, spec in STRATEGIES.items():
         if only and name not in only:
@@ -426,7 +516,7 @@ def backtest(universe_sessions, cost_bps=COST_BPS, oos_frac=OOS_FRAC, only=None)
                 for k, (d, bars) in enumerate(ss):
                     if len(bars) != SESSION_BARS:
                         continue
-                    ctx = contexts(ss, k)
+                    ctx = contexts(ss, k, xs.get((sym, d)))
                     ts, _ = run_day(spec["fn"], bars, ctx, p, True)
                     for t in ts:
                         r = trade_bps(t, cost_bps)
@@ -489,6 +579,7 @@ def choose(results):
 def live_signal(universe_sessions, chosen):
     """For each symbol, run each kept strategy on today's bars so far. Score in [-1, 1]."""
     out = []
+    xs = cross_section(universe_sessions)
     for sym, ss in sorted(universe_sessions.items()):
         if not ss:
             continue
@@ -497,7 +588,7 @@ def live_signal(universe_sessions, chosen):
         if not bars:
             continue
         full = len(bars) == SESSION_BARS
-        ctx = contexts(ss, k)
+        ctx = contexts(ss, k, xs.get((sym, d)))
         comps = []
         score = 0.0
         for c in chosen:
@@ -536,8 +627,8 @@ def label(score, agree_t=None):
 def fmt_variant(r):
     p = ",".join("%s=%s" % kv for kv in sorted(r["params"].items()))
     a, i, o = r["all"], r["is"], r["oos"]
-    return "%-6s %-28s %5d %5.0f%% %7.1f %6.2f | IS %5.2f | OOS %5.2f %6.1fbp t=%5.2f" % (
-        r["strategy"], p[:28], a["trades"], a["win"] * 100, a["avg_trade_bps"], a["sharpe"],
+    return "%-6s %-30s %5d %5.0f%% %7.1f %6.2f | IS %5.2f | OOS %5.2f %6.1fbp t=%5.2f" % (
+        r["strategy"], p[:30], a["trades"], a["win"] * 100, a["avg_trade_bps"], a["sharpe"],
         i["sharpe"], o["sharpe"], o["mean"], o["t"])
 
 

@@ -7,8 +7,9 @@ description: >-
   breakout (Zarattini & Aziz 2023), the classic opening-range breakout
   (Crabel), the "noise area" intraday momentum band with a VWAP trailing stop
   (Zarattini, Aziz & Barbon 2024), market intraday momentum, first half hour
-  predicts the last (Gao, Han, Li & Zhou 2018, JFE), the VWAP trend and the
-  overnight gap fade or follow-through. Picks each strategy's variant on older
+  predicts the last (Gao, Han, Li & Zhou 2018, JFE), the VWAP trend, the
+  overnight gap fade or follow-through, and the opening-range breakout on
+  "stocks in play" by relative volume (Zarattini, Barbon & Aziz 2024). Picks each strategy's variant on older
   data only, keeps it only if it still makes money on the newest 30% of the
   dates it never saw, and weights the survivors into a score from -1 to +1.
   The price store grows every run, past Yahoo's 60-day limit. Use when the
@@ -38,7 +39,7 @@ python3 "${CLAUDE_SKILL_DIR}/lab.py" backtest --only orb5,noise --cost 5
 python3 "${CLAUDE_SKILL_DIR}/lab.py" signal --symbols SPY,QQQ,TSLA --json
 ```
 
-Flags: `--symbols` (default: 20 liquid ETFs and large caps), `--cost` round
+Flags: `--symbols` (default: 40 liquid ETFs, large caps and high-volume names), `--cost` round
 trip in basis points (default 3), `--oos` out-of-sample fraction (default
 0.30), `--store` the price folder (default `data/` next to this file).
 

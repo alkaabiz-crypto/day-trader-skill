@@ -59,6 +59,46 @@ class Book(unittest.TestCase):
         self.assertAlmostEqual(lab.trade_bps(t, 3.0), 97.0)
 
 
+class StopEntry(unittest.TestCase):
+    def test_same_bar_entry_and_stop_fills_at_the_stop(self):
+        d = flat_day(100.0)
+        d[0] = dict(bar(100, 100.2, 99.0, 99.2), slot=0)    # red bar: sell stop at 99.0
+        d[1] = dict(bar(99.5, 99.9, 98.8, 99.4), slot=1)    # trades down through 99.0, then up past the stop
+        ctx = {"prev_close": None, "rvol": 2.0, "rvol_rank": 1, "atr14": 2.0}
+        trades, _ = run(lab.s_sip, d, {"top": 5, "min_rvol": 1.0, "stop": "atr10"}, ctx)
+        t = trades[0]
+        self.assertEqual((t["side"], t["entry"], t["entry_slot"]), (-1, 99.0, 1))
+        self.assertAlmostEqual(t["exit"], 99.2)              # the stop, not the 99.5 open before the entry
+
+    def test_sip_needs_rank_and_rvol(self):
+        d = flat_day(100.0)
+        d[0] = dict(bar(100, 101, 99.9, 100.9), slot=0)
+        d[1] = dict(bar(100.9, 101.5, 100.9, 101.4), slot=1)
+        p = {"top": 5, "min_rvol": 1.5, "stop": "bar"}
+        for rv, rank, n in ((2.0, 1, 1), (1.2, 1, 0), (2.0, 6, 0)):
+            ctx = {"prev_close": None, "rvol": rv, "rvol_rank": rank, "atr14": 2.0}
+            trades, _ = run(lab.s_sip, d, p, ctx)
+            self.assertEqual(len(trades), n, (rv, rank))
+        ctx = {"prev_close": None, "rvol": 2.0, "rvol_rank": 1, "atr14": 2.0}
+        trades, _ = run(lab.s_sip, d, p, ctx)
+        self.assertEqual(trades[0]["entry"], 101)            # the break of the first bar's high
+
+    def test_rvol_and_atr(self):
+        ss = []
+        for k in range(15):
+            day = flat_day(100.0)
+            day[0] = dict(bar(100, 101, 99, 100, 300 if k == 14 else 100), slot=0)
+            ss.append(("d%02d" % k, day))
+        self.assertAlmostEqual(lab.first_bar_rvol(ss, 14), 3.0)
+        self.assertIsNone(lab.first_bar_rvol(ss, 5))
+        self.assertAlmostEqual(lab.atr14(ss, 14), 2.0)
+        quiet = flat_day()
+        quiet[0] = dict(bar(100, 101, 99, 100, 150), slot=0)  # B: rvol 1.5 < A's 3.0
+        xs = lab.cross_section({"A": ss, "B": ss[:14] + [("d14", quiet)]})
+        self.assertEqual(xs[("B", "d14")]["rvol_rank"], 2)
+        self.assertEqual(xs[("A", "d14")]["rvol_rank"], 1)
+
+
 class Strategies(unittest.TestCase):
     def test_orb_breakout_once_with_mid_stop(self):
         d = flat_day(100.0)
