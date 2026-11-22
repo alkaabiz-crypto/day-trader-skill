@@ -180,6 +180,11 @@ class AlphaVantage(unittest.TestCase):
     def test_errors_and_months(self):
         with self.assertRaises(lab.LabError):
             lab.parse_av_csv('{"Information": "rate limit is 25 requests per day"}')
+        self.assertEqual(lab.av_error_kind('{"Information": "This is a premium endpoint."}'), "premium")
+        self.assertEqual(lab.av_error_kind('{"Information": "rate limit is 25 requests per day"}'), "daily")
+        self.assertEqual(lab.av_error_kind('{"Information": "spreading out your free API requests '
+                                           'more sparingly (1 request per second)"}'), "throttle")
+        self.assertIsNone(lab.av_error_kind("timestamp,open,high,low,close,volume\n"))
         self.assertEqual(lab.months_back("2016-02", "2015-11"), ["2016-02", "2016-01", "2015-12", "2015-11"])
 
 

@@ -973,6 +973,21 @@ def parse_av_csv(text):
     return out
 
 
+def av_error_kind(text):
+    """Classify an Alpha Vantage non-CSV reply: 'premium' (endpoint needs a paid plan),
+    'daily' (25-a-day limit spent), 'throttle' (too many per second/minute), or None."""
+    t = text.lower()
+    if t.lstrip().startswith("timestamp"):
+        return None
+    if "premium endpoint" in t:
+        return "premium"
+    if "per day" in t or "daily" in t:
+        return "daily"
+    if "per second" in t or "per minute" in t or "sparingly" in t or "rate limit" in t:
+        return "throttle"
+    return None
+
+
 def av_progress_path(store):
     return os.path.join(store, "progress.json")
 
@@ -1016,14 +1031,26 @@ def cmd_fetch_av(a):
                  "apikey": key}
             req = urllib.request.Request(AV_URL + "?" + urllib.parse.urlencode(q), headers={"User-Agent": UA})
             try:
-                with urllib.request.urlopen(req, timeout=60) as r:
-                    text = r.read().decode("utf-8", "replace")
-                used += 1
+                for attempt in range(3):
+                    with urllib.request.urlopen(req, timeout=60) as r:
+                        text = r.read().decode("utf-8", "replace")
+                    used += 1
+                    if av_error_kind(text) != "throttle":
+                        break
+                    time.sleep(15)   # per-second/minute throttle: wait and retry the same month
                 new = parse_av_csv(text)
             except LabError as e:
+                kind = av_error_kind(str(e))
                 print("%-6s %s: %s" % (s, m, e))
-                if "rate limit" in str(e).lower() or "per day" in str(e).lower() or "premium" in str(e).lower():
-                    used = a.max_requests
+                if kind == "premium":
+                    print("Alpha Vantage serves 5-minute intraday bars only on premium plans; this key is "
+                          "valid but free. Nothing was saved. Use `fetch-alpaca` for free 5-minute history, "
+                          "or a premium Alpha Vantage key. (%d request%s used)" % (used, "" if used == 1 else "s"))
+                    return 1
+                if kind == "daily":
+                    print("Alpha Vantage daily limit reached after %d request%s this run. Run again tomorrow; "
+                          "it resumes." % (used, "" if used == 1 else "s"))
+                    return 0
                 break
             except (urllib.error.URLError, OSError) as e:
                 print("%-6s %s: could not reach Alpha Vantage: %s" % (s, m, getattr(e, "reason", e)))
