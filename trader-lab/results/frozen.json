@@ -1,0 +1,94 @@
+[
+ {
+  "frozen": "2026-11-22",
+  "params": {
+   "exit": "up",
+   "fill": "close",
+   "x": 0.1
+  },
+  "passed": true,
+  "post_t_at_freeze": 3.58,
+  "rule": "s_ibs"
+ },
+ {
+  "frozen": "2026-11-22",
+  "params": {
+   "exit": "rsi",
+   "fill": "close",
+   "out": 65,
+   "x": 35
+  },
+  "passed": true,
+  "post_t_at_freeze": 3.18,
+  "rule": "s_crsi2"
+ },
+ {
+  "frozen": "2026-11-22",
+  "params": {
+   "exit": "high7",
+   "fill": "close",
+   "max_days": 30
+  },
+  "passed": true,
+  "post_t_at_freeze": 3.11,
+  "rule": "s_d7"
+ },
+ {
+  "frozen": "2026-11-22",
+  "params": {
+   "exit": "sma5",
+   "fill": "open",
+   "vix": "high",
+   "x": 10
+  },
+  "passed": false,
+  "post_t_at_freeze": 2.99,
+  "rule": "s_rsi2v"
+ },
+ {
+  "frozen": "2026-11-22",
+  "params": {
+   "exit": "rsi",
+   "fill": "open",
+   "x": 10
+  },
+  "passed": false,
+  "post_t_at_freeze": 2.98,
+  "rule": "s_rsi2"
+ },
+ {
+  "frozen": "2026-11-22",
+  "params": {
+   "exit": "donch",
+   "max_days": 60,
+   "n": 55,
+   "x": 20
+  },
+  "passed": false,
+  "post_t_at_freeze": 2.89,
+  "rule": "s_donch"
+ },
+ {
+  "frozen": "2026-11-22",
+  "params": {
+   "hold": "cc",
+   "side": 1,
+   "x": 0.2
+  },
+  "passed": false,
+  "post_t_at_freeze": 2.85,
+  "rule": "ibs"
+ },
+ {
+  "frozen": "2026-11-22",
+  "params": {
+   "exit": "high7",
+   "fill": "open",
+   "max_days": 30,
+   "vix": "high"
+  },
+  "passed": false,
+  "post_t_at_freeze": 2.8,
+  "rule": "s_d7v"
+ }
+]

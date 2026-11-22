@@ -540,6 +540,21 @@ EXITS = {"sma5": ex_sma5, "rsi": ex_rsi, "high7": ex_high7, "mid": ex_mid, "up":
          "donch": ex_donchian}
 
 
+VIX = {}   # date -> VIX close, filled by load_universe from data/daily/^VIX.json.gz
+
+
+def vix_ok(date_prev, p):
+    """VIX regime gate on the signal day's close: 'high' = above its trailing 252-day median."""
+    g = p.get("vix", "any")
+    if g == "any":
+        return True
+    info = VIX.get(date_prev)
+    if info is None:
+        return False
+    v, med = info
+    return v > med if g == "high" else v <= med
+
+
 def run_swing(D, entry, p, cost_bps):
     """Enter at the close of a signal day, mark to market each close, exit at the close the exit fires
     (or after max_days). -> ({date: bps}, trades). Cost is charged on the exit day."""
@@ -551,7 +566,7 @@ def run_swing(D, entry, p, cost_bps):
     j = 0
     N = len(c)
     while j < N - 1:
-        if j < 21 or not entry(D, j, p):
+        if j < 21 or not entry(D, j, p) or not vix_ok(D["d"][j], p):
             j += 1
             continue
         n_tr += 1
@@ -694,6 +709,10 @@ RULES = {
 SWING = {
     "s_rsi2": {"fn": sw_rsi2, "source": "Connors RSI(2), exit above the 5-day or RSI(2) > 70",
                "grid": {"x": [5, 10], "exit": ["sma5", "rsi"], "fill": ["close", "open"]}},
+    "s_rsi2v": {"fn": sw_rsi2, "source": "RSI(2) with a VIX regime gate (Quantpedia; Zarattini et al. VIX > 20)",
+                "grid": {"x": [10], "exit": ["sma5"], "fill": ["open"], "vix": ["high", "low"]}},
+    "s_d7v": {"fn": sw_d7, "source": "Double 7s with a VIX regime gate",
+              "grid": {"exit": ["high7"], "max_days": [30], "fill": ["open"], "vix": ["high", "low"]}},
     "s_crsi2": {"fn": sw_crsi2, "source": "Connors & Alvarez 2009: cumulative RSI(2)",
                 "grid": {"x": [35, 50], "exit": ["rsi"], "out": [65], "fill": ["close", "open"]}},
     "s_r3": {"fn": sw_r3, "source": "Connors 2009, High Probability ETF Trading: R3",
@@ -970,14 +989,26 @@ def report(res):
     return "\n".join(L)
 
 
+def load_vix(store=STORE):
+    """^VIX closes with their trailing 252-day median (known at that close)."""
+    V = load("^VIX", store)
+    VIX.clear()
+    if not V:
+        return
+    c = V["c"]
+    for i in range(252, len(c)):
+        VIX[V["d"][i]] = (c[i], statistics.median(c[i - 252:i]))
+
+
 def load_universe(symbols, store=STORE):
+    load_vix(store)
     out = {}
     for s in symbols:
         D = load(s, store)
         if D:
             k = next((i for i, d in enumerate(D["d"]) if d >= DATA_START), len(D["d"]))
             D = {key: v[k:] for key, v in D.items()}
-        if D and len(D["d"]) > 250:
+        if D and len(D["d"]) > 250 and not s.startswith("^"):
             out[s] = D
     if not out:
         raise LabError("no daily data: run `daily.py fetch` first")
@@ -1008,6 +1039,31 @@ def cmd_backtest(a):
     return 0
 
 
+def swing_state(D, entry, p):
+    """For a multi-day rule on one symbol: 'enter' if the last close is a fresh signal, ('hold', days, entry px)
+    if a position from an earlier signal is still open, else None."""
+    c = D["c"]
+    N = len(c)
+    ex = EXITS[p["exit"]]
+    maxd = p.get("max_days", 10)
+    j = 21
+    while j < N:
+        if not entry(D, j, p) or not vix_ok(D["d"][j], p):
+            j += 1
+            continue
+        if j == N - 1:
+            return ("enter", 0, c[j])
+        k = j + 1
+        while k < N:
+            if ex(D, k, p, j) or k - j >= maxd:
+                break
+            k += 1
+        if k >= N:
+            return ("hold", N - 1 - j, D["o"][j + 1] if p.get("fill") == "open" else c[j])
+        j = k + 1 if k == j + 1 else k
+    return None
+
+
 def cmd_signal(a):
     uni = load_universe(a.symbols, a.store)
     path = os.path.join(RESULTS, "daily-latest.json")
@@ -1017,9 +1073,25 @@ def cmd_signal(a):
     else:
         chosen = backtest(uni, a.cost)["chosen"]
     rows = next_session(uni, chosen)
+    swings = []
+    for c in chosen:
+        if c["rule"] in SWING and (c["pass"] or c["post_t"] >= 2.9):
+            for sym, D in sorted(uni.items()):
+                st = swing_state(D, SWING[c["rule"]]["fn"], c["params"])
+                if st:
+                    swings.append({"rule": c["rule"], "pass": c["pass"], "symbol": sym, "state": st[0],
+                                   "days": st[1], "entry": round(st[2], 2), "last_date": D["d"][-1],
+                                   "last": D["c"][-1], "params": c["params"]})
     if a.json:
-        print(json.dumps(rows, indent=1))
+        print(json.dumps({"day": rows, "multi_day": swings}, indent=1))
         return 0
+    if swings:
+        print("Multi-day rules (passed, or within 0.1 of the t >= 3 bar), as of the last close:")
+        for r in swings:
+            what = ("NEW: buy at the next open" if r["state"] == "enter"
+                    else "open %d day(s), in at %.2f, last %.2f" % (r["days"], r["entry"], r["last"]))
+            print("  %-8s %-4s %-6s %s" % (r["rule"], "PASS" if r["pass"] else "near", r["symbol"], what))
+        print("")
     if not rows:
         print("No passing rule fires for the next session.")
     for r in rows:
@@ -1029,13 +1101,65 @@ def cmd_signal(a):
     return 0
 
 
+FROZEN = os.path.join(RESULTS, "frozen.json")
+
+
+def cmd_freeze(a):
+    """Pre-register: append today's passing rules (and the near misses, marked) with their exact
+    parameters. They are then judged only on sessions after the freeze date."""
+    with open(os.path.join(RESULTS, "daily-latest.json")) as fh:
+        chosen = json.load(fh)["chosen"]
+    reg = []
+    if os.path.exists(FROZEN):
+        with open(FROZEN) as fh:
+            reg = json.load(fh)
+    today = a.date or datetime.date.today().isoformat()
+    have = {(r["rule"], json.dumps(r["params"], sort_keys=True)) for r in reg}
+    for c in chosen:
+        if c["pass"] or c["post_t"] >= a.min_t:
+            key = (c["rule"], json.dumps(c["params"], sort_keys=True))
+            if key not in have:
+                reg.append({"rule": c["rule"], "params": c["params"], "frozen": today, "passed": c["pass"],
+                            "post_t_at_freeze": round(c["post_t"], 2)})
+    with open(FROZEN, "w") as fh:
+        json.dump(reg, fh, indent=1, sort_keys=True)
+    for r in reg:
+        print("%-8s frozen %s  %s  %s" % (r["rule"], r["frozen"], "PASS" if r["passed"] else "near",
+                                         json.dumps(r["params"], sort_keys=True)))
+    return 0
+
+
+def cmd_forward(a):
+    """How each frozen rule has done on sessions strictly after its freeze date."""
+    if not os.path.exists(FROZEN):
+        print("Nothing frozen yet: run `daily.py freeze` after a backtest --write.")
+        return 0
+    with open(FROZEN) as fh:
+        reg = json.load(fh)
+    uni = load_universe(a.symbols, a.store)
+    dates = sorted({d for D in uni.values() for d in D["d"]})
+    for r in reg:
+        spec = RULES.get(r["rule"]) or SWING.get(r["rule"])
+        if spec is None:
+            continue
+        if r["rule"] in SWING:
+            per = {s: run_swing(D, spec["fn"], r["params"], a.cost)[0] for s, D in uni.items()}
+        else:
+            per = {s: run_rule(D, spec["fn"], r["params"], a.cost) for s, D in uni.items()}
+        ser = [x for d, x in portfolio(per, dates) if d > r["frozen"]]
+        st = stats(ser) if ser else {"n": 0, "mean": 0.0, "t": 0.0, "sharpe": 0.0}
+        print("%-8s since %s: %3d sessions, mean %6.1f bp/day, t %5.2f" % (
+            r["rule"], r["frozen"], st["n"], st["mean"], st["t"]))
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="trader-lab daily engine: day-trading rules on decades of daily bars.")
     sub = ap.add_subparsers(dest="cmd")
 
     def common(p):
         p.add_argument("--symbols", type=lambda s: [x.strip().upper() for x in s.split(",") if x.strip()],
-                       default=UNIVERSE)
+                       default=UNIVERSE + ["^VIX"])
         p.add_argument("--store", default=STORE)
         p.add_argument("--cost", type=float, default=COST_BPS, help="cost per trade in bps (default 2)")
         p.add_argument("--json", action="store_true")
@@ -1046,12 +1170,18 @@ def main(argv=None):
     p.add_argument("--only", type=lambda s: s.split(","))
     p.add_argument("--write", nargs="?", const=os.path.join(RESULTS, "daily-latest.json"), metavar="PATH")
     common(sub.add_parser("signal", help="which passing rules fire for the next session"))
+    p = sub.add_parser("freeze", help="pre-register today's passing rules for a forward test")
+    common(p)
+    p.add_argument("--date", help="freeze date (default today)")
+    p.add_argument("--min-t", type=float, default=2.5, help="also freeze near misses with post t >= this")
+    common(sub.add_parser("forward", help="results of frozen rules after their freeze date"))
     a = ap.parse_args(argv)
     if not a.cmd:
         ap.print_help()
         return 1
     try:
-        return {"fetch": cmd_fetch, "backtest": cmd_backtest, "signal": cmd_signal}[a.cmd](a)
+        return {"fetch": cmd_fetch, "backtest": cmd_backtest, "signal": cmd_signal,
+                "freeze": cmd_freeze, "forward": cmd_forward}[a.cmd](a)
     except LabError as e:
         print("daily.py: %s" % e, file=sys.stderr)
         return 1

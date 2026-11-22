@@ -44,7 +44,9 @@ Two more engines test rules on far more history:
 ```bash
 python3 "${CLAUDE_SKILL_DIR}/daily.py" fetch                    # daily bars back to each listing (SPY: 1993)
 python3 "${CLAUDE_SKILL_DIR}/daily.py" backtest --write         # 30 rules, 158 variants, IS / OOS / HOLDOUT
-python3 "${CLAUDE_SKILL_DIR}/daily.py" signal                   # which passing day-trade rules fire next session
+python3 "${CLAUDE_SKILL_DIR}/daily.py" signal                   # open positions and new entries of passing rules
+python3 "${CLAUDE_SKILL_DIR}/daily.py" freeze                   # pre-register today's passers for a forward test
+python3 "${CLAUDE_SKILL_DIR}/daily.py" forward                  # how frozen rules did after their freeze date
 python3 "${CLAUDE_SKILL_DIR}/hourly.py" fetch                   # 60-minute bars, last 730 days, merged
 python3 "${CLAUDE_SKILL_DIR}/hourly.py" backtest --write        # time-of-day rules on ~700 sessions
 ```

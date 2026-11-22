@@ -89,6 +89,28 @@ class Swing(unittest.TestCase):
         self.assertAlmostEqual(list(out.values())[0], (95 / 91.0 - 1) * 1e4)
 
 
+class SwingState(unittest.TestCase):
+    def test_enter_hold_and_flat(self):
+        rows = [(100, 101, 99, 100)] * 25 + [(100, 100, 90, 90)]
+        D = series(rows)
+        sig = lambda D, j, p: 1 if j == len(D["c"]) - 1 or j == 25 else 0
+        self.assertEqual(daily.swing_state(D, sig, {"exit": "up"})[0], "enter")
+        D2 = series(rows + [(90, 90, 85, 86)])
+        st = daily.swing_state(D2, lambda D, j, p: 1 if j == 25 else 0, {"exit": "up"})
+        self.assertEqual(st[:2], ("hold", 1))
+        D3 = series(rows + [(90, 96, 90, 95)])
+        self.assertIsNone(daily.swing_state(D3, lambda D, j, p: 1 if j == 25 else 0, {"exit": "up"}))
+
+    def test_vix_gate(self):
+        daily.VIX.clear()
+        daily.VIX["2020-01-06"] = (30.0, 20.0)
+        self.assertTrue(daily.vix_ok("2020-01-06", {"vix": "high"}))
+        self.assertFalse(daily.vix_ok("2020-01-06", {"vix": "low"}))
+        self.assertFalse(daily.vix_ok("2020-01-07", {"vix": "high"}))
+        self.assertTrue(daily.vix_ok("2020-01-07", {}))
+        daily.VIX.clear()
+
+
 class Statistics(unittest.TestCase):
     def test_norm_ppf_round_trip(self):
         for p in (0.01, 0.2, 0.5, 0.9, 0.999):

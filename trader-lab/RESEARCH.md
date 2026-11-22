@@ -92,6 +92,15 @@ with the noise area and plain orb5. End-of-day reversal (Baltussen, Da & Soebhag
 VWAP reclaim, lunch and the long-only noise area all failed. Nothing on 60 days has a t
 near significance.
 
+**Follow-ups the same day.** A VIX gate (trade RSI(2) and Double 7s only when VIX is above
+its 1-year median) raises the average trade (RSI(2): 42 vs 28 bp) and the IS t, but the
+2022+ holdout gets worse (Sharpe 0.18 vs 0.47), so it is not adopted. The three passers and
+five near misses (post t >= 2.5) are frozen in `results/frozen.json` as of 2026-11-22:
+`daily.py forward` scores them only on sessions after that date, the one test nobody can
+have tuned. `daily.py signal` now lists each multi-day rule's open positions and fresh
+entries. On 2026-11-20 most of them were open and underwater after a ~10% fall in SPY:
+the known tail of buying dips with no stop.
+
 **Verdict so far.** No pure day trade (in and out the same session) survives honest
 testing on decades of data. The only strategies that pass are 1 to 5 day "buy the
 oversold dip in an uptrend" holds, and their edge has shrunk to about buy-and-hold's
