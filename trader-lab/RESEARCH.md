@@ -31,9 +31,10 @@ result after costs, and whether it was kept. Failures stay in the record.
 0. **Survivorship-free test of R3**: add stocks that fell hard or were delisted (e.g. from an
    S&P 500 membership history), or test on many more ETFs and country funds. Until then R3 is
    unproven.
-1. **Portfolio of the passers**: combine RSI(2), cumulative RSI(2) and Double 7s with next-open fills, check overlap, drawdown and exposure against buy-and-hold; size by volatility.
-2. **VIX regime filter** on the passers and on the 5-minute momentum rules (Quantpedia; Zarattini et al.: better when VIX > 20). Needs ^VIX daily from Yahoo.
-3. **Pre-registered forward test**: freeze today's passing rules and parameters; judge them only on sessions after 2026-11-22.
+1. **R3 on a wider ETF set** (country, bond, commodity and leveraged funds back to the 2000s):
+   more survivorship-free trades to see if the ETF-only t of 1.53 was just too few trades.
+2. **New strategies from the web**: each daily run adds at least one rule not yet tested.
+3. **Forward test**: score R3 and the near misses on sessions after 2026-11-22 (`daily.py forward`).
 4. **Last-half-hour reversal on the 5-minute store**, pre-registered after imom's OOS t of -3.6 (judged only after 2026-11-20).
 5. **Stocks in play, revisited** once the 5-minute store has 120+ sessions.
 6. **FOMC and CPI days** (needs an event calendar): pre-FOMC drift (Lucca & Moench 2015) is reported dead after 2015, so a control, not a hope.

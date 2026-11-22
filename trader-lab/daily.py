@@ -1212,7 +1212,8 @@ def cmd_signal(a):
     rows = next_session(uni, chosen)
     swings = []
     for c in chosen:
-        if c["rule"] in SWING and (c["pass"] or c["post_t"] >= 2.9):
+        placebo_failed = c.get("placebo_p") is not None and c["placebo_p"] >= PLACEBO_P
+        if c["rule"] in SWING and (c["pass"] or (c["post_t"] >= 2.9 and not placebo_failed)):
             for sym, D in sorted(uni.items()):
                 st = swing_state(D, SWING[c["rule"]]["fn"], c["params"])
                 if st:
