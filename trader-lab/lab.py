@@ -406,6 +406,113 @@ def s_sip(book, i, bars, ctx, p):
     book.arm(side, b["h"] if side > 0 else b["l"], dist)
 
 
+def vol_gate(ctx, p):
+    """True if the volatility gate (if any) lets this day trade: yesterday's range vs the median of the
+    prior 20 daily ranges (Gao et al. 2018; Li, Sakkas & Urquhart 2022: momentum lives in high volatility)."""
+    g = p.get("gate", "none")
+    if g == "none":
+        return True
+    r, med = ctx.get("prev_range"), ctx.get("median_range")
+    if r is None or med is None:
+        return False
+    return r > med if g == "high" else r <= med
+
+
+def s_orb5g(book, i, bars, ctx, p):
+    if vol_gate(ctx, p):
+        s_orb5(book, i, bars, ctx, p)
+
+
+def s_noiseg(book, i, bars, ctx, p):
+    """Noise area, optionally long only (the replications' "long survives, short is a mirage"), gated."""
+    if not vol_gate(ctx, p):
+        return
+    before = book.pending
+    s_noise(book, i, bars, ctx, p)
+    if p.get("long_only") and book.pending is not before and book.pending and book.pending[0] < 0:
+        book.pending = (0, None) if book.pos else None
+
+
+def s_rod(book, i, bars, ctx, p):
+    """Baltussen, Da, Lammers & Martens (2021): the return from yesterday's close to 15:30 predicts
+    15:30 to 16:00. Trade its sign when |ROD| >= min_bps."""
+    pc = ctx.get("prev_close")
+    if pc is None or i != 71:
+        return
+    r = bars[71]["c"] / pc - 1
+    if abs(r) * 1e4 >= p["min_bps"]:
+        book.open_next((1 if r > 0 else -1) * (1 if p["mode"] == "mom" else -1))
+
+
+def s_eodrev(book, i, bars, ctx, p):
+    """Baltussen, Da & Soebhag (2025): end-of-day reversal across stocks. At 15:30 buy today's
+    biggest losers (prev close to 15:30) and short the biggest winners; out at the close."""
+    if i != 71:
+        return
+    rk, n = ctx.get("rod_rank"), ctx.get("rod_n")
+    if rk is None or not n:
+        return
+    if rk <= p["k"]:
+        book.open_next(-1 if p["side"] != "long" else 0)   # top winners: short
+    elif rk > n - p["k"]:
+        book.open_next(1 if p["side"] != "short" else 0)   # bottom losers: long
+
+
+def s_lunch(book, i, bars, ctx, p):
+    """Quantpedia lunch effect: long from 12:00 to 14:00 New York time."""
+    if i == 29:
+        book.open_next(1)
+    elif i == 53 and book.pos:
+        book.open_next(0)
+
+
+def s_vwapre(book, i, bars, ctx, p):
+    """VWAP reclaim: after at least n bars below VWAP, the first 5-min close back above a rising VWAP
+    (before 14:00) -> long, stop at that bar's low, out at the close. Once a day."""
+    if ctx.get("_vr_id") != id(bars):
+        ctx["_vr_id"], ctx["_vr_vw"], ctx["_vr_below"], ctx["_vr_done"] = id(bars), vwap_series(bars), 0, False
+    vw = ctx["_vr_vw"]
+    c = bars[i]["c"]
+    if ctx["_vr_done"] or book.pos or i > 53:
+        ctx["_vr_below"] = ctx["_vr_below"] + 1 if c < vw[i] else 0
+        return
+    if c > vw[i] and ctx["_vr_below"] >= p["n"] and i >= 1 and vw[i] >= vw[i - 1]:
+        book.open_next(1, bars[i]["l"])
+        ctx["_vr_done"] = True
+    ctx["_vr_below"] = ctx["_vr_below"] + 1 if c < vw[i] else 0
+
+
+def s_orbfail(book, i, bars, ctx, p):
+    """Failed opening-range breakout: price closes outside the first n bars' range, then a bar closes
+    back inside within w bars -> fade it, stop at the breakout extreme, out at the close. Once a day."""
+    n, w = p["bars"], p["within"]
+    if i < n or book.pos or i > 47:
+        return
+    if ctx.get("_of_id") != id(bars):
+        ctx["_of_id"], ctx["_of_brk"], ctx["_of_done"] = id(bars), None, False
+    if ctx["_of_done"]:
+        return
+    hi = max(b["h"] for b in bars[:n])
+    lo = min(b["l"] for b in bars[:n])
+    c = bars[i]["c"]
+    brk = ctx["_of_brk"]
+    if brk is None:
+        if c > hi:
+            ctx["_of_brk"] = (1, i, bars[i]["h"])
+        elif c < lo:
+            ctx["_of_brk"] = (-1, i, bars[i]["l"])
+        return
+    side, at, ext = brk
+    ext = max(ext, bars[i]["h"]) if side > 0 else min(ext, bars[i]["l"])
+    ctx["_of_brk"] = (side, at, ext)
+    if i - at > w:
+        ctx["_of_done"] = True
+        return
+    if lo <= c <= hi:
+        book.open_next(-side, ext)
+        ctx["_of_done"] = True
+
+
 def grid(d):
     keys = sorted(d)
     out = [{}]
@@ -419,6 +526,18 @@ STRATEGIES = {
              "grid": {"stop": ["bar", "none"]}},
     "sip": {"fn": s_sip, "source": "Zarattini, Barbon & Aziz 2024, SFI 24-98, ORB on stocks in play",
             "grid": {"top": [5, 10], "min_rvol": [1.0, 1.5], "stop": ["atr10", "bar"]}},
+    "orb5g": {"fn": s_orb5g, "source": "orb5 with a volatility gate (Gao et al. 2018 conditioning)",
+              "grid": {"stop": ["none", "bar"], "gate": ["high", "low"]}},
+    "noiseg": {"fn": s_noiseg, "source": "noise area, long-only and volatility-gated variants",
+               "grid": {"lookback": [14], "mult": [1.0, 1.5], "long_only": [True, False], "gate": ["none", "high"]}},
+    "rod": {"fn": s_rod, "source": "Baltussen, Da, Lammers & Martens 2021 JFE: hedging demand, last 30 min",
+            "grid": {"min_bps": [0, 50, 100], "mode": ["mom", "rev"]}},
+    "eodrev": {"fn": s_eodrev, "source": "Baltussen, Da & Soebhag 2025: end-of-day reversal",
+               "grid": {"k": [4, 8], "side": ["both", "long"]}},
+    "lunch": {"fn": s_lunch, "source": "Quantpedia: lunch effect, long 12:00 to 14:00", "grid": {}},
+    "vwapre": {"fn": s_vwapre, "source": "practitioner VWAP reclaim (long only)", "grid": {"n": [6, 12]}},
+    "orbfail": {"fn": s_orbfail, "source": "failed opening-range breakout fade",
+                "grid": {"bars": [3, 6], "within": [3, 6]}},
     "orb": {"fn": s_orb, "source": "Crabel 1990, opening range breakout",
             "grid": {"bars": [3, 6], "stop": ["mid", "opposite"], "last": [23]}},
     "noise": {"fn": s_noise, "source": "Zarattini, Aziz & Barbon 2024, SFI 24-97",
@@ -468,17 +587,38 @@ def cross_section(universe_sessions):
     """{(sym, date): {"rvol", "rvol_rank", "atr14"}}: rank 1 = the highest relative volume that day.
     Uses only the first 5-minute bar of the day, so it is known at 9:35."""
     by_date = {}
+    rod_by = {}
     out = {}
     for sym, ss in universe_sessions.items():
         for k, (d, bars) in enumerate(ss):
             rv = first_bar_rvol(ss, k)
-            out[(sym, d)] = {"rvol": rv, "rvol_rank": None, "atr14": atr14(ss, k)}
+            out[(sym, d)] = {"rvol": rv, "rvol_rank": None, "atr14": atr14(ss, k),
+                             "rod_rank": None, "rod_n": None}
+            out[(sym, d)].update(range_stats(ss, k))
             if rv is not None:
                 by_date.setdefault(d, []).append((rv, sym))
+            if k > 0 and len(ss[k - 1][1]) == SESSION_BARS and len(bars) > 71:
+                rod_by.setdefault(d, []).append((bars[71]["c"] / ss[k - 1][1][-1]["c"] - 1, sym))
     for d, rows in by_date.items():
         for n, (_, sym) in enumerate(sorted(rows, reverse=True)):
             out[(sym, d)]["rvol_rank"] = n + 1
+    for d, rows in rod_by.items():
+        for n, (_, sym) in enumerate(sorted(rows, reverse=True)):   # rank 1 = biggest winner
+            out[(sym, d)]["rod_rank"] = n + 1
+            out[(sym, d)]["rod_n"] = len(rows)
     return out
+
+
+def range_stats(ss, k, n=20):
+    """Yesterday's (high - low) / close, and the median of that over the n sessions before it."""
+    rs = []
+    for j in range(max(0, k - n - 1), k):
+        b = ss[j][1]
+        if len(b) == SESSION_BARS:
+            rs.append((max(x["h"] for x in b) - min(x["l"] for x in b)) / b[-1]["c"])
+    if len(rs) < 10:
+        return {"prev_range": None, "median_range": None}
+    return {"prev_range": rs[-1], "median_range": statistics.median(rs[:-1])}
 
 
 def contexts(sessions, k, extra=None):

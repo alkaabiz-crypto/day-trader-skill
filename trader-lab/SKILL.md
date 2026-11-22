@@ -39,6 +39,22 @@ python3 "${CLAUDE_SKILL_DIR}/lab.py" backtest --only orb5,noise --cost 5
 python3 "${CLAUDE_SKILL_DIR}/lab.py" signal --symbols SPY,QQQ,TSLA --json
 ```
 
+Two more engines test rules on far more history:
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/daily.py" fetch                    # daily bars back to each listing (SPY: 1993)
+python3 "${CLAUDE_SKILL_DIR}/daily.py" backtest --write         # 30 rules, 158 variants, IS / OOS / HOLDOUT
+python3 "${CLAUDE_SKILL_DIR}/daily.py" signal                   # which passing day-trade rules fire next session
+python3 "${CLAUDE_SKILL_DIR}/hourly.py" fetch                   # 60-minute bars, last 730 days, merged
+python3 "${CLAUDE_SKILL_DIR}/hourly.py" backtest --write        # time-of-day rules on ~700 sessions
+```
+
+`daily.py` splits the dates IS to 2014, OOS 2015 to 2021 and HOLDOUT 2022 onward, and
+passes a rule only with IS t >= 2, positive OOS and HOLDOUT, and t >= 3 on everything after
+IS (Harvey, Liu & Zhu 2016). It also reports the deflated Sharpe ratio (Bailey & Lopez de
+Prado 2014). Multi-day rules can fill at the signal close or the next open; prefer the
+next-open result, since nobody knows the close in advance.
+
 Flags: `--symbols` (default: 40 liquid ETFs, large caps and high-volume names), `--cost` round
 trip in basis points (default 3), `--oos` out-of-sample fraction (default
 0.30), `--store` the price folder (default `data/` next to this file).

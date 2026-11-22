@@ -28,14 +28,75 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Idea queue (top first)
 
-1. **Volatility regime gate**: trade momentum rules (orb5, noise) only when the 14-day average range is above its own median (Gao et al. 2018 find stronger predictability on volatile days). Aimed straight at the choppy-to-trending problem.
-2. **Last-half-hour reversal (pre-registered)**: imom lost with OOS t = -3.57 on 2026-10-28 to 11-20. The mirror rule (fade the morning into the close) is now a hypothesis. It is judged ONLY on data after 2026-11-20, because picking it after seeing that result would be data snooping.
-3. **RSI(2) intraday mean reversion**: Connors' RSI(2) on 5-minute bars in the direction of the daily trend.
-4. **First-hour reversal on gap days**: Lou, Polk & Skouras (2019) overnight vs intraday returns.
-5. **Stocks in play, revisited** once the store has 120+ sessions and a wider universe (the paper used 7,000 stocks; 40 is too few to rank).
-6. **Day-of-week and turn-of-month effects** as gates, not strategies.
+1. **Portfolio of the passers**: combine RSI(2), cumulative RSI(2) and Double 7s with next-open fills, check overlap, drawdown and exposure against buy-and-hold; size by volatility.
+2. **VIX regime filter** on the passers and on the 5-minute momentum rules (Quantpedia; Zarattini et al.: better when VIX > 20). Needs ^VIX daily from Yahoo.
+3. **Pre-registered forward test**: freeze today's passing rules and parameters; judge them only on sessions after 2026-11-22.
+4. **Last-half-hour reversal on the 5-minute store**, pre-registered after imom's OOS t of -3.6 (judged only after 2026-11-20).
+5. **Stocks in play, revisited** once the 5-minute store has 120+ sessions.
+6. **FOMC and CPI days** (needs an event calendar): pre-FOMC drift (Lucca & Moench 2015) is reported dead after 2015, so a control, not a hope.
+7. **Earnings-day drift and the earnings announcement premium** for single stocks (needs an earnings calendar from trader-analyst).
 
 ## Log
+
+### 2026-11-22 (third run): the big sweep, 30 years of daily bars and 3 years of hourly
+
+Three research agents searched papers, practitioner books and quant blogs and came back with
+about 80 rules. Every one that can be coded from the data we have is now in the lab:
+`daily.py` (daily bars from 1996, 40 symbols, 158 variants), `hourly.py` (hourly bars
+2023-12 to 2026-11, 49 symbols, 34 variants) and `lab.py` (5-minute bars, 60 days, 14
+strategies). The gates were fixed before looking: variant chosen on IS only (daily: to
+2014; hourly: first half), then OOS (2015-2021 / next quarter) and an untouched HOLDOUT
+(2022 onward / last quarter) must both be positive, and the t-stat on everything after IS
+must reach 3 (Harvey, Liu & Zhu 2016). The deflated Sharpe ratio (Bailey & Lopez de Prado
+2014) is reported too; with 158 widely spread variants its bar is about a 2.3 annual
+Sharpe after 2015, and nothing reaches it.
+
+**What passed (daily, 1996-2026, 2 bps per trade, multi-day holds):**
+
+| rule | source | trades | avg bp | IS t | OOS t | HOLDOUT t | post t | holdout Sharpe |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| IBS < 0.1, out on the first up close | Pagonidis 2013 | 25,964 | 37.8 | 5.89 | 3.66 | 1.22 | 3.58 | 0.55 |
+| Cumulative RSI(2) < 35, out RSI(2) > 65 | Connors & Alvarez 2009 | 14,477 | 38.7 | 4.64 | 3.38 | 1.06 | 3.18 | 0.48 |
+| Double 7s (lowest close of 7, above the 200-day) | Connors & Alvarez | 9,528 | 80.2 | 3.56 | 3.15 | 1.10 | 3.11 | 0.50 |
+| RSI(2) < 10 above the 200-day, out > 70 (next-open fill) | Connors 2008 | 19,955 | 27.7 | 5.03 | 3.00 | 1.03 | 2.98 | 0.47 (misses by 0.02) |
+
+**Fill realism, the most useful finding of the day.** Those results assume buying at the
+exact close, which nobody can know in advance. Re-run buying at the NEXT OPEN instead:
+RSI(2) (post t 2.98 to 3.60 across variants) and Double 7s (3.09) barely change, so their
+edge is real and capturable. IBS collapses (post t 3.58 to 2.31, holdout Sharpe 0.55 to
+0.15): its edge is the overnight bounce right after the close, which you only get with a
+market-on-close order.
+
+**The honest comparison.** Buy-and-hold of the same 40 names had a Sharpe of 0.86 in
+2015-2021 and 0.48 in 2022-2026. The mean-reversion rules beat it in 2015-2021 (1.1 to 1.5)
+but only match it in the holdout (about 0.5), while invested a fraction of the time. The
+classic edge is fading, exactly as McLean & Pontiff (2016) predict for published anomalies.
+
+**What failed (daily):** every pure open-to-close day trade. Larry Williams' volatility
+breakout (post t -6.6), greatest swing value (-52), Crabel's stretch (-11), NR4/NR7 (1.1),
+Oops! (-3.3), smash day (-2.9), Turtle Soup (-4.8), 80-20 (-1.6), gap fade and gap fill,
+index daily reversal (Baltussen et al. 2019), Turnaround Tuesday (1.7), day of week,
+turn of month, pre-holiday, option-expiration week, month-end, overnight with a trend
+filter (2.1). The open-to-close leg of buy-and-hold itself earns nothing (post t 0.24);
+nearly all of the return since 1996 came overnight.
+
+**What failed (hourly, 2023-2026):** first half hour predicts last half hour (Gao et al.
+2018; OOS t -3.1 for the momentum version), last-30-minute momentum and reversal
+(Baltussen et al. 2021), first-hour momentum and reversal, the 60-minute ORB, lunch
+(Quantpedia), every single hour as a seasonal, and gap-plus-first-hour. All negative or
+insignificant after 2 bps.
+
+**5-minute (60 days):** a volatility gate (trade orb5 only after a high-range day) gave
+the best IS Sharpe yet (4.46) and kept a positive OOS, so it is in the live 5-minute signal
+with the noise area and plain orb5. End-of-day reversal (Baltussen, Da & Soebhag 2025),
+VWAP reclaim, lunch and the long-only noise area all failed. Nothing on 60 days has a t
+near significance.
+
+**Verdict so far.** No pure day trade (in and out the same session) survives honest
+testing on decades of data. The only strategies that pass are 1 to 5 day "buy the
+oversold dip in an uptrend" holds, and their edge has shrunk to about buy-and-hold's
+Sharpe since 2022. The gold, if there is any, is in risk reduction (lower time in market,
+smaller drawdowns), not in beating the market.
 
 ### 2026-11-22 (second run): stocks in play, wider universe
 
