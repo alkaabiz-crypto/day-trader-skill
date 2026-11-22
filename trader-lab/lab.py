@@ -175,8 +175,11 @@ def load_store(sym, store=STORE):
 def save_store(sym, bars, store=STORE):
     os.makedirs(store, exist_ok=True)
     keys = sorted(bars, key=int)
-    with gzip.GzipFile(store_path(sym, store), "wb", mtime=0) as gz:
+    path = store_path(sym, store)
+    tmp = path + ".tmp"      # write then rename, so an interrupted run never leaves a broken store
+    with gzip.GzipFile(tmp, "wb", mtime=0) as gz:
         gz.write(json.dumps({k: bars[k] for k in keys}, separators=(",", ":")).encode("utf-8"))
+    os.replace(tmp, path)
 
 
 def merge(old, new):
@@ -973,6 +976,118 @@ def parse_av_csv(text):
     return out
 
 
+TIINGO_URL = "https://api.tiingo.com/iex/%s/prices"
+TIINGO_YEARS = 4                # default look-back; Tiingo's IEX 5-minute history goes back to Dec 2016
+TIINGO_PAUSE = 75.0             # seconds between requests: stays under the free plan's ~50 an hour
+
+
+def tiingo_page(sym, start, end):
+    """One Tiingo IEX request (at most 10,000 bars come back, the newest ones, so keep ranges short).
+    The key goes in 'Authorization: Token ...': added by the session's network proxy, or from
+    TIINGO_API_KEY when set."""
+    q = {"startDate": start, "endDate": end, "resampleFreq": "5min",
+         "columns": "open,high,low,close,volume", "afterHours": "false"}
+    url = TIINGO_URL % urllib.parse.quote(sym.lower()) + "?" + urllib.parse.urlencode(q)
+    hdr = {"User-Agent": UA, "Accept": "application/json"}
+    key = os.environ.get("TIINGO_API_KEY", "").strip()
+    if key:
+        hdr["Authorization"] = "Token " + key
+    for attempt in range(7):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=hdr), timeout=90) as r:
+                data = json.loads(r.read().decode("utf-8"))
+            if isinstance(data, dict):     # {"detail": "..."} on errors
+                raise LabError("Tiingo: %s" % data.get("detail", data))
+            return data
+        except urllib.error.HTTPError as e:
+            if e.code == 429:              # free plan: hourly request cap; wait it out
+                print("  Tiingo rate limit; waiting 10 minutes (attempt %d/6)" % (attempt + 1), flush=True)
+                time.sleep(600)
+                continue
+            if e.code in (401, 403):
+                raise LabError("Tiingo refused the request (HTTP %d): check the API key" % e.code)
+            raise LabError("Tiingo answered HTTP %d for %s" % (e.code, sym))
+        except (urllib.error.URLError, OSError) as e:
+            if attempt >= 3:
+                raise LabError("could not reach Tiingo: %s" % getattr(e, "reason", e))
+            time.sleep(10)
+    raise LabError("Tiingo kept rate limiting; run again later, it resumes")
+
+
+def parse_tiingo(rows, trading_days=None):
+    """Tiingo bar list -> {ts: [o,h,l,c,v]} for regular-session 5-min bars (ts = bar start).
+    Tiingo can emit flat filler bars on market holidays; days in which no bar traded are dropped.
+    Volume is IEX-only (a slice of consolidated volume); prices are unadjusted."""
+    out, traded = {}, set()
+    for b in rows:
+        if b.get("open") is None or b.get("close") is None:
+            continue
+        ts = iso_to_epoch(b["date"])
+        local = to_eastern(utc_of(ts))
+        mins = local.hour * 60 + local.minute - OPEN_MIN
+        if ts % INTERVAL or mins < 0 or mins >= SESSION_BARS * 5:
+            continue
+        v = float(b.get("volume") or 0)
+        out[str(ts)] = [float(b["open"]), float(b["high"]), float(b["low"]), float(b["close"]), v]
+        if v > 0:
+            traded.add(local.date())
+    return {k: v for k, v in out.items() if to_eastern(utc_of(int(k))).date() in traded}
+
+
+def quarter_chunks(start, end):
+    """[(YYYY-MM-DD, YYYY-MM-DD), ...] covering start..end in calendar quarters (< 10,000 bars each)."""
+    d = datetime.date.fromisoformat(start)
+    end = datetime.date.fromisoformat(end)
+    out = []
+    while d <= end:
+        q_end_month = ((d.month - 1) // 3) * 3 + 3
+        nxt = datetime.date(d.year + (q_end_month == 12), q_end_month % 12 + 1, 1)
+        out.append((d.isoformat(), min(nxt - datetime.timedelta(days=1), end).isoformat()))
+        d = nxt
+    return out
+
+
+def cmd_fetch_tiingo(a):
+    """Years of 5-minute bars (December 2016 onward) from Tiingo's free IEX endpoint, one quarter per
+    request, oldest first. Saved after every quarter into the long store; rerun to resume or update."""
+    os.makedirs(a.store_long, exist_ok=True)
+    today = datetime.date.today()
+    first = a.start or today.replace(year=today.year - TIINGO_YEARS, day=min(today.day, 28)).isoformat()
+    today = today.isoformat()
+    used = 0
+    for s in a.symbols:
+        bars = load_store(s, a.store_long)
+        start = first
+        if bars and not a.full:
+            last = to_eastern(utc_of(max(map(int, bars)))).date()
+            start = max(start, last.isoformat())      # re-fetch the last day in case it was partial
+        got = 0
+        for c0, c1 in quarter_chunks(start, today):
+            try:
+                rows = tiingo_page(s, c0, c1)
+            except LabError as e:
+                print("%-6s %s..%s: %s" % (s, c0, c1, e), flush=True)
+                if "refused" in str(e):
+                    return 1
+                if "rate limit" in str(e):
+                    print("Saved what arrived (%d requests). Run the same command later; it resumes." % used)
+                    return 0
+                break
+            used += 1
+            new = parse_tiingo(rows)
+            if new:
+                bars.update(new)
+                save_store(s, bars, a.store_long)
+                got += len(new)
+            time.sleep(a.pause)
+        ss = sessions_of(bars)
+        full = sum(1 for _, b in ss if len(b) == SESSION_BARS)
+        print("%-6s %7d bars fetched, %5d full sessions %s to %s" % (
+            s, got, full, ss[0][0] if ss else "-", ss[-1][0] if ss else "-"), flush=True)
+    print("%d Tiingo request%s used." % (used, "" if used == 1 else "s"))
+    return 0
+
+
 def av_error_kind(text):
     """Classify an Alpha Vantage non-CSV reply: 'premium' (endpoint needs a paid plan),
     'daily' (25-a-day limit spent), 'throttle' (too many per second/minute), or None."""
@@ -1117,6 +1232,12 @@ def main(argv=None):
     common(p)
     p.add_argument("--start", default="2016-01-01")
     p.add_argument("--full", action="store_true", help="re-download from --start even if data exists")
+    p = sub.add_parser("fetch-tiingo", help="last 4 years of 5-min bars from Tiingo IEX (free key)")
+    common(p)
+    p.add_argument("--start", default=None, help="first day YYYY-MM-DD (default: 4 years ago; Dec 2016 at most)")
+    p.add_argument("--full", action="store_true", help="re-download from --start even if data exists")
+    p.add_argument("--pause", type=float, default=TIINGO_PAUSE, help="seconds between requests (default 75)")
+    p.add_argument("--store-long", default=LONG_STORE)
     p = sub.add_parser("backtest", help="every strategy and variant, IS vs OOS, after costs")
     common(p)
     p.add_argument("--only", type=lambda s: s.split(","), help="comma list of strategies")
@@ -1130,7 +1251,8 @@ def main(argv=None):
         ap.print_help()
         return 1
     try:
-        return {"fetch": cmd_fetch, "fetch-av": cmd_fetch_av, "fetch-alpaca": cmd_fetch_alpaca, "backtest": cmd_backtest,
+        return {"fetch": cmd_fetch, "fetch-av": cmd_fetch_av, "fetch-alpaca": cmd_fetch_alpaca,
+                "fetch-tiingo": cmd_fetch_tiingo, "backtest": cmd_backtest,
                 "signal": cmd_signal}[a.cmd](a)
     except LabError as e:
         print("lab.py: %s" % e, file=sys.stderr)

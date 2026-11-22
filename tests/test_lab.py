@@ -188,6 +188,32 @@ class AlphaVantage(unittest.TestCase):
         self.assertEqual(lab.months_back("2016-02", "2015-11"), ["2016-02", "2016-01", "2015-12", "2015-11"])
 
 
+class Tiingo(unittest.TestCase):
+    def test_parse_keeps_session_bars_and_drops_holiday_filler(self):
+        rows = [
+            {"date": "2018-07-03T13:30:00.000Z", "open": 1, "high": 2, "low": 0.5, "close": 1.5, "volume": 10},
+            {"date": "2018-07-03T12:00:00.000Z", "open": 1, "high": 1, "low": 1, "close": 1, "volume": 5},
+            {"date": "2018-07-04T18:40:00.000Z", "open": 3, "high": 3, "low": 3, "close": 3, "volume": 0},
+            {"date": "2018-07-05T13:35:00.000Z", "open": None, "high": None, "low": None, "close": None},
+        ]
+        out = lab.parse_tiingo(rows)
+        self.assertEqual(list(out), [str(lab.iso_to_epoch("2018-07-03T13:30:00Z"))])
+        self.assertEqual(out[str(lab.iso_to_epoch("2018-07-03T13:30:00Z"))], [1.0, 2.0, 0.5, 1.5, 10.0])
+
+    def test_quarter_chunks(self):
+        self.assertEqual(lab.quarter_chunks("2016-12-01", "2017-05-10"),
+                         [("2016-12-01", "2016-12-31"), ("2017-01-01", "2017-03-31"), ("2017-04-01", "2017-05-10")])
+
+
+class AtomicStore(unittest.TestCase):
+    def test_save_leaves_no_tmp_and_round_trips(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            lab.save_store("ZZ", {"2": [2, 2, 2, 2, 0], "1": [1, 1, 1, 1, 0]}, tmp)
+            lab.save_store("ZZ", {"3": [3, 3, 3, 3, 0]}, tmp)
+            self.assertEqual(os.listdir(tmp), ["ZZ.json.gz"])
+            self.assertEqual(lab.load_store("ZZ", tmp), {"3": [3, 3, 3, 3, 0]})
+
+
 class StoreAndSplit(unittest.TestCase):
     def test_merge_never_duplicates(self):
         with tempfile.TemporaryDirectory() as tmp:
