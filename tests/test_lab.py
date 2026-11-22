@@ -159,6 +159,30 @@ class Alpaca(unittest.TestCase):
         self.assertEqual(out[str(lab.iso_to_epoch("2016-01-04T14:30:00Z"))], [1.0, 2.0, 0.5, 1.5, 100.0])
 
 
+class AlphaVantage(unittest.TestCase):
+    def test_end_labels_are_shifted_to_bar_starts(self):
+        csv = ("timestamp,open,high,low,close,volume\n"
+               "2016-01-04 16:00:00,5,5,5,5,50\n"
+               "2016-01-04 09:40:00,2,2,2,2,20\n"
+               "2016-01-04 09:35:00,1,1,1,1,10\n")
+        out = lab.parse_av_csv(csv)
+        first = str(lab.iso_to_epoch("2016-01-04T14:30:00Z"))      # 9:30 EST bar start
+        last = str(lab.iso_to_epoch("2016-01-04T20:55:00Z"))       # 15:55 bar start
+        self.assertEqual(out[first][0], 1.0)
+        self.assertEqual(out[last][0], 5.0)
+        self.assertEqual(len(out), 3)
+
+    def test_start_labels_kept_and_dst(self):
+        csv = "timestamp,open,high,low,close,volume\n2016-07-05 09:30:00,1,1,1,1,1\n2016-07-05 09:35:00,2,2,2,2,2\n"
+        out = lab.parse_av_csv(csv)
+        self.assertIn(str(lab.iso_to_epoch("2016-07-05T13:30:00Z")), out)  # 9:30 EDT
+
+    def test_errors_and_months(self):
+        with self.assertRaises(lab.LabError):
+            lab.parse_av_csv('{"Information": "rate limit is 25 requests per day"}')
+        self.assertEqual(lab.months_back("2016-02", "2015-11"), ["2016-02", "2016-01", "2015-12", "2015-11"])
+
+
 class StoreAndSplit(unittest.TestCase):
     def test_merge_never_duplicates(self):
         with tempfile.TemporaryDirectory() as tmp:

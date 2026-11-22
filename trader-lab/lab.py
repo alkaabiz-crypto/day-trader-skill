@@ -923,6 +923,129 @@ def cmd_fetch_alpaca(a):
     return 0
 
 
+LONG_STORE = os.path.join(HERE, "data", "long")      # years of 5-min bars, committed (the quota is precious)
+AV_URL = "https://www.alphavantage.co/query"
+AV_DAILY_LIMIT = 25
+
+
+def av_key():
+    """Alpha Vantage key from ALPHAVANTAGE_API_KEY (or APCA_API_KEY_ID, where it was first saved)."""
+    for name in ("ALPHAVANTAGE_API_KEY", "ALPHA_VANTAGE_API_KEY", "APCA_API_KEY_ID"):
+        v = os.environ.get(name)
+        if v and v.strip():
+            return v.strip()
+    raise LabError("no Alpha Vantage key: set ALPHAVANTAGE_API_KEY in the environment settings, "
+                   "then start a new session")
+
+
+def eastern_to_epoch(local):
+    """Naive New York time -> epoch seconds (tries EDT, then EST)."""
+    for hours in (4, 5):
+        utc = local + datetime.timedelta(hours=hours)
+        if to_eastern(utc) == local:
+            return int((utc - EPOCH).total_seconds())
+    return int((local + datetime.timedelta(hours=5) - EPOCH).total_seconds())
+
+
+def parse_av_csv(text):
+    """Alpha Vantage intraday CSV (timestamp,open,high,low,close,volume; New York time) ->
+    {ts: [o,h,l,c,v]} with ts = bar START. Days labelled 09:35..16:00 are bar-end labels and
+    are shifted back 5 minutes; days labelled 09:30..15:55 are already starts."""
+    first = text.lstrip()[:200]
+    if not first.startswith("timestamp"):
+        raise LabError("Alpha Vantage: %s" % " ".join(first.split())[:180])
+    rows = {}
+    for line in text.strip().splitlines()[1:]:
+        f = line.split(",")
+        if len(f) < 6:
+            continue
+        t = datetime.datetime.strptime(f[0].strip(), "%Y-%m-%d %H:%M:%S")
+        rows.setdefault(t.date(), []).append((t, [float(x) for x in f[1:6]]))
+    out = {}
+    for day, items in rows.items():
+        times = sorted(t for t, _ in items)
+        shift = datetime.timedelta(minutes=5) if times[0].time() == datetime.time(9, 35) else datetime.timedelta(0)
+        for t, ohlcv in items:
+            start = t - shift
+            mins = start.hour * 60 + start.minute - OPEN_MIN
+            if 0 <= mins < SESSION_BARS * 5 and mins % 5 == 0:
+                out[str(eastern_to_epoch(start))] = ohlcv
+    return out
+
+
+def av_progress_path(store):
+    return os.path.join(store, "progress.json")
+
+
+def months_back(newest, oldest):
+    y, m = map(int, newest.split("-"))
+    oy, om = map(int, oldest.split("-"))
+    out = []
+    while (y, m) >= (oy, om):
+        out.append("%04d-%02d" % (y, m))
+        m -= 1
+        if m == 0:
+            y, m = y - 1, 12
+    return out
+
+
+def cmd_fetch_av(a):
+    """Fill the long 5-minute store month by month from Alpha Vantage, newest first, within the
+    free limit (25 requests a day). Run it every day; it resumes where it stopped."""
+    key = av_key()
+    os.makedirs(a.store_long, exist_ok=True)
+    prog = {}
+    if os.path.exists(av_progress_path(a.store_long)):
+        with open(av_progress_path(a.store_long)) as fh:
+            prog = json.load(fh)
+    today = datetime.date.today()
+    last_full = (today.replace(day=1) - datetime.timedelta(days=1)).strftime("%Y-%m")
+    used = 0
+    for s in a.symbols:
+        done = set(prog.get(s, []))
+        todo = [m for m in months_back(last_full, a.oldest) if m not in done]
+        if not todo:
+            continue
+        bars = load_store(s, a.store_long)
+        got = 0
+        for m in todo:
+            if used >= a.max_requests:
+                break
+            q = {"function": "TIME_SERIES_INTRADAY", "symbol": s, "interval": "5min", "month": m,
+                 "outputsize": "full", "extended_hours": "false", "adjusted": "true", "datatype": "csv",
+                 "apikey": key}
+            req = urllib.request.Request(AV_URL + "?" + urllib.parse.urlencode(q), headers={"User-Agent": UA})
+            try:
+                with urllib.request.urlopen(req, timeout=60) as r:
+                    text = r.read().decode("utf-8", "replace")
+                used += 1
+                new = parse_av_csv(text)
+            except LabError as e:
+                print("%-6s %s: %s" % (s, m, e))
+                if "rate limit" in str(e).lower() or "per day" in str(e).lower() or "premium" in str(e).lower():
+                    used = a.max_requests
+                break
+            except (urllib.error.URLError, OSError) as e:
+                print("%-6s %s: could not reach Alpha Vantage: %s" % (s, m, getattr(e, "reason", e)))
+                break
+            bars.update(new)
+            done.add(m)
+            got += 1
+            time.sleep(13)   # 5 requests a minute on the free key
+        if got:
+            save_store(s, bars, a.store_long)
+            prog[s] = sorted(done)
+            with open(av_progress_path(a.store_long), "w") as fh:
+                json.dump(prog, fh, indent=1, sort_keys=True)
+            ss = sessions_of(bars)
+            print("%-6s +%d months, %d full sessions %s to %s" % (
+                s, got, sum(1 for _, b in ss if len(b) == SESSION_BARS), ss[0][0], ss[-1][0]))
+        if used >= a.max_requests:
+            print("Daily request budget used (%d). Run again tomorrow; it resumes." % used)
+            break
+    return 0
+
+
 def cmd_backtest(a):
     res = backtest(load_universe(a.symbols, a.store), a.cost, a.oos, a.only)
     if a.write:
@@ -958,6 +1081,11 @@ def main(argv=None):
         p.add_argument("--json", action="store_true")
 
     common(sub.add_parser("fetch", help="download 60 days of 5-min bars and merge into the store"))
+    p = sub.add_parser("fetch-av", help="years of 5-min bars from Alpha Vantage, 25 months a day (free key)")
+    common(p)
+    p.add_argument("--oldest", default="2006-01", help="oldest month to fetch (YYYY-MM)")
+    p.add_argument("--max-requests", type=int, default=AV_DAILY_LIMIT)
+    p.add_argument("--store-long", default=LONG_STORE)
     p = sub.add_parser("fetch-alpaca", help="years of 5-min bars from Alpaca (free key needed)")
     common(p)
     p.add_argument("--start", default="2016-01-01")
@@ -975,7 +1103,7 @@ def main(argv=None):
         ap.print_help()
         return 1
     try:
-        return {"fetch": cmd_fetch, "fetch-alpaca": cmd_fetch_alpaca, "backtest": cmd_backtest,
+        return {"fetch": cmd_fetch, "fetch-av": cmd_fetch_av, "fetch-alpaca": cmd_fetch_alpaca, "backtest": cmd_backtest,
                 "signal": cmd_signal}[a.cmd](a)
     except LabError as e:
         print("lab.py: %s" % e, file=sys.stderr)
