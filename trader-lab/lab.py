@@ -436,6 +436,50 @@ def s_noiseg(book, i, bars, ctx, p):
         book.pending = (0, None) if book.pos else None
 
 
+def s_noisepb(book, i, bars, ctx, p):
+    """Noise area with a pullback-entry overlay (Concretum 2026, "Fast alphas: a tactical overlay for
+    intraday trend trading"): a half-hour band break does not enter at once; it arms a signal that
+    enters on the first 5-minute bar closing against it (a down bar for a long, an up bar for a short)
+    within `wait` bars, while still outside the band. Exits are the noise area's (half-hour trail)."""
+    sig = ctx.get("sigma_%d" % p["lookback"])
+    pc = ctx.get("prev_close")
+    if sig is None or pc is None or i >= SESSION_BARS - 1:
+        return
+    if ctx.get("_pb_id") != id(bars):
+        ctx["_pb_id"], ctx["_pb"] = id(bars), None
+    o = bars[0]["o"]
+    ub = max(o, pc) * (1 + p["mult"] * sig[i])
+    lb = min(o, pc) * (1 - p["mult"] * sig[i])
+    c = bars[i]["c"]
+    half = (i + 1) % 6 == 0
+    if half:
+        if ctx.get("_vwap_id") != id(bars):
+            ctx["_vwap"], ctx["_vwap_id"] = vwap_series(bars), id(bars)
+        vw = ctx["_vwap"][i]
+        if (book.pos > 0 and c < max(ub, vw)) or (book.pos < 0 and c > min(lb, vw)):
+            book.open_next(0)
+            flat = True
+        else:
+            flat = not book.pos
+        if flat:
+            ctx["_pb"] = (1, i + p["wait"]) if c > ub else (-1, i + p["wait"]) if c < lb else None
+        return
+    arm = ctx["_pb"]
+    if arm is None or book.pos or book.pending is not None:
+        return
+    side, until = arm
+    if i > until:
+        ctx["_pb"] = None
+        return
+    prev = bars[i - 1]["c"]
+    if side > 0 and c < prev and c > ub:
+        book.open_next(1)
+        ctx["_pb"] = None
+    elif side < 0 and c > prev and c < lb:
+        book.open_next(-1)
+        ctx["_pb"] = None
+
+
 def s_rod(book, i, bars, ctx, p):
     """Baltussen, Da, Lammers & Martens (2021): the return from yesterday's close to 15:30 predicts
     15:30 to 16:00. Trade its sign when |ROD| >= min_bps."""
@@ -545,6 +589,8 @@ STRATEGIES = {
             "grid": {"bars": [3, 6], "stop": ["mid", "opposite"], "last": [23]}},
     "noise": {"fn": s_noise, "source": "Zarattini, Aziz & Barbon 2024, SFI 24-97",
               "grid": {"lookback": [10, 14], "mult": [1.0, 1.5]}},
+    "noisepb": {"fn": s_noisepb, "source": "Concretum 2026 QuanTip: pullback-entry overlay on the noise area",
+                "grid": {"lookback": [14], "mult": [1.0, 1.5], "wait": [3, 5]}},
     "imom": {"fn": s_imom, "source": "Gao, Han, Li & Zhou 2018, JFE 129(2)",
              "grid": {"entry": [72, 66], "min_bps": [0, 25]}},
     "vwap": {"fn": s_vwap, "source": "Zarattini & Aziz 2023, VWAP trend on QQQ",
