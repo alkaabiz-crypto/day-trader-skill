@@ -837,6 +837,92 @@ def cmd_fetch(a):
     return 0
 
 
+ALPACA = "https://data.alpaca.markets/v2/stocks/%s/bars"
+ALPACA_STORE = os.path.join(HERE, "data", "alpaca")
+
+
+def iso_to_epoch(t):
+    """'2016-01-04T14:30:00Z' -> epoch seconds."""
+    d = datetime.datetime.strptime(t[:19], "%Y-%m-%dT%H:%M:%S")
+    return int((d - EPOCH).total_seconds())
+
+
+def alpaca_page(sym, start, end, token=None, feed="sip"):
+    q = {"timeframe": "5Min", "start": start, "end": end, "feed": feed, "adjustment": "split", "limit": "10000"}
+    if token:
+        q["page_token"] = token
+    url = ALPACA % urllib.parse.quote(sym) + "?" + urllib.parse.urlencode(q)
+    for attempt in range(4):
+        try:
+            # credentials are added by the session's network proxy (or pass APCA headers yourself)
+            hdr = {"User-Agent": UA, "Accept": "application/json"}
+            kid, sec = os.environ.get("APCA_API_KEY_ID"), os.environ.get("APCA_API_SECRET_KEY")
+            if kid and sec:
+                hdr.update({"APCA-API-KEY-ID": kid, "APCA-API-SECRET-KEY": sec})
+            req = urllib.request.Request(url, headers=hdr)
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return json.loads(r.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                time.sleep(15 * (attempt + 1))
+                continue
+            if e.code in (401, 403):
+                raise LabError("Alpaca refused the request (HTTP %d): check the API key" % e.code)
+            raise LabError("Alpaca answered HTTP %d for %s" % (e.code, sym))
+        except (urllib.error.URLError, OSError) as e:
+            if attempt == 3:
+                raise LabError("could not reach Alpaca: %s" % getattr(e, "reason", e))
+            time.sleep(5)
+    raise LabError("Alpaca kept rate limiting")
+
+
+def parse_alpaca(bars):
+    """Alpaca bar list -> {ts: [o,h,l,c,v]} for regular-session 5-min bars."""
+    out = {}
+    for b in bars:
+        ts = iso_to_epoch(b["t"])
+        local = to_eastern(utc_of(ts))
+        mins = local.hour * 60 + local.minute - OPEN_MIN
+        if ts % INTERVAL or mins < 0 or mins >= SESSION_BARS * 5:
+            continue
+        out[str(ts)] = [float(b["o"]), float(b["h"]), float(b["l"]), float(b["c"]), float(b.get("v") or 0)]
+    return out
+
+
+def cmd_fetch_alpaca(a):
+    """Years of 5-minute bars from Alpaca's free market data API (SIP feed, split-adjusted, 2016+).
+    Saved per symbol in data/alpaca/ (not committed: re-downloadable)."""
+    end = (datetime.datetime.utcnow() - datetime.timedelta(minutes=20)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    for s in a.symbols:
+        old = load_store(s, ALPACA_STORE)
+        start = a.start + "T00:00:00Z"
+        if old and not a.full:
+            start = datetime.datetime.utcfromtimestamp(max(map(int, old)) + 1).strftime("%Y-%m-%dT%H:%M:%SZ")
+        new, token, pages = {}, None, 0
+        try:
+            while True:
+                res = alpaca_page(s, start, end, token)
+                new.update(parse_alpaca(res.get("bars") or []))
+                pages += 1
+                token = res.get("next_page_token")
+                if not token:
+                    break
+                time.sleep(0.35)   # free plan: 200 requests a minute
+        except LabError as e:
+            print("%-6s stopped: %s (%d pages kept)" % (s, e, pages))
+            if not new:
+                if "refused" in str(e):
+                    return 1
+                continue
+        allb = merge(old, new)
+        save_store(s, allb, ALPACA_STORE)
+        ss = sessions_of(allb)
+        full = sum(1 for _, b in ss if len(b) == SESSION_BARS)
+        print("%-6s %7d new bars, %3d pages, %5d full sessions %s to %s" % (
+            s, len(set(new) - set(old)), pages, full, ss[0][0] if ss else "-", ss[-1][0] if ss else "-"))
+    return 0
+
+
 def cmd_backtest(a):
     res = backtest(load_universe(a.symbols, a.store), a.cost, a.oos, a.only)
     if a.write:
@@ -872,6 +958,10 @@ def main(argv=None):
         p.add_argument("--json", action="store_true")
 
     common(sub.add_parser("fetch", help="download 60 days of 5-min bars and merge into the store"))
+    p = sub.add_parser("fetch-alpaca", help="years of 5-min bars from Alpaca (free key needed)")
+    common(p)
+    p.add_argument("--start", default="2016-01-01")
+    p.add_argument("--full", action="store_true", help="re-download from --start even if data exists")
     p = sub.add_parser("backtest", help="every strategy and variant, IS vs OOS, after costs")
     common(p)
     p.add_argument("--only", type=lambda s: s.split(","), help="comma list of strategies")
@@ -885,7 +975,8 @@ def main(argv=None):
         ap.print_help()
         return 1
     try:
-        return {"fetch": cmd_fetch, "backtest": cmd_backtest, "signal": cmd_signal}[a.cmd](a)
+        return {"fetch": cmd_fetch, "fetch-alpaca": cmd_fetch_alpaca, "backtest": cmd_backtest,
+                "signal": cmd_signal}[a.cmd](a)
     except LabError as e:
         print("lab.py: %s" % e, file=sys.stderr)
         return 1

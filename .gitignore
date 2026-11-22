@@ -2,3 +2,4 @@ __pycache__/
 *.py[cod]
 trader/
 trader-lab/data/daily/
+trader-lab/data/alpaca/

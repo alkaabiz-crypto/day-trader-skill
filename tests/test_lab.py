@@ -147,6 +147,18 @@ class Strategies(unittest.TestCase):
         self.assertEqual(lab.sigma_table(ss, 4, 3), [0.0] * N)
 
 
+class Alpaca(unittest.TestCase):
+    def test_parse_keeps_regular_session_5min_bars(self):
+        bars = [{"t": "2016-01-04T14:30:00Z", "o": 1, "h": 2, "l": 0.5, "c": 1.5, "v": 100},   # 9:30 ET
+                {"t": "2016-01-04T13:55:00Z", "o": 1, "h": 1, "l": 1, "c": 1, "v": 1},         # pre-market
+                {"t": "2016-01-04T21:00:00Z", "o": 1, "h": 1, "l": 1, "c": 1, "v": 1},         # 16:00, after
+                {"t": "2016-07-05T13:30:00Z", "o": 3, "h": 3, "l": 3, "c": 3, "v": 3}]         # 9:30 EDT
+        out = lab.parse_alpaca(bars)
+        self.assertEqual(sorted(out), sorted([str(lab.iso_to_epoch("2016-01-04T14:30:00Z")),
+                                              str(lab.iso_to_epoch("2016-07-05T13:30:00Z"))]))
+        self.assertEqual(out[str(lab.iso_to_epoch("2016-01-04T14:30:00Z"))], [1.0, 2.0, 0.5, 1.5, 100.0])
+
+
 class StoreAndSplit(unittest.TestCase):
     def test_merge_never_duplicates(self):
         with tempfile.TemporaryDirectory() as tmp:
