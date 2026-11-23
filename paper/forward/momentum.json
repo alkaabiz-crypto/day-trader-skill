@@ -7,43 +7,43 @@
   "holdings": {
     "MRNA": {
       "shares": 2.562821,
-      "last_price": 195.0
+      "last_price": 212.0800018310547
     },
     "DELL": {
       "shares": 1.797533,
-      "last_price": 278.0199890136719
+      "last_price": 334.9100036621094
     },
     "MU": {
       "shares": 0.840608,
-      "last_price": 594.510009765625
+      "last_price": 707.7000122070312
     },
     "LITE": {
       "shares": 1.085139,
-      "last_price": 460.5400085449219
+      "last_price": 544.3800048828125
     },
     "MRVL": {
       "shares": 4.086933,
-      "last_price": 122.27999877929688
+      "last_price": 144.74000549316406
     },
     "OKTA": {
       "shares": 2.610206,
-      "last_price": 191.4600067138672
+      "last_price": 206.27999877929688
     },
     "STX": {
       "shares": 1.093521,
-      "last_price": 457.010009765625
+      "last_price": 520.0999755859375
     },
     "INTC": {
       "shares": 9.745517,
-      "last_price": 51.279998779296875
+      "last_price": 59.65999984741211
     },
     "WDC": {
       "shares": 1.913945,
-      "last_price": 261.1099853515625
+      "last_price": 297.25
     },
     "AMD": {
       "shares": 1.177573,
-      "last_price": 424.3900146484375
+      "last_price": 453.4599914550781
     }
   },
   "benchmark": {
@@ -100,6 +100,11 @@
       "date": "2026-11-20",
       "value": 4997.5,
       "spy_value": 5000.0
+    },
+    {
+      "date": "2026-11-23",
+      "value": 5714.2,
+      "spy_value": 5235.43
     }
   ],
   "last_rebalance": "2026-11-20"
