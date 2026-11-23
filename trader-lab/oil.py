@@ -671,6 +671,56 @@ def report(res):
     return "\n".join(L)
 
 
+# ---------------------------------------------------------------- cross-asset and risk overlays (monthly)
+
+def cross_tests():
+    """Monthly tests judged like trend.py (CAGR / Sharpe over T-bills / max drawdown by period):
+    - oil -> stocks (Driesprong, Jacobsen & Maat 2008, JFE): hold SPY next month only if WTI fell (or
+      rose less than x%) over the past month; else T-bills. Benchmark: SPY buy-and-hold.
+    - volatility-managed oil (Moreira & Muir 2017): USO with exposure target/realized vol, capped at 1,
+      monthly. Benchmark: USO buy-and-hold."""
+    import trend
+    uni, cash = trend.load(["SPY", "USO", "BNO"])
+    dates, month_ends = trend.calendar(uni)
+    cl = daily.load("CL=F")
+    cli = {d: i for i, d in enumerate(cl["d"])}
+
+    def oil_month_ret(d):
+        i = cli.get(d)
+        if i is None:
+            i = max((cli[x] for x in cl["d"] if x <= d), default=None)
+        if i is None or i < 21:
+            return None
+        return cl["c"][i] / cl["c"][i - 21] - 1
+
+    rows = []
+    spy = trend.simulate(uni, cash, dates, month_ends, trend.w_hold, {"only": "SPY"})
+    rows.append({"name": "SPY buy-and-hold (benchmark)", "periods": trend.by_period(spy, cash)})
+    for x in (0.0, 5.0):
+        def w(u, c, d, p, x=x):
+            r = oil_month_ret(d)
+            return {} if r is None or r * 100 > x else {"SPY": 1.0}
+        ser = trend.simulate(uni, cash, dates, month_ends, w, {})
+        rows.append({"name": "SPY only after oil <= %+.0f%% last month" % x, "periods": trend.by_period(ser, cash),
+                     "bench": "SPY"})
+    uso = trend.simulate(uni, cash, dates, month_ends, trend.w_hold, {"only": "USO"})
+    rows.append({"name": "USO buy-and-hold (benchmark)", "periods": trend.by_period(uso, cash)})
+    for ov in ("vt1", "dd"):
+        rows.append({"name": "USO + %s" % {"vt1": "vol targeting", "dd": "drawdown control"}[ov],
+                     "periods": trend.by_period(trend.overlay(uso, cash, ov), cash), "bench": "USO"})
+    return rows
+
+
+def report_cross(rows):
+    import trend
+    L = ["Cross-asset and risk overlays (monthly; CAGR, Sharpe over T-bills, max drawdown):",
+         "%-38s | %-22s | %-22s | %-22s" % ("strategy", "IS (to 2014)", "OOS 2015-21", "HOLDOUT 2022+")]
+    for r in rows:
+        L.append("%-38s | %s | %s | %s" % (r["name"][:38], trend.fmt(r["periods"]["is"]), trend.fmt(r["periods"]["oos"]),
+                                           trend.fmt(r["periods"]["ho"])))
+    return "\n".join(L)
+
+
 # ---------------------------------------------------------------- the daily simulated oil track
 
 TRACK_START = "2026-11-24"
@@ -747,6 +797,7 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd")
     sub.add_parser("fetch")
     sub.add_parser("today", help="today's simulated oil DCA ladder state and action")
+    sub.add_parser("cross", help="oil -> stocks and volatility-managed oil (monthly)")
     p = sub.add_parser("backtest")
     p.add_argument("--json", action="store_true")
     p.add_argument("--cost", type=float, default=COST_BPS)
@@ -774,6 +825,10 @@ def main(argv=None):
         return 0
     if a.cmd == "today":
         return cmd_today(a)
+    if a.cmd == "cross":
+        print(report_cross(cross_tests()))
+        print("Research, not financial advice.")
+        return 0
     if a.cmd == "backtest":
         res = search(a.cost)
         if a.write:

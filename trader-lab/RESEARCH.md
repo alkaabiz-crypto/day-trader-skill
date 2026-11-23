@@ -50,6 +50,24 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (eighth run): oil predicts stocks; volatility-managed oil
+
+`oil.py cross` (monthly, next-open fills, T-bill cash, dividends counted; CAGR / Sharpe / max drawdown):
+
+| strategy | source | to 2014 | 2015-2021 | 2022+ |
+| --- | --- | --- | --- | --- |
+| SPY buy-and-hold | benchmark | 6.2% / 0.29 / -55% | 14.8% / 0.83 / -34% | 10.5% / 0.43 / -25% |
+| SPY only after an oil down month | Driesprong, Jacobsen & Maat 2008, JFE | 4.6% / 0.24 / -42% | 4.0% / 0.29 / -34% | 12.0% / 0.68 / -17% |
+| USO buy-and-hold | benchmark | -5.6% / -0.21 / -83% | -14.5% / -0.18 / -90% | 20.2% / 0.57 / -36% |
+| USO + volatility targeting | Moreira & Muir 2017 | -1.2% / -0.16 / -55% | -10.7% / -0.25 / -77% | 17.0% / 0.53 / -31% |
+| USO + drawdown control | | -0.6% / -0.13 / -58% | -5.1% / -0.18 / -63% | 13.9% / 0.57 / -18% |
+
+Oil -> stocks works only after 2022 and lost badly before: the published effect has faded. Vol
+targeting and drawdown control cut the oil drawdowns but cannot fix the return. The warning for
+the user: holding oil through a rolling instrument lost 14.5% a year in 2015-2021 (contango roll
+drag, -90% drawdown). A long USOIL CFD held for months pays the same drag; the simulated DCA
+track's 120-day time stop exists for this reason.
+
 ### 2026-11-23 (seventh run): the oil futures curve (backwardation, basis momentum)
 
 The strongest economic case for oil returns is the term structure: when the front contract trades
