@@ -596,6 +596,15 @@ def search(assets, boot=500, top=20):
         is_t, post_t, post_mean = np.array(is_t), np.array(post_t), np.array(post_mean)
         sharpe_post = np.array(sharpe_post)
         order = np.argsort(-is_t)[:top]
+        # the pre-registered portfolio test: pick the top K rules on data BEFORE 2015 only, hold them
+        # equally weighted, judge that ONE strategy after 2014 (no multiple-testing penalty needed)
+        ens = {}
+        for K in (1, 5, 20, 100, 500):
+            sel = np.argsort(-is_t)[:K]
+            series = E[sel].mean(axis=0).astype(np.float64)
+            sd = series.std(ddof=1)
+            ens[str(K)] = {"alpha_t": float(series.mean() / sd * math.sqrt(len(series))) if sd > 0 else 0.0,
+                           "alpha_bp_day": float(series.mean() * 1e4)}
         fam = {}
         for nm, t in zip(names, post_t):
             f = fam.setdefault(nm.split("/")[0].split(":")[0], {"n": 0, "pos": 0, "t3": 0})
@@ -616,7 +625,7 @@ def search(assets, boot=500, top=20):
                           for i in np.argsort(-post_t)[:5]],
             "top_is_then_post": [{"rule": names[i], "params": params[i], "is_t": float(is_t[i]),
                                   "post_t": float(post_t[i])} for i in order],
-            "families": fam}
+            "families": fam, "ensemble_is_selected": ens}
         print("%-4s %6d rules done (%.0fs)" % (sym, len(names), time.time() - t0), file=sys.stderr)
     out["total_rules"] = sum(a["rules"] for a in out["assets"].values())
     return out
@@ -639,6 +648,10 @@ def report(res):
         b = a["best_post"][0]
         L.append("   best after 2014: %s %s (t %.2f; it had IS t %.2f)" % (
             b["rule"], json.dumps(b["params"], sort_keys=True), b["post_t"], b["is_t"]))
+        e = a.get("ensemble_is_selected", {})
+        if e:
+            L.append("   portfolio of the top-K rules chosen BEFORE 2015, judged after: " + ", ".join(
+                "K=%s t %.2f" % (k, v["alpha_t"]) for k, v in sorted(e.items(), key=lambda kv: int(kv[0]))))
         tops = a["top_is_then_post"]
         L.append("   the 20 best rules to 2014 averaged t %.2f after 2014 (%d of 20 positive)" % (
             sum(t["post_t"] for t in tops) / len(tops), sum(1 for t in tops if t["post_t"] > 0)))
