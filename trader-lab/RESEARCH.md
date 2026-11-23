@@ -50,6 +50,37 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (tenth run): fair scoring, entry x exit rules, and the first candidate to clear the bar
+
+The user challenged the "everything fails" result. Two fair points, both fixed in `universe_search.py`:
+(1) excess return over buy-and-hold punished lower exposure, so rules are now scored by Jensen's alpha
+against buy-and-hold (beta from data before 2015) and by Sharpe, with uninvested money earning
+T-bills; (2) entries now also exit by take-profit x stop-loss x time stop (64 entries x 6 x 6 x 4).
+Overnight and session returns now compound exactly. The engine matches an independent loop to 0.0.
+
+147,984 tests (24,664 per asset). Many rules look good risk-adjusted (50% positive alpha on SPY, 910
+beat its Sharpe, 21 with t >= 3), but no Reality Check / SPA p < 0.05 (QQQ closest, 0.076); the best
+after-2014 rules mostly had NEGATIVE records before 2015, the signature of luck.
+
+**Pre-selected portfolios** (top-K by pre-2015 alpha only, judged after 2014; 30 tests, Bonferroni bar
+t 2.94): mostly positive but weak (t 0.6-1.8), except **USO, K = 1: alpha t 3.16**. The rule: when
+WTI's 40-day average crosses above its 50-day, long for 25 sessions. Before 2015 t 3.84. After 2014:
+Sharpe 0.85 (USO buy-and-hold 0.05), 16.9% a year, max drawdown -28%, long 32% of the days.
+
+| audit | result |
+| --- | --- |
+| 19 neighbouring settings | all positive, t 0.98-2.76 (40/50 is the peak: expect less) |
+| hold 15-50 sessions | all positive (30: t 3.26) |
+| costs 10 / 20 bp | t 3.09 / 2.96 |
+| one-day delay | t 2.71 |
+| Brent (BNO) | t 1.55 |
+| SPY / QQQ control | -1.77 / -0.26 (oil-specific, like commodity trend-following) |
+
+(An audit script first gave t 2.36: it built a long/short version, a different rule. Traced and fixed;
+the engine's 3.156 reproduces exactly.) **Status: candidate, not proven.** Frozen in
+`results/frozen-oil.json` and added to `oil.py today` as the second simulated oil track; judged only
+on sessions after 2026-11-23.
+
 ### 2026-11-23 (ninth run): 78,864 technical rule tests with data-snooping corrections
 
 `universe_search.py` rebuilds the rule universe of Sullivan, Timmermann & White (1999, Journal of

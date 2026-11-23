@@ -727,6 +727,31 @@ TRACK_START = "2026-11-24"
 TRACK_DCA = {"drop": 20, "layers": 5, "step": 8, "tp": 3, "max_days": 120}   # chosen on data to 2014
 TRACK_BUDGET = 1000.0
 CFD = {"USO": "USOIL (WTI)", "BNO": "UKOIL (Brent)"}
+# Pre-registered 2026-11-23 (results/frozen-oil.json): chosen on data to 2014 only from 24,664 universe
+# rules (IS t 3.84), after 2014 alpha t 3.16; audit: neighbours all positive, costs 20 bp t 2.96, delay 2.71.
+TRACK_MA = {"fast": 40, "slow": 50, "hold": 25, "frozen": "2026-11-23"}
+
+
+def ma_cross_state(D, p=TRACK_MA):
+    """Long for `hold` sessions after the fast average closes above the slow one (a fresh cross).
+    -> dict with the last cross date, sessions left, and today's action."""
+    c = D["c"]
+    n = len(c)
+    fa = [daily.sma(c, i + 1, p["fast"]) for i in range(n)]
+    sl = [daily.sma(c, i + 1, p["slow"]) for i in range(n)]
+    crosses = [i for i in range(1, n) if None not in (fa[i], sl[i], fa[i - 1], sl[i - 1])
+               and fa[i] > sl[i] and not fa[i - 1] > sl[i - 1]]
+    if not crosses:
+        return {"long": False, "action": "FLAT: no cross yet"}
+    last = crosses[-1]
+    held = n - 1 - last              # sessions since the cross close (entry at the next open)
+    if held < p["hold"]:
+        act = "BUY at the next open (cross today)" if held == 0 else "HOLD (%d of %d sessions)" % (held, p["hold"])
+        return {"long": True, "cross": D["d"][last], "sessions_left": p["hold"] - held, "action": act,
+                "fast": round(fa[-1], 2), "slow": round(sl[-1], 2)}
+    state = "above" if fa[-1] is not None and sl[-1] is not None and fa[-1] > sl[-1] else "below"
+    return {"long": False, "cross": D["d"][last], "action": "FLAT (last cross %s; %d-day average is %s the %d-day)" % (
+        D["d"][last], p["fast"], state, p["slow"])}
 
 
 def dca_state(D, p):
@@ -785,6 +810,11 @@ def cmd_today(a):
             if st["next_add_close"]:
                 print("  next layer if a close <= %.2f" % st["next_add_close"])
         print("  -> %s" % st["action"])
+    print("\nSecond oil track, the MA cross candidate (pre-registered %s; %d/%d-day averages, long %d sessions):" % (
+        TRACK_MA["frozen"], TRACK_MA["fast"], TRACK_MA["slow"], TRACK_MA["hold"]))
+    for s, D in funds.items():
+        st = ma_cross_state(D)
+        print("  %s: %s" % (CFD.get(s, s), st["action"]))
     print("\nRule: first layer when the close is %d%% below its 20-day high; add a layer at each further %d%% "
           "below the last buy (max %d); sell all at +%d%% on average cost or after %d days. Fills at the next open." % (
               TRACK_DCA["drop"], TRACK_DCA["step"], TRACK_DCA["layers"], TRACK_DCA["tp"], TRACK_DCA["max_days"]))

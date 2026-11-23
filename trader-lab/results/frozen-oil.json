@@ -1,0 +1,25 @@
+[
+ {
+  "rule": "oil MA cross",
+  "market": "USO / USOIL (WTI)",
+  "params": {
+   "fast": 40,
+   "slow": 50,
+   "hold": 25
+  },
+  "frozen": "2026-11-23",
+  "chosen_on": "data to 2014 only, top-1 of 24,664 universe rules by IS alpha t",
+  "is_t": 3.84,
+  "post2014_alpha_t": 3.16,
+  "post2014_sharpe": 0.85,
+  "audit": {
+   "neighbours": "all 19 positive, t 0.98-2.76",
+   "cost_20bp_t": 2.96,
+   "delay_1d_t": 2.71,
+   "brent_t": 1.55,
+   "spy_control_t": -1.77,
+   "qqq_control_t": -0.26
+  },
+  "forward_test": "judge only on sessions after 2026-11-23; paper / simulated only"
+ }
+]

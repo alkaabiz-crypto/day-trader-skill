@@ -96,6 +96,18 @@ class Carry(unittest.TestCase):
         oil.CARRY.clear()
 
 
+class MaCross(unittest.TestCase):
+    def test_cross_then_hold_then_flat(self):
+        p = {"fast": 2, "slow": 3, "hold": 3, "frozen": "x"}
+        D = series([10.0, 9.0, 8.0, 7.0, 10.0])                 # 2-day avg 8.5 > 3-day 8.33 today, 7.5 < 8 yesterday
+        st = oil.ma_cross_state(D, p)
+        self.assertTrue(st["long"])
+        self.assertIn("BUY", st["action"])
+        D2 = series([10.0, 9.0, 8.0, 7.0, 10.0, 10.5, 10.6, 10.7, 10.8])
+        st = oil.ma_cross_state(D2, p)
+        self.assertFalse(st["long"])                             # 4 sessions since the cross > hold 3
+
+
 class Rules(unittest.TestCase):
     def test_eia_wednesday_follows_or_fades_tuesday(self):
         D = series([100, 101, 103, 103], opens=[100, 100, 101, 103], start="2020-01-06")  # Mon..Thu
