@@ -56,6 +56,23 @@ class DCA(unittest.TestCase):
         self.assertLess(paid, free)
 
 
+class TrackState(unittest.TestCase):
+    P = {"drop": 10, "step": 5, "layers": 3, "tp": 5, "max_days": 120}
+
+    def test_open_ladder_and_next_levels(self):
+        D = series([100.0] * 25 + [89.0, 84.0, 82.0])
+        st = oil.dca_state(D, self.P)
+        self.assertTrue(st["open"])
+        self.assertEqual(st["layers"], [84.0])
+        self.assertAlmostEqual(st["take_profit_close"], 88.2)
+        self.assertAlmostEqual(st["next_add_close"], 79.8)
+        self.assertEqual(st["action"], "HOLD")
+
+    def test_trigger_today_and_wait(self):
+        self.assertIn("BUY", oil.dca_state(series([100.0] * 25 + [89.0]), self.P)["action"])
+        self.assertIn("WAIT", oil.dca_state(series([100.0] * 26), self.P)["action"])
+
+
 class Rules(unittest.TestCase):
     def test_eia_wednesday_follows_or_fades_tuesday(self):
         D = series([100, 101, 103, 103], opens=[100, 100, 101, 103], start="2020-01-06")  # Mon..Thu

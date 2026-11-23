@@ -511,10 +511,82 @@ def report(res):
     return "\n".join(L)
 
 
+# ---------------------------------------------------------------- the daily simulated oil track
+
+TRACK_START = "2026-11-24"
+TRACK_DCA = {"drop": 20, "layers": 5, "step": 8, "tp": 3, "max_days": 120}   # chosen on data to 2014
+TRACK_BUDGET = 1000.0
+CFD = {"USO": "USOIL (WTI)", "BNO": "UKOIL (Brent)"}
+
+
+def dca_state(D, p):
+    """Replay the ladder to the last close. -> dict: open campaign (layers with fill prices, average,
+    take-profit level, next add level) or None, and the action for the next session."""
+    c, o, d = D["c"], D["o"], D["d"]
+    n = len(c)
+    j = 21
+    while j < n:
+        if c[j] > max(c[j - 19:j + 1]) * (1 - p["drop"] / 100.0):
+            j += 1
+            continue
+        if j == n - 1:
+            return {"open": False, "action": "BUY first layer at the next open (close %.2f is %.0f%%+ below its "
+                    "20-day high %.2f)" % (c[j], p["drop"], max(c[j - 19:j + 1]))}
+        start = j + 1
+        layers = [o[start]]
+        k = start
+        while k < n:
+            avg = sum(layers) / len(layers)
+            if c[k] >= avg * (1 + p["tp"] / 100.0) or k - start >= p["max_days"]:
+                break
+            if len(layers) < p["layers"] and k + 1 < n and c[k] <= layers[-1] * (1 - p["step"] / 100.0):
+                layers.append(o[k + 1])
+            elif len(layers) < p["layers"] and k == n - 1 and c[k] <= layers[-1] * (1 - p["step"] / 100.0):
+                pass
+            k += 1
+        if k >= n:
+            avg = sum(layers) / len(layers)
+            add = layers[-1] * (1 - p["step"] / 100.0)
+            act = "HOLD"
+            if c[-1] <= add and len(layers) < p["layers"]:
+                act = "ADD a layer at the next open"
+            return {"open": True, "since": d[start], "layers": [round(x, 2) for x in layers], "avg": round(avg, 2),
+                    "take_profit_close": round(avg * (1 + p["tp"] / 100.0), 2),
+                    "next_add_close": round(add, 2) if len(layers) < p["layers"] else None,
+                    "days": n - 1 - start, "time_stop_days": p["max_days"], "last": c[-1], "action": act}
+        j = k + 1
+    return {"open": False, "action": "WAIT: no trigger (close %.2f, needs <= %.2f)" % (
+        c[-1], max(c[-20:]) * (1 - p["drop"] / 100.0))}
+
+
+def cmd_today(a):
+    funds = load(FUNDS)
+    print("Oil track (SIMULATED, unproven: no oil rule passed the lab's gates; see RESEARCH.md). Signals from")
+    print("USO / BNO closes, applied to USOIL / UKOIL as percentages. $%.0f budget, %d equal layers." % (
+        TRACK_BUDGET, TRACK_DCA["layers"]))
+    for s, D in funds.items():
+        st = dca_state(D, TRACK_DCA)
+        print("\n%s, last close %s %.2f:" % (CFD.get(s, s), D["d"][-1], D["c"][-1]))
+        if st["open"]:
+            print("  ladder open since %s: %d layer(s) at %s, average %.2f" % (
+                st["since"], len(st["layers"]), st["layers"], st["avg"]))
+            print("  sell all on a close >= %.2f (+%d%% on average cost), or after %d days (day %d now)" % (
+                st["take_profit_close"], TRACK_DCA["tp"], st["time_stop_days"], st["days"]))
+            if st["next_add_close"]:
+                print("  next layer if a close <= %.2f" % st["next_add_close"])
+        print("  -> %s" % st["action"])
+    print("\nRule: first layer when the close is %d%% below its 20-day high; add a layer at each further %d%% "
+          "below the last buy (max %d); sell all at +%d%% on average cost or after %d days. Fills at the next open." % (
+              TRACK_DCA["drop"], TRACK_DCA["step"], TRACK_DCA["layers"], TRACK_DCA["tp"], TRACK_DCA["max_days"]))
+    print("Simulated only; nothing is placed. Research, not financial advice.")
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="trader-lab oil search")
     sub = ap.add_subparsers(dest="cmd")
     sub.add_parser("fetch")
+    sub.add_parser("today", help="today's simulated oil DCA ladder state and action")
     p = sub.add_parser("backtest")
     p.add_argument("--json", action="store_true")
     p.add_argument("--cost", type=float, default=COST_BPS)
@@ -535,6 +607,8 @@ def main(argv=None):
                 gz.write(json.dumps({k: old[k] for k in sorted(old, key=int)}).encode())
             print("%-5s hourly: %d bars, %d full day sessions" % (s, len(old), len(hourly_sessions(s))))
         return 0
+    if a.cmd == "today":
+        return cmd_today(a)
     if a.cmd == "backtest":
         res = search(a.cost)
         if a.write:

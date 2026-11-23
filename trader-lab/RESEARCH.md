@@ -28,6 +28,11 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Idea queue (top first)
 
+- **Oil term structure:** download individual CL / BZ contract months (Yahoo `CLF27.NYM`-style
+  tickers) to build front-minus-second spreads; test backwardation-only longs and basis momentum.
+- **Oil events:** a hand-built OPEC / OPEC+ decision list (2000+) and EIA release dates
+  (holiday shifts); DCA with a 252-day-high trigger and a hard stop (agent rule 30).
+
 0. **Survivorship-free test of R3**: add stocks that fell hard or were delisted (e.g. from an
    S&P 500 membership history), or test on many more ETFs and country funds. Until then R3 is
    unproven.
@@ -44,6 +49,36 @@ result after costs, and whether it was kept. Failures stay in the record.
 7. **Earnings-day drift and the earnings announcement premium** for single stocks (needs an earnings calendar from trader-analyst).
 
 ## Log
+
+### 2026-11-23 (sixth run): oil (WTI / Brent, Exness USOIL / UKOIL), 279 candidates, none pass
+
+`oil.py` runs the lab's gates on oil. Same-day rules on CL=F / BZ=F front-month futures (the roll
+happens between sessions, so it never touches them); multi-day rules and DCA ladders on USO / BNO
+(real funds that pay the monthly roll, like a long CFD held for days) with 1 bp a night financing;
+Brent-WTI spread; hourly NYMEX-session rules incl. the Wednesday 10:30 EIA report hour.
+5 bp a round trip. A research agent brought 32 oil-specific rules; the codable ones are in.
+
+| family | variants | best after 2014 (t) | passed |
+| --- | --- | --- | --- |
+| same-day on futures (RSI(2), pre-holiday, 80-20, gaps, Crabel/Williams, day of week, month, EIA day) | 105 | RSI(2) day trade 1.38 | 0 |
+| multi-day on funds (Connors family, Donchian, trend, seasonal holds) | 60 | Donchian 20 1.20 | 0 |
+| DCA ladders (drop 5-20%, step 3-8%, 3-5 layers, TP 3-10%) | 72 | 1.18 | 0 |
+| Brent-WTI spread z-score | 12 | -0.45 | 0 |
+| hourly (first hour, overnight gap, EIA hour, time of day) | 30 | 0.75 | 0 |
+
+The DCA lesson: the ladder chosen on data to 2014 (first buy 20% below the 20-day high, up to 5
+layers 8% apart, sell at +3% on average cost) won 94% of its 32 campaigns (+3.9% each), yet its
+t was -0.89 to 2014 and 1.07 after: the rare losers (2008, 2014-16, 2020) are enormous. A high
+win rate is not an edge. This matches Psaradellis et al. (2019, European Journal of Finance):
+7,846 technical rules on CL/USO, none persistently profitable after data-snooping controls.
+
+Not testable yet with our data (strongest economic logic): term structure / roll yield
+(Gorton, Hayashi & Rouwenhorst 2013) and basis momentum (Boons & Porras Prado 2019) need the
+second-month contract; EIA surprise rules need consensus forecasts; OPEC rules need an event list.
+
+The user asked for daily oil trades from 2026-11-24: `oil.py today` runs that DCA ladder as a
+SIMULATED track on USOIL / UKOIL (signals from USO / BNO). On 2026-11-23 oil was ~20-26% below
+its 20-day high (WTI futures 104.12 -> 80.56 since 2026-10-29), so both ladders open tomorrow.
 
 ### 2026-11-23 (fifth run): paper trial starts
 
