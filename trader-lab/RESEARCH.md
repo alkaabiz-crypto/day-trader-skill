@@ -50,6 +50,36 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (ninth run): 78,864 technical rule tests with data-snooping corrections
+
+`universe_search.py` rebuilds the rule universe of Sullivan, Timmermann & White (1999, Journal of
+Finance; filter rules, moving averages, support/resistance, channel breakouts, OBV, with bands,
+delays and holding periods) and adds RSI, Stochastic, CCI, MACD, Bollinger, rate of change,
+ADX/DI, Keltner, Donchian, IBS, streak and calendar rules: 6,572 rules, each long/flat and
+long/short = 13,144 per asset, on SPY, QQQ, IWM, DIA, USO and BNO. Next-open fills, 2 bp (ETFs) or
+5 bp + 1 bp/night (oil) costs, dividend-adjusted prices. Judged only after 2014, as excess return
+over buy-and-hold, with White's Reality Check (2000) and Hansen's SPA (2005) on 500 stationary-
+bootstrap resamples. Tests show the bootstrap gives p > 0.2 on noise and p < 0.01 on a planted edge.
+
+| asset | best rule after 2014 | Reality Check p | SPA p | t >= 3 | beat buy-and-hold | top-20 IS rules after 2014 |
+| --- | --- | --- | --- | --- | --- | --- |
+| SPY | t 1.84 (RSI(9) mean reversion) | 1.000 | 0.722 | 0 | 0.4% | avg t 0.73 |
+| QQQ | t 1.41 | 1.000 | 0.956 | 0 | 0.2% | avg t -1.17 |
+| IWM | t 1.34 | 0.970 | 0.978 | 0 | 1.6% | avg t -0.90 |
+| DIA | t 0.87 | 0.996 | 1.000 | 0 | 0.2% | avg t -0.58 |
+| USO | t 2.07 (4.5% filter) | 0.592 | 0.670 | 0 | 29.9% | avg t 0.73 |
+| BNO | t 2.00 (MA 15/25, 50-day hold) | 0.846 | 0.716 | 0 | 7.9% | avg t 0.36 |
+
+No technical rule beats buy-and-hold by more than the luck of trying this many. The oil numbers
+look better only because holding USO/BNO lost to roll costs, so any rule that is often out of oil
+"beats" it: avoiding a bad benchmark, not an edge. The best stock rules to 2014 decayed to
+negative afterwards on QQQ, IWM and DIA, the post-publication decay McLean & Pontiff (2016)
+describe. This matches Sullivan, Timmermann & White (1999: no rule survives after 1986) and
+Psaradellis et al. (2019, oil).
+
+Running totals: stocks about 300 hand-built rules + 52,576 universe tests; oil 293 + 26,288
+universe tests. Passed every gate: 0.
+
 ### 2026-11-23: the user's video strategy, ORB + 10-minute close + 20 EMA pullback (`orb_ema.py`). FAIL
 
 From a short video by a prop-firm Nasdaq trader (payout screenshots shown as proof): mark the
