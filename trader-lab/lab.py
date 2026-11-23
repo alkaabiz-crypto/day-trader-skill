@@ -71,6 +71,10 @@ COST_BPS = 3.0      # round trip: spread + slippage + fees, liquid US names
 OOS_FRAC = 0.30     # the last 30% of the dates are never used to choose a variant
 KEEP_IS_SHARPE = 0.5
 KEEP_OOS_T = 3.0    # Harvey, Liu & Zhu (2016), the same bar as daily.py's POST_T: many variants are tried
+MIN_IS_T = 2.0      # the chosen variant must have worked where it was chosen
+SPLIT = (0.50, 0.75)  # IS = first 50% of dates, OOS = next 25%, HOLDOUT = last 25% (as hourly.py)
+PLACEBO_REPS = 200
+PLACEBO_P = 0.05    # divided by the number of strategies placebo-tested (Bonferroni)
 MIN_TRADES = 20
 
 
@@ -693,7 +697,7 @@ def backtest(universe_sessions, cost_bps=COST_BPS, oos_frac=OOS_FRAC, only=None)
     dates = sorted({d for ss in universe_sessions.values() for d, b in ss if len(b) == SESSION_BARS})
     if len(dates) < 25:
         raise LabError("only %d full sessions in the store; need 25+ (run fetch first)" % len(dates))
-    cut = dates[int(len(dates) * (1 - oos_frac))]
+    cuts = (dates[int(len(dates) * SPLIT[0])], dates[int(len(dates) * SPLIT[1])])
     xs = cross_section(universe_sessions)
     results = []
     for name, spec in STRATEGIES.items():
@@ -710,12 +714,15 @@ def backtest(universe_sessions, cost_bps=COST_BPS, oos_frac=OOS_FRAC, only=None)
                     ts, _ = run_day(spec["fn"], bars, ctx, p, True)
                     for t in ts:
                         r = trade_bps(t, cost_bps)
-                        trades.append((d, sym, r))
+                        trades.append((d, sym, r, r + cost_bps))   # net, and gross in the trade's direction
                         daily.setdefault(d, []).append(r)
-            results.append(summarize(name, p, spec["source"], trades, daily, dates, cut))
-    return {"dates": [dates[0], dates[-1]], "n_dates": len(dates), "oos_from": cut,
+            results.append(summarize(name, p, spec["source"], trades, daily, dates, cuts))
+    chosen = choose(results, dates, cuts, cost_bps)
+    for r in results:
+        r.pop("_trades", None)
+    return {"dates": [dates[0], dates[-1]], "n_dates": len(dates), "oos_from": cuts[0], "ho_from": cuts[1],
             "cost_bps": cost_bps, "symbols": sorted(universe_sessions), "variants": results,
-            "chosen": choose(results)}
+            "chosen": chosen}
 
 
 def stats(series):
@@ -728,42 +735,87 @@ def stats(series):
     return {"n": n, "mean": m, "sd": sd, "t": t, "sharpe": (m / sd * math.sqrt(252)) if sd > 0 else 0.0}
 
 
-def summarize(name, p, source, trades, daily, dates, cut):
+def summarize(name, p, source, trades, daily, dates, cuts):
+    """cuts = (oos_from, ho_from): IS before the first, OOS between, HOLDOUT from the second.
+    A bare date is accepted too (IS before it, everything after is OOS; no holdout)."""
+    if isinstance(cuts, str):
+        cuts = (cuts, "9999-12-31")
+    c1, c2 = cuts
+
     def part(pred):
         # equal-weight portfolio of that day's trades; a day with no trade earns 0
         series = [statistics.mean(daily[d]) if d in daily else 0.0 for d in dates if pred(d)]
-        tr = [r for d, _, r in trades if pred(d)]
+        tr = [t[2] for t in trades if pred(t[0])]
         s = stats(series)
         s["trades"] = len(tr)
         s["win"] = (sum(1 for r in tr if r > 0) / len(tr)) if tr else 0.0
         s["avg_trade_bps"] = statistics.mean(tr) if tr else 0.0
         return s
-    return {"strategy": name, "params": p, "source": source,
-            "all": part(lambda d: True), "is": part(lambda d: d < cut), "oos": part(lambda d: d >= cut)}
+    return {"strategy": name, "params": p, "source": source, "_trades": trades,
+            "all": part(lambda d: True), "is": part(lambda d: d < c1),
+            "oos": part(lambda d: c1 <= d < c2), "ho": part(lambda d: d >= c2), "post": part(lambda d: d >= c1)}
 
 
-def choose(results):
-    """Per strategy: the variant with the best IN-SAMPLE Sharpe. It is kept only if that is
-    >= KEEP_IS_SHARPE with enough trades AND its out-of-sample t reaches KEEP_OOS_T (a positive
-    mean alone let 60-day flukes into the live signal)."""
+def direction_placebo(trades, dates, from_date, cost_bps, real_t, reps=PLACEBO_REPS, seed=17):
+    """Keep every trade's timing, flip its side at random: does the long/short call add anything?
+    -> share of flipped copies whose post-IS t is >= the real one."""
+    import random
+    rnd = random.Random(seed)
+    post = [d for d in dates if d >= from_date]
+    tr = [t for t in trades if t[0] >= from_date]
+    hits = 0
+    for _ in range(reps):
+        by = {}
+        for d, _, net, gross in tr:
+            by.setdefault(d, []).append(net if rnd.random() < 0.5 else -gross - cost_bps)
+        t = stats([statistics.mean(by[d]) if d in by else 0.0 for d in post])["t"]
+        if t >= real_t:
+            hits += 1
+    return hits / float(reps)
+
+
+def choose(results, dates=None, cuts=None, cost_bps=COST_BPS):
+    """Per strategy: the variant with the best IN-SAMPLE Sharpe (OOS and HOLDOUT are never used to
+    choose). PASS needs IS t >= MIN_IS_T, positive OOS and HOLDOUT means, t >= KEEP_OOS_T on all
+    data after IS (Harvey, Liu & Zhu 2016), enough trades, and beating random side flips of its own
+    trades at p < PLACEBO_P / (strategies placebo-tested). "watch" = the old loose rule (IS Sharpe
+    >= 0.5 and a positive mean after IS): shown in reports, never used in the live signal.
+    Results without a holdout (old callers) treat OOS as everything after IS."""
     best = {}
     for r in results:
         cur = best.get(r["strategy"])
         if cur is None or r["is"]["sharpe"] > cur["is"]["sharpe"]:
             best[r["strategy"]] = r
+
+    def post(r):
+        return r.get("post") or r["oos"]
+
+    def gates(r):
+        ho = r.get("ho")
+        return (r["is"].get("t", r["is"]["sharpe"]) >= MIN_IS_T if "t" in r["is"] else True) and \
+            r["is"]["trades"] >= MIN_TRADES and r["oos"]["mean"] > 0 and (ho is None or ho["mean"] > 0) and \
+            post(r)["t"] >= KEEP_OOS_T and post(r)["trades"] >= MIN_TRADES // 2
+
+    cands = [r for r in best.values() if gates(r)]
+    alpha = PLACEBO_P / max(1, len(cands))
     out = []
     for name, r in best.items():
-        keep = (r["is"]["sharpe"] >= KEEP_IS_SHARPE and r["is"]["trades"] >= MIN_TRADES
-                and r["oos"]["mean"] > 0 and r["oos"]["t"] >= KEEP_OOS_T
-                and r["oos"]["trades"] >= MIN_TRADES // 2)
-        out.append({"strategy": name, "params": r["params"], "keep": keep,
-                    "is_sharpe": r["is"]["sharpe"], "oos_sharpe": r["oos"]["sharpe"],
-                    "oos_mean_bps": r["oos"]["mean"], "oos_t": r["oos"]["t"],
-                    "weight": 0.0})
+        ok = gates(r)
+        pp = None
+        if ok and dates is not None and r.get("_trades") is not None:
+            pp = direction_placebo(r["_trades"], dates, cuts[0], cost_bps, post(r)["t"])
+            ok = pp < alpha
+        watch = r["is"]["sharpe"] >= KEEP_IS_SHARPE and post(r)["mean"] > 0
+        out.append({"strategy": name, "params": r["params"], "keep": ok,
+                    "status": "PASS" if ok else ("watch" if watch else "drop"),
+                    "is_sharpe": r["is"]["sharpe"], "is_t": r["is"].get("t"),
+                    "oos_sharpe": r["oos"]["sharpe"], "oos_mean_bps": r["oos"]["mean"],
+                    "ho_mean_bps": r["ho"]["mean"] if r.get("ho") else None,
+                    "oos_t": post(r)["t"], "post_mean_bps": post(r)["mean"], "placebo_p": pp, "weight": 0.0})
     tot = sum(max(c["is_sharpe"], 0) for c in out if c["keep"])
     for c in out:
         c["weight"] = (max(c["is_sharpe"], 0) / tot) if (c["keep"] and tot > 0) else 0.0
-    return sorted(out, key=lambda c: -c["oos_sharpe"])
+    return sorted(out, key=lambda c: (c["status"] != "PASS", c["status"] != "watch", -c["oos_t"]))
 
 
 # ---------------------------------------------------------------- live signal
@@ -818,32 +870,38 @@ def label(score, agree_t=None):
 
 def fmt_variant(r):
     p = ",".join("%s=%s" % kv for kv in sorted(r["params"].items()))
-    a, i, o = r["all"], r["is"], r["oos"]
-    return "%-6s %-30s %5d %5.0f%% %7.1f %6.2f | IS %5.2f | OOS %5.2f %6.1fbp t=%5.2f" % (
-        r["strategy"], p[:30], a["trades"], a["win"] * 100, a["avg_trade_bps"], a["sharpe"],
-        i["sharpe"], o["sharpe"], o["mean"], o["t"])
+    a, i, o, h = r["all"], r["is"], r["oos"], r.get("ho") or {"mean": float("nan")}
+    q = r.get("post") or o
+    return "%-6s %-30s %5d %5.0f%% %7.1f | IS t %5.2f | OOS %6.1fbp HO %6.1fbp | post %6.1fbp t=%5.2f" % (
+        r["strategy"], p[:30], a["trades"], a["win"] * 100, a["avg_trade_bps"], i.get("t", 0.0),
+        o["mean"], h["mean"], q["mean"], q["t"])
 
 
 def report_backtest(res):
     lines = ["Strategy Lab: %d sessions %s to %s, %d symbols, %.1f bps round-trip cost" % (
         res["n_dates"], res["dates"][0], res["dates"][1], len(res["symbols"]), res["cost_bps"]),
-        "In-sample before %s, out-of-sample from %s (never used to pick a variant)." % (
-            res["oos_from"], res["oos_from"]),
+        "In-sample before %s, OOS %s to %s, HOLDOUT from %s (OOS and HOLDOUT never pick a variant)." % (
+            res["oos_from"], res["oos_from"], res.get("ho_from", "-"), res.get("ho_from", "-")),
         "",
-        "%-6s %-28s %5s %6s %7s %6s | %8s | %s" % ("strat", "params", "trades", "win", "avg bp",
-                                                 "Sharpe", "IS Shrp", "OOS Sharpe / mean / t"),
-        "-" * 108]
+        "%-6s %-30s %5s %6s %7s | %9s | %-25s | %s" % ("strat", "params", "trades", "win", "avg bp",
+                                                     "IS t", "OOS / HOLDOUT bp a day", "after IS"),
+        "-" * 118]
     for r in sorted(res["variants"], key=lambda r: (r["strategy"], -r["is"]["sharpe"])):
         lines.append(fmt_variant(r))
-    lines += ["", "Chosen (best in-sample variant per strategy; kept only if it held up out of sample):"]
+    lines += ["", "Chosen (best in-sample variant per strategy):"]
     for c in res["chosen"]:
-        lines.append("  %-6s %-5s IS Sharpe %5.2f  OOS Sharpe %5.2f  OOS %6.1f bp/day t=%5.2f  weight %.2f  %s" % (
-            c["strategy"], "KEEP" if c["keep"] else "drop", c["is_sharpe"], c["oos_sharpe"],
-            c["oos_mean_bps"], c["oos_t"], c["weight"], json.dumps(c["params"], sort_keys=True)))
-    lines += ["", "KEEP needs: IS Sharpe >= %.1f, out-of-sample mean > 0 and OOS t >= %.1f (Harvey, Liu & Zhu"
-              % (KEEP_IS_SHARPE, KEEP_OOS_T),
-              "2016), with at least %d IS and %d OOS trades." % (MIN_TRADES, MIN_TRADES // 2),
-              "Sharpe is annualized from the equal-weight daily portfolio. Research, not financial advice."]
+        lines.append("  %-7s %-5s IS t %5.2f | after IS %6.1f bp/day t %5.2f | placebo p %s | weight %.2f  %s" % (
+            c["strategy"], c.get("status", "KEEP" if c["keep"] else "drop"), c.get("is_t") or 0.0,
+            c.get("post_mean_bps", c["oos_mean_bps"]), c["oos_t"],
+            ("%.3f" % c["placebo_p"]) if c.get("placebo_p") is not None else "  -  ",
+            c["weight"], json.dumps(c["params"], sort_keys=True)))
+    lines += ["", "PASS needs: IS t >= %.1f, OOS and HOLDOUT means > 0, t >= %.1f on everything after IS (Harvey,"
+              % (MIN_IS_T, KEEP_OOS_T),
+              "Liu & Zhu 2016), %d IS / %d later trades, and beating random side flips of its own trades at" % (
+                  MIN_TRADES, MIN_TRADES // 2),
+              "p < %.2f / strategies tested. 'watch' = IS Sharpe >= %.1f and a positive mean after IS: not in the" % (
+                  PLACEBO_P, KEEP_IS_SHARPE),
+              "live signal. Research, not financial advice."]
     return "\n".join(lines)
 
 
@@ -1267,6 +1325,51 @@ def cmd_fetch_av(a):
     return 0
 
 
+COST_SWEEP = (0.0, 0.5, 1.0, 2.0, 3.0, 5.0)
+
+
+def cost_sweep(universe_sessions, costs=COST_SWEEP, only=None):
+    """Rerun at several round-trip costs. Per strategy: the chosen variant's mean bp/day and t after IS
+    at each cost, and the break-even cost per trade (gross bp/day / trades per day after IS)."""
+    rows = {}
+    for c in costs:
+        res = backtest(universe_sessions, c, only=only)
+        for ch in res["chosen"]:
+            rows.setdefault(ch["strategy"], {})[c] = ch
+            if c == 0.0:
+                v = [r for r in res["variants"] if r["strategy"] == ch["strategy"] and r["params"] == ch["params"]][0]
+                days = max(1, v["post"]["n"])
+                rows[ch["strategy"]]["_tpd"] = v["post"]["trades"] / float(days)
+    out = []
+    for name, by in rows.items():
+        g = by.get(0.0)
+        tpd = by.get("_tpd", 0.0)
+        be = (g["post_mean_bps"] / tpd) if (g and tpd > 0 and g["post_mean_bps"] > 0) else None
+        out.append({"strategy": name, "break_even_bps": be, "trades_per_day": tpd,
+                    "by_cost": {str(c): {"params": by[c]["params"], "mean": by[c]["post_mean_bps"],
+                                         "t": by[c]["oos_t"], "status": by[c]["status"]}
+                                for c in costs if c in by}})
+    return sorted(out, key=lambda r: -(r["break_even_bps"] or -1))
+
+
+def cmd_costs(a):
+    rows = cost_sweep(load_universe(a.symbols, a.store), only=a.only)
+    if a.json:
+        print(json.dumps(rows, indent=1, sort_keys=True))
+        return 0
+    head = "".join("%13s" % ("%.1f bp" % c) for c in COST_SWEEP)
+    print("Cost sweep: mean bp/day and t after IS for each strategy's chosen variant, by round-trip cost.")
+    print("%-8s %10s %6s%s" % ("strategy", "break-even", "tr/day", head))
+    for r in rows:
+        cells = "".join("%13s" % ("%+.1f t%+.1f" % (r["by_cost"][str(c)]["mean"], r["by_cost"][str(c)]["t"])
+                                  if str(c) in r["by_cost"] else "-") for c in COST_SWEEP)
+        be = ("%.1f bp" % r["break_even_bps"]) if r["break_even_bps"] is not None else "never"
+        print("%-8s %10s %6.2f%s" % (r["strategy"], be, r["trades_per_day"], cells))
+    print("\nBreak-even = the round-trip cost per trade at which the zero-cost edge after IS is used up.")
+    print("Compare with costs.py table. Research, not financial advice.")
+    return 0
+
+
 def cmd_backtest(a):
     res = backtest(load_universe(a.symbols, a.store), a.cost, a.oos, a.only)
     if a.write:
@@ -1321,6 +1424,9 @@ def main(argv=None):
     common(p)
     p.add_argument("--only", type=lambda s: s.split(","), help="comma list of strategies")
     p.add_argument("--write", nargs="?", const=os.path.join(RESULTS, "latest.json"), metavar="PATH")
+    p = sub.add_parser("costs", help="cost sweep: each strategy at 0 to 5 bp round trip, break-even cost")
+    common(p)
+    p.add_argument("--only", type=lambda s: s.split(","), help="comma list of strategies")
     p = sub.add_parser("signal", help="today's live signal from the kept strategies")
     common(p)
     p.add_argument("--chosen", default=os.path.join(RESULTS, "latest.json"),
@@ -1331,7 +1437,7 @@ def main(argv=None):
         return 1
     try:
         return {"fetch": cmd_fetch, "fetch-av": cmd_fetch_av, "fetch-alpaca": cmd_fetch_alpaca,
-                "fetch-tiingo": cmd_fetch_tiingo, "backtest": cmd_backtest,
+                "fetch-tiingo": cmd_fetch_tiingo, "backtest": cmd_backtest, "costs": cmd_costs,
                 "signal": cmd_signal}[a.cmd](a)
     except LabError as e:
         print("lab.py: %s" % e, file=sys.stderr)

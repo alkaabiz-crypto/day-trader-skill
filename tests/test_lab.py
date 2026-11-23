@@ -256,6 +256,35 @@ class StoreAndSplit(unittest.TestCase):
         self.assertFalse(by["weak"]["keep"])              # positive OOS mean alone is not enough
         self.assertTrue(by["strong"]["keep"])
 
+    def test_three_way_split_and_placebo_gate(self):
+        dates = ["d%03d" % i for i in range(100)]
+        import random
+        rnd = random.Random(3)
+        # always right: every trade earns +20 bp gross in its own direction
+        right = [(d, "X", 17.0, 20.0) for d in dates]
+        daily = {d: [17.0] for d in dates}
+        r = lab.summarize("right", {}, "test", right, daily, dates, ("d050", "d075"))
+        self.assertEqual((r["is"]["n"], r["oos"]["n"], r["ho"]["n"], r["post"]["n"]), (50, 25, 25, 50))
+        self.assertEqual(lab.direction_placebo(right, dates, "d050", 3.0, 5.0, reps=50), 0.0)
+        # no edge: gross +-10 at random. One strategy's p is a uniform draw, so average over many:
+        # with no edge the placebo p should average about 0.5 (and rarely be tiny)
+        ps = []
+        for k in range(30):
+            noise = [(d, "X", g - 3.0, g) for d, g in ((d, rnd.choice((10.0, -10.0))) for d in dates)]
+            real_t = lab.stats([n[2] for n in noise if n[0] >= "d050"])["t"]
+            ps.append(lab.direction_placebo(noise, dates, "d050", 3.0, real_t, reps=100, seed=k))
+        self.assertTrue(0.35 < sum(ps) / len(ps) < 0.65, sum(ps) / len(ps))
+        self.assertLessEqual(sum(1 for p in ps if p < 0.05), 4)
+
+    def test_choose_never_uses_oos_or_holdout_to_pick(self):
+        def mk(isx, oos, ho):
+            return {"strategy": "s", "params": {"is": isx}, "_trades": None,
+                    "is": {"sharpe": isx, "t": isx, "trades": 100}, "oos": {"sharpe": 0, "mean": oos, "t": 0, "trades": 50},
+                    "ho": {"mean": ho}, "post": {"mean": oos, "t": 4.0, "trades": 50}}
+        c = lab.choose([mk(3.0, 5.0, -1.0), mk(2.5, 9.0, 9.0)])[0]
+        self.assertEqual(c["params"], {"is": 3.0})       # best IS, even though the other did better later
+        self.assertEqual(c["status"], "watch")            # and it fails: the holdout lost money
+
     def test_labels(self):
         self.assertEqual(lab.label(0.1), "no edge")
         self.assertEqual(lab.label(0.5), "lean long")
