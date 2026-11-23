@@ -60,6 +60,15 @@ python3 "${CLAUDE_SKILL_DIR}/costs.py" table                    # estimated spre
 python3 "${CLAUDE_SKILL_DIR}/costs.py" check                    # trader/plan.json: do costs eat the reward?
 ```
 
+Paper day-trading trial (pre-registered in `paper/PLAN.md`, placed by hand on an Exness demo):
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/paper.py" tickets                  # at 15:31 New York: today's tickets
+python3 "${CLAUDE_SKILL_DIR}/paper.py" log                      # after the close: shadow-fill into paper/journal.csv
+python3 "${CLAUDE_SKILL_DIR}/paper.py" record --date D --instrument US500 --side buy --pnl -3.2
+python3 "${CLAUDE_SKILL_DIR}/paper.py" report                   # progress against the fixed pass bar
+```
+
 `audit.py` re-implements the passing rules from scratch and runs the checks that caught real
 errors on 2026-11-22: random-entry placebos, ETFs only (survivorship), costs, a one-day signal
 delay, and Wilder vs simple RSI. Run it before trusting any "PASS".

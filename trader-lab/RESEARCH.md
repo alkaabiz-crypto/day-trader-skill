@@ -45,6 +45,16 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (fifth run): paper trial starts
+
+The user wants to day trade, chose paper trading first, a live budget under $1,000 and Exness.
+The best remaining day-trading candidate (the 15:30 reversal, pre-registered idea 4) now runs as
+a pre-registered paper trial: `paper/PLAN.md` (rule, limits, pass bar, written before the first
+trade), `paper.py` (tickets at 15:31 New York, a shadow log of every ticket, the user's demo
+fills, and a report against the bar). Honest prior: about 0 bp a trade net of 2 bp on
+2022-2026. Replaying 2026-11-20: three buy tickets (QQQ -5.1%, SPY -3.2%, DIA -1.6% by 15:30),
+all lost about 35-41 bp to 15:55, -$11.50 in total at $1,000 notional each.
+
 ### 2026-11-23 (sixth run): risk parity and equal weight, no forecasting (`parity.py`). FAIL
 
 If every timing rule fails, maybe the answer is how to hold, not when. Pre-registered in `parity.py`:

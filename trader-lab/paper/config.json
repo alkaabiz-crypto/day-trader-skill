@@ -1,0 +1,26 @@
+{
+ "start_date": "2026-11-23",
+ "broker": "Exness demo (MT5), placed by hand",
+ "instruments": {
+  "US500": "SPY",
+  "USTEC": "QQQ",
+  "US30": "DIA"
+ },
+ "min_move_pct": 1.0,
+ "stop_pct": 0.5,
+ "entry": "15:30",
+ "no_entries_after": "15:35",
+ "flat_by": "15:55",
+ "budget_usd": 1000,
+ "risk_per_trade_usd": 10,
+ "max_daily_loss_usd": 30,
+ "max_trades_per_day": 3,
+ "cost_bps": 2.0,
+ "pass_bar": {
+  "min_days": 20,
+  "min_trades": 30,
+  "min_t": 2.0,
+  "max_drawdown_usd": 60,
+  "max_demo_lag": 0.3
+ }
+}
