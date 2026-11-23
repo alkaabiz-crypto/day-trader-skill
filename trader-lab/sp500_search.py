@@ -231,7 +231,7 @@ def candidates(A, C):
                     yield "entry:" + nm, {"tp": tp, "sl": sl, "T": T}, "trade", us.trade_path(A, edge, tp, sl, T)
 
 
-def search(boot=300):
+def search(boot=300, seed=7):
     t0 = time.time()
     A = us.load_asset("SPY")
     C = conditions(A)
@@ -275,7 +275,9 @@ def search(boot=300):
     E = np.vstack(chunks)
     del chunks
     print("  %d candidates built (%.0fs); Reality Check..." % (len(names), time.time() - t0), file=sys.stderr)
-    rc = reality_check_big(E, boot)
+    rc = reality_check_big(E, boot, seed=seed)
+    rc2 = reality_check_big(E, boot, seed=seed + 1000)
+    rc["rc_p_seed2"], rc["spa_p_seed2"] = rc2["rc_p"], rc2["spa_p"]
     is_t, post_t, post_mean, sharpe = map(np.array, (is_t, post_t, post_mean, sharpe))
     bh_sh = bh_x[post].mean() / bh_x[post].std() * math.sqrt(252)
     ens = {}
@@ -291,12 +293,18 @@ def search(boot=300):
         k["t3"] += int(t >= 3)
         k["sharpe_over_bh"] += int(sh > bh_sh)
     best = np.argsort(-post_t)[:10]
+    by_mean = np.argsort(-post_mean)[:5]
+    sd_post = E.std(axis=1, dtype=np.float64)
     return {"asset": "SPY", "candidates": len(names), "conditions": len(C), "days_post": n_post,
             "bh_sharpe_post": float(bh_sh), "reality_check": rc, "by_kind": kinds,
             "n_t3": int((post_t >= 3).sum()), "n_bonferroni": int((post_t >= rc["bonferroni_z"]).sum()),
             "n_sharpe_over_bh": int((sharpe > bh_sh).sum()), "best_sharpe": float(sharpe.max()),
             "best_post": [{"rule": names[i], "params": params[i], "post_t": float(post_t[i]), "is_t": float(is_t[i]),
                            "alpha_bp_day": float(post_mean[i]), "sharpe": float(sharpe[i])} for i in best],
+            "best_by_mean": [{"rule": names[i], "params": params[i], "alpha_bp_day": float(post_mean[i]),
+                              "post_t": float(post_t[i]), "is_t": float(is_t[i]), "sd_bp": float(sd_post[i] * 1e4)}
+                             for i in by_mean],
+            "sd_bp_quantiles": [float(np.quantile(sd_post, q) * 1e4) for q in (0.5, 0.9, 0.99, 1.0)],
             "top_is": [{"rule": names[i], "params": params[i], "is_t": float(is_t[i]), "post_t": float(post_t[i])}
                        for i in np.argsort(-is_t)[:10]],
             "portfolio_is_selected": ens, "seconds": round(time.time() - t0)}
@@ -375,6 +383,7 @@ def report(r):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="S&P 500 combination search")
+    ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--boot", type=int, default=300)
     ap.add_argument("--write", nargs="?", const=os.path.join(RESULTS, "sp500-latest.json"))
     ap.add_argument("--count", action="store_true", help="only count the candidates")
@@ -385,7 +394,7 @@ def main(argv=None):
         n = sum(1 for _ in candidates_count(C))
         print("%d conditions -> %s candidates" % (len(C), "{:,}".format(n)))
         return 0
-    r = search(a.boot)
+    r = search(a.boot, a.seed)
     if a.write:
         with open(a.write, "w") as fh:
             json.dump(r, fh, indent=1, sort_keys=True)
