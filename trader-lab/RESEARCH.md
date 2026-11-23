@@ -50,6 +50,40 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (daily run, 21:41 UTC): everything rerun, five pre-registered anomalies. No pass
+
+**Paper trial** (pre-registered 15:30 reversal): day 1, 3 shadow trades, net +$9.90. IN PROGRESS;
+it needs 20+ days and 30+ trades. Scanner track (simulated): 3 trades, net -$10.53.
+
+**Oil track** (SIMULATED):
+- DCA ladder: first-layer BUY at the next open on both USOIL and UKOIL. Each closed more than 20%
+  below its 20-day high (USO 133.36 vs 168.83; BNO 56.66 vs 71.39).
+- MA-cross candidate: flat on both.
+- Oil backtest: 0 candidates passed every gate.
+
+**Reruns.** Nothing reached PASS anywhere:
+- 5-minute, 60-day: best after-IS t 1.46 (noise).
+- Long 5-minute store, 995 sessions: every chosen rule's after-IS t is between -1.91 and 0.52.
+- Hourly: best post t 0.68.
+- Daily: best post t 0.97 (tuesday).
+- Trend: no rule beats equal-weight.
+- Frozen rules: day 1 of forward data, too early to judge.
+- Tiingo: +156 bars each for SPY, QQQ and IWM (995 sessions).
+
+**New: `anomalies.py`, five pre-registered single hypotheses** (no tuning; a PASS needs after-2014
+t >= 3 and a positive IS t):
+
+| rule | source | IS t | after-2014 t |
+| --- | --- | --- | --- |
+| dash_avoid: out over the 3 sessions into the month-end selling day T-(settlement+1); the window moves with the 2017 (T+2) and 2024 (T+1) settlement changes | Etula, Rinne, Suominen & Vaittinen 2020, RFS | 1.46 | 0.56 |
+| dash_revert: long from the selling day to the 3rd session of the next month | same | 1.51 | 0.26 |
+| li_yu: DIA, regression on nearness to the 52-week and historical highs, fitted to 2014, monthly | Li & Yu 2012, JFE | 0.81 | -0.56 |
+| vix_spike: VIX >= 1.2x its 10-day average, long 5 days | Connors & Alvarez practitioner rule | 1.35 | -0.51 |
+| hv_down: down day on 1.5x volume, long 5 days | Gervais, Kaniel & Mingelgrin 2001 | 0.74 | -0.68 |
+
+All five fail. "Dash for cash" was positive before 2015 but has faded since, including in the
+window that follows the settlement changes.
+
 ### 2026-11-23 (twelfth run): Bitcoin 844,664 and Ethereum 863,003 candidates. No pass
 
 `crypto_search.py`: 199 conditions known at the daily close. Combined alone, as AND pairs and as
