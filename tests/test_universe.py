@@ -92,5 +92,20 @@ class RealityCheck(unittest.TestCase):
         self.assertLess(r["spa_p"], 0.01)
 
 
+@unittest.skipIf(np is None, "numpy not installed")
+class BigRealityCheck(unittest.TestCase):
+    def test_prefix_sum_version_agrees_on_noise_and_edge(self):
+        sp = load("trader-lab", "sp500_search")
+        rng = np.random.default_rng(3)
+        noise = rng.normal(0, 0.01, (300, 1500)).astype(np.float32)
+        r = sp.reality_check_big(noise, B=200)
+        self.assertGreater(r["rc_p"], 0.2)
+        edge = noise.copy()
+        edge[11] += 0.002
+        r = sp.reality_check_big(edge, B=200)
+        self.assertLess(r["rc_p"], 0.01)
+        self.assertLess(r["spa_p"], 0.01)
+
+
 if __name__ == "__main__":
     unittest.main()
