@@ -1,0 +1,41 @@
+{
+  "start_cash": 300.0,
+  "cash": 301.96897360271,
+  "btc": 0.0,
+  "position": null,
+  "consecutive_losses": 0,
+  "cooldown_until": null,
+  "week_start": "2026-11-23",
+  "week_start_equity": 301.96897360271,
+  "last_processed_candle": "2026-11-23 08:00",
+  "trades": [
+    {
+      "date": "2026-11-21T09:42+00:00",
+      "side": "BUY",
+      "qty": 0.00128959,
+      "price": 57925.34,
+      "fee": 0.3,
+      "pnl": 0.0,
+      "reason": "oversold bounce"
+    },
+    {
+      "date": "2026-11-21 12:00",
+      "side": "SELL",
+      "qty": 0.0006448,
+      "price": 59373.47,
+      "fee": 0.15,
+      "pnl": 0.63,
+      "reason": "take-profit half"
+    },
+    {
+      "date": "2026-11-21 12:00",
+      "side": "SELL",
+      "qty": 0.0006448,
+      "price": 60475.51,
+      "fee": 0.16,
+      "pnl": 1.34,
+      "reason": "bounced to 20-period avg"
+    }
+  ],
+  "last_exit_ms": 1795262400000
+}
