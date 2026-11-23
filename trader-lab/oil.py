@@ -1,0 +1,550 @@
+#!/usr/bin/env python3
+"""trader-lab oil: test oil strategies (WTI / Brent; Exness USOIL / UKOIL) with the lab's gates.
+
+    python3 oil.py fetch          # daily CL=F, BZ=F, USO, BNO (+ XLE, UUP) and hourly CL=F, BZ=F
+    python3 oil.py backtest       # every candidate: day trades, multi-day, DCA ladders, spread, hourly
+    python3 oil.py backtest --json --write
+
+Instruments and why:
+  * Same-day rules (enter at the open or on a stop, out at the close) run on the continuous
+    front-month futures CL=F (WTI, the Exness USOIL reference) and BZ=F (Brent, UKOIL). The
+    monthly contract roll happens between sessions, so it never touches an open-to-close trade.
+  * Multi-day rules and DCA ladders run on USO (WTI) and BNO (Brent): real funds that pay the
+    roll every month, like a long USOIL / UKOIL CFD held for days. A continuous futures series
+    would show the roll jumps as fake returns.
+  * Hourly rules use CL=F / BZ=F hourly bars, New York clock hours 09:00-14:00 (the NYMEX day
+    session; settlement 14:30).
+
+Gates (same as daily.py): variant chosen on data to 2014 only; positive 2015-2021 and 2022+;
+t >= 3 on everything after 2014; long exposure across a close must beat random-entry placebos
+(Bonferroni); no fills at a close nobody knows in advance. Hourly: first half / next quarter /
+last quarter. Costs: 5 bps per round trip (USOIL spread ~3-4 cents on ~$70-90), plus 1 bp per
+night for multi-day CFD financing on USO/BNO trades. Research, not financial advice.
+"""
+
+import argparse
+import datetime
+import json
+import math
+import os
+import random
+import statistics
+import sys
+import urllib.request
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import daily  # noqa: E402
+import hourly  # noqa: E402
+
+FUT = ["CL=F", "BZ=F"]
+FUNDS = ["USO", "BNO"]
+COST_BPS = 5.0
+NIGHT_BPS = 1.0
+RESULTS = os.path.join(HERE, "results")
+HSTORE = os.path.join(HERE, "data", "hourly_oil")
+
+
+# ---------------------------------------------------------------- oil-specific daily rules
+
+def r_month(D, i, p):
+    """Seasonality: long the chosen calendar month (open to close)."""
+    if int(D["d"][i][5:7]) in p["months"]:
+        return {"side": 1, "hold": "oc"}
+    return None
+
+
+def r_wed_eia(D, i, p):
+    """EIA weekly report day (Wednesday, 10:30 ET): follow or fade Tuesday's open-to-close move."""
+    if i < 1 or daily.weekday(D, i) != 2:
+        return None
+    r = D["c"][i - 1] / D["o"][i - 1] - 1
+    if abs(r) * 100 < p["min"]:
+        return None
+    s = 1 if r > 0 else -1
+    return {"side": s if p["mode"] == "mom" else -s, "hold": "oc"}
+
+
+def r_inside_break(D, i, p):
+    """After an inside day, trade the break of its high (buy stop) or low (sell stop), out at the close."""
+    if i < 2 or not (D["h"][i - 1] <= D["h"][i - 2] and D["l"][i - 1] >= D["l"][i - 2]):
+        return None
+    if p["side"] > 0:
+        return {"side": 1, "hold": "stop", "entry": D["h"][i - 1]}
+    return {"side": -1, "hold": "stop", "entry": D["l"][i - 1]}
+
+
+def sw_tsmom(D, j, p):
+    """Time-series momentum (Moskowitz, Ooi & Pedersen 2012): long while the L-day return is positive."""
+    L = p["L"]
+    return 1 if j > L and D["c"][j] > D["c"][j - L] else 0
+
+
+def ex_tsmom(D, k, p, j):
+    L = p["L"]
+    return k > L and D["c"][k] <= D["c"][k - L]
+
+
+def sw_sma(D, j, p):
+    """Long while the close is above its n-day average."""
+    m = daily.sma(D["c"], j + 1, p["n"])
+    return 1 if m is not None and D["c"][j] > m else 0
+
+
+def ex_sma(D, k, p, j):
+    m = daily.sma(D["c"], k + 1, p["n"])
+    return m is not None and D["c"][k] < m
+
+
+def sw_season(D, j, p):
+    """Long from the close of the last trading day before the chosen months start."""
+    if j + 1 >= len(D["d"]):
+        return 0
+    return 1 if int(D["d"][j + 1][5:7]) in p["months"] and D["d"][j][5:7] != D["d"][j + 1][5:7] else 0
+
+
+def ex_season(D, k, p, j):
+    return int(D["d"][k][5:7]) not in p["months"] or (k + 1 < len(D["d"]) and int(D["d"][k + 1][5:7]) not in p["months"])
+
+
+daily.EXITS.update({"tsmom": ex_tsmom, "sma": ex_sma, "season": ex_season})
+
+DAY_RULES = {
+    "o_month": {"fn": r_month, "source": "oil seasonality by calendar month",
+                "grid": {"months": [[m] for m in range(1, 13)]}},
+    "o_eia": {"fn": r_wed_eia, "source": "EIA Weekly Petroleum Status Report day (Wednesday)",
+              "grid": {"min": [0.0, 1.0, 2.0], "mode": ["mom", "rev"]}},
+    "o_inside": {"fn": r_inside_break, "source": "inside-day breakout (Crabel; practitioner)",
+                 "grid": {"side": [1, -1]}},
+}
+SWING_RULES = {
+    "o_tsmom": {"fn": sw_tsmom, "source": "Moskowitz, Ooi & Pedersen 2012: time-series momentum",
+                "grid": {"L": [21, 63, 126, 252], "exit": ["tsmom"], "max_days": [400], "fill": ["open"]}},
+    "o_sma": {"fn": sw_sma, "source": "moving-average trend filter (Faber 2007 style)",
+              "grid": {"n": [20, 50, 100, 200], "exit": ["sma"], "max_days": [400], "fill": ["open"]}},
+    "o_season": {"fn": sw_season, "source": "oil seasonality: hold through chosen months",
+                 "grid": {"months": [[4, 5, 6], [5, 6, 7, 8], [11, 12, 1, 2], [12, 1, 2, 3]],
+                          "exit": ["season"], "max_days": [130], "fill": ["open"]}},
+}
+
+# day-trade rules from the general engine that make sense on front-month futures (no close fills)
+GENERAL_DAY = ["gap", "gapfill", "prev", "ccrev", "wvb", "nr", "oops", "dow", "rsi2", "down", "lowx",
+               "tom", "prehol", "8020", "smash", "soup", "stretch", "gsv", "base"]
+GENERAL_SWING = ["s_rsi2", "s_crsi2", "s_r3", "s_mdd", "s_3hl", "s_d7", "s_bb", "s_ibs", "s_donch"]
+
+
+def install():
+    daily.RULES.update(DAY_RULES)
+    daily.SWING.update(SWING_RULES)
+
+
+def load(symbols):
+    out = {}
+    for s in symbols:
+        D = daily.load(s)
+        if D:
+            k = next((i for i, d in enumerate(D["d"]) if d >= daily.DATA_START), len(D["d"]))
+            out[s] = {key: v[k:] for key, v in D.items()}
+    return out
+
+
+def add_financing(res, universe):
+    """Charge NIGHT_BPS per night held to every multi-day trade (CFD financing)."""
+    return res   # applied inside run_swing via a wrapper (see swing_cost)
+
+
+# ---------------------------------------------------------------- DCA ladders on funds
+
+def dca(D, p, cost_bps=COST_BPS, night_bps=NIGHT_BPS, starts=None):
+    """A DCA campaign: the first buy when the close is >= drop% below its 20-day high (or at given
+    `starts`), then one more equal layer each further step% below the LAST buy, at most `layers`;
+    sell everything at the close when it is >= tp% above the average cost, or after max_days.
+    Every buy fills at the next open. Daily marks are in bps of the full ladder's capital
+    (layers x layer size); each layer earns from its own fill price on its first day.
+    Returns ({date: bps}, campaigns [(start, end, return on average cost in bps, layers used)])."""
+    c, o, d = D["c"], D["o"], D["d"]
+    n = len(c)
+    cap = float(p["layers"])
+    out, camps = {}, []
+    starts = sorted(starts) if starts is not None else None
+    si = 0
+    j = 21
+    while j < n - 2:
+        if starts is not None:
+            while si < len(starts) and starts[si] < j:
+                si += 1
+            if si >= len(starts):
+                break
+            j = starts[si]
+        elif c[j] > max(c[j - 19:j + 1]) * (1 - p["drop"] / 100.0):
+            j += 1
+            continue
+        start = j + 1
+        layers = [(start, o[start])]           # (day bought, fill price)
+        k = start
+        closed = False
+        while k < n:
+            r = 0.0
+            for (kb, px) in layers:
+                base = px if kb == k else c[k - 1]
+                r += (c[k] / base - 1) * 1e4 / cap
+                if kb == k:
+                    r -= cost_bps / 2 / cap    # half the round trip on the buy
+                if kb < k:
+                    r -= night_bps / cap       # financing for the night just held
+            avg = sum(px for _, px in layers) / len(layers)
+            if c[k] >= avg * (1 + p["tp"] / 100.0) or k - start >= p["max_days"]:
+                r -= len(layers) * cost_bps / 2 / cap
+                out[d[k]] = out.get(d[k], 0.0) + r
+                camps.append((start, k, (c[k] / avg - 1) * 1e4, len(layers)))
+                closed = True
+                break
+            out[d[k]] = out.get(d[k], 0.0) + r
+            if len(layers) < p["layers"] and k + 1 < n and c[k] <= layers[-1][1] * (1 - p["step"] / 100.0):
+                layers.append((k + 1, o[k + 1]))
+            k += 1
+        j = (k + 1) if closed else n
+    return out, camps
+
+
+def dca_grid():
+    out = []
+    for drop in (5, 10, 15, 20):
+        for step in (3, 5, 8):
+            for layers in (3, 5):
+                for tp in (3, 5, 10):
+                    out.append({"drop": drop, "step": step, "layers": layers, "tp": tp, "max_days": 120})
+    return out
+
+
+def run_dca(funds, cost_bps):
+    """Every DCA variant on every fund; chosen on IS Sharpe; gated like the rest, with a random-start
+    placebo (same campaign count, same ladder rules, random first buy)."""
+    all_dates = sorted({d for D in funds.values() for d in D["d"]})
+    rows = []
+    for p in dca_grid():
+        per, camps = {}, {}
+        for s, D in funds.items():
+            per[s], camps[s] = dca(D, p, cost_bps)
+        ser = daily.portfolio(per, all_dates)
+        row = {"rule": "o_dca", "params": p, "hold": "mc", "source": "DCA ladder on drawdowns",
+               "trades": sum(len(v) for v in camps.values()),
+               "win": (sum(1 for v in camps.values() for x in v if x[2] > 0) /
+                       max(1, sum(len(v) for v in camps.values()))),
+               "avg_trade_bps": (statistics.mean([x[2] for v in camps.values() for x in v])
+                                 if any(camps.values()) else 0.0), "_camps": camps}
+        for part in ("is", "oos", "ho"):
+            row[part] = daily.stats([r for d, r in ser if daily.period_of(d) == part])
+        row["post"] = daily.stats([r for d, r in ser if daily.period_of(d) != "is"])
+        rows.append(row)
+    best = max(rows, key=lambda r: r["is"]["sharpe"])
+    ok = (best["is"]["t"] >= daily.MIN_IS_T and best["oos"]["mean"] > 0 and best["ho"]["mean"] > 0
+          and best["post"]["t"] >= daily.POST_T)
+    pl = None
+    if best["post"]["t"] >= 1.5:
+        rnd = random.Random(23)
+        hits = 0
+        reps = 200
+        for _ in range(reps):
+            per = {}
+            for s, D in funds.items():
+                k = len(best["_camps"][s])
+                starts = sorted(rnd.sample(range(25, len(D["c"]) - 30), k)) if k else []
+                per[s] = dca(D, best["params"], cost_bps, starts=starts)[0]
+            t = daily.stats([r for d, r in daily.portfolio(per, all_dates) if daily.period_of(d) != "is"])["t"]
+            hits += t >= best["post"]["t"]
+        pl = hits / float(reps)
+        ok = ok and pl < daily.PLACEBO_P
+    for r in rows:
+        r.pop("_camps", None)
+    return rows, {"rule": "o_dca", "kind": "multi", "params": best["params"], "trades": best["trades"],
+                  "win": best["win"], "avg_trade_bps": best["avg_trade_bps"], "is_t": best["is"]["t"],
+                  "oos_t": best["oos"]["t"], "ho_t": best["ho"]["t"], "post_t": best["post"]["t"],
+                  "ho_sharpe": best["ho"]["sharpe"], "placebo_p": pl, "pass": bool(ok),
+                  "source": "DCA ladder on drawdowns"}
+
+
+# ---------------------------------------------------------------- Brent-WTI spread
+
+def spread_rule(cl, bz, p, cost_bps):
+    """Brent-WTI log spread z-score over `lb` days. z > entry: short Brent / long WTI open to close next
+    day; z < -entry: the reverse. Same-day legs on futures (no roll exposure). -> {date: bps}."""
+    common = sorted(set(cl["d"]) & set(bz["d"]))
+    ic = {d: i for i, d in enumerate(cl["d"])}
+    ib = {d: i for i, d in enumerate(bz["d"])}
+    s = [math.log(bz["c"][ib[d]] / cl["c"][ic[d]]) for d in common]
+    out = {}
+    lb = p["lb"]
+    for t in range(lb + 1, len(common)):
+        w = s[t - 1 - lb:t - 1]
+        mu, sd = statistics.mean(w), statistics.pstdev(w)
+        if sd <= 0:
+            continue
+        z = (s[t - 1] - mu) / sd
+        if abs(z) < p["z"]:
+            continue
+        side = -1 if z > 0 else 1        # +1 = long Brent / short WTI
+        d = common[t]
+        rb = bz["c"][ib[d]] / bz["o"][ib[d]] - 1
+        rc = cl["c"][ic[d]] / cl["o"][ic[d]] - 1
+        out[d] = side * (rb - rc) / 2 * 1e4 - cost_bps   # two legs, half capital each, two spreads ~ one cost
+    return out
+
+
+def run_spread(cl, bz, cost_bps):
+    rows = []
+    for lb in (10, 20, 60):
+        for z in (1.0, 1.5, 2.0, 2.5):
+            per = {"BZ-CL": spread_rule(cl, bz, {"lb": lb, "z": z}, cost_bps)}
+            dates = sorted(set(cl["d"]) & set(bz["d"]))
+            ser = daily.portfolio(per, dates)
+            row = {"rule": "o_spread", "params": {"lb": lb, "z": z}, "trades": len(per["BZ-CL"])}
+            for part in ("is", "oos", "ho"):
+                row[part] = daily.stats([r for d, r in ser if daily.period_of(d) == part])
+            row["post"] = daily.stats([r for d, r in ser if daily.period_of(d) != "is"])
+            rows.append(row)
+    best = max(rows, key=lambda r: r["is"]["sharpe"])
+    ok = (best["is"]["t"] >= daily.MIN_IS_T and best["oos"]["mean"] > 0 and best["ho"]["mean"] > 0
+          and best["post"]["t"] >= daily.POST_T)
+    return rows, {"rule": "o_spread", "kind": "day", "params": best["params"], "trades": best["trades"],
+                  "win": None, "avg_trade_bps": None, "is_t": best["is"]["t"], "oos_t": best["oos"]["t"],
+                  "ho_t": best["ho"]["t"], "post_t": best["post"]["t"], "ho_sharpe": best["ho"]["sharpe"],
+                  "placebo_p": None, "pass": bool(ok), "source": "Brent-WTI spread mean reversion"}
+
+
+# ---------------------------------------------------------------- hourly (NYMEX day session)
+
+def hourly_sessions(sym):
+    """{date: [bars 09:00 .. 14:00 New York]} from the oil hourly store; full sessions only."""
+    p = os.path.join(HSTORE, "%s.json.gz" % sym)
+    if not os.path.exists(p):
+        return []
+    import gzip
+    with gzip.open(p, "rt") as fh:
+        bars = json.load(fh)
+    days = {}
+    for ts, (o, h, l, c, v) in bars.items():
+        loc = hourly.to_eastern(datetime.datetime(1970, 1, 1) + datetime.timedelta(seconds=int(ts)))
+        if loc.minute or not 9 <= loc.hour <= 14:
+            continue
+        days.setdefault(loc.date().isoformat(), {})[loc.hour] = {"o": o, "h": h, "l": l, "c": c}
+    return [(d, [days[d][h] for h in range(9, 15)]) for d in sorted(days) if len(days[d]) == 6]
+
+
+def fetch_hourly(sym):
+    url = "https://query2.finance.yahoo.com/v8/finance/chart/%s?range=730d&interval=60m" % sym
+    req = urllib.request.Request(url, headers={"User-Agent": daily.UA})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        res = json.loads(r.read().decode())["chart"]["result"][0]
+    q = res["indicators"]["quote"][0]
+    out = {}
+    now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+    for i, ts in enumerate(res["timestamp"]):
+        row = [q[k][i] for k in ("open", "high", "low", "close", "volume")]
+        if None in row[:4]:
+            continue
+        if datetime.datetime(1970, 1, 1) + datetime.timedelta(seconds=ts + 3600) > now:
+            continue
+        out[str(ts)] = [float(x or 0) for x in row]
+    return out
+
+
+def h_rules():
+    """(name, fn(S, k, p) -> [(side, entry, exit)], grid, source). Bars: 0=09:00 .. 5=14:00 New York."""
+    def first_hour(S, k, p):
+        B = S[k][1]
+        r = B[0]["c"] / B[0]["o"] - 1
+        if abs(r) * 1e4 < p["min"]:
+            return []
+        s = (1 if r > 0 else -1) * (1 if p["mode"] == "mom" else -1)
+        return [(s, B[1]["o"], B[5]["c"])]
+
+    def overnight_to_day(S, k, p):
+        B, P = S[k][1], S[k - 1][1]
+        r = B[0]["o"] / P[5]["c"] - 1
+        if abs(r) * 1e4 < p["min"]:
+            return []
+        s = (1 if r > 0 else -1) * (1 if p["mode"] == "mom" else -1)
+        return [(s, B[0]["o"], B[5]["c"])]
+
+    def eia_hour(S, k, p):
+        d = datetime.date(*map(int, S[k][0].split("-")))
+        if d.weekday() != 2:
+            return []
+        B = S[k][1]
+        r = B[1]["c"] / B[1]["o"] - 1            # the 10:00-11:00 bar holds the 10:30 release
+        if abs(r) * 1e4 < p["min"]:
+            return []
+        s = (1 if r > 0 else -1) * (1 if p["mode"] == "mom" else -1)
+        return [(s, B[2]["o"], B[5]["c"])]
+
+    def hour_long(S, k, p):
+        b = S[k][1][p["slot"]]
+        return [(1, b["o"], b["c"])]
+
+    def morning_to_close(S, k, p):
+        B = S[k][1]
+        r = B[3]["c"] / B[0]["o"] - 1           # 09:00 -> 13:00
+        if abs(r) * 1e4 < p["min"]:
+            return []
+        s = (1 if r > 0 else -1) * (1 if p["mode"] == "mom" else -1)
+        return [(s, B[4]["o"], B[5]["c"])]
+
+    return [
+        ("oh_first", first_hour, daily.grid({"min": [0, 50, 100], "mode": ["mom", "rev"]}), "first-hour momentum/reversal"),
+        ("oh_gap", overnight_to_day, daily.grid({"min": [0, 50, 100], "mode": ["mom", "rev"]}), "overnight move -> day session"),
+        ("oh_eia", eia_hour, daily.grid({"min": [0, 30, 60], "mode": ["mom", "rev"]}), "EIA release hour (Wed 10:30) -> rest of day"),
+        ("oh_hour", hour_long, daily.grid({"slot": list(range(6))}), "time-of-day seasonality control"),
+        ("oh_late", morning_to_close, daily.grid({"min": [0, 50, 100], "mode": ["mom", "rev"]}), "09:00-13:00 move -> 13:00-14:00+"),
+    ]
+
+
+def run_hourly(cost_bps):
+    uni = {s: hourly_sessions(s) for s in FUT}
+    dates = sorted({d for ss in uni.values() for d, _ in ss})
+    if len(dates) < 100:
+        return [], []
+    c1, c2 = dates[len(dates) // 2], dates[(3 * len(dates)) // 4]
+    part = lambda d: "is" if d < c1 else ("oos" if d < c2 else "ho")
+    rows, chosen = [], []
+    for name, fn, grid, src in h_rules():
+        best = None
+        for p in grid:
+            by = {}
+            n = 0
+            for sym, ss in uni.items():
+                for k in range(1, len(ss)):
+                    for s, e, x in fn(ss, k, p):
+                        by.setdefault(ss[k][0], []).append(s * (x / e - 1) * 1e4 - cost_bps)
+                        n += 1
+            ser = [(d, statistics.mean(by[d]) if d in by else 0.0) for d in dates]
+            row = {"rule": name, "params": p, "trades": n, "source": src}
+            for pt in ("is", "oos", "ho"):
+                row[pt] = daily.stats([r for d, r in ser if part(d) == pt])
+            row["post"] = daily.stats([r for d, r in ser if part(d) != "is"])
+            rows.append(row)
+            if best is None or row["is"]["sharpe"] > best["is"]["sharpe"]:
+                best = row
+        ok = (best["is"]["t"] >= daily.MIN_IS_T and best["oos"]["mean"] > 0 and best["ho"]["mean"] > 0
+              and best["post"]["t"] >= daily.POST_T)
+        chosen.append({"rule": name, "kind": "hourly", "params": best["params"], "trades": best["trades"],
+                       "win": None, "avg_trade_bps": None, "is_t": best["is"]["t"], "oos_t": best["oos"]["t"],
+                       "ho_t": best["ho"]["t"], "post_t": best["post"]["t"], "ho_sharpe": best["ho"]["sharpe"],
+                       "placebo_p": None, "pass": bool(ok), "source": src})
+    return rows, chosen
+
+
+# ---------------------------------------------------------------- the whole oil search
+
+def swing_cost_wrapper(cost_bps):
+    """Charge NIGHT_BPS per night on multi-day trades by wrapping daily.run_swing."""
+    orig = daily.run_swing
+
+    def run(D, entry, p, c):
+        out, n = orig(D, entry, p, c)
+        # daily.run_swing stores its trades on the module-level name, which is this wrapper now
+        trades = run.last_trades
+        for j, k, _ in trades:
+            nights = max(0, k - j)
+            if nights and D["d"][k] in out:
+                out[D["d"][k]] -= nights * NIGHT_BPS
+        run.last_trades = [(j, k, r - max(0, k - j) * NIGHT_BPS) for j, k, r in trades]
+        return out, n
+    run.last_trades = []
+    return orig, run
+
+
+def search(cost_bps=COST_BPS):
+    install()
+    fut, funds = load(FUT), load(FUNDS)
+    if not fut or not funds:
+        raise SystemExit("oil.py: no data; run `oil.py fetch` first")
+    out = {"cost_bps": cost_bps, "night_bps": NIGHT_BPS, "families": {}}
+    # 1. same-day rules on futures
+    day_names = GENERAL_DAY + list(DAY_RULES)
+    res = daily.backtest(fut, cost_bps, only=day_names)
+    keep = [v for v in res["variants"] if v["hold"] in ("oc", "stop", "target")]
+    chosen_day = daily.choose(keep, fut, sorted({d for D in fut.values() for d in D["d"]}), cost_bps)
+    out["families"]["day_futures"] = {"n_variants": len(keep), "chosen": chosen_day}
+    # 2. multi-day rules on funds (with nightly financing)
+    orig, wrapped = swing_cost_wrapper(cost_bps)
+    daily.run_swing = wrapped
+    try:
+        res2 = daily.backtest(funds, cost_bps, only=GENERAL_SWING + list(SWING_RULES))
+    finally:
+        daily.run_swing = orig
+    out["families"]["multi_funds"] = {"n_variants": res2["n_variants"], "chosen": res2["chosen"]}
+    # 3. DCA ladders on funds
+    dca_rows, dca_best = run_dca(funds, cost_bps)
+    out["families"]["dca_funds"] = {"n_variants": len(dca_rows), "chosen": [dca_best],
+                                    "top": sorted(({"params": r["params"], "is_t": r["is"]["t"], "post_t": r["post"]["t"],
+                                                    "oos_mean": r["oos"]["mean"], "ho_mean": r["ho"]["mean"],
+                                                    "trades": r["trades"]} for r in dca_rows),
+                                                  key=lambda x: -x["post_t"])[:10]}
+    # 4. Brent-WTI spread
+    sp_rows, sp_best = run_spread(fut["CL=F"], fut["BZ=F"], cost_bps)
+    out["families"]["spread"] = {"n_variants": len(sp_rows), "chosen": [sp_best]}
+    # 5. hourly
+    h_rows, h_chosen = run_hourly(cost_bps)
+    out["families"]["hourly_futures"] = {"n_variants": len(h_rows), "chosen": h_chosen}
+    out["n_variants"] = sum(f["n_variants"] for f in out["families"].values())
+    out["passes"] = [dict(c, family=f) for f, v in out["families"].items() for c in v["chosen"] if c.get("pass")]
+    return out
+
+
+def report(res):
+    L = ["Oil search: %d candidate variants, %.0f bp a round trip, %.0f bp a night on multi-day holds." % (
+        res["n_variants"], res["cost_bps"], res["night_bps"]),
+        "Chosen on data to 2014 (hourly: first half), judged on 2015-2021 and 2022+ (hourly: later quarters).", ""]
+    for fam, v in res["families"].items():
+        L.append("== %s (%d variants)" % (fam, v["n_variants"]))
+        for c in sorted(v["chosen"], key=lambda c: -(c.get("post_t") or -9))[:12]:
+            pp = c.get("placebo_p")
+            L.append("  %-9s %-5s IS t %5.2f | OOS t %5.2f | HO t %5.2f | post t %5.2f | placebo %s | %s %s" % (
+                c["rule"], c.get("kind", ""), c.get("is_t") or 0, c.get("oos_t") or 0, c.get("ho_t") or 0,
+                c.get("post_t") or 0, ("%.3f" % pp) if pp is not None else "  -  ",
+                "PASS" if c.get("pass") else "    ", json.dumps(c["params"], sort_keys=True)[:60]))
+    L += ["", "PASSED every gate: %d" % len(res["passes"])]
+    for p in res["passes"]:
+        L.append("  %s %s %s" % (p["family"], p["rule"], json.dumps(p["params"], sort_keys=True)))
+    L.append("Research, not financial advice.")
+    return "\n".join(L)
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="trader-lab oil search")
+    sub = ap.add_subparsers(dest="cmd")
+    sub.add_parser("fetch")
+    p = sub.add_parser("backtest")
+    p.add_argument("--json", action="store_true")
+    p.add_argument("--cost", type=float, default=COST_BPS)
+    p.add_argument("--write", nargs="?", const=os.path.join(RESULTS, "oil-latest.json"))
+    a = ap.parse_args(argv)
+    if a.cmd == "fetch":
+        daily.main(["fetch", "--symbols", ",".join(FUT + FUNDS + ["XLE", "UUP"])])
+        import gzip
+        os.makedirs(HSTORE, exist_ok=True)
+        for s in FUT:
+            path = os.path.join(HSTORE, "%s.json.gz" % s)
+            old = {}
+            if os.path.exists(path):
+                with gzip.open(path, "rt") as fh:
+                    old = json.load(fh)
+            old.update(fetch_hourly(s))
+            with gzip.GzipFile(path, "wb", mtime=0) as gz:
+                gz.write(json.dumps({k: old[k] for k in sorted(old, key=int)}).encode())
+            print("%-5s hourly: %d bars, %d full day sessions" % (s, len(old), len(hourly_sessions(s))))
+        return 0
+    if a.cmd == "backtest":
+        res = search(a.cost)
+        if a.write:
+            with open(a.write, "w") as fh:
+                json.dump(res, fh, indent=1, sort_keys=True, default=str)
+        print(json.dumps(res, indent=1, sort_keys=True, default=str) if a.json else report(res))
+        return 0
+    ap.print_help()
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
