@@ -19,11 +19,19 @@ import json
 import math
 import os
 import statistics
+import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import lab  # noqa: E402
+import costs  # noqa: E402
+
+ROOT = os.path.dirname(HERE)
+SCAN = os.path.join(ROOT, "trader-scanner", "scan.py")
+SCANNER_DIR = os.path.join(HERE, "paper", "scanner")
+SCANNER_CFG = {"at": "09:50", "picks": 3, "risk_usd": 10.0, "budget_usd": 1000.0, "target_r": 1.0,
+               "max_cost_share": 0.10, "slip_bps": 1.0}
 
 PAPER = os.path.join(HERE, "paper")
 CONFIG = os.path.join(PAPER, "config.json")
@@ -197,6 +205,124 @@ def evaluate(rows, cfg):
             "demo_trades": len(demo), "demo_lag": lag, "checks": checks, "verdict": verdict}
 
 
+# ---------------------------------------------------------------- scanner track (simulated, automatic)
+
+def slot_of(hhmm):
+    h, m = map(int, hhmm.split(":"))
+    return (h * 60 + m - lab.OPEN_MIN) // 5
+
+
+def scanner_plan(hit, bars_so_far, watch, cfg=SCANNER_CFG):
+    """One orb hit -> a long plan, or None. Stop at the opening-range midpoint, target at target_r x risk,
+    whole shares so the stop loses at most risk_usd and the position is at most budget_usd.
+    Skipped when the estimated round trip (Corwin-Schultz on today's 5-minute bars + slippage) eats more
+    than max_cost_share of the reward."""
+    entry = float(hit["price"])
+    stop = round((float(hit["or_high"]) + float(hit["or_low"])) / 2.0, 2)
+    if stop >= entry:
+        return None
+    risk = entry - stop
+    target = round(entry + cfg["target_r"] * risk, 2)
+    shares = int(min(cfg["risk_usd"] / risk, cfg["budget_usd"] / entry))
+    if shares < 1:
+        return None
+    sp = [x for x in costs.cs_spread([b["h"] for b in bars_so_far], [b["l"] for b in bars_so_far],
+                                     [b["c"] for b in bars_so_far]) if x is not None]
+    spread_bps = statistics.median(sp) * 1e4 if sp else 5.0
+    cost_bps = spread_bps + 2 * cfg["slip_bps"] + costs.SEC_FEE_BPS
+    reward_bps = (target - entry) / entry * 1e4
+    if cost_bps > cfg["max_cost_share"] * reward_bps:
+        return None
+    return {"symbol": hit["symbol"], "side": "buy", "entry_est": entry, "stop": stop, "target": target,
+            "shares": shares, "max_loss_usd": round(shares * risk, 2), "cost_bps": round(cost_bps, 2),
+            "reward_bps": round(reward_bps, 1), "premarket_hit": hit["symbol"] in watch,
+            "or_low": hit["or_low"], "or_high": hit["or_high"], "pct_over": hit.get("pct_over")}
+
+
+def pick_scanner(hits, watch, n):
+    """Pre-market watchlist names first, then the freshest breakouts (least extended over the range)."""
+    return sorted(hits, key=lambda h: (h["symbol"] not in watch, h.get("pct_over", 99), h["symbol"]))[:n * 4]
+
+
+def fill_long(bars, start_slot, stop, target, exit_slot=EXIT_SLOT):
+    """Enter at the open of start_slot; a bar touching both stop and target counts as the stop.
+    -> (entry, exit, how)."""
+    e = bars[start_slot]["o"]
+    for i in range(start_slot, exit_slot + 1):
+        b = bars[i]
+        if b["l"] <= stop:
+            return e, (min(stop, b["o"]) if i > start_slot else min(stop, e)), "stop"
+        if b["h"] >= target:
+            return e, (max(target, b["o"]) if i > start_slot else max(target, e)), "target"
+    return e, bars[exit_slot]["c"], "close"
+
+
+def cmd_scanner(a):
+    """Whole-market opening-range breakout scan at --at (default 09:50 New York), the best picks
+    planned and saved for the automatic simulated fill. Nothing is placed anywhere."""
+    cfg = dict(SCANNER_CFG)
+    at = a.at or cfg["at"]
+    cmd = [sys.executable, SCAN, "orb", "--at", at, "--json", "--no-write"]
+    if a.now:
+        cmd += ["--now", a.now]
+    out = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT)
+    try:
+        doc = json.loads(out.stdout)
+    except ValueError:
+        raise PaperError("the orb scan failed: %s" % (out.stderr.strip()[-300:] or out.stdout.strip()[-300:]))
+    watch = set()
+    wl = os.path.join(ROOT, "trader", "watchlist.json")
+    if os.path.exists(wl):
+        with open(wl) as fh:
+            w = json.load(fh)
+        if w.get("mode") == "daily":
+            watch = {h["symbol"] for h in w.get("hits", [])}
+    date = doc["as_of"][:10]
+    plans = []
+    for h in pick_scanner(doc.get("hits", []), watch, cfg["picks"]):
+        if len(plans) >= cfg["picks"]:
+            break
+        try:
+            sess = lab.sessions_of(lab.parse_chart(lab.fetch_chart(h["symbol"])))
+        except lab.LabError:
+            continue
+        today = dict(sess).get(date) or []
+        p = scanner_plan(h, today[:slot_of(at)], watch, cfg)
+        if p:
+            p["date"], p["decided_at"] = date, at
+            plans.append(p)
+    os.makedirs(SCANNER_DIR, exist_ok=True)
+    with open(os.path.join(SCANNER_DIR, "%s.json" % date), "w") as fh:
+        json.dump(plans, fh, indent=1)
+    print("Scanner track (SIMULATED, automatic), %s %s New York: %d breakouts in %s charts; picked %d." % (
+        date, at, len(doc.get("hits", [])), "{:,}".format(doc.get("scanned", 0)), len(plans)))
+    for p in plans:
+        print("  BUY %-6s ~%.2f  %d sh  stop %.2f  target %.2f  max loss $%.2f  cost %.1f bp of %.0f bp reward%s" % (
+            p["symbol"], p["entry_est"], p["shares"], p["stop"], p["target"], p["max_loss_usd"], p["cost_bps"],
+            p["reward_bps"], "  (also a pre-market hit)" if p["premarket_hit"] else ""))
+    print("Filled automatically from real 5-minute prices after the close (paper.py log). No order is placed.")
+    return 0
+
+
+def log_scanner(date, plans):
+    rows = []
+    for p in plans:
+        sess = dict(lab.sessions_of(lab.parse_chart(lab.fetch_chart(p["symbol"]))))
+        bars = sess.get(date)
+        if not bars or len(bars) <= EXIT_SLOT:
+            continue
+        e, x, how = fill_long(bars, slot_of(p["decided_at"]), p["stop"], p["target"])
+        notional = p["shares"] * e
+        cost_usd = notional * p["cost_bps"] / 1e4
+        pnl = p["shares"] * (x - e) - cost_usd
+        rows.append({"date": date, "source": "scanner-sim", "instrument": p["symbol"], "proxy": p["symbol"],
+                     "side": "buy", "move_bps": p.get("pct_over", ""), "entry": round(e, 4), "exit": round(x, 4),
+                     "stopped": int(how == "stop"), "gross_bps": round((x / e - 1) * 1e4, 2),
+                     "cost_bps": p["cost_bps"], "net_bps": round(pnl / notional * 1e4, 2),
+                     "notional_usd": round(notional, 2), "pnl_usd": round(pnl, 2)})
+    return rows
+
+
 # ---------------------------------------------------------------- commands
 
 def ny_now():
@@ -246,6 +372,7 @@ def cmd_tickets(a):
             cfg["flat_by"], server_time(exit_ny).strftime("%H:%M")))
         print("Volume in MT5 = notional / (index price x contract size). After closing, record the result:")
         print("  python3 trader-lab/paper.py record --date %s --instrument <US500|USTEC|US30> --side <buy|sell> --pnl <$>" % date)
+    print("These are SIMULATED automatically (filled and logged after the close); placing them on the demo is optional.")
     print("Paper trading only. Not financial advice.")
     return 0
 
@@ -262,6 +389,16 @@ def cmd_log(a):
             continue
         got = log_day(sess, d, cfg)
         new += got if got else [{"date": d, "source": "shadow-day"}]   # a day with no ticket still counts
+    logged_sc = {r["date"] for r in rows if r["source"] in ("scanner-sim", "scanner-day")}
+    if os.path.isdir(SCANNER_DIR):
+        for f in sorted(os.listdir(SCANNER_DIR)):
+            d = f[:-5]
+            if not f.endswith(".json") or d in logged_sc or d >= ny_now().date().isoformat() and ny_now().hour < 16:
+                continue
+            with open(os.path.join(SCANNER_DIR, f)) as fh:
+                plans = json.load(fh)
+            got = log_scanner(d, plans)
+            new += got if got else [{"date": d, "source": "scanner-day"}]
     append_rows(new)
     print("Logged %d new row(s) for %d day(s)." % (len(new), len({r["date"] for r in new})))
     return 0
@@ -295,12 +432,20 @@ def cmd_report(a):
         "ok" if r["checks"]["t_ok"] else "no", bar["max_drawdown_usd"], "ok" if r["checks"]["drawdown_ok"] else "no",
         bar["max_demo_lag"] * 100, "ok" if r["checks"]["demo_lag_ok"] else "no"))
     print("Verdict: %s. Paper trading only; going live is your decision. Not financial advice." % r["verdict"])
+    sc = [x for x in rows if x["source"] == "scanner-sim"]
+    if sc:
+        pnl = [float(x["pnl_usd"]) for x in sc]
+        print("Scanner track (simulated, not part of the bar): %d trades on %d days, net $%+.2f, win rate %.0f%%." % (
+            len(sc), len({x["date"] for x in sc}), sum(pnl), 100.0 * sum(1 for v in pnl if v > 0) / len(pnl)))
     return 0
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="trader-lab paper trial (Exness demo, placed by hand)")
     sub = ap.add_subparsers(dest="cmd")
+    p = sub.add_parser("scanner", help="whole-market ORB scan at 09:50 New York -> simulated picks")
+    p.add_argument("--at", help="New York time of the decision (default 09:50)")
+    p.add_argument("--now", help='pretend it is this New York time, "YYYY-MM-DD HH:MM"')
     p = sub.add_parser("tickets")
     p.add_argument("--now", help='pretend it is this New York time, "YYYY-MM-DD HH:MM"')
     sub.add_parser("log")
@@ -316,7 +461,8 @@ def main(argv=None):
     p.add_argument("--json", action="store_true")
     a = ap.parse_args(argv)
     try:
-        fn = {"tickets": cmd_tickets, "log": cmd_log, "record": cmd_record, "report": cmd_report}.get(a.cmd)
+        fn = {"tickets": cmd_tickets, "log": cmd_log, "record": cmd_record, "report": cmd_report,
+              "scanner": cmd_scanner}.get(a.cmd)
         if not fn:
             ap.print_help()
             return 1
