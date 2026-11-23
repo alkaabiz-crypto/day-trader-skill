@@ -50,6 +50,41 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (twelfth run): Bitcoin 844,664 and Ethereum 863,003 candidates. No pass
+
+`crypto_search.py`: 199 conditions known at the daily close. Combined alone, as AND pairs and as
+"A and not B" pairs; long-while, long-unless or short-while; held 1 to 30 days. Plus entries with
+take-profit / stop / time exits. Conditions from the crypto literature:
+- time-series momentum (Liu & Tsyvinski 2021) and moving-average ratios (Detzel et al. 2021)
+- Mayer multiple, RSI, MACD, Bollinger, stochastics, streaks, volatility regimes
+- distance from the all-time high, volume shocks, the ETH/BTC ratio
+- stocks, VIX, the dollar, gold, rates, credit, oil and copper
+- weekday and weekend, month, turn of month, the halving cycle
+
+Next-open fills, 10 bp per change, T-bill cash, Jensen's alpha against buy-and-hold. The gate is
+SPA plus Romano-Wolf, computed in chunks (a test checks that it matches the in-memory version
+exactly). A second test checks that no condition changes when future data is cut off.
+
+| | BTC-USD | ETH-USD |
+| --- | --- | --- |
+| judged after | 2019-12-31 (2,518 days) | 2021-06-30 (1,971 days) |
+| candidates | 844,664 | 863,003 |
+| best alpha t | 4.10 (13.2 bp/day) | 3.86 (13.7 bp/day) |
+| SPA p / Reality Check p | 0.807 / 0.263 | 0.917 / 0.927 |
+| Romano-Wolf critical t, rules above | 6.55, 0 | 6.69, 0 |
+| t >= 3 | 531 | 117 |
+| 20 best before, mean t after | 0.48 | 0.86 |
+| correlation of t before / after | 0.19 | 0.12 |
+
+- **BTC:** the best rule after 2019 is "ETH up yesterday and RSI14 > 70, long 21 days" (t 4.10).
+  Before 2020 it had IS t 0.16.
+- **ETH:** the best rule is "Tuesday when TLT rose over 30 days, long 1 day" (t 3.86, IS t 0.56).
+  That is calendar noise.
+- **Reading:** no edge beyond the luck of trying ~850k rules on either coin. Many candidates beat
+  buy-and-hold's Sharpe (91k on BTC, 204k on ETH), but ETH's buy-and-hold Sharpe after mid-2021 was
+  only 0.24, which makes that comparison easy and meaningless.
+- **Not included:** Exness swap on crypto CFDs, which would make multi-day holds worse.
+
 ### 2026-11-23 (eleventh run): 203,968 S&P 500 candidates, and a check of the test itself. No pass
 
 **What was tested.** `sp500_search.py`: 148 published conditions on SPY, used alone, as AND pairs,

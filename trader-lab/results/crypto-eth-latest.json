@@ -1,0 +1,399 @@
+{
+ "asset": "ETH-USD",
+ "is_end": "2021-06-30",
+ "cost_bps": 10.0,
+ "candidates": 863003,
+ "conditions": 199,
+ "days_post": 1971,
+ "days_pre": 1331,
+ "bh_sharpe_post": 0.24082833259702247,
+ "reality_check": {
+  "M": 863003,
+  "n": 1971,
+  "best_mean_bps": 13.682920353852392,
+  "best_t": 3.861805551294009,
+  "rc_p": 0.9266666666666666,
+  "spa_p": 0.9166666666666666,
+  "bonferroni_z": 5.425053369828581,
+  "rw_crit_t": 6.690637796169735,
+  "rw_rejects": 0,
+  "passes": false
+ },
+ "by_kind": {
+  "one": {
+   "n": 5373,
+   "alpha_pos": 2127,
+   "t3": 0,
+   "sharpe_over_bh": 1270
+  },
+  "pair": {
+   "n": 450900,
+   "alpha_pos": 191737,
+   "t3": 76,
+   "sharpe_over_bh": 120407
+  },
+  "andnot": {
+   "n": 362630,
+   "alpha_pos": 144621,
+   "t3": 29,
+   "sharpe_over_bh": 72377
+  },
+  "entry": {
+   "n": 44100,
+   "alpha_pos": 15521,
+   "t3": 12,
+   "sharpe_over_bh": 9602
+  }
+ },
+ "n_t3": 117,
+ "n_bonferroni": 0,
+ "n_sharpe_over_bh": 203656,
+ "best_sharpe": 1.6387744996772653,
+ "best_post": [
+  {
+   "rule": "pair:next_wd1&tlt_up30",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 3.8618055512940095,
+   "is_t": 0.5607851634402266,
+   "alpha_bp_day": 9.457318799755079,
+   "sharpe": 1.6387744996772653
+  },
+  {
+   "rule": "andnot:next_wd1&!tlt_down30",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 3.856896066400619,
+   "is_t": 0.26541100623350783,
+   "alpha_bp_day": 9.43403572302985,
+   "sharpe": 1.6387744996772653
+  },
+  {
+   "rule": "andnot:next_m7&!curve_inverted",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 3.7103575076114836,
+   "is_t": -0.7853019436080841,
+   "alpha_bp_day": 9.643264262666671,
+   "sharpe": 1.5693342894123696
+  },
+  {
+   "rule": "pair:copper_gold_up30&next_m7",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 3.5622912912660003,
+   "is_t": 2.2955308353740786,
+   "alpha_bp_day": 7.924588521757583,
+   "sharpe": 1.526340487982268
+  },
+  {
+   "rule": "andnot:next_m7&!copper_gold_down30",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 3.5622912912660003,
+   "is_t": 2.2955308353740786,
+   "alpha_bp_day": 7.924588521757583,
+   "sharpe": 1.526340487982268
+  },
+  {
+   "rule": "andnot:next_m7&!halving_0-365",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 3.556083507085516,
+   "is_t": -2.5612955010058407,
+   "alpha_bp_day": 9.458895371202482,
+   "sharpe": 1.5061227338919612
+  },
+  {
+   "rule": "entry:ethbtc>ma50",
+   "params": {
+    "tp": null,
+    "sl": 0.04,
+    "T": 30
+   },
+   "post_t": 3.508899606152619,
+   "is_t": 0.23519684000561858,
+   "alpha_bp_day": 12.280808994998521,
+   "sharpe": 1.4341302387876593
+  },
+  {
+   "rule": "andnot:next_m7&!rv_high",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 3.4809416182505117,
+   "is_t": 0.2410969517190749,
+   "alpha_bp_day": 8.74658558834539,
+   "sharpe": 1.4811984811297862
+  },
+  {
+   "rule": "entry:rsi2>95",
+   "params": {
+    "tp": null,
+    "sl": 0.04,
+    "T": 30
+   },
+   "post_t": 3.4465849398947097,
+   "is_t": 1.0981381543482311,
+   "alpha_bp_day": 12.781389612745878,
+   "sharpe": 1.3675277219936746
+  },
+  {
+   "rule": "pair:next_m7&rv_low",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 3.432486556035068,
+   "is_t": 2.446845397197158,
+   "alpha_bp_day": 8.206876298173688,
+   "sharpe": 1.4687325781182328
+  }
+ ],
+ "top_is": [
+  {
+   "rule": "entry:next_wd4",
+   "params": {
+    "tp": null,
+    "sl": 0.02,
+    "T": 60
+   },
+   "post_t": 1.5037128805462427,
+   "is_t": 5.29136967967398,
+   "alpha_bp_day": 6.233480267208442,
+   "sharpe": 0.6590855068553999
+  },
+  {
+   "rule": "entry:other_ret1>0",
+   "params": {
+    "tp": null,
+    "sl": 0.02,
+    "T": 60
+   },
+   "post_t": -0.5487697505245325,
+   "is_t": 4.685601244000851,
+   "alpha_bp_day": -2.2797183867659676,
+   "sharpe": 0.049182790237233
+  },
+  {
+   "rule": "andnot:macd>0&!tlt_down30",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 0.9770444871532735,
+   "is_t": 4.487394075804576,
+   "alpha_bp_day": 3.340388251391186,
+   "sharpe": 0.5238710141310191
+  },
+  {
+   "rule": "entry:ret2>0",
+   "params": {
+    "tp": null,
+    "sl": 0.02,
+    "T": 60
+   },
+   "post_t": -0.723469843636116,
+   "is_t": 4.429000429938955,
+   "alpha_bp_day": -3.2541205351300757,
+   "sharpe": -0.0123294068814336
+  },
+  {
+   "rule": "entry:ret3>0",
+   "params": {
+    "tp": null,
+    "sl": 0.02,
+    "T": 60
+   },
+   "post_t": 1.8048340190777237,
+   "is_t": 4.310971431706544,
+   "alpha_bp_day": 7.397014812666049,
+   "sharpe": 0.6914384600475159
+  },
+  {
+   "rule": "andnot:other<ma50&!halving_0-365",
+   "params": {
+    "hold": 30,
+    "dir": "short_when"
+   },
+   "post_t": -0.8432209165827388,
+   "is_t": 4.294813023188333,
+   "alpha_bp_day": -3.300259020895479,
+   "sharpe": -0.39338681212552656
+  },
+  {
+   "rule": "andnot:ma7>ma30&!tlt_down30",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 1.7033290020304688,
+   "is_t": 4.288899492234569,
+   "alpha_bp_day": 5.867205885831244,
+   "sharpe": 0.7820087292514234
+  },
+  {
+   "rule": "entry:ret3>0",
+   "params": {
+    "tp": null,
+    "sl": 0.04,
+    "T": 60
+   },
+   "post_t": 1.1082624093285378,
+   "is_t": 4.273771303353691,
+   "alpha_bp_day": 4.375308111537304,
+   "sharpe": 0.4609766896437587
+  },
+  {
+   "rule": "entry:stoch>80",
+   "params": {
+    "tp": 0.25,
+    "sl": 0.02,
+    "T": 60
+   },
+   "post_t": 1.0031224151877887,
+   "is_t": 4.267508557229778,
+   "alpha_bp_day": 3.097597111048684,
+   "sharpe": 0.49685176317173485
+  },
+  {
+   "rule": "andnot:tlt_up30&!ma7<ma30",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 1.7038968008248547,
+   "is_t": 4.25156931431529,
+   "alpha_bp_day": 5.868732253371728,
+   "sharpe": 0.7820087292514234
+  },
+  {
+   "rule": "pair:ma7>ma30&tlt_up30",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 1.7038968008248547,
+   "is_t": 4.25156931431529,
+   "alpha_bp_day": 5.868732253371728,
+   "sharpe": 0.7820087292514234
+  },
+  {
+   "rule": "entry:c>ma20",
+   "params": {
+    "tp": null,
+    "sl": 0.04,
+    "T": 14
+   },
+   "post_t": 1.329784532687231,
+   "is_t": 4.2512751219187965,
+   "alpha_bp_day": 4.797873411741792,
+   "sharpe": 0.6296279890193335
+  },
+  {
+   "rule": "andnot:other<ma50&!halving_0-365",
+   "params": {
+    "hold": 7,
+    "dir": "short_when"
+   },
+   "post_t": 0.5661593071445638,
+   "is_t": 4.243718528120877,
+   "alpha_bp_day": 2.325640887573742,
+   "sharpe": -0.018423642051229684
+  },
+  {
+   "rule": "andnot:other<ma50&!next_m4",
+   "params": {
+    "hold": 7,
+    "dir": "short_when"
+   },
+   "post_t": 0.8537745346799074,
+   "is_t": 4.216903634192768,
+   "alpha_bp_day": 3.400857657977645,
+   "sharpe": 0.051751290313045976
+  },
+  {
+   "rule": "pair:other<ma50&tlt_down30",
+   "params": {
+    "hold": 21,
+    "dir": "long_unless"
+   },
+   "post_t": 0.5544183659405556,
+   "is_t": 4.214486298402463,
+   "alpha_bp_day": 2.353583889723681,
+   "sharpe": 0.4008912256718382
+  },
+  {
+   "rule": "pair:macd>0&tlt_up30",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 1.0046781843642025,
+   "is_t": 4.19564593945797,
+   "alpha_bp_day": 3.415755542851493,
+   "sharpe": 0.5238710141310191
+  },
+  {
+   "rule": "andnot:tlt_up30&!macd<0",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 1.0046781843642025,
+   "is_t": 4.19564593945797,
+   "alpha_bp_day": 3.415755542851493,
+   "sharpe": 0.5238710141310191
+  },
+  {
+   "rule": "pair:ma7>ma30&tlt_up30",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": 1.0783139768890355,
+   "is_t": 4.179130814121927,
+   "alpha_bp_day": 3.8681113654022834,
+   "sharpe": 0.5334462233967179
+  },
+  {
+   "rule": "pair:other<ma50&tlt_down30",
+   "params": {
+    "hold": 21,
+    "dir": "short_when"
+   },
+   "post_t": 0.30533111271298413,
+   "is_t": 4.158745834653978,
+   "alpha_bp_day": 1.2961887550343096,
+   "sharpe": -0.043161240058605915
+  },
+  {
+   "rule": "entry:stoch>80",
+   "params": {
+    "tp": 0.25,
+    "sl": 0.02,
+    "T": 30
+   },
+   "post_t": 1.133589833206642,
+   "is_t": 4.15663882496525,
+   "alpha_bp_day": 3.4687701808675397,
+   "sharpe": 0.5546034108834498
+  }
+ ],
+ "top_is_mean_post_t": 0.861168316810984,
+ "corr_is_post_t": 0.12307935770579655,
+ "seconds": 1169
+}
