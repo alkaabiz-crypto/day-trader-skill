@@ -50,6 +50,27 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23: the user's video strategy, ORB + 10-minute close + 20 EMA pullback (`orb_ema.py`). FAIL
+
+From a short video by a prop-firm Nasdaq trader (payout screenshots shown as proof): mark the
+9:30-10:00 range, wait for a 10-minute candle to close outside it, then enter on a pullback to the
+2-minute 20 EMA. Pre-registered (commit a2ccec4) before the run: QQQ, 4 years of 5-minute Tiingo bars
+(the 2-minute 20 EMA approximated by a 5-minute EMA(8), same 40-minute span), 24 variants of stop
+(entry bar or range edge), target (2R, 3R, close), EMA (8, 20) and sides (both, long-only), chosen on
+in-sample t; 1.5 and 3 bps per round trip.
+
+| QQQ, chosen: range-edge stop, hold to close, EMA 8, both sides | IS (275 trades) | OOS (135) | HOLDOUT (125) | post-IS t | placebo p |
+| --- | --- | --- | --- | --- | --- |
+| 1.5 bps | +2.2 bp, t 0.83 | -6.8 bp | +7.7 bp | 0.05 | 0.27 |
+| 3 bps | +0.7 bp, t 0.26 | -8.3 bp | +6.2 bp | -0.46 | 0.27 |
+
+SPY and IWM: post-IS t 1.50 and 0.22 at 1.5 bps, below zero or near it at 3 bps. Even the best of all 24
+variants picked with hindsight reaches only post-IS t 1.01. Why: two-thirds of trades are stopped out (the
+pullback usually goes back to the range edge), and the winners don't cover them. This rule's
+core, a 30-minute opening-range breakout, had already failed here (`orb`, 2026-11-23 second run); the EMA
+pullback entry does not rescue it. The video's evidence is payout screenshots, which show withdrawals but not
+losses, fees or failed accounts, so they say nothing about the rule's edge.
+
 ### 2026-11-23 (eighth run): oil predicts stocks; volatility-managed oil
 
 `oil.py cross` (monthly, next-open fills, T-bill cash, dividends counted; CAGR / Sharpe / max drawdown):
