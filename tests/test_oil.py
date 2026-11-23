@@ -73,6 +73,29 @@ class TrackState(unittest.TestCase):
         self.assertIn("WAIT", oil.dca_state(series([100.0] * 26), self.P)["action"])
 
 
+class Carry(unittest.TestCase):
+    def test_roll_jump_reads_as_contango(self):
+        # the front series jumps +2% at a roll (contango); the fund that rolls does not
+        fut = series([100.0] * 30 + [102.0] * 10)                  # the jump falls inside the last 21 days
+        fund = series([50.0] * 40)
+        c = oil.carry_series(fut, fund, Ls=(21,))
+        last = fut["d"][-1]
+        self.assertAlmostEqual(c[last][21], __import__("math").log(1.02))
+        oil.CARRY.clear()
+        oil.CARRY[id(fund)] = c
+        self.assertEqual(oil.sw_carry(fund, 39, {"L": 21}), 0)     # contango: no long
+        oil.CARRY.clear()
+
+    def test_backwardation_goes_long(self):
+        fut = series([100.0] * 30 + [98.0] * 10)                    # roll jump down: backwardation
+        fund = series([50.0] * 40)
+        oil.CARRY.clear()
+        oil.CARRY[id(fund)] = oil.carry_series(fut, fund, Ls=(21,))
+        self.assertEqual(oil.sw_carry(fund, 39, {"L": 21}), 1)
+        self.assertEqual(oil.sw_carry(fund, 39, {"L": 21, "trend": True}), 0)   # fund flat: no trend
+        oil.CARRY.clear()
+
+
 class Rules(unittest.TestCase):
     def test_eia_wednesday_follows_or_fades_tuesday(self):
         D = series([100, 101, 103, 103], opens=[100, 100, 101, 103], start="2020-01-06")  # Mon..Thu

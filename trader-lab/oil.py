@@ -107,7 +107,158 @@ def ex_season(D, k, p, j):
     return int(D["d"][k][5:7]) not in p["months"] or (k + 1 < len(D["d"]) and int(D["d"][k + 1][5:7]) not in p["months"])
 
 
-daily.EXITS.update({"tsmom": ex_tsmom, "sma": ex_sma, "season": ex_season})
+# ---- carry (term structure) proxy: the continuous front-month series jumps at each roll, a fund that
+# rolls does not, so over L days ln(front change) - ln(fund change) = the roll jumps = minus the roll
+# yield. Negative = backwardation (Gorton, Hayashi & Rouwenhorst 2013; Erb & Harvey 2006).
+CARRY = {}   # id(fund dict) -> {date: {L: carry}}
+
+
+def carry_series(fut, fund, Ls=(21, 63, 126)):
+    fi = {d: i for i, d in enumerate(fut["d"])}
+    out = {}
+    for j, d in enumerate(fund["d"]):
+        i = fi.get(d)
+        row = {}
+        for L in Ls:
+            if i is None or j < L or i < L or fut["d"][i - L] != fund["d"][j - L]:
+                continue
+            row[L] = math.log(fut["c"][i] / fut["c"][i - L]) - math.log(fund["c"][j] / fund["c"][j - L])
+        if row:
+            out[d] = row
+    return out
+
+
+def sw_carry(D, j, p):
+    """Long while the L-day roll yield is positive (backwardation); with trend=True also require a
+    positive L-day fund return (Moskowitz et al.; carry + momentum)."""
+    v = CARRY.get(id(D), {}).get(D["d"][j], {}).get(p["L"])
+    if v is None or v >= 0:
+        return 0
+    if p.get("trend") and not (j > p["L"] and D["c"][j] > D["c"][j - p["L"]]):
+        return 0
+    return 1
+
+
+def ex_carry(D, k, p, j):
+    v = CARRY.get(id(D), {}).get(D["d"][k], {}).get(p["L"])
+    if v is None or v >= 0:
+        return True
+    return bool(p.get("trend")) and k > p["L"] and D["c"][k] <= D["c"][k - p["L"]]
+
+
+# ---- the real WTI futures curve from the EIA: daily settlements of contracts 1-4 since 1983
+EIA_URL = "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=RCLC%d&f=D"
+MONTHS = {m: i for i, m in enumerate(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
+                                       "Nov", "Dec"], 1)}
+CURVE = {}   # date -> {1: F1, 2: F2, ...}
+
+
+def parse_eia(html):
+    """EIA weekly table -> {date: price}. Each row: '1983 Apr- 4 to Apr- 8' then five cells Mon..Fri
+    (empty on holidays)."""
+    import re
+    out = {}
+    for row in re.findall(r"<tr>(.*?)</tr>", html, re.S):
+        m = re.search(r"class='B6'>[^0-9]*(\d{4})\s+(\w{3})-\s*(\d+)\s+to", row)
+        if not m:
+            continue
+        y, mon, day = int(m.group(1)), MONTHS.get(m.group(2)), int(m.group(3))
+        if not mon:
+            continue
+        start = datetime.date(y, mon, day)
+        cells = re.findall(r"<td class='B3'>([^<]*)</td>", row)
+        for k, v in enumerate(cells[:5]):
+            v = v.strip().replace(",", "")
+            if v:
+                try:
+                    out[(start + datetime.timedelta(days=k)).isoformat()] = float(v)
+                except ValueError:
+                    pass
+    return out
+
+
+def fetch_curve(n_max=2):
+    path = os.path.join(daily.STORE, "EIA_CL_curve.json")
+    data = {}
+    for n in range(1, n_max + 1):
+        req = urllib.request.Request(EIA_URL % n, headers={"User-Agent": daily.UA})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            for d, px in parse_eia(r.read().decode("utf-8", "replace")).items():
+                data.setdefault(d, {})[str(n)] = px
+    with open(path, "w") as fh:
+        json.dump(data, fh, separators=(",", ":"), sort_keys=True)
+    return data
+
+
+def load_curve():
+    CURVE.clear()
+    path = os.path.join(daily.STORE, "EIA_CL_curve.json")
+    if os.path.exists(path):
+        with open(path) as fh:
+            for d, row in json.load(fh).items():
+                if "1" in row and "2" in row and row["1"] > 0 and row["2"] > 0:
+                    CURVE[d] = (row["1"], row["2"])
+    return CURVE
+
+
+def backwardation(d):
+    """F1 / F2 - 1 in % on date d (positive = backwardation), or None."""
+    v = CURVE.get(d)
+    return None if v is None else (v[0] / v[1] - 1) * 100
+
+
+def sw_curve(D, j, p):
+    """Long while contract 1 is at least x% above contract 2; trend=L also needs a positive L-day return."""
+    b = backwardation(D["d"][j])
+    if b is None or b <= p["x"]:
+        return 0
+    if p.get("trend") and not (j > p["trend"] and D["c"][j] > D["c"][j - p["trend"]]):
+        return 0
+    return 1
+
+
+def ex_curve(D, k, p, j):
+    b = backwardation(D["d"][k])
+    if b is None or b <= 0:
+        return True
+    return bool(p.get("trend")) and k > p["trend"] and D["c"][k] <= D["c"][k - p["trend"]]
+
+
+BMOM = {}    # date -> {L: basis momentum}
+
+
+def basis_momentum(Ls=(63, 126, 252)):
+    """Boons & Porras Prado (2019): the L-day sum of (F1 daily return - F2 daily return). Days where the
+    contracts roll (contract 1 expires) show as jumps in both; their difference is kept small by
+    skipping days where either series moves more than 15% (a roll or a bad print)."""
+    BMOM.clear()
+    days = sorted(CURVE)
+    diffs = []
+    for k in range(1, len(days)):
+        a, b = CURVE[days[k - 1]], CURVE[days[k]]
+        r1, r2 = b[0] / a[0] - 1, b[1] / a[1] - 1
+        diffs.append(0.0 if abs(r1) > 0.15 or abs(r2) > 0.15 else r1 - r2)
+        row = {}
+        for L in Ls:
+            if len(diffs) >= L:
+                row[L] = sum(diffs[-L:])
+        if row:
+            BMOM[days[k]] = row
+    return BMOM
+
+
+def sw_bmom(D, j, p):
+    v = BMOM.get(D["d"][j], {}).get(p["L"])
+    return 1 if v is not None and v > 0 else 0
+
+
+def ex_bmom(D, k, p, j):
+    v = BMOM.get(D["d"][k], {}).get(p["L"])
+    return v is None or v <= 0
+
+
+daily.EXITS.update({"tsmom": ex_tsmom, "sma": ex_sma, "season": ex_season, "carry": ex_carry,
+                    "curve": ex_curve, "bmom": ex_bmom})
 
 DAY_RULES = {
     "o_month": {"fn": r_month, "source": "oil seasonality by calendar month",
@@ -122,6 +273,13 @@ SWING_RULES = {
                 "grid": {"L": [21, 63, 126, 252], "exit": ["tsmom"], "max_days": [400], "fill": ["open"]}},
     "o_sma": {"fn": sw_sma, "source": "moving-average trend filter (Faber 2007 style)",
               "grid": {"n": [20, 50, 100, 200], "exit": ["sma"], "max_days": [400], "fill": ["open"]}},
+    # o_carry (USO-vs-front proxy) is NOT in the search: USO stopped holding only the front month in
+    # April 2020, so the proxy shows contango in 2022's steep backwardation. Replaced by o_curve (EIA).
+    "o_curve": {"fn": lambda D, j, p: sw_curve(D, j, p), "source": "backwardation from EIA contracts 1-2 "
+                "(Gorton, Hayashi & Rouwenhorst 2013; Erb & Harvey 2006)",
+                "grid": {"x": [0.0, 0.5, 1.0], "trend": [0, 63], "exit": ["curve"], "max_days": [400], "fill": ["open"]}},
+    "o_bmom": {"fn": lambda D, j, p: sw_bmom(D, j, p), "source": "basis momentum (Boons & Porras Prado 2019, JF)",
+               "grid": {"L": [63, 126, 252], "exit": ["bmom"], "max_days": [400], "fill": ["open"]}},
     "o_season": {"fn": sw_season, "source": "oil seasonality: hold through chosen months",
                  "grid": {"months": [[4, 5, 6], [5, 6, 7, 8], [11, 12, 1, 2], [12, 1, 2, 3]],
                           "exit": ["season"], "max_days": [130], "fill": ["open"]}},
@@ -459,6 +617,8 @@ def search(cost_bps=COST_BPS):
     fut, funds = load(FUT), load(FUNDS)
     if not fut or not funds:
         raise SystemExit("oil.py: no data; run `oil.py fetch` first")
+    load_curve()
+    basis_momentum()
     out = {"cost_bps": cost_bps, "night_bps": NIGHT_BPS, "families": {}}
     # 1. same-day rules on futures
     day_names = GENERAL_DAY + list(DAY_RULES)
@@ -594,6 +754,11 @@ def main(argv=None):
     a = ap.parse_args(argv)
     if a.cmd == "fetch":
         daily.main(["fetch", "--symbols", ",".join(FUT + FUNDS + ["XLE", "UUP"])])
+        try:
+            c = fetch_curve(2)
+            print("EIA WTI curve: %d days, contracts 1-2, %s to %s" % (len(c), min(c), max(c)))
+        except Exception as e:      # the EIA site is optional; the rest still works
+            print("EIA curve: could not fetch (%s)" % e)
         import gzip
         os.makedirs(HSTORE, exist_ok=True)
         for s in FUT:

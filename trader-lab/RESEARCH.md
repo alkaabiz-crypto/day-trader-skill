@@ -50,6 +50,30 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (seventh run): the oil futures curve (backwardation, basis momentum)
+
+The strongest economic case for oil returns is the term structure: when the front contract trades
+above the next one (backwardation), long holders earn the roll (Gorton, Hayashi & Rouwenhorst 2013;
+Erb & Harvey 2006). Two attempts:
+
+1. **USO-vs-front proxy (withdrawn).** ln(front change) - ln(USO change) = the roll jumps, but USO
+   stopped holding only the front month in April 2020, so the proxy said "contango" in March 2022's
+   steep backwardation. Removed from the search; documented in `oil.py`.
+2. **The real curve from the EIA** (`www.eia.gov`, now allowed): daily settlements of WTI contracts
+   1 and 2 since 1983. Sanity check passes: contango Mar 2009 (-5.4%), 2015-16 (-3.8 to -5.2%),
+   Apr 2020 (-14.5%); backwardation Mar 2022 (+3.2%). **The EIA stopped this series in April 2024**,
+   so the holdout is 2022 to 2024-04 only; live values now come from Yahoo's active contracts.
+
+| rule (on USO, next-open fills, 5 bp + 1 bp/night) | chosen on data to 2014 | IS t | OOS t | HO t | after 2014 | verdict |
+| --- | --- | --- | --- | --- | --- | --- |
+| backwardation long (`o_curve`) | F1 > F2 and a positive 63-day trend | 2.53 | 0.97 | 0.36 | 0.91 | best oil candidate yet, not a pass |
+| basis momentum (`o_bmom`, Boons & Porras Prado 2019) | 63-day | 1.63 | -0.72 | 0.63 | -0.21 | fails |
+
+Backwardation + trend is the only oil rule positive in all three periods, with the strongest
+theory behind it, but t 0.91 after 2014 is far from 3. It joins the watch list. On 2026-11-23 the
+live curve (CLF27 80.39, CLG27 79.34, CLH27 78.21) is in backwardation (+1.3%), but oil's 63-day
+trend is down after the 22% fall, so the rule is flat. 288 oil variants now; none passes.
+
 ### 2026-11-23 (sixth run): oil (WTI / Brent, Exness USOIL / UKOIL), 279 candidates, none pass
 
 `oil.py` runs the lab's gates on oil. Same-day rules on CL=F / BZ=F front-month futures (the roll
