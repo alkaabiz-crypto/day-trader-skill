@@ -102,6 +102,12 @@ volatility clustering and fat tails.
   fat-tailed, volatility-clustered market at 0.3x to 5x leverage. It passed 0 of 40 null sets and
   caught a planted 40 bp/day edge. The synthetic data did not reproduce the Reality Check's false
   alarms (0 of 40), so the evidence for dropping it is the real-data calibration above.
+- **Diagnostic re-run** (1,000 bootstrap samples, two seeds): Reality Check p 0.028 / 0.028, SPA
+  0.726 / 0.723, so the conflict is not bootstrap noise. The rule with the largest mean
+  (`andnot:vix9d>vix&!pres_y2`, long 20 days, 4.74 bp/day, after-2014 t 3.26, before t 0.93) has a
+  daily volatility of 79 bp. That is above the 90th percentile of all 203,968 candidates (median
+  46 bp, max 98 bp). The unstudentized Reality Check rewards exactly this kind of high-volatility
+  rule, which is consistent with the null calibration.
 - The earlier universe runs are unchanged in substance: their best Reality Check p was QQQ 0.076,
   with SPA 0.31 to 0.91, so nothing there passed either way.
 
