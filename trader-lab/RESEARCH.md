@@ -45,6 +45,32 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (fourth run): full gates for the 5-minute engine, and what trading costs allow
+
+`lab.py` now judges 5-minute rules like the other engines: IS / OOS / HOLDOUT 50/25/25, PASS
+needs IS t >= 2, positive OOS and HOLDOUT, t >= 3 after IS, and beating random side flips of its
+own trades (Bonferroni). The old loose rule survives only as a "watch" label, never in the live
+signal. On 4 years of SPY/QQQ/IWM (Tiingo) at 3 bp **nothing passes; the best t after IS is 0.52**.
+
+`lab.py costs` reruns at 0 to 5 bp round trip. Average gross profit per trade after IS (= the
+break-even cost) for each strategy's chosen variant:
+
+| strategy | gross bp/trade | t after IS at 0 / 1 / 3 bp |
+| --- | --- | --- |
+| stocks in play (3 ETFs only) | 3.9 | 0.8 / 0.6 / 0.3 |
+| 15:30 reversal (`rod` rev) | 3.0 | 2.4 / 1.8 / 0.5 |
+| lunch (long only, so mostly market drift) | 2.5 | 1.0 / 0.6 / -0.2 |
+| gap fade | 2.5 | 0.8 / -0.1 / -0.6 |
+| 5-min ORB | 2.3 | 0.6 / 0.4 / -0.2 |
+| noise area + pullback | 2.1 | 0.8 / 0.4 / -0.4 |
+| noise area | 1.3 | 0.4 / -0.1 / -0.9 |
+| first half hour -> last, VWAP trend, VWAP reclaim | <= 0 | negative at any cost |
+
+Even at a realistic 1 bp for these ETFs, no rule gets near t 3; the closest is the 15:30
+reversal (t 1.8), which is pre-registered idea 4 and only forward data may judge. Bug caught in
+the sweep: the first break-even column divided by trades across all symbols and understated it
+up to 3x; fixed to the average gross per trade.
+
 ### 2026-11-23 (fourth run): monthly trend, momentum and volatility targeting (`alloc.py`). All FAIL
 
 New direction: rules that hold for weeks to months, the family with the best published record after

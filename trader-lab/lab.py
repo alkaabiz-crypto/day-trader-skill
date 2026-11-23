@@ -1330,7 +1330,7 @@ COST_SWEEP = (0.0, 0.5, 1.0, 2.0, 3.0, 5.0)
 
 def cost_sweep(universe_sessions, costs=COST_SWEEP, only=None):
     """Rerun at several round-trip costs. Per strategy: the chosen variant's mean bp/day and t after IS
-    at each cost, and the break-even cost per trade (gross bp/day / trades per day after IS)."""
+    at each cost, and the break-even cost per trade = its average gross profit per trade after IS."""
     rows = {}
     for c in costs:
         res = backtest(universe_sessions, c, only=only)
@@ -1338,13 +1338,13 @@ def cost_sweep(universe_sessions, costs=COST_SWEEP, only=None):
             rows.setdefault(ch["strategy"], {})[c] = ch
             if c == 0.0:
                 v = [r for r in res["variants"] if r["strategy"] == ch["strategy"] and r["params"] == ch["params"]][0]
-                days = max(1, v["post"]["n"])
-                rows[ch["strategy"]]["_tpd"] = v["post"]["trades"] / float(days)
+                rows[ch["strategy"]]["_tpd"] = v["post"]["trades"] / float(max(1, v["post"]["n"]))
+                rows[ch["strategy"]]["_gross"] = v["post"]["avg_trade_bps"]   # average gross bp per trade
     out = []
     for name, by in rows.items():
-        g = by.get(0.0)
         tpd = by.get("_tpd", 0.0)
-        be = (g["post_mean_bps"] / tpd) if (g and tpd > 0 and g["post_mean_bps"] > 0) else None
+        gross = by.get("_gross")
+        be = gross if (gross is not None and gross > 0) else None   # each trade pays the cost once
         out.append({"strategy": name, "break_even_bps": be, "trades_per_day": tpd,
                     "by_cost": {str(c): {"params": by[c]["params"], "mean": by[c]["post_mean_bps"],
                                          "t": by[c]["oos_t"], "status": by[c]["status"]}
