@@ -45,6 +45,40 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (fourth run): monthly trend, momentum and volatility targeting (`alloc.py`). All FAIL
+
+New direction: rules that hold for weeks to months, the family with the best published record after
+publication. Pre-registered in `alloc.py`'s docstring before the first run: six rules, small grids,
+variant picked on IS Sharpe only, dividend-adjusted prices, T-bill cash, trades one day after the
+signal, 10 and 20 bps per turnover. PASS needs a higher Sharpe than the benchmark in OOS and HOLDOUT,
+a bootstrap p < 0.05/6 and a time-shift placebo p < 0.05 (the same positions slid in time). Results
+after IS, at 20 bps (`results/alloc.json`):
+
+| rule | source | chosen | Sharpe (bench) | CAGR (bench) | max DD (bench) | boot p | placebo p | verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| sma (SPY) | Faber 2007 | 12 months | 0.66 (0.84) | 9.0% (13.9%) | -18.7% (-23.8%) | 0.89 | 0.82 | FAIL |
+| absmom (SPY) | Antonacci 2014 | 9 months | 0.47 (0.84) | 7.0% (13.9%) | -27.7% (-23.8%) | 0.99 | 1.00 | FAIL |
+| volman (SPY) | Moreira & Muir 2017 | cap 2.0 | 0.66 (0.84) | 9.1% (13.9%) | -20.1% (-23.8%) | 0.87 | 0.37 | FAIL |
+| gtaa (5 ETFs) | Faber 2007 | 12 months | 0.40 (0.70) | 4.4% (8.7%) | -10.7% (-18.8%) | 0.89 | 0.52 | FAIL |
+| gem | Antonacci 2014 | 6 months | 0.07 (0.70) | 2.1% (8.7%) | -31.0% (-18.8%) | 1.00 | 1.00 | FAIL |
+| topk (9 ETFs) | cross-asset momentum | top 4 | 0.55 (0.70) | 7.1% (8.7%) | -17.7% (-18.8%) | 0.73 | 0.22 | FAIL |
+
+Benchmarks: SPY buy-and-hold for SPY rules (2010-2026); 60/40 SPY/IEF for the ETF rules (2015-2026).
+
+Reading it. Every timing rule chosen on its best years (1994-2009 for SPY, with two crashes)
+then lost to plain holding after 2009. Getting out after falls kept missing the sharp V-shaped
+rebounds (2020, 2025). For absolute momentum and dual momentum the timing was worse than every
+time-shifted copy of itself (placebo p 1.00; checked: the placebo reproduces the real Sharpe at
+zero shift). GTAA did halve the drawdown (-10.7% vs -18.8%) but at half the return and a lower
+Sharpe, so it is not a risk-reducer by the pre-registered bar (Sharpe >= 0.9x the benchmark's).
+
+**Verdict:** the published trend and momentum timing rules did not beat buy-and-hold (or 60/40)
+on risk-adjusted terms after 2009/2014, and none survived the placebo. This matches the post-2009
+complaints in the trend-following literature (e.g. Hurst, Ooi & Pedersen's century study shows the
+weakest decade in 2010s). Holding the index is still the bar nothing here has cleared.
+
+**Independent agreement.** The entry below (a separate session's `trend.py`, 23 ETFs, its own code and gates) tested the same family the same day and reached the same answer: trend timing halves the worst loss but does not beat buy-and-hold on risk-adjusted terms after 2014. Two separate implementations agree.
+
 ### 2026-11-23 (third run): longer horizons, risk overlays and real trading costs
 
 The day-trading search found nothing, so this run tests where the evidence is stronger.

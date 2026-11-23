@@ -3,3 +3,4 @@ __pycache__/
 trader/
 trader-lab/data/daily/
 trader-lab/data/alpaca/
+trader-lab/data/alloc/
