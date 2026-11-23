@@ -1060,6 +1060,34 @@ def tiingo_page(sym, start, end):
     raise LabError("Tiingo kept rate limiting; run again later, it resumes")
 
 
+EARLY_CLOSE_SLOT = 42   # 13:00 New York: the first bar after an early close
+
+
+def nyse_early_close(d):
+    """True on NYSE 13:00 early-close days: the day after Thanksgiving, Christmas Eve (a weekday,
+    not itself a holiday) and July 3 (a weekday, when July 4 is a weekday holiday)."""
+    if d.month == 11 and d.weekday() == 4:
+        first_thu = 1 + (3 - datetime.date(d.year, 11, 1).weekday()) % 7
+        return d.day == first_thu + 22
+    if d.month == 12 and d.day == 24:
+        return d.weekday() < 4          # Mon-Thu; on a Friday Dec 24 is the observed Christmas holiday
+    if d.month == 7 and d.day == 3:
+        return d.weekday() < 4          # Mon-Thu; on a Friday July 3 is the observed holiday
+    return False
+
+
+def drop_after_early_close(bars):
+    """Remove bars at or after 13:00 on early-close days (feeds such as Tiingo IEX keep printing
+    after-hours trades and filler bars there, which would pass for the regular session)."""
+    out = {}
+    for k, v in bars.items():
+        local = to_eastern(utc_of(int(k)))
+        if nyse_early_close(local.date()) and (local.hour * 60 + local.minute - OPEN_MIN) // 5 >= EARLY_CLOSE_SLOT:
+            continue
+        out[k] = v
+    return out
+
+
 def parse_tiingo(rows, trading_days=None):
     """Tiingo bar list -> {ts: [o,h,l,c,v]} for regular-session 5-min bars (ts = bar start).
     Tiingo can emit flat filler bars on market holidays; days in which no bar traded are dropped.
@@ -1077,7 +1105,7 @@ def parse_tiingo(rows, trading_days=None):
         out[str(ts)] = [float(b["open"]), float(b["high"]), float(b["low"]), float(b["close"]), v]
         if v > 0:
             traded.add(local.date())
-    return {k: v for k, v in out.items() if to_eastern(utc_of(int(k))).date() in traded}
+    return drop_after_early_close({k: v for k, v in out.items() if to_eastern(utc_of(int(k))).date() in traded})
 
 
 def quarter_chunks(start, end):

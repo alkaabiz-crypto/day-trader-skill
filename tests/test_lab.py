@@ -200,6 +200,19 @@ class Tiingo(unittest.TestCase):
         self.assertEqual(list(out), [str(lab.iso_to_epoch("2018-07-03T13:30:00Z"))])
         self.assertEqual(out[str(lab.iso_to_epoch("2018-07-03T13:30:00Z"))], [1.0, 2.0, 0.5, 1.5, 10.0])
 
+    def test_early_close_days(self):
+        import datetime as dt
+        early = ["2022-11-25", "2023-07-03", "2023-11-24", "2024-07-03", "2024-11-29", "2024-12-24",
+                 "2025-07-03", "2025-11-28", "2025-12-24", "2026-11-27", "2026-12-24"]
+        for d in early:
+            self.assertTrue(lab.nyse_early_close(dt.date.fromisoformat(d)), d)
+        for d in ["2022-11-23", "2022-12-23", "2026-07-03", "2021-12-24", "2025-11-21"]:
+            self.assertFalse(lab.nyse_early_close(dt.date.fromisoformat(d)), d)
+        bars = {str(lab.iso_to_epoch("2022-11-25T17:55:00Z")): [1, 1, 1, 1, 1],    # 12:55, kept
+                str(lab.iso_to_epoch("2022-11-25T18:00:00Z")): [1, 1, 1, 1, 1],    # 13:00, dropped
+                str(lab.iso_to_epoch("2022-11-28T18:00:00Z")): [1, 1, 1, 1, 1]}    # normal day, kept
+        self.assertEqual(len(lab.drop_after_early_close(bars)), 2)
+
     def test_quarter_chunks(self):
         self.assertEqual(lab.quarter_chunks("2016-12-01", "2017-05-10"),
                          [("2016-12-01", "2016-12-31"), ("2017-01-01", "2017-03-31"), ("2017-04-01", "2017-05-10")])
