@@ -51,6 +51,15 @@ python3 "${CLAUDE_SKILL_DIR}/hourly.py" fetch                   # 60-minute bars
 python3 "${CLAUDE_SKILL_DIR}/hourly.py" backtest --write        # time-of-day rules on ~700 sessions
 ```
 
+Longer horizons, risk overlays and costs:
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/trend.py" backtest --write         # trend/momentum + vol targeting + drawdown control
+python3 "${CLAUDE_SKILL_DIR}/trend.py" signal                   # this month's positions per strategy
+python3 "${CLAUDE_SKILL_DIR}/costs.py" table                    # estimated spread and round-trip cost per symbol
+python3 "${CLAUDE_SKILL_DIR}/costs.py" check                    # trader/plan.json: do costs eat the reward?
+```
+
 `audit.py` re-implements the passing rules from scratch and runs the checks that caught real
 errors on 2026-11-22: random-entry placebos, ETFs only (survivorship), costs, a one-day signal
 delay, and Wilder vs simple RSI. Run it before trusting any "PASS".

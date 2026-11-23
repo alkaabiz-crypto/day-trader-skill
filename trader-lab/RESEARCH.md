@@ -45,6 +45,48 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (third run): longer horizons, risk overlays and real trading costs
+
+The day-trading search found nothing, so this run tests where the evidence is stronger.
+New tools: `trend.py` (monthly trend and momentum, volatility targeting, drawdown control on
+23 index ETFs, so no survivorship bias; cash earns the 13-week T-bill) and `costs.py` (bid-ask
+spread estimates and a pre-trade cost check).
+
+**Data fix first:** Yahoo's daily "close" leaves out dividends, which understated buy-and-hold
+(SPY 1998-2014: 4.5% a year price-only vs 6.3% with dividends) and bonds even more, while cash
+earned T-bills. `daily.py` now also stores the dividend-adjusted close (`a`); `trend.py` uses it.
+
+**Trend and momentum** (monthly, next-open fills, 2 bp per unit traded; CAGR / Sharpe over
+T-bills / max drawdown; `results/trend-latest.json`):
+
+| strategy | source | IS to 2014 | OOS 2015-21 | HOLDOUT 2022+ |
+| --- | --- | --- | --- | --- |
+| equal-weight buy-and-hold (benchmark) | | 7.5% / 0.38 / -42% | 10.4% / 0.76 / -28% | 6.9% / 0.28 / -19% |
+| SPY buy-and-hold | | 6.2% / 0.29 / -55% | 14.8% / 0.83 / -34% | 9.4% / 0.38 / -25% |
+| time-series momentum, 12 m | Moskowitz, Ooi & Pedersen 2012 | 7.7% / 0.59 / -16% | 5.7% / 0.61 / -16% | 5.8% / 0.25 / -9% |
+| 10-month average | Faber 2007 | 7.3% / 0.57 / -12% | 6.6% / 0.78 / -11% | 4.9% / 0.15 / -9% |
+| top-5 relative strength | Jegadeesh & Titman 1993 | 8.4% / 0.46 / -35% | 8.0% / 0.52 / -23% | 11.4% / 0.52 / -16% |
+| dual momentum | Antonacci 2014 | 9.3% / 0.60 / -20% | 7.4% / 0.47 / -34% | 4.3% / 0.09 / -25% |
+
+None passes the gate (a Sharpe at least equal-weight's AND a smaller drawdown in every period,
+then a random-timing placebo). The pattern is consistent and well known: trend timing cuts the
+worst loss by half to two-thirds in every period, at a similar or lower Sharpe and a lower
+return after 2014. It is crash insurance, not extra return.
+
+**Risk overlays.** Volatility targeting (Moreira & Muir 2017): better before 2015, neutral to
+slightly worse after. Drawdown control (cut exposure while X% below the peak): the first
+setting tried (10%, half exposure, SPY) improved both Sharpe and drawdown in all three periods,
+but a robustness grid (4 thresholds x 2 cuts x 7 assets = 56 variants) found that only 3 of 56
+did, about what luck gives. What holds almost everywhere: the worst loss shrinks by 10-50
+points, and the Sharpe usually falls. No free improvement.
+
+**Costs.** `costs.py` estimates the spread three ways, best first: a live IEX bid/ask from
+Tiingo (market hours only), the Corwin & Schultz (2012) high-low estimator on 5-minute bars,
+or on daily bars. Daily high-low estimates are useless for liquid names in volatile markets
+(SPY: 23.5 bp vs about 0.15 bp real); on 5-minute bars they rank names sensibly (TLT 0.9,
+SPY 2.7-3.9, TSLA 7.9, NVDA 8.7, SMCI 11.9 bp) but still overstate the most liquid ones.
+`costs.py check` warns when costs exceed 10% of a plan's reward or 20% of its risk.
+
 ### 2026-11-23 (third run): the 5-minute keep rule now needs OOS t >= 3
 
 The 5-minute engine used to keep a rule with IS Sharpe >= 0.5 and any positive out-of-sample mean.

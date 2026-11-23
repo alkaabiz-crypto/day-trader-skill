@@ -97,6 +97,8 @@ def parse_daily(text):
     q = ((res.get("indicators") or {}).get("quote") or [{}])[0]
     off = (res.get("meta") or {}).get("gmtoffset", -18000) or -18000
     out = {k: [] for k in "dohlcv"}
+    out["a"] = []   # dividend- and split-adjusted close (total return); "c" is split-adjusted only
+    adj = (((res.get("indicators") or {}).get("adjclose") or [{}])[0] or {}).get("adjclose") or []
     seen = set()
     for i, ts in enumerate(res.get("timestamp") or []):
         row = [(q.get(k) or [None] * (i + 1))[i] for k in ("open", "high", "low", "close", "volume")]
@@ -111,6 +113,8 @@ def parse_daily(text):
         out["d"].append(d)
         for k, x in zip("ohlcv", row):
             out[k].append(float(x or 0))
+        a_ = adj[i] if i < len(adj) and adj[i] else None
+        out["a"].append(float(a_) if a_ else float(row[3]))
     return out
 
 
