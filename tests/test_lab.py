@@ -239,15 +239,22 @@ class StoreAndSplit(unittest.TestCase):
             self.assertTrue(os.path.exists(os.path.join(tmp, "ZZ.json.gz")))
 
     def test_choice_uses_in_sample_only(self):
-        mk = lambda name, is_s, oos_s, oos_m: {
+        mk = lambda name, is_s, oos_s, oos_m, t=3.5: {
             "strategy": name, "params": {"x": is_s},
-            "is": {"sharpe": is_s, "trades": 100}, "oos": {"sharpe": oos_s, "mean": oos_m, "t": 1, "trades": 50}}
+            "is": {"sharpe": is_s, "trades": 100}, "oos": {"sharpe": oos_s, "mean": oos_m, "t": t, "trades": 50}}
         chosen = lab.choose([mk("a", 1.0, -9, -1), mk("a", 0.2, 9, 5), mk("b", 2.0, 1, 2)])
         by = {c["strategy"]: c for c in chosen}
         self.assertEqual(by["a"]["params"], {"x": 1.0})   # the OOS winner was NOT picked
         self.assertFalse(by["a"]["keep"])                 # and the IS winner failed OOS
         self.assertTrue(by["b"]["keep"])
         self.assertAlmostEqual(by["b"]["weight"], 1.0)
+
+    def test_keep_needs_oos_t_of_3(self):
+        mk = lambda name, t: {"strategy": name, "params": {}, "is": {"sharpe": 1.0, "trades": 100},
+                              "oos": {"sharpe": 2.0, "mean": 5.0, "t": t, "trades": 50}}
+        by = {c["strategy"]: c for c in lab.choose([mk("weak", 2.9), mk("strong", 3.1)])}
+        self.assertFalse(by["weak"]["keep"])              # positive OOS mean alone is not enough
+        self.assertTrue(by["strong"]["keep"])
 
     def test_labels(self):
         self.assertEqual(lab.label(0.1), "no edge")

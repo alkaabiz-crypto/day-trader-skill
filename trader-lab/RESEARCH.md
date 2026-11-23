@@ -38,12 +38,21 @@ result after costs, and whether it was kept. Failures stay in the record.
 5. **Stocks in play on 4 years of the 40-name universe**: `fetch-tiingo --symbols <universe>` (free
    plan: 500 tickers a month, about 50 requests an hour, so about 14 hours for 40 names). The paper's top-20-of-7,000
    is still out of reach; 40 names is a weak test. The same store also unlocks `eodrev`.
-5b. **Tighten the 5-minute keep rule** to the daily engine's gates (OOS t >= 3 and a placebo), so a
-   60-day fluke can never again reach the live signal.
+5b. ~~Tighten the 5-minute keep rule~~ done 2026-11-23 (OOS t >= 3). A placebo gate for the 5-minute
+   engine is still open.
 6. **FOMC and CPI days** (needs an event calendar): pre-FOMC drift (Lucca & Moench 2015) is reported dead after 2015, so a control, not a hope.
 7. **Earnings-day drift and the earnings announcement premium** for single stocks (needs an earnings calendar from trader-analyst).
 
 ## Log
+
+### 2026-11-23 (third run): the 5-minute keep rule now needs OOS t >= 3
+
+The 5-minute engine used to keep a rule with IS Sharpe >= 0.5 and any positive out-of-sample mean.
+On 60 days that let noise, orb5g and orb5 into the live signal (OOS t 0.2 to 1.5), and all three
+failed on 4 years (second run below). The keep rule now also needs OOS t >= 3, the bar `daily.py`
+uses (Harvey, Liu & Zhu 2016). `results/latest.json` was rewritten: **the live 5-minute signal now
+holds no strategy** and `lab.py signal` says "no edge" for every name. That's the honest output until
+a rule clears the bar.
 
 ### 2026-11-23 (second run): all 5-minute rules on 4 years of SPY, QQQ and IWM. Nothing survives
 

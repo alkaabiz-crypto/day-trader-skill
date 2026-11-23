@@ -70,6 +70,7 @@ UNIVERSE = ["SPY", "QQQ", "IWM", "DIA", "SMH", "XLF", "XLK", "XLE", "TLT", "GLD"
 COST_BPS = 3.0      # round trip: spread + slippage + fees, liquid US names
 OOS_FRAC = 0.30     # the last 30% of the dates are never used to choose a variant
 KEEP_IS_SHARPE = 0.5
+KEEP_OOS_T = 3.0    # Harvey, Liu & Zhu (2016), the same bar as daily.py's POST_T: many variants are tried
 MIN_TRADES = 20
 
 
@@ -743,7 +744,8 @@ def summarize(name, p, source, trades, daily, dates, cut):
 
 def choose(results):
     """Per strategy: the variant with the best IN-SAMPLE Sharpe. It is kept only if that is
-    >= KEEP_IS_SHARPE with enough trades AND its out-of-sample mean is still positive."""
+    >= KEEP_IS_SHARPE with enough trades AND its out-of-sample t reaches KEEP_OOS_T (a positive
+    mean alone let 60-day flukes into the live signal)."""
     best = {}
     for r in results:
         cur = best.get(r["strategy"])
@@ -752,7 +754,8 @@ def choose(results):
     out = []
     for name, r in best.items():
         keep = (r["is"]["sharpe"] >= KEEP_IS_SHARPE and r["is"]["trades"] >= MIN_TRADES
-                and r["oos"]["mean"] > 0 and r["oos"]["trades"] >= MIN_TRADES // 2)
+                and r["oos"]["mean"] > 0 and r["oos"]["t"] >= KEEP_OOS_T
+                and r["oos"]["trades"] >= MIN_TRADES // 2)
         out.append({"strategy": name, "params": r["params"], "keep": keep,
                     "is_sharpe": r["is"]["sharpe"], "oos_sharpe": r["oos"]["sharpe"],
                     "oos_mean_bps": r["oos"]["mean"], "oos_t": r["oos"]["t"],
@@ -837,8 +840,10 @@ def report_backtest(res):
         lines.append("  %-6s %-5s IS Sharpe %5.2f  OOS Sharpe %5.2f  OOS %6.1f bp/day t=%5.2f  weight %.2f  %s" % (
             c["strategy"], "KEEP" if c["keep"] else "drop", c["is_sharpe"], c["oos_sharpe"],
             c["oos_mean_bps"], c["oos_t"], c["weight"], json.dumps(c["params"], sort_keys=True)))
-    lines += ["", "Sharpe is annualized from the equal-weight daily portfolio. Many variants were tried,",
-              "so a t below about 2.5 out of sample can be luck. Research, not financial advice."]
+    lines += ["", "KEEP needs: IS Sharpe >= %.1f, out-of-sample mean > 0 and OOS t >= %.1f (Harvey, Liu & Zhu"
+              % (KEEP_IS_SHARPE, KEEP_OOS_T),
+              "2016), with at least %d IS and %d OOS trades." % (MIN_TRADES, MIN_TRADES // 2),
+              "Sharpe is annualized from the equal-weight daily portfolio. Research, not financial advice."]
     return "\n".join(lines)
 
 
