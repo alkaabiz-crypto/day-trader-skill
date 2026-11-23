@@ -42,6 +42,28 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23: the 5-minute strategies on 338 days of SPY (Tiingo, Nov 2022 to Mar 2024)
+
+First run on the long Tiingo store (SPY only; the download was still going). 3 bps round
+trip; tuned on the first 70% of days, judged on the last 30%. `results/long-spy.json`.
+
+| strategy | source | best variant, out-of-sample | verdict |
+| --- | --- | --- | --- |
+| noise area | Zarattini, Aziz & Barbon 2024 | +0.3 bp/day, t 0.15 | "kept" by the lab's loose 5-min gate, but no evidence |
+| noise + pullback entry | Concretum 2026 | -0.2 bp/day | fails |
+| 5-min ORB | Zarattini & Aziz 2023 | -9.0 bp/day, t -1.82 | fails |
+| ORB + volatility gate | | -4.9 bp/day | fails |
+| classic ORB, failed ORB | Crabel; practitioner | -3.6 to -3.8 bp/day | fail |
+| first half hour -> last | Gao et al. 2018 | -1.1 bp/day (15:00 entry) | fails |
+| last 30 minutes | Baltussen et al. 2021 | momentum t -2.85 (all variants negative) | fails |
+| VWAP trend / reclaim, lunch, gap | | all negative | fail |
+
+Stocks in play and end-of-day reversal need several stocks to rank; with SPY alone they are
+not meaningful. Reading: on SPY 2022-2024 none of the published 5-minute rules makes money
+after costs; the only positive one, the noise area, is indistinguishable from zero. The
+5-minute engine's own keep rule (IS Sharpe >= 0.5 and OOS mean > 0) is much looser than the
+daily engine's and should get the same t >= 3 and placebo gates once QQQ and IWM are in.
+
 ### 2026-11-22 (fourth run): AUDIT. The earlier "passed" results were wrong
 
 Asked to quadruple-check everything, I audited the daily engine with `audit.py`, an
