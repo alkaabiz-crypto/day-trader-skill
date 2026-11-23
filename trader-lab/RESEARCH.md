@@ -31,8 +31,7 @@ result after costs, and whether it was kept. Failures stay in the record.
 0. **Survivorship-free test of R3**: add stocks that fell hard or were delisted (e.g. from an
    S&P 500 membership history), or test on many more ETFs and country funds. Until then R3 is
    unproven.
-1. **R3 on a wider ETF set** (country, bond, commodity and leveraged funds back to the 2000s):
-   more survivorship-free trades to see if the ETF-only t of 1.53 was just too few trades.
+1. ~~**R3 on a wider ETF set**~~ done 2026-11-23: FAILED after 2014 (see Log). R3 stays unproven.
 2. **New strategies from the web**: each daily run adds at least one rule not yet tested.
 3. **Forward test**: score R3 and the near misses on sessions after 2026-11-22 (`daily.py forward`).
 4. **Last-half-hour reversal on the 5-minute store**, pre-registered after imom's OOS t of -3.6 (judged only after 2026-11-20).
@@ -41,6 +40,30 @@ result after costs, and whether it was kept. Failures stay in the record.
 7. **Earnings-day drift and the earnings announcement premium** for single stocks (needs an earnings calendar from trader-analyst).
 
 ## Log
+
+### 2026-11-23: R3 on 110 fresh ETFs (pre-registered). FAILED
+
+`r3_etfs.py` tests Connors R3 (independent code from `audit.py`: Wilder RSI(2), next-open fill,
+exit RSI(2) > 70, 30-day stop) on 110 ETFs the lab never used, in five groups: US equity (17),
+US industry (24), international (35), bonds (16), commodities and FX (18). The gates were written
+into the script before the first run: placebo p < 0.05 in both the full history and post-2014,
+t >= 2 at 5 bps in both, and beating the placebo median in 3 of 5 groups.
+
+| set | full t | placebo p | post-2014 t | placebo median | placebo p | t at 5 bps |
+| --- | --- | --- | --- | --- | --- | --- |
+| 110 new ETFs (6,311 trades) | 2.59 | 0.005 | 1.08 | 0.92 | 0.385 | 0.85 |
+| old 19 ETFs (reference) | 3.33 | 0.005 | 1.69 | 1.28 | 0.244 | 1.53 |
+| leveraged (not in the test) | 1.88 | 0.26 | 1.15 | 1.15 | 0.50 | 1.12 |
+
+By group, post-2014 (200 placebos each): only bonds beat random entry (t 1.14 vs median -0.60,
+p 0.035), and that dies at 5 bps (t 0.79) because bond trades average 12 bp. US equity, industry,
+international and commodities are all within luck.
+
+**Verdict: FAIL** (2 of 5 gates fail). R3 had a real edge over random entry before 2015, on old
+and new ETFs alike, but since 2015 it is no better than buying on random days. The stock-heavy
+40-symbol result (post t 4.02) came from the 21 surviving stocks. R3 stays unproven and frozen
+for the forward test; do not trade it. Caveats: Yahoo has no closed ETFs, and prices are not
+dividend-adjusted.
 
 ### 2026-11-22 (fourth run): AUDIT. The earlier "passed" results were wrong
 
