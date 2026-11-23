@@ -61,8 +61,17 @@ def load_asset(sym):
     c = np.array(D["c"][k:], float)
     a = np.array(D["a"][k:], float)
     f = a / c
-    return {"d": D["d"][k:], "o": np.array(D["o"][k:]) * f, "h": np.array(D["h"][k:]) * f,
-            "l": np.array(D["l"][k:]) * f, "c": a, "v": np.array(D["v"][k:], float)}
+    dates = D["d"][k:]
+    irx = daily.load("^IRX")
+    rf = np.zeros(len(dates))
+    if irx:
+        m = dict(zip(irx["d"], irx["c"]))
+        last = 0.0
+        for i, d in enumerate(dates):
+            last = m.get(d, last)
+            rf[i] = last / 100.0 / 252.0          # 13-week T-bill, per trading day
+    return {"d": dates, "o": np.array(D["o"][k:]) * f, "h": np.array(D["h"][k:]) * f,
+            "l": np.array(D["l"][k:]) * f, "c": a, "v": np.array(D["v"][k:], float), "rf": rf}
 
 
 # ---------------------------------------------------------------- vector helpers
@@ -357,7 +366,117 @@ def g_osc(A):
         yield "month", {"m": m}, (np.roll(mo, -1) == m).astype(float)
 
 
-GENERATORS = [g_ma, g_sr, g_cb, g_filter, g_obv, g_osc]
+def entry_events(A):
+    """Long entry signals (decided at the close), from the classic setups."""
+    o, h, l, c = A["o"], A["h"], A["l"], A["c"]
+    ev = {}
+    for n in (2, 3, 5, 14):
+        r = rsi_np(c, n)
+        for lo in (5, 10, 20, 30):
+            ev["rsi%d<%d" % (n, lo)] = r < lo
+    for n in (10, 20):
+        m = sma(c, n)
+        from numpy.lib.stride_tricks import sliding_window_view
+        sd = np.full(len(c), np.nan)
+        sd[n - 1:] = sliding_window_view(c, n).std(axis=1)
+        for k in (1.5, 2.0, 2.5):
+            ev["bb%d-%.1f" % (n, k)] = c < m - k * sd
+    dn = np.diff(c, prepend=c[0]) < 0
+    for k in (2, 3, 4, 5):
+        ev["down%d" % k] = np.convolve(dn.astype(float), np.ones(k), "full")[:len(c)] >= k
+    for n in (10, 20, 55):
+        ev["break%d" % n] = c > shift(rolling_max(c, n))
+        ev["low%d" % n] = c < shift(rolling_min(c, n))
+    for f, s_ in ((5, 20), (10, 50), (20, 100), (50, 200)):
+        fa, sl = sma(c, f), sma(c, s_)
+        ev["macross%d/%d" % (f, s_)] = (fa > sl) & ~(shift(fa) > shift(sl))
+    ibs = (c - l) / np.maximum(h - l, 1e-12)
+    for t in (0.1, 0.2):
+        ev["ibs<%.1f" % t] = ibs < t
+    gap = o / shift(c) - 1
+    for x in (0.01, 0.02):
+        ev["gapdown%.0f" % (x * 100)] = gap < -x                # known at today's close (gap was this morning)
+    m200 = sma(c, 200)
+    for name in list(ev):
+        ev[name + "&up200"] = ev[name] & (c > m200)            # the same entry, only in an uptrend
+    for name in list(ev):
+        ev[name] = np.nan_to_num(ev[name].astype(float)) > 0
+    return ev
+
+
+TPS = [None, 0.01, 0.02, 0.03, 0.05, 0.08]
+SLS = [None, 0.01, 0.02, 0.03, 0.05, 0.08]
+TIMES = [3, 5, 10, 20]
+
+
+def trade_path(A, entries, tp, sl, T):
+    """Non-overlapping long trades: enter at the open after an entry signal; exit at the take-profit,
+    the stop-loss (if a day touches both, the STOP is assumed first) or the close of day T.
+    -> (position path of 0/1 by session, exit price override {day index: price})."""
+    o, h, l, c = A["o"], A["h"], A["l"], A["c"]
+    n = len(c)
+    pos = np.zeros(n)
+    exit_px = {}
+    i = 0
+    idx = np.flatnonzero(entries)
+    k = 0
+    while k < len(idx):
+        e = idx[k]
+        if e + 1 >= n or e < i:
+            k += 1
+            continue
+        start = e + 1
+        px = o[start]
+        stop = px * (1 - sl) if sl else -np.inf
+        targ = px * (1 + tp) if tp else np.inf
+        end = min(start + T - 1, n - 1)
+        hl = l[start:end + 1] <= stop
+        hh = h[start:end + 1] >= targ
+        hit = np.flatnonzero(hl | hh)
+        if len(hit):
+            j = start + hit[0]
+            if hl[hit[0]]:
+                exit_px[j] = min(stop, o[j]) if j > start else stop
+            else:
+                exit_px[j] = max(targ, o[j]) if j > start else targ
+            end = j
+        pos[start:end + 1] = 1.0
+        i = end + 1
+        k += 1
+    return pos, exit_px
+
+
+def returns_exit(A, pos_session, exit_px, cost_bps, night_bps):
+    """Daily returns when pos_session[t] = position during session t (entered at its open) and some
+    trades leave intraday at exit_px[t]."""
+    o, c = A["o"], A["c"]
+    n = len(c)
+    prev_s = np.concatenate(([0.0], pos_session[:-1]))
+    held_overnight = prev_s * pos_session          # still in the trade overnight into t
+    gap = np.concatenate(([0.0], o[1:] / c[:-1] - 1))
+    day = c / o - 1
+    r = (1 + held_overnight * gap) * (1 + pos_session * day) - 1
+    for t, px in exit_px.items():
+        r[t] = (1 + held_overnight[t] * gap[t]) * (px / o[t]) - 1
+    entries = (pos_session > 0) & (prev_s == 0)
+    exits = (pos_session > 0) & ((np.concatenate((pos_session[1:], [0.0])) == 0) | np.isin(np.arange(n), list(exit_px)))
+    r = r - (entries + exits) * cost_bps / 2 / 1e4 - held_overnight * night_bps / 1e4
+    if "rf" in A:
+        r = r + (1 - pos_session) * A["rf"]
+    return r
+
+
+def g_entry_exit(A):
+    """Entry signal x take-profit x stop-loss x time stop. Yields precomputed RETURNS (flag 'ret')."""
+    for name, ev in entry_events(A).items():
+        for tp in TPS:
+            for sl in SLS:
+                for T in TIMES:
+                    pos, ex = trade_path(A, ev, tp, sl, T)
+                    yield "ee:" + name, {"tp": tp, "sl": sl, "T": T}, ("ret", pos, ex)
+
+
+GENERATORS = [g_ma, g_sr, g_cb, g_filter, g_obv, g_osc, g_entry_exit]
 
 
 # ---------------------------------------------------------------- execution
@@ -376,7 +495,10 @@ def returns_for(A, pos, cost_bps, night_bps):
     # the session to the new position from close t-1
     pp = shift(prev)
     pp[:2] = 0.0
-    r = pp * gap + prev * day - np.abs(prev - pp) * cost_bps / 1e4 - np.abs(pp) * night_bps / 1e4
+    # overnight and session returns compound within the day
+    r = (1 + pp * gap) * (1 + prev * day) - 1 - np.abs(prev - pp) * cost_bps / 1e4 - np.abs(pp) * night_bps / 1e4
+    if "rf" in A:
+        r = r + (1 - np.minimum(np.abs(prev), 1.0)) * A["rf"]   # money not in the market earns T-bills
     return r
 
 
@@ -439,28 +561,44 @@ def search(assets, boot=500, top=20):
         dates = np.array(A["d"])
         post = dates > IS_END
         pre = ~post
-        names, params, ex_post, is_t, post_t, post_mean = [], [], [], [], [], []
+        rf = A["rf"]
+        bh_x = bh - rf                                     # buy-and-hold excess over T-bills
+        bh_sharpe_post = bh_x[post].mean() / bh_x[post].std() * math.sqrt(252)
+        names, params, ex_post, is_t, post_t, post_mean, sharpe_post = [], [], [], [], [], [], []
+
+        def add(name, p, r):
+            x = r - rf
+            # Jensen's alpha against buy-and-hold, beta estimated BEFORE 2015 only (no look-ahead)
+            xi, bi = x[pre], bh_x[pre]
+            beta = float(np.cov(xi, bi)[0, 1] / np.var(bi, ddof=1)) if np.var(bi) > 0 else 0.0
+            e = x - beta * bh_x
+            ep, ei = e[post], e[pre]
+            names.append(name)
+            params.append(p)
+            ex_post.append(ep.astype(np.float32))
+            sdi, sdp = ei.std(ddof=1), ep.std(ddof=1)
+            is_t.append(ei.mean() / sdi * math.sqrt(len(ei)) if sdi > 0 else 0.0)
+            post_t.append(ep.mean() / sdp * math.sqrt(len(ep)) if sdp > 0 else 0.0)
+            post_mean.append(ep.mean() * 1e4)
+            xp = x[post]
+            sharpe_post.append(xp.mean() / xp.std() * math.sqrt(252) if xp.std() > 0 else 0.0)
+
         for gen in GENERATORS:
             for name, p, sig in gen(A):
+                if isinstance(sig, tuple) and sig[0] == "ret":
+                    add(name + "/lf", p, returns_exit(A, sig[1], sig[2], cost, night))
+                    continue
                 for mode in ("ls", "lf"):
                     pos = sig if mode == "ls" else np.maximum(sig, 0.0)
-                    r = returns_for(A, pos, cost, night)
-                    e = r - bh
-                    ep, ei = e[post], e[pre]
-                    names.append(name + "/" + mode)
-                    params.append(p)
-                    ex_post.append(ep.astype(np.float32))
-                    sdi, sdp = ei.std(ddof=1), ep.std(ddof=1)
-                    is_t.append(ei.mean() / sdi * math.sqrt(len(ei)) if sdi > 0 else 0.0)
-                    post_t.append(ep.mean() / sdp * math.sqrt(len(ep)) if sdp > 0 else 0.0)
-                    post_mean.append(ep.mean() * 1e4)
+                    add(name + "/" + mode, p, returns_for(A, pos, cost, night))
         E = np.vstack(ex_post)
         rc = reality_check(E.astype(np.float64), B=boot)
         is_t, post_t, post_mean = np.array(is_t), np.array(post_t), np.array(post_mean)
+        sharpe_post = np.array(sharpe_post)
         order = np.argsort(-is_t)[:top]
         fam = {}
         for nm, t in zip(names, post_t):
-            f = fam.setdefault(nm.split("/")[0], {"n": 0, "pos": 0, "t3": 0})
+            f = fam.setdefault(nm.split("/")[0].split(":")[0], {"n": 0, "pos": 0, "t3": 0})
             f["n"] += 1
             f["pos"] += int(t > 0)
             f["t3"] += int(t >= 3)
@@ -470,6 +608,9 @@ def search(assets, boot=500, top=20):
             "n_post_t_over_bonferroni": int((post_t >= rc["bonferroni_z"]).sum()),
             "n_post_t_over_3": int((post_t >= 3).sum()),
             "share_positive_post": float((post_t > 0).mean()),
+            "bh_sharpe_post": float(bh_sharpe_post),
+            "n_sharpe_over_bh": int((sharpe_post > bh_sharpe_post).sum()),
+            "best_sharpe_post": float(sharpe_post.max()),
             "best_post": [{"rule": names[i], "params": params[i], "post_t": float(post_t[i]),
                            "post_bps_day": float(post_mean[i]), "is_t": float(is_t[i])}
                           for i in np.argsort(-post_t)[:5]],
@@ -482,15 +623,17 @@ def search(assets, boot=500, top=20):
 
 
 def report(res):
-    L = ["Universe search: %s rule tests (%d assets). Excess return over buy-and-hold, after costs," % (
+    L = ["Universe search: %s rule tests (%d assets). Risk-adjusted: Jensen's alpha against buy-and-hold" % (
         "{:,}".format(res["total_rules"]), len(res["assets"])),
-        "judged only on data after %s." % res["is_end"], ""]
+        "(beta from data before 2015), cash at the T-bill rate, after costs; judged only after %s." % res["is_end"], ""]
     for sym, a in res["assets"].items():
         rc = a["reality_check"]
-        L.append("%s: %s rules, %d days after 2014. Best rule t %.2f (%.2f bp/day over buy-and-hold)." % (
-            sym, "{:,}".format(a["rules"]), a["days_post"], rc["best_t"], rc["best_mean_bps"] * 1e4))
+        L.append("%s: %s rules, %d days after 2014. Best alpha t %.2f (%.2f bp/day). Buy-and-hold Sharpe %.2f; "
+                 "%d rules beat it (best %.2f)." % (
+            sym, "{:,}".format(a["rules"]), a["days_post"], rc["best_t"], rc["best_mean_bps"] * 1e4,
+            a["bh_sharpe_post"], a["n_sharpe_over_bh"], a["best_sharpe_post"]))
         L.append("   Reality Check p = %.3f | SPA p = %.3f | rules with t >= %.2f (Bonferroni): %d | t >= 3: %d | "
-                 "positive after 2014: %.1f%%" % (rc["rc_p"], rc["spa_p"], rc["bonferroni_z"],
+                 "positive alpha after 2014: %.1f%%" % (rc["rc_p"], rc["spa_p"], rc["bonferroni_z"],
                                                     a["n_post_t_over_bonferroni"], a["n_post_t_over_3"],
                                                     a["share_positive_post"] * 100))
         b = a["best_post"][0]
