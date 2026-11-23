@@ -45,6 +45,24 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (sixth run): risk parity and equal weight, no forecasting (`parity.py`). FAIL
+
+If every timing rule fails, maybe the answer is how to hold, not when. Pre-registered in `parity.py`:
+inverse-volatility weights on the nine ETFs or on SPY/EFA/IEF/GLD, and 1/N on the nine, monthly,
+vs 60/40 (alloc.py's Part B setup). After IS at 20 bps (`results/parity.json`):
+
+| rule | chosen | Sharpe (60/40) | CAGR (60/40) | max DD (60/40) | OOS Sh | HOLDOUT Sh | boot p | verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ivol9 | 63 days | 0.41 (0.70) | 5.4% (8.7%) | -18.1% (-18.8%) | 0.58 vs 0.91 | 0.26 vs 0.49 | 1.00 | FAIL |
+| ivol4 | 63 days | 0.58 (0.70) | 6.2% (8.7%) | -16.2% (-18.8%) | 0.89 vs 0.91 | 0.38 vs 0.49 | 0.79 | FAIL |
+| ew9 | | 0.52 (0.70) | 7.2% (8.7%) | -17.8% (-18.8%) | 0.60 vs 0.91 | 0.44 vs 0.49 | 0.93 | FAIL |
+
+**The pattern across today's runs:** from 2010 to 2026, adding anything to US large caps (foreign
+stocks, emerging markets, commodities, REITs, gold, small caps) or timing them lowered the
+risk-adjusted return. SPY buy-and-hold had the best post-IS Sharpe (0.76-0.84) of every strategy
+and benchmark in alloc.py, vrp.py and parity.py. That is a fact about one exceptional decade for US
+large caps, not proof it will continue. But no rule here has beaten it on the evidence.
+
 ### 2026-11-23 (fifth run): the volatility risk premium (short VIX futures, `vrp.py`). FAIL
 
 The premium for selling crash insurance has the strongest economic reason to persist of anything
