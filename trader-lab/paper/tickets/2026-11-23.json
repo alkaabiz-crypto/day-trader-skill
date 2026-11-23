@@ -1,0 +1,35 @@
+[
+ {
+  "instrument": "USTEC",
+  "proxy": "QQQ",
+  "side": "sell",
+  "move_bps": 701.6,
+  "proxy_1530": 652.8400268554688,
+  "proxy_prev_close": 610.04248046875,
+  "notional_usd": 1000,
+  "max_loss_usd": 5.0,
+  "stop_pct": 0.5
+ },
+ {
+  "instrument": "US500",
+  "proxy": "SPY",
+  "side": "sell",
+  "move_bps": 486.6,
+  "proxy_1530": 724.530029296875,
+  "proxy_prev_close": 690.9099731445312,
+  "notional_usd": 1000,
+  "max_loss_usd": 5.0,
+  "stop_pct": 0.5
+ },
+ {
+  "instrument": "US30",
+  "proxy": "DIA",
+  "side": "sell",
+  "move_bps": 325.6,
+  "proxy_1530": 496.9200134277344,
+  "proxy_prev_close": 481.25,
+  "notional_usd": 1000,
+  "max_loss_usd": 5.0,
+  "stop_pct": 0.5
+ }
+]
