@@ -341,6 +341,7 @@ def reality_check_big(E, B=300, block=10, seed=7):
         segs.append((np.array(st), np.array(st) + np.array(ln)))
     vb = np.full(B, -np.inf)
     tb = np.zeros(B)
+    sb = np.full(B, -np.inf)                              # Romano-Wolf: max studentized deviation
     step = 20000
     for a in range(0, M, step):
         Eb = E[a:a + step].astype(np.float64)
@@ -351,9 +352,11 @@ def reality_check_big(E, B=300, block=10, seed=7):
             mb = (P[:, en] - P[:, st]).sum(axis=1) / n
             vb[b] = max(vb[b], math.sqrt(n) * (mb - mu).max())
             tb[b] = max(tb[b], (math.sqrt(n) * (mb - gg) / s).max())
+            sb[b] = max(sb[b], (math.sqrt(n) * (mb - mu) / s).max())
         del P, Eb
     return {"M": M, "n": n, "best_mean_bps": float(means.max() * 1e4), "best_t": float(tstat.max()),
             "rc_p": float((vb >= v).mean()), "spa_p": float((np.maximum(tb, 0) >= t_spa).mean()),
+            **us.gate(tstat, sb, (np.maximum(tb, 0) >= t_spa).mean()),
             "bonferroni_z": float(us.z_bonferroni(M))}
 
 
@@ -365,6 +368,7 @@ def report(r):
         "",
         "Best alpha t %.2f (%.2f bp/day). Reality Check p = %.3f | SPA p = %.3f | t >= %.2f (Bonferroni): %d | t >= 3: %d" % (
             rc["best_t"], rc["best_mean_bps"], rc["rc_p"], rc["spa_p"], rc["bonferroni_z"], r["n_bonferroni"], r["n_t3"]),
+        us.gate_line(rc),
         "Buy-and-hold Sharpe %.2f; %s candidates beat it (best %.2f)." % (
             r["bh_sharpe_post"], "{:,}".format(r["n_sharpe_over_bh"]), r["best_sharpe"]), "", "By kind:"]
     for k, v in r["by_kind"].items():

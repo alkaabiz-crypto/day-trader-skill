@@ -1,3 +1,4 @@
+import math
 import unittest
 
 from _load import load
@@ -93,6 +94,33 @@ class RealityCheck(unittest.TestCase):
 
 
 @unittest.skipIf(np is None, "numpy not installed")
+class GateCalibration(unittest.TestCase):
+    """Rules that are on/off copies of one fat-tailed, volatility-clustered market at very different
+    leverage, with signals unrelated to the returns: the gate must rarely pass, and must pass a real edge."""
+
+    def rules(self, seed, M=150, n=1200):
+        rng = np.random.default_rng(seed)
+        vol = np.exp(np.convolve(rng.normal(0, 0.25, n + 50), np.ones(50) / 7.0, "valid")[:n])
+        f = 0.01 * vol * rng.standard_t(3, n) / math.sqrt(3)
+        f -= f.mean()
+        lev = np.exp(rng.uniform(np.log(0.3), np.log(5), M))
+        on = np.cumsum(rng.random((M, n)) < 0.05, axis=1) % 2              # persistent on/off signals
+        return lev[:, None] * on * f[None, :]
+
+    def test_null_rarely_passes_and_an_edge_does(self):
+        passes = 0
+        for seed in range(10):
+            r = us.reality_check(self.rules(seed), B=200, seed=seed)
+            passes += r["passes"]
+        self.assertLessEqual(passes, 1)
+        E = self.rules(99)
+        E[5] += 0.004                                                       # a real 40 bp/day edge
+        r = us.reality_check(E, B=200)
+        self.assertTrue(r["passes"])
+        self.assertGreaterEqual(r["rw_rejects"], 1)
+
+
+@unittest.skipIf(np is None, "numpy not installed")
 class BigRealityCheck(unittest.TestCase):
     def test_prefix_sum_version_agrees_on_noise_and_edge(self):
         sp = load("trader-lab", "sp500_search")
@@ -105,6 +133,7 @@ class BigRealityCheck(unittest.TestCase):
         r = sp.reality_check_big(edge, B=200)
         self.assertLess(r["rc_p"], 0.01)
         self.assertLess(r["spa_p"], 0.01)
+        self.assertTrue(r["passes"])
 
 
 if __name__ == "__main__":

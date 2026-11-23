@@ -50,6 +50,61 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (eleventh run): 203,968 S&P 500 candidates, and a check of the test itself. No pass
+
+**What was tested.** `sp500_search.py`: 148 published conditions on SPY, used alone, as AND pairs,
+as "A and not B", and as entries with take-profit / stop / time exits. That makes 203,968 candidates.
+Conditions cover technicals, VIX and its term structure, variance risk premium, yield curve, credit,
+copper/gold, oil, the dollar, breadth and the calendar. Scored as Jensen's alpha against buy-and-hold
+(beta estimated before 2015), with T-bill cash and 2 bp costs, judged only after 2014 (2,991 days).
+
+**Result.** Best alpha t 4.02 (4.74 bp/day). 181 candidates had t >= 3, none reached Bonferroni
+(5.16), and 20,700 beat buy-and-hold's Sharpe (0.66; best 1.32). The two multiple-testing checks
+disagreed: **Reality Check p = 0.030, SPA p = 0.693.** The best rules after 2014 had nothing before
+2015 (IS t -1.62 to 0.15). A portfolio of the top-K chosen before 2015 scored t -0.36 (K=1) to
+0.73 after 2014.
+
+**Is the test good? Calibration on null data.** I fixed the decision rule before running: if
+the Reality Check rejects at 5% on 2 or more of 12 null datasets, it is miscalibrated here. The
+null data is the same pipeline (27,280 candidates: all singles plus 3,000 sampled pairs) with SPY's
+returns circularly shifted against the signals. This destroys any real edge but keeps the
+volatility clustering and fat tails.
+
+| data | best t | Reality Check p | SPA p |
+| --- | --- | --- | --- |
+| real | 3.87 | 0.060 | 0.495 |
+| shift 4205 | 3.22 | 0.565 | 0.860 |
+| shift 4387 | 3.38 | 0.410 | 0.790 |
+| shift 2621 | 3.17 | 0.675 | 0.950 |
+| shift 1375 | 3.74 | **0.030** | 0.605 |
+| shift 2211 | 4.41 | 0.260 | 0.270 |
+| shift 3461 | 3.61 | 0.125 | 0.640 |
+| shift 4776 | 3.39 | 0.140 | 0.775 |
+| shift 1984 | 3.34 | 0.375 | 0.880 |
+| shift 6047 | 3.48 | 0.455 | 0.800 |
+| shift 6421 | 3.88 | **0.005** | 0.525 |
+| shift 1851 | 3.87 | 0.105 | 0.475 |
+| shift 1649 | 3.68 | 0.470 | 0.645 |
+
+- **Reality Check:** p < 0.05 on 2 of 12 null shifts, which meets the rule, so it is
+  **miscalibrated for this setting**. It compares raw means, so the most volatile rules (long-hold,
+  levered-looking combinations) dominate its maximum.
+- **SPA** (studentized): never below 0.27 on null data. It behaves.
+- **Real data:** best t 3.87 sits inside the null range (3.17 to 4.41), so the real result looks
+  like what pure luck produces from this many tries.
+
+**Decision.**
+- The S&P 500 search is **not a pass**.
+- The gate in `universe_search.py` and `sp500_search.py` is now **SPA p < 0.05 AND at least one rule
+  above Romano-Wolf's studentized max-t critical value** (first step of StepM). The Reality Check
+  is printed for information only.
+- `tests/test_universe.py::GateCalibration` checks the gate on synthetic rules: on/off copies of a
+  fat-tailed, volatility-clustered market at 0.3x to 5x leverage. It passed 0 of 40 null sets and
+  caught a planted 40 bp/day edge. The synthetic data did not reproduce the Reality Check's false
+  alarms (0 of 40), so the evidence for dropping it is the real-data calibration above.
+- The earlier universe runs are unchanged in substance: their best Reality Check p was QQQ 0.076,
+  with SPA 0.31 to 0.91, so nothing there passed either way.
+
 ### 2026-11-23 (tenth run): fair scoring, entry x exit rules, and the first candidate to clear the bar
 
 The user challenged the "everything fails" result. Two fair points, both fixed in `universe_search.py`:

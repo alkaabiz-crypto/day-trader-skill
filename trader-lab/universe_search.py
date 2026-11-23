@@ -529,13 +529,33 @@ def reality_check(E, B=500, block=10, seed=7):
     idx = stationary_indices(n, B, block, rng)
     vb = np.empty(B)
     tb = np.empty(B)
+    sb = np.empty(B)
     for b in range(B):
         mb = E[:, idx[b]].mean(axis=1)
         vb[b] = math.sqrt(n) * (mb - means).max()
         tb[b] = max((math.sqrt(n) * (mb - g) / sd).max(), 0.0)
+        sb[b] = (math.sqrt(n) * (mb - means) / sd).max()
     return {"M": M, "n": n, "best_mean_bps": float(means.max()), "best_t": float(tstat.max()),
             "rc_p": float((vb >= v).mean()), "spa_p": float((tb >= t_spa).mean()),
+            **gate(tstat, sb, (tb >= t_spa).mean()),
             "bonferroni_z": float(z_bonferroni(M))}
+
+
+def gate(tstat, sb, spa_p, alpha=0.05):
+    """The pass gate. White's Reality Check is NOT used: on SPY with its returns circularly shifted
+    against the signals (no real edge), it gave p < 0.05 on 2 of 12 shifts (RESEARCH.md, 2026-11-23),
+    because the unstudentized max is dominated by the most volatile rules. The gate is Hansen's SPA
+    (studentized) AND Romano-Wolf's studentized max-t, first step: rules whose t beats the
+    (1 - alpha) quantile of the bootstrap max of centred t statistics."""
+    crit = float(np.quantile(sb, 1 - alpha))
+    n_rw = int((tstat > crit).sum())
+    return {"rw_crit_t": crit, "rw_rejects": n_rw, "passes": bool(spa_p < alpha and n_rw > 0)}
+
+
+def gate_line(rc):
+    return ("Gate (SPA p < 0.05 and Romano-Wolf): %s | Romano-Wolf critical t %.2f, rules above it: %d "
+            "(Reality Check shown for information only: it rejects too often on null data)" % (
+                "PASS" if rc["passes"] else "no pass", rc["rw_crit_t"], rc["rw_rejects"]))
 
 
 def z_bonferroni(M, alpha=0.05):
@@ -645,6 +665,8 @@ def report(res):
                  "positive alpha after 2014: %.1f%%" % (rc["rc_p"], rc["spa_p"], rc["bonferroni_z"],
                                                     a["n_post_t_over_bonferroni"], a["n_post_t_over_3"],
                                                     a["share_positive_post"] * 100))
+        if "passes" in rc:
+            L.append("   " + gate_line(rc))
         b = a["best_post"][0]
         L.append("   best after 2014: %s %s (t %.2f; it had IS t %.2f)" % (
             b["rule"], json.dumps(b["params"], sort_keys=True), b["post_t"], b["is_t"]))
@@ -655,8 +677,8 @@ def report(res):
         tops = a["top_is_then_post"]
         L.append("   the 20 best rules to 2014 averaged t %.2f after 2014 (%d of 20 positive)" % (
             sum(t["post_t"] for t in tops) / len(tops), sum(1 for t in tops if t["post_t"] > 0)))
-    L += ["", "A p-value under 0.05 would mean the best rule beats buy-and-hold by more than the luck of",
-          "trying this many rules. Research, not financial advice."]
+    L += ["", "A PASS would mean the best rule beats buy-and-hold by more than the luck of trying this many",
+          "rules (SPA and Romano-Wolf; the Reality Check alone is not trusted). Research, not financial advice."]
     return "\n".join(L)
 
 
