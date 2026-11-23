@@ -45,6 +45,27 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-23 (fifth run): the volatility risk premium (short VIX futures, `vrp.py`). FAIL
+
+The premium for selling crash insurance has the strongest economic reason to persist of anything
+tested so far. Pre-registered in `vrp.py`: hold SVXY only when spot VIX is below 3-month VIX
+(contango; Simon & Campasano 2014) by a factor k (0.90/0.95/1.00), or the same plus SPY above its
+200-day. IS 2011-10 to 2017 (SVXY at -1x), OOS 2018-2021 (with 2018-02-05, when SVXY lost 83% in one
+session), HOLDOUT 2022+. Results after IS at 20 bps (`results/vrp.json`):
+
+| rule | chosen | IS Sharpe | OOS Sharpe (SPY) | HOLDOUT Sharpe (SPY) | post-IS CAGR (SPY) | max DD | worst day | verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| contango | k 0.90 | 1.34 | -0.32 (0.83) | -0.48 (0.36) | -7.4% (12.9%) | -58% | -12.8% | FAIL |
+| contango + trend | | 0.89 | -0.06 (0.83) | -0.25 (0.36) | -7.3% (12.9%) | -68% | -32.0% | FAIL |
+
+As a 20% sleeve next to 80% SPY, both lowered the Sharpe (0.43 vs SPY's 0.59). Checked it isn't
+a bug: before costs the k 0.90 rule was a 64%-a-year, Sharpe-1.4 strategy in 2011-2017 and about
+zero afterwards (gross Sharpe -0.07 OOS, -0.19 HOLDOUT; about 28 switches a year). Plain SVXY
+lost 41% a year in 2018-2021 (max DD -95%) and the filter, which did dodge the February 2018
+crash, still lost money after it. This is the cleanest example in the lab of a backtest that
+looked superb in sample (Sharpe 1.34, the best IS number of any rule here) and failed afterwards.
+That's exactly why the gates exist.
+
 ### 2026-11-23 (fourth run): full gates for the 5-minute engine, and what trading costs allow
 
 `lab.py` now judges 5-minute rules like the other engines: IS / OOS / HOLDOUT 50/25/25, PASS
