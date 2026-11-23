@@ -36,11 +36,71 @@ result after costs, and whether it was kept. Failures stay in the record.
 2. **New strategies from the web**: each daily run adds at least one rule not yet tested.
 3. **Forward test**: score R3 and the near misses on sessions after 2026-11-22 (`daily.py forward`).
 4. **Last-half-hour reversal on the 5-minute store**, pre-registered after imom's OOS t of -3.6 (judged only after 2026-11-20).
-5. **Stocks in play, revisited** once the 5-minute store has 120+ sessions.
+5. **Stocks in play on 4 years of the 40-name universe**: `fetch-tiingo --symbols <universe>` (free
+   plan: 500 tickers a month, about 50 requests an hour, so about 14 hours for 40 names). The paper's top-20-of-7,000
+   is still out of reach; 40 names is a weak test. The same store also unlocks `eodrev`.
+5b. **Tighten the 5-minute keep rule** to the daily engine's gates (OOS t >= 3 and a placebo), so a
+   60-day fluke can never again reach the live signal.
 6. **FOMC and CPI days** (needs an event calendar): pre-FOMC drift (Lucca & Moench 2015) is reported dead after 2015, so a control, not a hope.
 7. **Earnings-day drift and the earnings announcement premium** for single stocks (needs an earnings calendar from trader-analyst).
 
 ## Log
+
+### 2026-11-23 (second run): all 5-minute rules on 4 years of SPY, QQQ and IWM. Nothing survives
+
+**Data.** Tiingo's free IEX feed (`lab.py fetch-tiingo`), Nov 2022 to Nov 2026, 1,002 sessions
+per ETF (993 full). Checked before use: no holidays, no gaps, the big moves are real (2025-04-09
+SPY +9.4%). Caveats: volume is IEX-only, a slice of the tape, which matters only for `sip`; prices are
+unadjusted, which is harmless because none of the three split. **Data trap found and fixed:** on NYSE half days the IEX
+feed keeps printing thin after-hours trades and zero-volume filler bars until 16:00. Those days
+looked like full sessions whose "close" was an after-hours print. Bars from 13:00 on early-close
+days are now dropped (`drop_after_early_close`, tested on all 2022-2026 half days).
+
+**Test.** 15 strategies and their variants, 3 bps round trip, variant chosen on the first 70%
+(to 2025-09-11), judged on the last 30% (290 sessions). `results/long-3etf.json`.
+
+| strategy | source | chosen variant | IS Sharpe | OOS Sharpe | OOS bp/day | OOS t |
+| --- | --- | --- | --- | --- | --- | --- |
+| sip | Zarattini, Barbon & Aziz 2024 | top 5, rvol 1.5, bar stop | -0.33 | 0.78 | 2.0 | 0.85 |
+| rod | Baltussen et al. 2021 | reversal, 100 bp | -0.17 | 0.40 | 0.4 | 0.44 |
+| noisepb | Concretum 2026 (pullback entry) | k 1.0, wait 5 | -0.44 | -0.17 | -0.3 | -0.18 |
+| noiseg | noise area, vol-gated | k 1.5, high-vol days | -0.06 | -0.29 | -0.5 | -0.31 |
+| orbfail | failed ORB fade | 3 bars | 0.05 | -0.41 | -1.1 | -0.44 |
+| orb5g | ORB + vol gate | high-vol days | 0.13 | -0.66 | -2.3 | -0.72 |
+| gap | gap fade | 1% | -0.20 | -0.86 | -1.1 | -0.94 |
+| orb | Crabel 1990 | 15 min, opposite stop | 0.05 | -0.91 | -3.2 | -0.99 |
+| orb5 | Zarattini & Aziz 2023 | no stop | -0.36 | -0.97 | -3.5 | -1.06 |
+| lunch | Quantpedia | | -0.21 | -1.13 | -2.5 | -1.23 |
+| noise | Zarattini, Aziz & Barbon 2024 | lookback 10, k 1.5 | -0.27 | -1.52 | -2.9 | -1.65 |
+| vwap | Zarattini & Aziz 2023 | 10:00 | -0.77 | -1.62 | -3.6 | -1.76 |
+| imom | Gao et al. 2018 | 15:00, 25 bp | -0.59 | -1.63 | -2.8 | -1.77 |
+| vwapre | practitioner | 6 bars | -1.06 | -2.96 | -3.9 | -3.23 |
+| eodrev | Baltussen, Da & Soebhag 2025 | | needs a cross-section; 3 ETFs is not one | | | |
+
+No strategy is kept. Every in-sample Sharpe is at most 0.13: none of them worked even in the period
+used to tune them.
+
+**Before costs.** Rerunning the main eight at 0 bps, the best OOS result is the 15:30 reversal
+(`rod` rev, all moves): t 1.91, 1.8 bp a day, which is less than one round trip's cost.
+`noisepb` (t 0.95) is the only other positive one. The ORB family and the noise area are not
+just eaten by costs: they have no gross edge on 2022-2026 ETFs. Note that `rod` reversal is close
+to the pre-registered idea 4, which is judged only on sessions after 2026-11-20. This
+backward look is consistent with it but is not evidence for it.
+
+**Outside replication agrees.** Paz Serpa (2026, [code and paper](https://github.com/PazSheimy/spy-intraday-momentum-oos))
+reproduced the noise area's paper results on SPY in sample (Sharpe 1.34, 2015-2024), then found the
+Sharpe fell to 0.39 from May 2024 to Mar 2026, below buy-and-hold, with professional 1-minute data and volatility-targeted sizing.
+Our -1.65 OOS t (no vol targeting, 5-minute bars) points the same way: the published intraday
+momentum edge on index ETFs has not survived publication. Concretum's own pullback overlay
+([QuanTip](https://concretumgroup.com/quantip-improving-performance-with-fast-alphas-a-tactical-overlay-for-intraday-trend-trading/),
+reported Sharpe 0.87 to 0.99 on 2007-2026) made our noise area less bad (OOS t -0.18 vs -1.65) but not
+positive.
+
+**Verdict.** This supersedes the SPY-only first run below, which reached the same answer on 338
+days. Four years and three ETFs say the same thing as 30 years of daily bars: **no published pure
+day-trading rule on index ETFs makes money after realistic costs today.** The 60-day results
+earlier in this log (noise "KEEP", orb5 "KEEP") were noise from a short window. The live 5-minute
+signal should not be trusted.
 
 ### 2026-11-23: the 5-minute strategies on 338 days of SPY (Tiingo, Nov 2022 to Mar 2024)
 
