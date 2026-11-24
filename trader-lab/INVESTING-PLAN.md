@@ -80,14 +80,26 @@ Halving in a crash is normal on the way. The plan only works if you keep buying 
   - write down why you took each trade
 - **Going live is your decision, and only after a PASS.** Even then, start with the smallest size.
 
-## 3. The scans: a watchlist, not buy signals
+## 3. The scans and the bot: the bot makes the calls, on paper
 
-- The 8:41 pre-market scan, the 9:51 simulated picks, the hourly stock scans (10:17 to 3:17) and
-  the 24/7 hourly crypto and forex scan keep running.
-- The hourly scans now say one line when nothing new fired and give detail only when something does,
-  so they're less noise.
-- Their setups have been tested and don't beat luck on their own. Use them to learn and to see what's
-  moving, on the demo.
+- Since 2026-11-24 the trade calls are the bot's, not yours (your request). `trader-lab/bot.py`:
+  - **Stocks**, each hourly scan, 10:17 a.m. to 3:17 p.m. New York:
+    - takes up to 2 of the most-traded opening-range breakouts that are still above the range
+    - at most 5 a day and $50 of total risk a day
+    - $10 risk each, stop at the range midpoint, target 2R, out by 3:55
+  - **Crypto and forex**, every hour, 24/7:
+    - takes up to 2 fresh trend setups: long a 20-hour high breakout or reclaim, short a 20-hour low break
+    - at most 6 open
+    - $10 risk, stop 1.5 × the hourly ATR, target 2R, closed after 24 hours
+  - Every trade is filled on paper from real prices. `python3 trader-lab/bot.py report` shows the record.
+  - Nothing reaches any account. You don't need to place anything.
+- The 8:41 pre-market scan, the 9:51 picks and the 3:30 index trial keep running. They are filled on
+  paper automatically.
+- The bot's rules are fixed (RESEARCH.md, 2026-11-24) and are not changed because of a good or bad week.
+  The lab has found no rule that beats luck after costs, so expect the record to be roughly break-even
+  minus costs until weeks of trades say otherwise.
+- Real money stays off. Going live is your decision, and only after a PASS on the pre-registered trial
+  (section 2).
 
 ## 4. The lab
 

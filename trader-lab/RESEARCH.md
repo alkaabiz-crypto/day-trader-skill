@@ -1012,3 +1012,26 @@ lost in both halves on this window, unlike the 1993 to 2013 paper.
 
 Next: idea 1 (stocks in play) and idea 5 (volatility gate), since both are
 claimed to fix exactly this regime problem.
+
+### 2026-11-24: the bot makes the trade calls (paper), rules fixed before its first trade
+
+The owner asked that the trade calls be the bot's. `bot.py` takes trades by fixed rules and fills
+them on paper from real prices, with a running ledger in `paper/bot/ledger.json`. Nothing reaches an
+account. The rules are in the bot.py docstring and are written here before any result:
+- **stocks:**
+  - the most-traded opening-range breakouts still above the range, long only
+  - 2 a run, 5 a day, $50 risk a day, no entries after 15:00
+  - stop at the range midpoint, 2R target, flat by 15:55, the paper.py cost filter
+- **crypto/forex:**
+  - only setups new since the previous hourly run
+  - long on a 20-hour high breakout or reclaim, short on a 20-hour low break; RSI setups not traded,
+    and a name with both directions skipped
+  - 2 an hour, 6 open
+  - 1.5 × ATR(14 h) stop, 2R target, 24-hour time exit, 2 bp (FX) or 10 bp (crypto) cost
+
+One rule was added during the first live run, before any fill: AAPL and AVGO had broken out at 9:50
+and fallen back under the range high by 10:39, so a breakout now counts only while the price is still
+above the range. Those two entries were removed unfilled.
+
+The bot's record is reported separately from the pre-registered trial and doesn't change its bar.
+Expectation from the lab: no edge after costs.

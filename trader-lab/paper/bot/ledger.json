@@ -1,0 +1,110 @@
+{
+ "trades": [
+  {
+   "symbol": "MRNA",
+   "side": "buy",
+   "entry_est": 223.155,
+   "stop": 216.69,
+   "target": 236.09,
+   "shares": 1,
+   "max_loss_usd": 6.47,
+   "cost_bps": 34.6,
+   "reward_bps": 579.6,
+   "premarket_hit": false,
+   "or_low": 212.2,
+   "or_high": 221.18,
+   "pct_over": 0.9,
+   "track": "stocks",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 15:44Z",
+   "decided_at": "10:44",
+   "slot": 15,
+   "status": "open",
+   "risk_usd": 6.47,
+   "setup": "opening-range breakout",
+   "id": "S-2026-11-24-MRNA"
+  },
+  {
+   "symbol": "WMT",
+   "side": "buy",
+   "entry_est": 131.725,
+   "stop": 130.51,
+   "target": 134.16,
+   "shares": 7,
+   "max_loss_usd": 8.51,
+   "cost_bps": 9.96,
+   "reward_bps": 184.9,
+   "premarket_hit": false,
+   "or_low": 129.74,
+   "or_high": 131.29,
+   "pct_over": 0.01,
+   "track": "stocks",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 15:44Z",
+   "decided_at": "10:44",
+   "slot": 15,
+   "status": "open",
+   "risk_usd": 8.51,
+   "setup": "opening-range breakout",
+   "id": "S-2026-11-24-WMT"
+  }
+ ],
+ "last_fx": {
+  "BTC-USD": [],
+  "ETH-USD": [],
+  "SOL-USD": [],
+  "XRP-USD": [],
+  "BNB-USD": [],
+  "DOGE-USD": [],
+  "ADA-USD": [],
+  "AVAX-USD": [],
+  "LINK-USD": [],
+  "LTC-USD": [],
+  "DOT-USD": [],
+  "BCH-USD": [],
+  "EURUSD=X": [
+   "breakout_20d",
+   "overbought"
+  ],
+  "GBPUSD=X": [
+   "breakout_20d",
+   "overbought"
+  ],
+  "USDJPY=X": [
+   "reclaim_ma20"
+  ],
+  "AUDUSD=X": [
+   "breakout_20d"
+  ],
+  "USDCAD=X": [
+   "oversold",
+   "breakdown_20h"
+  ],
+  "USDCHF=X": [
+   "oversold",
+   "breakdown_20h"
+  ],
+  "NZDUSD=X": [
+   "breakout_20d",
+   "overbought"
+  ],
+  "EURJPY=X": [
+   "breakout_20d",
+   "overbought"
+  ],
+  "GBPJPY=X": [
+   "breakout_20d"
+  ],
+  "EURGBP=X": [],
+  "AUDJPY=X": [
+   "breakout_20d"
+  ],
+  "EURCHF=X": [],
+  "EURAUD=X": [],
+  "GBPCHF=X": [
+   "breakdown_20h"
+  ],
+  "GC=F": [],
+  "SI=F": []
+ }
+}
