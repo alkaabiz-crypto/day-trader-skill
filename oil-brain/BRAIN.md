@@ -305,6 +305,20 @@ too large and consistent to be luck; gold is borderline.
 **Live:** `combo/combo_live.py` paper-trades BTC_BREAKOUT, GLD_PULLBACK and USO_TURTLE (forward only)
 with $2,000 each from 2026-11-24, 1% risk per trade, issuing tickets after each close.
 
+### 2026-11-24, CFD cost stress (`combo/cfd_costs.py`): survivors with overnight financing (Exness swaps)
+
+| system | trades | avg hold | avg stop | 0%/yr | mid | high | highest |
+|---|---|---|---|---|---|---|---|
+| BTC 20-day breakout, trend, 4R (R2 D1 T2) | 74 | 16 days | 7.4% | +0.79R t 3.28 | 10%: +0.73R t 3.03 | 20%: +0.66R t 2.77 | 30%: +0.60R t 2.51 |
+| BTC 55-day breakout, trend, 4R | 56 | 17 days | 7.5% | +0.74R t 2.87 | 10%: +0.68R t 2.62 | 20%: +0.61R t 2.37 | 30%: +0.54R t 2.11 |
+| GLD uptrend RSI(2) pullback, trail | 54 | 37 days | 2.5% | +0.86R t 2.08 | 3.5%: +0.69R t 1.76 | 7%: +0.53R t 1.41 | 15%: +0.16R t 0.47 |
+| USO 55-day breakout, trend, trail | 58 | 28 days | 5.2% | +0.67R t 1.53 | 3.5%: +0.61R | 7%: +0.54R | 15%: +0.40R t 1.02 |
+
+BTC survives even 30% a year of financing because its stops are wide (7%) and holds short (16 days).
+Gold needs a swap-free account or the GLD ETF itself: at a typical 7%/yr CFD financing, t falls to 1.4.
+Spreads (Exness 2026, third-party lists): XAUUSD ~$0.20, BTCUSD ~$10-30, USOIL ~$0.03-0.05 per unit,
+within the backtest's 5-10 bp per side. Exact swaps: MT5 > right-click symbol > Specification.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
