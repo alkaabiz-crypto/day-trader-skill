@@ -1185,3 +1185,41 @@ the deepest drop to about a third of SPY's. After 2015 it earns less than buying
 Not changed after the result. Kept for a forward paper record only if the owner wants it, and labelled as
 having failed its own bar.
 
+### 2026-11-24: the day-trading brain, every first-candle feature on the whole market (`daybrain/brain.py`). FAIL
+
+Pre-registered in 19406b9 before any run. At 9:35 New York, after the first 5-minute candle, 12 features
+were measured for every liquid US stock, about 1,490 a day over 44 usable days (2026-09-23 to 11-23):
+- the candle itself: colour and size, upper wick, lower wick, body, close location, range against normal
+- the gap
+- relative volume of the first candle (stocks in play)
+- the previous day's return, close location and last 30 minutes
+- the candle's direction times its relative volume
+
+Each was tested as a cross-sectional rank correlation with the 9:35 to 15:55 return. It had to clear
+Bonferroni |t| ≥ 2.87 on the first 22 days and keep its sign with t ≥ 2 on the last 22.
+
+**Each feature alone:** none passes. None even reaches the discovery bar; the largest |t| there is 1.55.
+Several flip sign between the two halves:
+- previous day: −1.19, then +2.43
+- range: −0.80, then +3.17
+- upper wick: +1.19, then −2.59
+
+**The brain**, a ridge regression on all 12 fitted on the first half, top 10% minus bottom 10% at 10 bp a
+side:
+
+| test | long-short a day | t |
+| --- | --- | --- |
+| discovery | +23.6 bp | 0.74 |
+| validation | −100.7 bp | −3.22 |
+| long top 10% vs the market, validation | −39.7 bp | −2.19 |
+| 4-year check (40 names, 977 days, top 4 minus bottom 4) | −21.3 bp | −3.55 |
+
+On the 4-year store the strongest single feature is the previous day's return, a weak short-term reversal
+(IC −0.019, t −2.16, below the bar). The candle's colour reaches only t +1.38, and the wicks t −1.40 and
++0.27.
+
+**Reading:** the first 5-minute candle, its wicks, the gap and relative volume tell nothing reliable about
+the rest of the day across the US market. What they seem to say in one month flips the next. That agrees
+with the candle-pattern literature (Marshall, Young & Rose 2006) and with the lab's earlier ORB and
+stocks-in-play results. **Verdict: FAIL**, not changed after the result.
+
