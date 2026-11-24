@@ -1,1 +1,2 @@
 date,symbol,qty,entry_time,entry,stop,target,exit_time,exit,why,gross_usd,cost_usd,pnl_usd
+2026-11-24,MSFT,8,2026-11-24 10:46,494.2688,490.76,501.29,2026-11-24 12:20,501.29,target,56.17,1.99,54.18
