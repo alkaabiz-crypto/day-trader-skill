@@ -1156,3 +1156,32 @@ change that. 59 sessions of stocks is short, but it's long enough to show a lose
 - The group cap and the Exness cost table are now live. They're risk and accounting fixes, not edges.
 - Challengers run forward. One is promoted only on the forward rule written in bot_backtest.py.
 
+### 2026-11-24: "survivors", the lab's surviving rules as one daily strategy (`survivors.py`). FAIL
+
+The owner asked for smart strategies for daily trading over the long term. Same-day trades all failed, so
+this combines the only rules that held up, decided daily and held for a few days:
+- RSI(2) under 10, or the lowest close of 7 days, on 21 index and sector ETFs above their 200-day average
+- out at RSI(2) above 70, the highest close of 7, or 10 days held
+- 5 slots of 20%, bought at the next open
+- plus 20% in SPY on the night before each scheduled FOMC announcement
+
+The rules, universe, costs and pass bar were fixed in the docstring before the first run. Costs are 3 bp a
+round trip, and dividends are included.
+
+| period | rule per year | Sharpe | max drop | t | SPY per year | Sharpe | max drop |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2000-2014 | 6.6% | 0.47 | 18% | 1.83 | 4.2% | 0.21 | 55% |
+| 2015-2026 (judged) | 7.8% | 0.54 | 16% | 1.87 | 13.0% | 0.66 | 34% |
+
+- After 2015 there were 1,510 trades, 68% of them winners, at 26.6 bp a trade, with 2.4 of the 5 slots
+  used on average.
+- At 3x cost it still makes 6.1% a year.
+- Placebo (random ETFs and days with the same holding times): the rule beats only 60% of 200 draws.
+
+**Verdict: FAIL** on the pre-registered bar, which needed t ≥ 2 and beating 95% of placebos. Most of the
+return is the stock market's own return, earned while about half invested, not timing skill. It does cut
+the deepest drop to about a third of SPY's. After 2015 it earns less than buying SPY and holding.
+
+Not changed after the result. Kept for a forward paper record only if the owner wants it, and labelled as
+having failed its own bar.
+
