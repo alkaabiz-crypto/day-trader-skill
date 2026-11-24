@@ -148,6 +148,13 @@ def scoreboard():
     if j:
         add("swarm: 100,000 machine-made rules", "FAIL",
             "the 2 holdout 'passes' were a scoring artifact (RESEARCH.md 2026-11-24)")
+    j = _load("news-events.json")
+    if j:
+        add("news: earnings-day drift (SEC 8-K 2.02, 30 stocks)", j.get("verdict", "FAIL"),
+            "chosen %s" % json.dumps(j.get("params")))
+    else:
+        add("news: earnings-day drift (SEC 8-K 2.02, 30 stocks)", "PENDING",
+            "pre-registered (news_events.py); runs once SEC access is set")
     j = _load("sip-long.json")
     if j:
         v = j.get("verdict", {})
