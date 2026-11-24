@@ -7,3 +7,4 @@ trader-lab/data/alloc/
 oil-brain/brains/*/data/
 oil-brain/brains/*/raw/
 __pycache__/
+oil-brain/audit/data/
