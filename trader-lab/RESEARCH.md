@@ -48,7 +48,7 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 2. **Forward ledger.** Score every rule that ever came close (`results/frozen.json`) on new data
    only, monthly, in the daily run. Out of sample in real time is the one test that can't be
    overfitted.
-3. **Crypto cross-sectional factors.** Liu, Tsyvinski & Wu (2022, JF) "Common Risk Factors in
+3. ~~**Crypto cross-sectional factors.**~~ Done 2026-11-24 (`crypto_xs.py`): FAIL, see Log. Liu, Tsyvinski & Wu (2022, JF) "Common Risk Factors in
    Cryptocurrency": coin momentum, size and market. Pre-registered, weekly, on the top coins. Caveat:
    dead coins are missing from Yahoo, so a pass would need a survivorship audit.
 4. **FOMC and CPI days.** Lucca & Moench (2015) pre-FOMC drift, using the Fed's public meeting
