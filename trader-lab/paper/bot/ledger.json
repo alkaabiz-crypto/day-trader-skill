@@ -806,7 +806,9 @@
  "last_fx": {
   "BTC-USD": [],
   "ETH-USD": [],
-  "SOL-USD": [],
+  "SOL-USD": [
+   "breakdown_20h"
+  ],
   "XRP-USD": [],
   "BNB-USD": [],
   "DOGE-USD": [],
@@ -824,11 +826,10 @@
   "AUDUSD=X": [],
   "USDCAD=X": [
    "oversold",
-   "breakdown_20h"
+   "oversold_bounce"
   ],
   "USDCHF=X": [
-   "oversold",
-   "oversold_bounce"
+   "oversold"
   ],
   "NZDUSD=X": [],
   "EURJPY=X": [],
@@ -840,11 +841,7 @@
   "EURCHF=X": [],
   "EURAUD=X": [],
   "GBPCHF=X": [],
-  "GC=F": [
-   "breakdown_20h"
-  ],
-  "SI=F": [
-   "breakdown_20h"
-  ]
+  "GC=F": [],
+  "SI=F": []
  }
 }
