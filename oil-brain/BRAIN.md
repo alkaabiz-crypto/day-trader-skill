@@ -319,6 +319,16 @@ Gold needs a swap-free account or the GLD ETF itself: at a typical 7%/yr CFD fin
 Spreads (Exness 2026, third-party lists): XAUUSD ~$0.20, BTCUSD ~$10-30, USOIL ~$0.03-0.05 per unit,
 within the backtest's 5-10 bp per side. Exact swaps: MT5 > right-click symbol > Specification.
 
+### 2026-11-24, independent audit of the GLD pullback (`audit2/AUDIT_GLD.md`): WEAK
+
+Rebuilt from its description: 54 trades, +0.86R, t 2.08 (matches). But: with 0.02%/day CFD financing
++0.53R, t 1.40; random entries above the 200-day average with the same exits already earn +0.48R
+(the RSI timing adds ~0.35R, placebo p 0.018, or 0.16 if re-entry on a stop-out day is allowed);
+the top 3 trades are 72% of the R since 2014 (without them t 1.1); 2006-2013 t 1.03; buy-and-hold GLD
+grew 8.5%/yr vs the rule's 6.8% since 2014. Robust to neighbours (11 of 12) and positive on IAU, SLV
+and gold futures. Verdict: weak; only on an unlevered ETF (GLD/IAU), never on a financed CFD. The paper
+sleeve stays as registered, as a forward test.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
