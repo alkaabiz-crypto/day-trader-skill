@@ -81,5 +81,57 @@ class Scoring(unittest.TestCase):
         self.assertEqual(cd.verdict(s), "FAIL")
 
 
+class FetchLock(unittest.TestCase):
+    def test_lock_blocks_a_second_live_fetcher_and_frees_a_dead_one(self):
+        import subprocess
+        import tempfile
+        path = os.path.join(tempfile.mkdtemp(), "fetch.lock")
+        other = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(30)"])
+        try:
+            with open(path, "w") as fh:
+                fh.write("%d 0\n" % other.pid)
+            self.assertFalse(cd.take_lock(path))        # a live process holds it
+        finally:
+            other.kill()
+            other.wait()
+        self.assertTrue(cd.take_lock(path))             # its owner is gone: taken over
+        cd.drop_lock(path)
+        self.assertFalse(os.path.exists(path))
+
+    def test_max_requests_stops_after_n_and_resumes(self):
+        import argparse
+        import io
+        import json as js
+        import tempfile
+        import urllib.request
+        calls = []
+
+        class Resp(io.BytesIO):
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+        def fake_urlopen(req, timeout=0):
+            calls.append(req.full_url)
+            n = len(calls)
+            row = {"date": "2022-11-%02dT00:00:00+00:00" % (n * 2), "open": 1, "high": 1, "low": 1, "close": 1}
+            return Resp(js.dumps([{"priceData": [row]}]).encode())
+
+        old = (cd.STORE, cd.LOCK, urllib.request.urlopen)
+        cd.STORE = tempfile.mkdtemp()
+        cd.LOCK = os.path.join(cd.STORE, "fetch.lock")
+        urllib.request.urlopen = fake_urlopen
+        try:
+            a = argparse.Namespace(coins="btcusd", pause=0.0, max_requests=2)
+            cd._fetch_crypto(a)
+            self.assertEqual(len(calls), 2)
+            cd._fetch_crypto(a)                          # resumes from the stored bars
+            self.assertEqual(len(calls), 4)
+            self.assertEqual(len(cd.load_gz(os.path.join(cd.STORE, "btcusd.json.gz"))), 4)
+        finally:
+            cd.STORE, cd.LOCK, urllib.request.urlopen = old
+
 if __name__ == "__main__":
     unittest.main()
