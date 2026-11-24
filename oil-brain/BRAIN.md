@@ -83,6 +83,16 @@ TSMOM 42d by year: 2014 +45%, 2015 +39%, 2016 -4%, 2017 +21%, 2018 +21%, 2019 -1
 crashes short. In normal years it is close to zero (t < 1.1). That matches the trend-following
 literature. Useful as insurance inside a portfolio; not a steady edge for short-term trading.
 
+### 2026-11-24, study 4 (`study4.py`): EIA Wednesday 10:30 reaction, hourly USO. 0 PASS of 4
+
+~150 Wednesdays (2023-12 to 2026-11), 5 bp round trip. Every |t| < 2:
+following the 10:30-11:30 move to the close: -6.2 bp (t -0.59); fading it: -3.8 bp (t -0.36);
+only big reactions (> 0.75%): +10.8 bp (t 0.40, n 42); drifting into the report
+(Tue close -> Wed 10:30): -6.6 bp (t -0.39). Other weekdays at the same hour look the same, so
+the report adds noise, not a pattern. Matches the lab's earlier hourly finding
+(skipping Wednesdays did not help). CL=F hourly bars start on the hour, not at :30, so the
+futures test was not valid; USO answers the question.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
@@ -94,7 +104,7 @@ Neither is a 1-3 day trading edge.
 
 1. Literature review results: add the top hypotheses with precise rules.
 2. ~~Check momentum candidates for crash dependence~~ done (study 3): crash-driven.
-3. Hourly data (Yahoo, ~2 years): EIA 10:30 Wednesday reaction and drift; settlement 14:30.
+3. ~~EIA 10:30 Wednesday reaction~~ done (study 4): nothing. Still open: settlement 14:30 effect.
 4. Brent-WTI spread (BNO vs USO) mean reversion.
 5. Crack spread (RB + HO vs CL) as a signal for refiners / oil.
 6. CFTC positioning (hedging pressure) if a free data host can be reached.
