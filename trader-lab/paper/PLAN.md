@@ -57,3 +57,11 @@ trades is a small sample.
 - **Exness doesn't serve some countries** (for example the US). Check that yours is allowed.
 - **Signals come from ETF prices.** The CFD can differ slightly, especially near the cash close.
 - Research, not financial advice.
+
+## Amendment 2026-11-24 (stricter only)
+
+The bar also requires the shadow log to stay net positive if every round trip cost 5 bp instead of
+the assumed 2 bp (`stress_cost_bps` in `config.json`). This is a stress figure for Exness's spread at
+15:30–15:55, not a quoted Exness number. `paper.py report` also prints the cost at which the trial
+breaks even. These trades pay no swap: every one is flat by 15:55 New York, before Exness's rollover.
+Nothing else in the plan changed.

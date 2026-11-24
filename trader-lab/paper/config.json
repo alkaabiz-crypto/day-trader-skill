@@ -16,6 +16,8 @@
  "max_daily_loss_usd": 30,
  "max_trades_per_day": 3,
  "cost_bps": 2.0,
+ "stress_cost_bps": 5.0,
+ "stress_note": "Exness Standard index CFDs charge no commission; cost is the spread. 5 bp round trip is a stress figure (about 2.5x the assumed 2 bp), not a quoted Exness number. Check the live spread in MT5 Market Watch; your recorded demo trades carry the real cost.",
  "pass_bar": {
   "min_days": 20,
   "min_trades": 30,

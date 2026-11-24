@@ -50,6 +50,27 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-24: the plan, a cost stress test for the paper trial, and the index-fund yardstick
+
+The user asked what is smart to do now and approved the plan in `INVESTING-PLAN.md`:
+- real money goes into a monthly index-fund plan
+- trading stays on the Exness demo until the paper trial passes
+- the scans are a watchlist, not buy signals
+- no more giant searches after the 62-market one
+
+**Paper trial cost stress** (`paper.py`, `paper/PLAN.md` amendment, stricter only). The bar now also
+needs the trial to be net positive at 5 bp per round trip, against the assumed 2 bp. Day 1: +$9.00 at
+5 bp; it breaks even at 35 bp a trade. No swap applies, because every trade is flat by 15:55 New York.
+
+**Index-fund yardstick** (`dca.py`): $500 a month, bought at the month's first open, dividends reinvested.
+
+| fund | period | put in | worth now | per year | deepest drop | 10-year windows ahead |
+| --- | --- | --- | --- | --- | --- | --- |
+| SPY | 1996–2026 | $185,500 | $1,242,273 | 10.5% | −51% | 95% (worst −9.4%/yr, 1999–2009) |
+| VT | 2008–2026 | $111,000 | $325,327 | 10.6% | −34% | 100% (worst +3.6%/yr) |
+
+These are history, not forecasts.
+
 ### 2026-11-23 (daily run, 21:41 UTC): everything rerun, five pre-registered anomalies. No pass
 
 **Paper trial** (pre-registered 15:30 reversal): day 1, 3 shadow trades, net +$9.90. IN PROGRESS;

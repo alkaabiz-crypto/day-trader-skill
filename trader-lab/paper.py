@@ -196,13 +196,29 @@ def evaluate(rows, cfg):
         lag = (sh_same - de) / abs(sh_same) if sh_same else None
     n_days = len(set(cfg.get("_logged_days", [])) | {r["date"] for r in sh})
     enough = n_days >= bar["min_days"] and len(sh) >= bar["min_trades"]
+    # Exness stress: the same trades if the round trip cost stress_cost_bps instead of cost_bps (a wider
+    # spread at 15:30-15:55 than assumed). Added 2026-11-24; it only makes the bar stricter.
+    def gross_of(r):
+        return float(r["gross_bps"]) if r.get("gross_bps") not in (None, "") else float(r["net_bps"]) + cfg["cost_bps"]
+
+    def notional_of(r):
+        return float(r["notional_usd"]) if r.get("notional_usd") not in (None, "") else cfg["budget_usd"]
+    stress = cfg.get("stress_cost_bps")
+    stress_pnl = None
+    if stress is not None:
+        stress_pnl = sum((gross_of(r) - stress) / 1e4 * notional_of(r) for r in sh)
+    gross = [gross_of(r) for r in sh]
     checks = {"net_positive": sum(pnl) > 0, "t_ok": t >= bar["min_t"], "drawdown_ok": mdd < bar["max_drawdown_usd"],
               "demo_lag_ok": lag is None or lag <= bar["max_demo_lag"]}
+    if stress is not None:
+        checks["stress_net_positive"] = stress_pnl > 0
     verdict = "IN PROGRESS" if not enough else ("PASS" if all(checks.values()) else "FAIL")
     return {"days": n_days, "trades": len(sh), "net_usd": round(sum(pnl), 2),
             "mean_net_bps": round(statistics.mean(nets), 2) if nets else 0.0, "t": round(t, 2),
             "max_drawdown_usd": round(mdd, 2), "win_rate": (sum(1 for x in nets if x > 0) / len(nets)) if nets else 0.0,
-            "demo_trades": len(demo), "demo_lag": lag, "checks": checks, "verdict": verdict}
+            "demo_trades": len(demo), "demo_lag": lag, "checks": checks, "verdict": verdict,
+            "stress_cost_bps": stress, "stress_net_usd": None if stress_pnl is None else round(stress_pnl, 2),
+            "break_even_cost_bps": round(statistics.mean(gross), 2) if gross else None}
 
 
 # ---------------------------------------------------------------- scanner track (simulated, automatic)
@@ -431,6 +447,12 @@ def cmd_report(a):
         bar["min_days"], bar["min_trades"], "ok" if r["checks"]["net_positive"] else "no", bar["min_t"],
         "ok" if r["checks"]["t_ok"] else "no", bar["max_drawdown_usd"], "ok" if r["checks"]["drawdown_ok"] else "no",
         bar["max_demo_lag"] * 100, "ok" if r["checks"]["demo_lag_ok"] else "no"))
+    if r.get("stress_cost_bps") is not None:
+        print("Cost stress: at %.1f bp a round trip (vs %.1f assumed) net $%+.2f %s; the trial breaks even at %s bp a trade. "
+              "Swap: none (every trade is flat by 15:55 New York, before Exness's rollover)." % (
+                  r["stress_cost_bps"], cfg["cost_bps"], r["stress_net_usd"],
+                  "ok" if r["checks"].get("stress_net_positive") else "no",
+                  "n/a" if r["break_even_cost_bps"] is None else "%.1f" % r["break_even_cost_bps"]))
     print("Verdict: %s. Paper trading only; going live is your decision. Not financial advice." % r["verdict"])
     sc = [x for x in rows if x["source"] == "scanner-sim"]
     if sc:

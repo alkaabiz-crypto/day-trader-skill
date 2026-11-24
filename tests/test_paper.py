@@ -123,6 +123,16 @@ class Report(unittest.TestCase):
         bad = [12.0, -14.0] * 20
         self.assertEqual(paper.evaluate(self.rows(bad), dict(CFG, _logged_days=days))["verdict"], "FAIL")
 
+    def test_cost_stress_can_fail_a_thin_edge(self):
+        days = ["2026-01-%02d" % d for d in range(1, 29)]
+        thin = [3.0, 2.0, 2.5, 3.5, 2.0] * 8          # net 2.6 bp a trade at the assumed 2 bp cost
+        cfg = dict(CFG, _logged_days=days)
+        self.assertEqual(paper.evaluate(self.rows(thin), cfg)["verdict"], "PASS")
+        r = paper.evaluate(self.rows(thin), dict(cfg, stress_cost_bps=5.0))
+        self.assertFalse(r["checks"]["stress_net_positive"])
+        self.assertEqual(r["verdict"], "FAIL")
+        self.assertAlmostEqual(r["break_even_cost_bps"], 4.6)
+
     def test_journal_round_trip(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = os.path.join(tmp, "j.csv")
