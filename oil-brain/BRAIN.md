@@ -139,6 +139,40 @@ Basis-momentum proxy (USO minus USL return), month-end, 2009 on:
 252d long/flat: t 1.31, FAIL; 63d long/short: t 1.18, FAIL; 63d long/flat: t 1.11, FAIL.
 Positive like the paper says, but for oil alone too weak to clear t >= 2.
 
+### 2026-11-24, study 6 (`study6.py`): diversified commodity trend and carry. 0 PASS of 4
+
+12 commodity ETFs (USO, UNG, UGA, GLD, SLV, DBB, DBA, CORN, WEAT, SOYB, PALL, PPLT), equal risk,
+month-end, 5 bp. Benchmark DBC (post-2014 Sharpe 0.22).
+
+| rule | IS | OOS | HOLDOUT | post-2014 | t | placebo p | max DD | verdict |
+|---|---|---|---|---|---|---|---|---|
+| P1 trend blend 1/3/12m (Hurst et al.) | 0.07 | -0.06 | 0.78 | 0.42 | 1.49 | 0.10 | -11% | FAIL |
+| P2 trend 12m (Moskowitz et al.) | 0.12 | 0.11 | 0.56 | 0.35 | 1.26 | 0.15 | -17% | FAIL |
+| P3 carry, oil and gas only | 0.65 | 0.43 | 0.31 | 0.37 | 1.32 | 0.09 | -6% | FAIL |
+| P4 trend blend + carry | 0.22 | -0.08 | 0.79 | 0.41 | 1.48 | 0.08 | -12% | FAIL |
+
+P1 by year: losing or flat 2014-2019, strong 2020-2022, mixed since. Matches the literature's
+post-2009 trend whipsaw. Carry is the most stable (positive in all three periods, smallest
+drawdown) but only two ETF pairs exist, so it is thin. At month-end Nov 2026 P1 was short
+almost everything except a small long in USO.
+
+### 2026-11-24, study 7 (`study7.py`): extreme days, Brent-WTI, crack spread. 0 PASS of 7
+
+| rule | IS | OOS | HOLDOUT | post-2014 | t | placebo p | verdict |
+|---|---|---|---|---|---|---|---|
+| X1 fade a +/-2.5 sd USO day, hold 1d | -0.33 | 0.40 | -0.67 | -0.35 | -1.24 | 0.78 | FAIL |
+| X2 same, hold 3d | -0.25 | -0.36 | -0.53 | -0.45 | -1.63 | 0.92 | FAIL |
+| X3 same, hold 5d | -0.08 | -0.74 | -0.70 | -0.70 | -2.49 | 0.99 | FAIL |
+| X4 fade, hold 3d, OVX high | 0.04 | -0.01 | -0.70 | -0.46 | -1.64 | 0.94 | FAIL |
+| X5 fade, hold 3d, OVX low | -0.38 | -0.72 | 0.45 | -0.08 | -0.28 | 0.60 | FAIL |
+| S1 Brent-WTI z>2 reversion | -0.65 | 0.42 | -0.47 | -0.11 | -0.38 | 0.38 | FAIL |
+| C1 crack spread z>1, long USO | 0.12 | -0.38 | 0.30 | 0.04 | 0.15 | 0.38 | FAIL |
+
+**Fading big oil days loses, and the loss grows with the holding period** (t -2.49 at 5 days):
+after a shock, oil tends to keep going, not snap back. This contradicts the reversal idea and
+fits short-term momentum. The flipped rule ("follow a +/-2.5 sd day for 5 days") was NOT
+pre-registered and its IS was flat (+0.08), so it is only a hypothesis for a forward test.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
@@ -148,19 +182,17 @@ Neither is a 1-3 day trading edge.
 
 ## Idea queue (top first)
 
-1. **Diversified commodity trend + carry** (where the literature is strongest): equal-weight,
-   vol-scaled TSMOM (Hurst 1/3/12m blend) across liquid commodity ETFs on Yahoo (USO, BNO, UNG,
-   UGA, GLD, SLV, CPER, DBA, CORN, WEAT, SOYB), monthly; then add carry where a 12-month ETF
-   pair exists (USO/USL, UNG/UNL). Long-only alternative: DBC.
+1. Forward-test "follow a +/-2.5 sd USO day for 5 days" from 2026-11-24 (not pre-registered;
+   only forward results count). Log each event in oil-brain/forward.csv.
 2. CFTC COT liquidity premium (Kang, Rouwenhorst & Tang 2020): weekly change in producer/merchant
    net position in crude; needs www.cftc.gov (ask the user to allow the host).
-3. Fade extreme non-roll days, split by OVX above/below its 1-year median, hold 1/3/5 days.
-4. Brent-WTI spread (BNO vs USO) mean reversion.
-5. Crack spread (UGA vs USO) as a signal for oil / refiners.
+3. ~~Diversified commodity trend + carry~~ done (study 6): FAIL, whipsaw 2014-2019.
+4. ~~Extreme-day fades, Brent-WTI, crack spread~~ done (study 7): FAIL.
+5. Energy equities: XLE/XOP vs oil (beta-hedged residual momentum), daily.
 6. OPEC cut drift: needs a hand-built list of meeting dates.
 7. ~~Check momentum candidates for crash dependence~~ done (study 3): crash-driven.
 8. ~~EIA 10:30 Wednesday reaction~~ done (study 4); ~~EIA-day intraday momentum~~ done (study 5).
 9. ~~Basis-momentum on USO/USL~~ done (study 5): positive, not significant.
 
-**Rules tried so far: 36** (study 1: 9, study 2: 14, study 4: 4, study 5: 9; study 3 re-scored
-old rules). At this count, a couple of t = 2 results are expected by chance alone.
+**Rules tried so far: 47** (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
+study 7: 7; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.

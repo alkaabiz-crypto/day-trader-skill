@@ -1,7 +1,7 @@
 """Download free daily data from Yahoo for the oil brain. Saves CSVs in oil-brain/data/."""
 import os, yfinance as yf
 D = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
-SYMS = ["CL=F","BZ=F","HO=F","RB=F","NG=F","USO","USL","BNO","XLE","XOP","SPY","QQQ","IWM","^OVX","^VIX","DX-Y.NYB","^TNX","GLD","TLT"]
+SYMS = ["CL=F","BZ=F","HO=F","RB=F","NG=F","USO","USL","BNO","XLE","XOP","SPY","QQQ","IWM","^OVX","^VIX","DX-Y.NYB","^TNX","GLD","TLT","UNG","UNL","UGA","SLV","CPER","DBA","CORN","WEAT","SOYB","DBC","DBB","PALL","PPLT"]
 for s in SYMS:
     for k in range(3):
         try:
