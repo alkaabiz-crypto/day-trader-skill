@@ -244,9 +244,49 @@ def load_gz(path):
         return json.load(fh)
 
 
+LOCK = os.path.join(STORE, "fetch.lock")
+
+
+def take_lock(path=LOCK):
+    """True if this process now holds the fetch lock; False if another live process does (so two fetchers never
+    write the store at once). A lock left by a dead process is taken over."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    if os.path.exists(path):
+        try:
+            pid = int(open(path).read().split()[0])
+            os.kill(pid, 0)
+            if pid != os.getpid():
+                return False
+        except (ValueError, IndexError, ProcessLookupError, PermissionError, OSError):
+            pass
+    with open(path, "w") as fh:
+        fh.write("%d %d\n" % (os.getpid(), int(time.time())))
+    return True
+
+
+def drop_lock(path=LOCK):
+    try:
+        if int(open(path).read().split()[0]) == os.getpid():
+            os.remove(path)
+    except (OSError, ValueError, IndexError):
+        pass
+
+
 def cmd_fetch_crypto(a):
-    """Tiingo crypto, 5-minute, 5,000 bars a request (about 17 days); resumes from what is stored."""
+    """Tiingo crypto, 5-minute, 5,000 bars a request (about 17 days); resumes from what is stored.
+    --max-requests N stops after N requests (short foreground chunks from the scheduled runs)."""
+    if not take_lock():
+        print("another fetch-crypto holds %s: skipping" % LOCK)
+        return 0
+    try:
+        return _fetch_crypto(a)
+    finally:
+        drop_lock()
+
+
+def _fetch_crypto(a):
     import lab
+    budget = a.max_requests if getattr(a, "max_requests", 0) else None
     for coin in a.coins.split(","):
         p = os.path.join(STORE, coin + ".json.gz")
         bars = load_gz(p) or {}
@@ -254,7 +294,12 @@ def cmd_fetch_crypto(a):
         if bars:
             start = datetime.datetime.utcfromtimestamp(max(int(k) for k in bars)) + datetime.timedelta(minutes=5)
         end = datetime.datetime.utcnow()
-        while start < end:
+        while start < end - datetime.timedelta(minutes=10):
+            if budget is not None and budget <= 0:
+                print("request budget used: stopping (resumes next time)")
+                return 0
+            if budget is not None:
+                budget -= 1
             stop = min(start + datetime.timedelta(days=17), end)
             q = {"tickers": coin, "startDate": start.strftime("%Y-%m-%dT%H:%M:%S"),
                  "endDate": stop.strftime("%Y-%m-%dT%H:%M:%S"), "resampleFreq": "5min"}
@@ -266,6 +311,9 @@ def cmd_fetch_crypto(a):
                         data = json.loads(r.read().decode("utf-8"))
                     break
                 except urllib.error.HTTPError as e:
+                    if e.code == 429 and budget is not None:
+                        print("  rate limit: stopping this chunk (resumes next time)", flush=True)
+                        return 0
                     if e.code == 429:
                         print("  rate limit; waiting 10 minutes", flush=True)
                         time.sleep(600)
@@ -621,6 +669,7 @@ def main(argv=None):
     f = sub.add_parser("fetch-crypto")
     f.add_argument("--coins", default=",".join(COINS))
     f.add_argument("--pause", type=float, default=75.0)
+    f.add_argument("--max-requests", type=int, default=0, help="stop after N requests (0: no limit)")
     sub.add_parser("fetch-daily")
     r = sub.add_parser("run")
     r.add_argument("--write", nargs="?", const=os.path.join(RESULTS, "candles.json"))
