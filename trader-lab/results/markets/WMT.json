@@ -1,0 +1,382 @@
+{
+ "asset": "WMT",
+ "class": "stock",
+ "peer": "SPY",
+ "cost_bps": 3.0,
+ "is_end": "2014-12-31",
+ "first_day": "2000-01-03",
+ "candidates": 854410,
+ "conditions": 200,
+ "days_post": 2991,
+ "days_pre": 3773,
+ "bh_sharpe_post": 0.6772044663597865,
+ "reality_check": {
+  "M": 854410,
+  "n": 2991,
+  "best_mean_bps": 5.986987971919897,
+  "best_t": 4.751172603845807,
+  "rc_p": 0.08,
+  "spa_p": 0.45,
+  "bonferroni_z": 5.423265674731605,
+  "rw_crit_t": 6.416864308353904,
+  "rw_rejects": 0,
+  "passes": false,
+  "across_markets": {
+   "alpha": 0.000819672131147541,
+   "rw_crit_t": 8.971850298512535,
+   "rw_rejects": 0,
+   "passes": false
+  }
+ },
+ "n_t3": 333,
+ "n_bonferroni": 0,
+ "n_sharpe_over_bh": 69201,
+ "best_sharpe": 1.398141352814764,
+ "share_positive_post": 0.3908346110181295,
+ "best_post": [
+  {
+   "rule": "entry:next_wd0",
+   "params": {
+    "tp": 0.02,
+    "sl": 0.02,
+    "T": 14
+   },
+   "post_t": 4.751172603845807,
+   "is_t": 0.33626029168079963,
+   "alpha_bp_day": 5.986987971919897,
+   "sharpe": 1.398141352814764
+  },
+  {
+   "rule": "entry:next_wd0",
+   "params": {
+    "tp": 0.02,
+    "sl": 0.02,
+    "T": 30
+   },
+   "post_t": 4.710129046733078,
+   "is_t": 0.25278629606525704,
+   "alpha_bp_day": 5.944841653814403,
+   "sharpe": 1.387947054361119
+  },
+  {
+   "rule": "entry:next_wd0",
+   "params": {
+    "tp": 0.02,
+    "sl": 0.02,
+    "T": 60
+   },
+   "post_t": 4.710129046733078,
+   "is_t": 0.25278629606525704,
+   "alpha_bp_day": 5.944841653814403,
+   "sharpe": 1.387947054361119
+  },
+  {
+   "rule": "entry:next_wd0",
+   "params": {
+    "tp": 0.06,
+    "sl": 0.02,
+    "T": 14
+   },
+   "post_t": 4.532440659648723,
+   "is_t": 0.6562168000789643,
+   "alpha_bp_day": 5.836264174737373,
+   "sharpe": 1.2661782143193656
+  },
+  {
+   "rule": "entry:next_wd0",
+   "params": {
+    "tp": 0.06,
+    "sl": 0.02,
+    "T": 30
+   },
+   "post_t": 4.3637184431130445,
+   "is_t": 1.2880698415583078,
+   "alpha_bp_day": 5.6764290314613985,
+   "sharpe": 1.2504535138488957
+  },
+  {
+   "rule": "pair:copper_gold_down21&turn_of_month",
+   "params": {
+    "hold": 3,
+    "dir": "long_when"
+   },
+   "post_t": 4.243144235957826,
+   "is_t": -0.11387982540193163,
+   "alpha_bp_day": 3.5327104252625503,
+   "sharpe": 1.3066134913645806
+  },
+  {
+   "rule": "entry:next_wd0",
+   "params": {
+    "tp": 0.06,
+    "sl": 0.02,
+    "T": 60
+   },
+   "post_t": 4.208414760700946,
+   "is_t": 1.226983049555688,
+   "alpha_bp_day": 5.496646826054173,
+   "sharpe": 1.2101003752020005
+  },
+  {
+   "rule": "entry:turn_of_month",
+   "params": {
+    "tp": 0.06,
+    "sl": 0.1,
+    "T": 60
+   },
+   "post_t": 4.173019454204942,
+   "is_t": 1.0612758772341766,
+   "alpha_bp_day": 5.211859031157904,
+   "sharpe": 1.2019971640955593
+  },
+  {
+   "rule": "entry:next_wd0",
+   "params": {
+    "tp": 0.02,
+    "sl": 0.02,
+    "T": 7
+   },
+   "post_t": 4.170102395667988,
+   "is_t": 0.15994692403080094,
+   "alpha_bp_day": 5.081738400633539,
+   "sharpe": 1.2722862463100808
+  },
+  {
+   "rule": "entry:next_wd0",
+   "params": {
+    "tp": 0.06,
+    "sl": 0.04,
+    "T": 14
+   },
+   "post_t": 4.124244436356214,
+   "is_t": -0.7222555439718934,
+   "alpha_bp_day": 4.952550340366843,
+   "sharpe": 1.1442531848448827
+  }
+ ],
+ "top_is": [
+  {
+   "rule": "pair:ret126<0&ret15<0",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": 1.0240949418637866,
+   "is_t": 3.9958008309132085,
+   "alpha_bp_day": 1.1134937757877887,
+   "sharpe": 0.8344180378838867
+  },
+  {
+   "rule": "andnot:c<ma50&!ret126>0",
+   "params": {
+    "hold": 7,
+    "dir": "long_when"
+   },
+   "post_t": -1.0429630204596034,
+   "is_t": 3.986819057608604,
+   "alpha_bp_day": -1.3674253936902714,
+   "sharpe": 0.36674006938917303
+  },
+  {
+   "rule": "andnot:ret126<0&!ret15>0",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 0.0833388501692618,
+   "is_t": 3.9849844487195005,
+   "alpha_bp_day": 0.08573281267628294,
+   "sharpe": 0.5546690034032331
+  },
+  {
+   "rule": "pair:c<ma50&ret3<0",
+   "params": {
+    "hold": 10,
+    "dir": "long_when"
+   },
+   "post_t": -0.0192804503240567,
+   "is_t": 3.939944526652366,
+   "alpha_bp_day": -0.02398869740880759,
+   "sharpe": 0.5904657802717361
+  },
+  {
+   "rule": "pair:ret126<0&ret15<0",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 0.08717983314402068,
+   "is_t": 3.8534668502887883,
+   "alpha_bp_day": 0.08941412290277502,
+   "sharpe": 0.5496695297161501
+  },
+  {
+   "rule": "pair:ma20<ma100&rsi2<10",
+   "params": {
+    "hold": 5,
+    "dir": "long_when"
+   },
+   "post_t": 1.3257660561883136,
+   "is_t": 3.7550547696318897,
+   "alpha_bp_day": 1.2150873036525112,
+   "sharpe": 0.6451529800478191
+  },
+  {
+   "rule": "andnot:c<ma50&!ret252>0",
+   "params": {
+    "hold": 3,
+    "dir": "long_when"
+   },
+   "post_t": -0.9712640321345053,
+   "is_t": 3.7361846968421313,
+   "alpha_bp_day": -0.9894264292043142,
+   "sharpe": 0.35561614358986693
+  },
+  {
+   "rule": "andnot:c<ma50&!ma20>ma100",
+   "params": {
+    "hold": 7,
+    "dir": "long_when"
+   },
+   "post_t": -0.8366200749384678,
+   "is_t": 3.729066881897053,
+   "alpha_bp_day": -1.046718509054866,
+   "sharpe": 0.3142858527538588
+  },
+  {
+   "rule": "pair:ibs>0.8&rsi2>90",
+   "params": {
+    "hold": 5,
+    "dir": "long_unless"
+   },
+   "post_t": -0.2811909507183784,
+   "is_t": 3.7232830277611737,
+   "alpha_bp_day": -0.3656001349368185,
+   "sharpe": 0.6358194262637539
+  },
+  {
+   "rule": "pair:ma20<ma100&rsi2<10",
+   "params": {
+    "hold": 7,
+    "dir": "long_when"
+   },
+   "post_t": 1.3315882515506547,
+   "is_t": 3.7146711917365702,
+   "alpha_bp_day": 1.2928797321817906,
+   "sharpe": 0.6767097482116888
+  },
+  {
+   "rule": "pair:next_wd0&rsi14<40",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": 1.609699762567277,
+   "is_t": 3.693037660309122,
+   "alpha_bp_day": 1.035423956476079,
+   "sharpe": 0.7205983801511708
+  },
+  {
+   "rule": "pair:ma20<ma100&ret15<0",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": 1.044731539407758,
+   "is_t": 3.6564493145404904,
+   "alpha_bp_day": 1.193945608480282,
+   "sharpe": 0.6349147854889793
+  },
+  {
+   "rule": "andnot:rsi14>60&!next_m11",
+   "params": {
+    "hold": 1,
+    "dir": "short_when"
+   },
+   "post_t": -1.2921551163407894,
+   "is_t": 3.6384428449892665,
+   "alpha_bp_day": -1.3366591495835356,
+   "sharpe": -0.5128948115364304
+  },
+  {
+   "rule": "pair:ma50<ma200&ret15<0",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": 0.5621595130812141,
+   "is_t": 3.6285456239921228,
+   "alpha_bp_day": 0.45068963386681116,
+   "sharpe": 0.6648952856864
+  },
+  {
+   "rule": "andnot:c<ma250&!up_on_vol",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 0.24202458027641266,
+   "is_t": 3.625707550785808,
+   "alpha_bp_day": 0.2631112513301033,
+   "sharpe": 0.5334418355249937
+  },
+  {
+   "rule": "andnot:c<ma50&!c>ma250",
+   "params": {
+    "hold": 7,
+    "dir": "long_when"
+   },
+   "post_t": -0.7949738444290116,
+   "is_t": 3.622663709914027,
+   "alpha_bp_day": -1.0467569183099144,
+   "sharpe": 0.4700548854731137
+  },
+  {
+   "rule": "andnot:c<ma250&!ret5>0",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 0.5731609739277745,
+   "is_t": 3.6064097060809397,
+   "alpha_bp_day": 0.5152723837412175,
+   "sharpe": 0.5650329920118814
+  },
+  {
+   "rule": "andnot:ma10<ma50&!ret126>0",
+   "params": {
+    "hold": 7,
+    "dir": "long_when"
+   },
+   "post_t": -0.6274812942980443,
+   "is_t": 3.5958164956512877,
+   "alpha_bp_day": -0.7845586690029327,
+   "sharpe": 0.4428804087255103
+  },
+  {
+   "rule": "andnot:c<ma250&!rv_falling",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": -1.099017144703925,
+   "is_t": 3.5902165443958967,
+   "alpha_bp_day": -0.8887670210954837,
+   "sharpe": 0.019900103912190697
+  },
+  {
+   "rule": "pair:c<ma250&rv_rising",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": -1.099017144703925,
+   "is_t": 3.5902165443958967,
+   "alpha_bp_day": -0.8887670210954837,
+   "sharpe": 0.019900103912190697
+  }
+ ],
+ "top_is_mean_post_t": -0.009010938543711666,
+ "corr_is_post_t": 0.4872604414136837,
+ "seconds": 2138
+}
