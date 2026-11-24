@@ -208,6 +208,17 @@ winner for the last 3 days (10 bp a round trip for two legs).
 Right sign before 2020, gone since. The month-end bond effect that the audit found real (IEF over the
 last 3 days) is about bond index extension, not this stock-bond rebalancing flow.
 
+### 2026-11-24, study 10 (`study10.py`): natural gas storage report (Thursday 10:30) on UNG. 0 PASS of 3
+
+722 days of hourly UNG (2023-12 to 2026-11), 144 report Thursdays. At 2 bp a round trip:
+continuation of the 10:30 bar to the close -16.6 bp (t -1.13); fading it +12.6 bp (t 0.86); last half
+hour in its direction -4.6 bp (t -1.97). Nothing passes on report days.
+Side note (a control, not a pre-registered rule): on the other weekdays the 10:30 bar's direction
+continued to the close, +14.8 bp at 2 bp (t 2.32) but t 1.85 at 5 bp. Below every bar; logged only as
+a possible forward-test idea, not a result.
+**OPEC production-cut drift:** not testable with free data: only ~6-8 surprise cut announcements since
+2014, too few for t >= 2 under any rule. Removed from the queue.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
@@ -224,10 +235,10 @@ Neither is a 1-3 day trading edge.
 3. ~~Diversified commodity trend + carry~~ done (study 6): FAIL, whipsaw 2014-2019.
 4. ~~Extreme-day fades, Brent-WTI, crack spread~~ done (study 7): FAIL.
 5. Energy equities: XLE/XOP vs oil (beta-hedged residual momentum), daily.
-6. OPEC cut drift: needs a hand-built list of meeting dates.
+6. ~~OPEC cut drift~~ untestable (too few events); ~~gas storage report~~ done (study 10): FAIL.
 7. ~~Check momentum candidates for crash dependence~~ done (study 3): crash-driven.
 8. ~~EIA 10:30 Wednesday reaction~~ done (study 4); ~~EIA-day intraday momentum~~ done (study 5).
 9. ~~Basis-momentum on USO/USL~~ done (study 5): positive, not significant.
 
-**Rules tried so far: 54** (oil brain; the tournament adds ~2,930) (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
-study 7: 7, study 8: 5, study 9: 2; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
+**Rules tried so far: 57** (oil brain; the tournament adds ~2,930) (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
+study 7: 7, study 8: 5, study 9: 2, study 10: 3; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
