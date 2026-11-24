@@ -41,7 +41,7 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 - power of the paper-trial bar (`power.py`)
 
 **B. Next, in order:**
-1. **Portfolio mixes for the monthly plan, without forecasting.** Stocks with bonds and gold (100/0,
+1. ~~**Portfolio mixes for the monthly plan, without forecasting.**~~ Done 2026-11-24 (`mixes.py`, see Log). Stocks with bonds and gold (100/0,
    80/20, 60/40, a three-way mix) on ETFs since 2004, rebalanced yearly. Measure the cost in return
    of each step down in drawdown, so the plan's mix can be chosen by risk tolerance. `parity.py`
    data is reused.
@@ -83,6 +83,24 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 7. **Earnings-day drift and the earnings announcement premium** for single stocks (needs an earnings calendar from trader-analyst).
 
 ## Log
+
+### 2026-11-24: plan item B1, stock / bond / gold mixes (`mixes.py`, descriptive)
+
+Rebalanced each January, 2005-01 to 2026-10, dividends reinvested, 5 bp per unit of turnover:
+
+| mix | per year | volatility | Sharpe | deepest drop | 2008 | 2022 |
+| --- | --- | --- | --- | --- | --- | --- |
+| SPY 100 | 10.7% | 14.8% | 0.65 | 51% | -36.8% | -18.2% |
+| 80/20 SPY/IEF | 9.6% | 11.7% | 0.69 | 39% | -25.9% | -17.6% |
+| 60/40 | 8.2% | 8.9% | 0.73 | 27% | -14.9% | -17.0% |
+| 60/30/10 with gold | 8.9% | 9.2% | 0.79 | 27% | -16.2% | -15.5% |
+| 40/40/20 with gold | 8.2% | 7.7% | 0.83 | 18% | -6.6% | -13.5% |
+| VT 80 / IEF 20 (from 2009) | 9.7% | 12.4% | 0.70 | 24% | n/a | -17.4% |
+
+- Each step down in risk cost about 1 to 1.5 points of yearly return, and roughly halved the worst crash.
+- Bonds failed as a hedge in 2022, when stocks and bonds fell together.
+- Gold helped over this window, but its 2005-2026 run is hindsight and may not repeat.
+- No mix is "best": the right one is the deepest drop the owner can sit through without selling.
 
 ### 2026-11-24: widened plan, part A. Only the market premium survives; no factor ETF beats SPY; the trial bar was too lenient
 

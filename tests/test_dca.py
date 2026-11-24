@@ -36,5 +36,20 @@ class Dca(unittest.TestCase):
         self.assertLess(p["value"], p["invested"])
 
 
+
+@unittest.skipIf(np is None, "numpy not installed")
+class Mixes(unittest.TestCase):
+    def test_rebalance_each_january(self):
+        mx = load("trader-lab", "mixes")
+        months = ["2020-%02d" % m for m in range(1, 13)] + ["2021-01"]
+        rets = {"A": {m: 0.10 for m in months}, "B": {m: 0.0 for m in months}}
+        r = mx.simulate({"A": 0.5, "B": 0.5}, rets, months)
+        self.assertAlmostEqual(r[0], 0.05)                      # starts at 50/50
+        self.assertGreater(r[11], r[0])                         # A drifted up during the year
+        self.assertLess(r[12], 0.05)                            # reset to 50/50 in January, minus cost
+        self.assertAlmostEqual(r[12], 0.05 - sum(abs(0.5 - w) for w in (
+            1.1 ** 12 / (1.1 ** 12 + 1), 1 / (1.1 ** 12 + 1))) * 5e-4, places=9)
+
+
 if __name__ == "__main__":
     unittest.main()

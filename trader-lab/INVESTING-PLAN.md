@@ -43,6 +43,17 @@ Every 10-year window:
 - **VT:** 100% of windows ended with more than went in. The worst gained 3.6% a year.
 - **SPY over 5-year windows:** only 86% ended ahead.
 
+How much risk: from `python3 trader-lab/mixes.py`, rebalanced each January, 2005-2026.
+
+| mix | per year | deepest drop | 2008 |
+| --- | --- | --- | --- |
+| 100% stocks (SPY) | 10.7% | −51% | −37% |
+| 80% stocks / 20% Treasuries (IEF) | 9.6% | −39% | −26% |
+| 60 / 40 | 8.2% | −27% | −15% |
+| 60 / 30 / 10 gold | 8.9% | −27% | −16% |
+
+Pick the deepest drop you could watch without selling. Each step safer cost about 1 to 1.5% a year.
+
 Halving in a crash is normal on the way. The plan only works if you keep buying through it.
 
 ## 2. Trading: demo only, until the trial passes
