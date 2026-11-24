@@ -219,6 +219,26 @@ a possible forward-test idea, not a result.
 **OPEC production-cut drift:** not testable with free data: only ~6-8 surprise cut announcements since
 2014, too few for t >= 2 under any rule. Removed from the queue.
 
+### 2026-11-24, study 11 (`study11.py`): overnight move -> daytime move, USO and XLE. 0 PASS of 6
+
+Sources: Energy Economics 2017 (inventory announcements, intraday CL); Wen et al. 2021 (USO, overnight
+carries the signal); INE China 2021 (night predicts day negatively). Trade open -> close in the
+direction (or against) the overnight gap, 10 bp a day traded.
+
+| rule | gross post-2014 Sharpe | net post-2014 | t | verdict |
+|---|---|---|---|---|
+| continuation, USO | -0.04 | -0.99 | -3.56 | FAIL |
+| reversal, USO | 0.04 | -0.91 | -3.27 | FAIL |
+| continuation, big gaps only, USO | 0.10 | -0.53 | -1.90 | FAIL |
+| continuation, XLE | 0.06 | -1.12 | -4.03 | FAIL |
+| reversal, XLE | -0.06 | -1.24 | -4.44 | FAIL |
+| continuation, big gaps only, XLE | 0.05 | -0.72 | -2.59 | FAIL |
+
+Before costs the overnight gap says nothing about the US daytime move in either direction (gross
+Sharpe within +/-0.1); paying the spread twice a day turns every version into a steady loser.
+Sources: https://www.sciencedirect.com/science/article/abs/pii/S0140988316302110 ,
+https://ideas.repec.org/a/eee/ecmode/v95y2021icp374-384.html , https://ideas.repec.org/a/eee/ecmode/v96y2021icp209-219.html
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
@@ -240,5 +260,5 @@ Neither is a 1-3 day trading edge.
 8. ~~EIA 10:30 Wednesday reaction~~ done (study 4); ~~EIA-day intraday momentum~~ done (study 5).
 9. ~~Basis-momentum on USO/USL~~ done (study 5): positive, not significant.
 
-**Rules tried so far: 57** (oil brain; the tournament adds ~2,930) (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
-study 7: 7, study 8: 5, study 9: 2, study 10: 3; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
+**Rules tried so far: 63** (oil brain; the tournament adds ~2,930) (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
+study 7: 7, study 8: 5, study 9: 2, study 10: 3, study 11: 6; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
