@@ -173,6 +173,27 @@ after a shock, oil tends to keep going, not snap back. This contradicts the reve
 fits short-term momentum. The flipped rule ("follow a +/-2.5 sd day for 5 days") was NOT
 pre-registered and its IS was flat (+0.08), so it is only a hypothesis for a forward test.
 
+### 2026-11-24, study 8 (`study8.py`, data `fetch_cot.py`): CFTC positioning in WTI. 0 PASS of 5
+
+CFTC Commitments of Traders (legacy 1986-, disaggregated 2006-), WTI code 067651. Positions are
+as of Tuesday and released Friday 15:30 ET; the signal is used from the next trading day's close
+(no look-ahead), traded on USO.
+
+| rule | IS | OOS | HOLDOUT | post-2014 | t | placebo p | verdict |
+|---|---|---|---|---|---|---|---|
+| K1 hedgers (commercials) bought last week -> long (Kang et al. 2020) | 0.09 | 0.09 | 0.37 | 0.26 | 0.92 | 0.12 | FAIL |
+| K2 producers/merchants bought -> long | -0.32 | 0.10 | -0.27 | -0.12 | -0.43 | 0.57 | FAIL |
+| K3 fade managed-money weekly change | 0.49 | -0.14 | 0.13 | 0.02 | 0.08 | 0.41 | FAIL |
+| K4 hedgers' 4-week change | 0.27 | -0.08 | 0.06 | 0.01 | 0.02 | 0.46 | FAIL |
+| K5 hedging pressure level high -> long (insurance premium) | 0.11 | -0.68 | -0.13 | -0.36 | -1.30 | 0.97 | FAIL |
+
+**Reading:** the liquidity premium keeps the paper's sign (K1 positive in every period) but is
+far too weak for crude alone once the 3-day publication lag is respected. The papers measure
+it across many commodities, and often from the Tuesday position date, which a trader cannot
+use until Friday. The level premium is negative, as Maréchal (2023) found.
+Latest report (2026-11-17): commercials net -4.5% of open interest, +0.8 pt on the week;
+managed money net +0.8%, -0.5 pt (speculators trimming longs).
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
@@ -184,8 +205,8 @@ Neither is a 1-3 day trading edge.
 
 1. Forward-test "follow a +/-2.5 sd USO day for 5 days" from 2026-11-24 (not pre-registered;
    only forward results count). Log each event in oil-brain/forward.csv.
-2. CFTC COT liquidity premium (Kang, Rouwenhorst & Tang 2020): weekly change in producer/merchant
-   net position in crude; needs www.cftc.gov (ask the user to allow the host).
+2. ~~CFTC COT signals~~ done (study 8): FAIL. Hosts publicreporting.cftc.gov and www.cftc.gov are
+   allowed (2026-11-24); refresh with fetch_cot.py.
 3. ~~Diversified commodity trend + carry~~ done (study 6): FAIL, whipsaw 2014-2019.
 4. ~~Extreme-day fades, Brent-WTI, crack spread~~ done (study 7): FAIL.
 5. Energy equities: XLE/XOP vs oil (beta-hedged residual momentum), daily.
@@ -194,5 +215,5 @@ Neither is a 1-3 day trading edge.
 8. ~~EIA 10:30 Wednesday reaction~~ done (study 4); ~~EIA-day intraday momentum~~ done (study 5).
 9. ~~Basis-momentum on USO/USL~~ done (study 5): positive, not significant.
 
-**Rules tried so far: 47** (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
-study 7: 7; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
+**Rules tried so far: 52** (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
+study 7: 7, study 8: 5; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
