@@ -88,8 +88,34 @@ def sec_get(url, ua):
 
 
 def ny_from_sec(ts):
-    """SEC acceptanceDateTime ('2019-10-30T16:31:05.000Z', actually Eastern wall time) -> naive NY datetime."""
-    return datetime.datetime.strptime(ts[:19], "%Y-%m-%dT%H:%M:%S")
+    """SEC acceptanceDateTime ('2019-10-30T20:31:05.000Z', UTC) -> naive New York datetime.
+
+    Execution fix after the first fetch (before any test run): the original assumed the 'Z' stamp was Eastern
+    wall time, but Apple's 16:30 ET releases are stamped 20:30Z (EDT) / 21:30Z (EST), so it is UTC."""
+    u = datetime.datetime.strptime(ts[:19], "%Y-%m-%dT%H:%M:%S")
+    y = u.year
+
+    def sunday(month, n):  # n-th Sunday of the month (n = -1: last)
+        if n < 0:
+            d = datetime.date(y, month + 1, 1) - datetime.timedelta(days=1)
+            return d - datetime.timedelta(days=(d.weekday() + 1) % 7)
+        d = datetime.date(y, month, 1)
+        return d + datetime.timedelta(days=(6 - d.weekday()) % 7 + 7 * (n - 1))
+    # US Eastern DST (no zoneinfo on Python 3.8): 2:00 local; from 2007 2nd Sun Mar - 1st Sun Nov, before
+    # that 1st Sun Apr - last Sun Oct. In UTC: starts 07:00, ends 06:00.
+    a, b = (sunday(3, 2), sunday(11, 1)) if y >= 2007 else (sunday(4, 1), sunday(10, -1))
+    start = datetime.datetime.combine(a, datetime.time(7))
+    end = datetime.datetime.combine(b, datetime.time(6))
+    return u - datetime.timedelta(hours=4 if start <= u < end else 5)
+
+
+# Execution fix (before any test run): SEC's ticker map points at today's registrant only, which drops the
+# "company's full SEC submissions history" the design asks for when the issuer re-registered under a new CIK.
+PREDECESSOR_CIKS = {
+    "XOM": [34088],             # Exxon Mobil Corp, before the 2026 ExxonMobil Holdings reorganisation
+    "GOOGL": [1288776],         # Google Inc., before Alphabet (2015)
+    "AVGO": [1441634, 1649338],  # Avago Technologies (2009-15), Broadcom Ltd (2016-18)
+}
 
 
 def cmd_fetch(a):
@@ -102,11 +128,14 @@ def cmd_fetch(a):
         if s not in cik:
             print("%-5s no CIK" % s)
             continue
-        sub = sec_get("https://data.sec.gov/submissions/CIK%s.json" % cik[s], ua)
-        blocks = [sub["filings"]["recent"]]
-        for f in sub["filings"].get("files", []):
+        blocks = []
+        for c in [cik[s]] + ["%010d" % p for p in PREDECESSOR_CIKS.get(s, [])]:
+            sub = sec_get("https://data.sec.gov/submissions/CIK%s.json" % c, ua)
+            blocks.append(sub["filings"]["recent"])
+            for f in sub["filings"].get("files", []):
+                time.sleep(0.15)
+                blocks.append(sec_get("https://data.sec.gov/submissions/%s" % f["name"], ua))
             time.sleep(0.15)
-            blocks.append(sec_get("https://data.sec.gov/submissions/%s" % f["name"], ua))
         ev = set()
         for b in blocks:
             for form, items, acc in zip(b["form"], b.get("items", [""] * len(b["form"])), b["acceptanceDateTime"]):

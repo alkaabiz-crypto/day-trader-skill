@@ -84,6 +84,41 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 
 ## Log
 
+### 2026-11-24: news as a signal, post-earnings drift on 30 stocks (`news_events.py`). FAIL, no news edge
+
+Pre-registered (commit d30874a, text fix a0e96c0) before any data was fetched. Events: every SEC 8-K with
+item 2.02 (earnings release) for the 30 single stocks, 2,320 reaction days; reaction day = first close after
+the filing's acceptance time in New York. Rule: after a reaction of at least k%, follow it (or long only),
+enter at the next close, hold H days; score = return minus the equal-weight return of all 30 stocks, minus
+10 or 20 bps. Grid of 12 (k 2/4, H 5/20/60, both/long), chosen on IS 2006-2014; OOS 2015-2020; HOLDOUT
+2021+. t-stats over monthly averages. Placebo: the same rule on big moves with no earnings filing within 5
+trading days, resampled to the same trade count 1,000 times.
+
+Chosen on IS: **k 4%, hold 20 days, long only** (long after an earnings jump of 4%+). Means are bp per
+trade (20-day hold), averaged by month:
+
+| cost | IS t (207 tr, mean) | OOS (178 tr) | HOLDOUT (208 tr) | post-IS t (386 tr, mean) | big moves w/o earnings | placebo p |
+| --- | --- | --- | --- | --- | --- | --- |
+| 10 bp | 1.12 (56.3 bp) | 84.3 bp, t 1.43 | 37.3 bp, t 0.32 | 0.92 (60.4 bp) | 89.6 bp | 0.625 |
+| 20 bp | 0.92 (46.3 bp) | 74.3 bp, t 1.26 | 27.3 bp, t 0.24 | 0.77 (50.4 bp) | 79.6 bp | 0.625 |
+
+Verdict: **FAIL**. Not even the best IS variant reaches t 2 (1.12), post-IS t is under 1, and the placebo
+kills it outright: buying after big up days *without* earnings news earned more (89.6 bp) than after
+earnings jumps (60.4 bp); 62.5% of random placebo draws beat the real trades. Whatever positive drift there
+is in these names (survivor-biased winners) comes from "big move", not from the news. Consistent with the
+literature saying post-earnings drift has largely gone in large caps. The news skill stays a context tool,
+not a signal.
+
+Data checks: about 4 earnings 8-Ks a year for US filers (SHOP 8, ARM 0: foreign filers, as stated). Spot
+checks: AAPL 2015-01-27 after close -> 2015-01-28 +5.7%; NFLX 2013-10-21 -> 10-22 -9.1%; META 2022-02-02 ->
+02-03 -26.4%; XOM's pre-market filings react the same day. Two execution fixes made after the first fetch
+and before the test ever ran (design untouched): (1) SEC's acceptanceDateTime is UTC, not Eastern as the
+code assumed (Apple's 16:30 ET releases are stamped 20:30Z/21:30Z), now converted to New York time; (2)
+SEC's ticker map points only at today's registrant, which had dropped history for XOM (2 events; a 2026
+holding-company reorganisation), GOOGL (Google Inc. before 2015) and AVGO (Avago, Broadcom Ltd); their
+predecessor CIKs are now included (XOM 128, GOOGL 93, AVGO 72). Results: `results/news-events.json`.
+Research, not financial advice.
+
 ### 2026-11-24: plan item B1, stock / bond / gold mixes (`mixes.py`, descriptive)
 
 Rebalanced each January, 2005-01 to 2026-10, dividends reinvested, 5 bp per unit of turnover:
