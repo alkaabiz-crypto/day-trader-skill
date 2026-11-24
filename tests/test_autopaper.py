@@ -77,7 +77,7 @@ class Autopaper(unittest.TestCase):
         def skill(args):
             name = args[0]
             if "scan.py" in name:
-                return {"hits": [{"symbol": "AAA"}, {"symbol": "BBB"}]}, None
+                return {"hits": [{"symbol": "AAA", "bar_start": "11:30"}, {"symbol": "BBB", "bar_start": "11:35"}]}, None
             if "entry.py" in name:
                 return {"status": "triggered", "minutes_since": 30, "last": {"close": 100.0, "vs_level_pct": 0.2}}, None
             if "exit.py" in name:
@@ -91,6 +91,64 @@ class Autopaper(unittest.TestCase):
         self.assertEqual([p["symbol"] for p in new], ["AAA"])
         self.assertAlmostEqual(s["cash"], 10000 - 20 * 100.02)
         self.assertTrue(any("BBB: risk BLOCK" in x for x in log))
+
+
+class Books(unittest.TestCase):
+    def test_fresh_window(self):
+        now = datetime.datetime(2026, 11, 25, 10, 22)
+        self.assertTrue(ap.fresh("10:00", now, 30))      # closed 10:05, 17 minutes ago
+        self.assertFalse(ap.fresh("09:45", now, 30))     # closed 9:50, 32 minutes ago
+        self.assertFalse(ap.fresh(None, now, 30))
+
+    def test_sip_pick_ranks_by_relative_volume(self):
+        days = {}
+        for k, (s, v_today, green) in enumerate([("A", 3000, True), ("B", 2000, False), ("C", 1100, True)]):
+            d = {"2026-11-%02d" % (i + 1): [{"t": "09:30", "o": 10, "h": 11, "l": 9, "c": 10.5, "v": 1000}]
+                 for i in range(14)}
+            o, c = (10, 10.5) if green else (10.5, 10)
+            d["2026-11-25"] = [{"t": "09:30", "o": o, "h": 11, "l": 9.8, "c": c, "v": v_today}]
+            days[s] = d
+        picks = ap.sip_pick(days, "2026-11-25")
+        self.assertEqual([p[0] for p in picks], ["A", "B"])          # C's ratio 1.1 is under 1.5
+        self.assertEqual(picks[0][1:3], (1, 11))                     # green: buy stop at the high
+        self.assertEqual(picks[1][1:3], (-1, 9.8))                   # red: short at the low
+
+    def test_sip_order_fills_after_placement_and_stops(self):
+        st = {"cash": 10000.0, "positions": [], "realized": {}, "start": None, "done": [],
+              "orders": [{"symbol": "A", "side": 1, "level": 11.0, "dist": 2.0, "date": "2026-11-25",
+                          "active_from": "09:35"}]}
+        bars = [{"t": "09:30", "o": 10, "h": 12, "l": 9, "c": 11},          # before placement: ignored
+                {"t": "09:35", "o": 10.8, "h": 11.2, "l": 10.7, "c": 11.1},  # fills at 11.00
+                {"t": "09:40", "o": 11, "h": 11.1, "l": 8.9, "c": 9}]        # stop at 9.00
+        closed, log, _ = ap.sip_step(st, lambda s: bars, datetime.datetime(2026, 11, 25, 10, 7))
+        self.assertEqual(closed[0]["why"], "stop")
+        self.assertAlmostEqual(closed[0]["entry"], 11.0)
+        self.assertAlmostEqual(closed[0]["exit"], 9.0)
+        self.assertLess(abs(st["cash"] - (10000 + closed[0]["pnl_usd"])), 0.01)
+
+    def test_short_close_accounting(self):
+        st = {"cash": 10000.0 - 100 * 10.0, "realized": {}}
+        pos = {"symbol": "B", "qty": 100, "entry": 10.0, "side": -1, "date": "2026-11-25", "entry_time": "x"}
+        t = ap.book_close(st, pos, 9.0, "2026-11-25 15:50", "end of day", 0.0)
+        self.assertAlmostEqual(t["pnl_usd"], 100.0)
+        self.assertAlmostEqual(st["cash"], 10100.0)
+
+    def test_fed_buys_day_before_and_sells_at_open(self):
+        import tempfile
+        old = ap.BOOK
+        ap.BOOK = tempfile.mkdtemp()
+        try:
+            bars = [{"t": "15:45", "o": 600, "h": 601, "l": 599, "c": 600.0}]
+            st, closed, log = ap.run_fed(datetime.datetime(2026, 12, 8, 15, 52), lambda s: bars, ["2026-12-09"])
+            self.assertEqual(st["positions"][0]["qty"], 16)
+            ap.save_json(os.path.join(ap.BOOK, "fed_state.json"), st)
+            open_bars = [{"t": "09:30", "o": 603.0, "h": 604, "l": 602, "c": 603.5}]
+            st, closed, log = ap.run_fed(datetime.datetime(2026, 12, 9, 9, 37), lambda s: open_bars, ["2026-12-09"])
+            self.assertEqual(closed[0]["exit"], 603.0)
+            self.assertFalse(st["positions"])
+            self.assertGreater(closed[0]["pnl_usd"], 0)
+        finally:
+            ap.BOOK = old
 
 
 if __name__ == "__main__":
