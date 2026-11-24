@@ -10,3 +10,4 @@ __pycache__/
 oil-brain/audit/data/
 oil-brain/combo/data/
 oil-brain/audit2/data/
+oil-brain/btc_research/*/data/

@@ -329,6 +329,16 @@ grew 8.5%/yr vs the rule's 6.8% since 2014. Robust to neighbours (11 of 12) and 
 and gold futures. Verdict: weak; only on an unlevered ETF (GLD/IAU), never on a financed CFD. The paper
 sleeve stays as registered, as a forward test.
 
+### 2026-11-24, Bitcoin breakout deep research (`btc_research/BTC_REPORT.md`, 4 independent agents)
+
+Real, not curve-fit (288/288 neighbours positive; honest yearly re-tuning +0.65R t 2.47; deflated Sharpe
+0.90-0.94), but smaller than the headline: random entries with the same trend filter and exits earn
++0.19R since 2019, so the breakout adds ~+0.4-0.6R. Longs carry it (+1.20R, t 5.1 since 2015); shorts
+do not (+0.23R; +0.06R across 13 coins). ETH replicates (+0.74R, t 3.0); 12 of 13 coins positive.
+Fading: 2022-now +0.57R (t 1.9). Exness execution: mid-cost case +0.68R, t 2.89. Expect +0.3-0.5R per
+trade. New paper sleeve BTC_BREAKOUT_LONG (long-only, 0.5% risk) registered today; demo tickets now
+0.5% risk with shorts optional at half size.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days

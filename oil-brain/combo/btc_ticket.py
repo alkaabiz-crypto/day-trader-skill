@@ -24,7 +24,7 @@ def arg(name, default):
 
 
 def ticket():
-    bal, risk = arg("--balance", 2000.0), arg("--risk", 0.01)
+    bal, risk = arg("--balance", 2000.0), arg("--risk", 0.005)  # 0.5%: btc_research/BTC_REPORT.md
     b = yf.Ticker("BTC-USD").history(period="1y")[["Open", "High", "Low", "Close"]]
     b.index = b.index.tz_localize(None).normalize()
     today = pd.Timestamp.now(tz="UTC").tz_localize(None).normalize()
@@ -49,6 +49,9 @@ def ticket():
     stop_d = 2 * atr; lots = round(bal * risk / stop_d, 3)
     stop = px - side * stop_d; tp = px + side * 4 * stop_d
     print(f"SIGNAL: {'BUY' if side > 0 else 'SELL'} BTCUSD at market now (open ~${px:,.0f})")
+    if side < 0:
+        lots = round(lots / 2, 3)
+        print("  NOTE: research found no edge in shorts (+0.06R on 13 coins). Optional: take it at HALF size (shown) or skip.")
     print(f"  Volume {lots} lots (risk {risk:.0%} of ${bal:,.0f} = ${bal*risk:,.0f}; stop distance ${stop_d:,.0f})")
     print(f"  Stop loss ${stop:,.0f}   Take profit ${tp:,.0f} (4R)   Close by {(today + pd.Timedelta(days=30)).date()} if neither hits")
     print("  MT5: New Order > BTCUSD > Market Execution > enter Volume, Stop Loss, Take Profit > Sell/Buy.")

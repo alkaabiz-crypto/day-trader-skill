@@ -20,6 +20,9 @@ SYS = {
     "BTC_BREAKOUT": dict(sym="BTC-USD", start=2000, entry="d1", regime="r2", stop=2, trail=None, target=4, maxh=30, cost=10),
     "GLD_PULLBACK": dict(sym="GLD", start=2000, entry="rsi2", regime="r2l", stop=2, trail=3, target=None, maxh=10**6, cost=5),
     "USO_TURTLE": dict(sym="USO", start=2000, entry="d2", regime="r2", stop=2, trail=3, target=None, maxh=10**6, cost=5),
+    # Registered 2026-11-24 after the deep research (btc_research/BTC_REPORT.md): long-only, 0.5% risk.
+    "BTC_BREAKOUT_LONG": dict(sym="BTC-USD", start=2000, entry="d1", regime="r2", stop=2, trail=None, target=4, maxh=30,
+                              cost=10, long_only=True, risk=0.005),
 }
 
 
@@ -50,12 +53,16 @@ def signal(b, s):
         r2 = 100 - 100 / (1 + up / dn); raw = np.where(r2 < 10, 1, 0)
     raw = pd.Series(raw, index=b.index)
     ok = (raw == trend) if s["regime"] == "r2" else ((raw > 0) & (trend > 0))
-    return raw.where(ok, 0), atr
+    sig = raw.where(ok, 0)
+    if s.get("long_only"): sig = sig.clip(lower=0)
+    return sig, atr
 
 
 def main():
     st = json.load(open(STATE)) if os.path.exists(STATE) else {
         k: dict(cash=v["start"], open=None, pending=None, trades=[]) for k, v in SYS.items()}
+    for k, v in SYS.items():  # sleeves registered later start flat with their own cash
+        st.setdefault(k, dict(cash=v["start"], open=None, pending=None, trades=[], last_day=str(pd.Timestamp.now().normalize().date() - pd.Timedelta(days=1))))
     tickets = []
     for name, s in SYS.items():
         b = bars(s["sym"]); sig, atr = signal(b, s); S = st[name]; day = b.index[-1]
@@ -65,7 +72,7 @@ def main():
             if S["pending"] and S["open"] is None:  # fill at this day's open
                 p = S["pending"]; e = float(bar.Open); risk = p["risk_per_unit"]
                 if risk >= 0.0005 * e:
-                    qty = min(0.01 * S["cash"] / risk, S["cash"] / e)
+                    qty = min(s.get("risk", 0.01) * S["cash"] / risk, S["cash"] / e)
                     S["open"] = dict(side=p["side"], entry=e, qty=qty, stop=e - p["side"] * risk, risk=risk,
                                      target=(e + p["side"] * s["target"] * risk) if s["target"] else None,
                                      opened=str(d.date()), days=0)
@@ -96,7 +103,7 @@ def main():
         if S["pending"]:
             p = S["pending"]; side = "BUY" if p["side"] > 0 else "SELL SHORT"
             tickets.append(f"{name}: {side} {s['sym']} at the next open; stop {p['risk_per_unit']:.2f} away "
-                           f"(~{p['risk_per_unit']/last:.1%}); risk 1% of ${S['cash']:,.0f} = ${0.01*S['cash']:.0f}"
+                           f"(~{p['risk_per_unit']/last:.1%}); risk {s.get("risk",0.01):.1%} of ${S['cash']:,.0f} = ${s.get("risk",0.01)*S['cash']:.0f}"
                            + (f"; target {s['target']}R" if s["target"] else "; trailing stop 3 x ATR"))
         elif o:
             tickets.append(f"{name}: HOLD {'long' if o['side']>0 else 'short'} {s['sym']} from {o['entry']:.2f}, stop now {o['stop']:.2f}"
@@ -105,7 +112,7 @@ def main():
             tickets.append(f"{name}: no position, no signal ({s['sym']} {last:.2f})")
     json.dump(st, open(STATE, "w"), indent=1, default=float)
     tot = sum(st[k]["equity"] for k in SYS)
-    print(f"Combo paper trader {dt.date.today()}: ${tot:,.2f} (start $6,000)")
+    print(f"Combo paper trader {dt.date.today()}: ${tot:,.2f} (start ${sum(v['start'] for v in SYS.values()):,})")
     for t in tickets: print("  " + t)
 
 
