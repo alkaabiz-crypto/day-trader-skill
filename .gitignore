@@ -6,3 +6,4 @@ trader-lab/data/alpaca/
 trader-lab/data/alloc/
 trader-lab/results/markets/*.lock
 trader-lab/data/swarm/
+trader-lab/data/news_events/
