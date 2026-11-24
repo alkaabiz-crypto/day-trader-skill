@@ -1,0 +1,14 @@
+{
+ "start": "2026-11-23",
+ "equity": 10000.0,
+ "cash": 10000.0,
+ "positions": {},
+ "orders": [],
+ "history": [
+  {
+   "date": "2026-11-23",
+   "equity": 10000.0
+  }
+ ],
+ "trades": []
+}
