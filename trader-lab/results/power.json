@@ -1,0 +1,29 @@
+{
+ "from": "2022-11-22",
+ "to": "2026-11-23",
+ "days": 995,
+ "signal_days": 422,
+ "trades": 778,
+ "mean_net_bps": -1.3251670951156813,
+ "sd_bps": 21.98231343662667,
+ "trades_per_signal_day": 1.8436018957345972,
+ "same_day_corr": 0.9310436927642085,
+ "per_trade_t_hist": -1.6814619574489473,
+ "scenarios": {
+  "null": {
+   "pass_per_trade_t": 0.11225,
+   "pass_daily_t": 0.03125,
+   "median_days": 38.0
+  },
+  "as-is": {
+   "pass_per_trade_t": 0.06275,
+   "pass_daily_t": 0.0185,
+   "median_days": 39.0
+  },
+  "+5 bp": {
+   "pass_per_trade_t": 0.34225,
+   "pass_daily_t": 0.16325,
+   "median_days": 38.0
+  }
+ }
+}

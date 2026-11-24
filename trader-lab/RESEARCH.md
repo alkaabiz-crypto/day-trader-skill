@@ -26,7 +26,41 @@ result after costs, and whether it was kept. Failures stay in the record.
 | gap | gap over 0.5% or 1%: fade it or go with it, stop at the first bar's extreme | size, mode |
 | sip | stocks in play: only today's top names by first-5-min relative volume (vs 14 days) trade the 5-min ORB, entering on a break of the first bar's high/low | top 5/10, rvol 1.0/1.5, stop 10% of ATR14 or the first bar's range |
 
-## Idea queue (top first)
+## Research plan (widened 2026-11-24)
+
+The lab has tested about 53 million timing rules, and none beats luck after costs. The plan widens
+the question from "which signal beats the market?" to "what reliably improves an investor's result?".
+That covers the premia that survive publication, what investors can actually buy, how to put money
+in, and whether our own tests can be trusted. Every item is pre-registered and tests one hypothesis
+(or uses a Bonferroni bar). No more giant searches after the 62-market one.
+
+**A. Done 2026-11-24** (see Log):
+- factor premia before and after publication (`factors.py`)
+- investable factor ETFs vs SPY (`factor_etfs.py`)
+- lump sum vs spreading in (`dca.py --lump`)
+- power of the paper-trial bar (`power.py`)
+
+**B. Next, in order:**
+1. **Portfolio mixes for the monthly plan, without forecasting.** Stocks with bonds and gold (100/0,
+   80/20, 60/40, a three-way mix) on ETFs since 2004, rebalanced yearly. Measure the cost in return
+   of each step down in drawdown, so the plan's mix can be chosen by risk tolerance. `parity.py`
+   data is reused.
+2. **Forward ledger.** Score every rule that ever came close (`results/frozen.json`) on new data
+   only, monthly, in the daily run. Out of sample in real time is the one test that can't be
+   overfitted.
+3. **Crypto cross-sectional factors.** Liu, Tsyvinski & Wu (2022, JF) "Common Risk Factors in
+   Cryptocurrency": coin momentum, size and market. Pre-registered, weekly, on the top coins. Caveat:
+   dead coins are missing from Yahoo, so a pass would need a survivorship audit.
+4. **FOMC and CPI days.** Lucca & Moench (2015) pre-FOMC drift, using the Fed's public meeting
+   calendar, run as a control (reported dead after 2015).
+5. **FX carry.** Lustig, Roussanov & Verdelhan (2011) carry needs each country's interest rate. On
+   Exness, carry *is* the swap, so test the swap-inclusive version only. Needs a rates source; FRED
+   is not on the network allowlist.
+6. **Survivorship-free S&P 500** (membership history). Unlocks single-stock momentum and reversal
+   without survivor bias, and an honest retest of R3. Needs a membership source not yet allowed on
+   the network.
+
+**C. Older queue** (kept):
 
 - **Oil term structure:** download individual CL / BZ contract months (Yahoo `CLF27.NYM`-style
   tickers) to build front-minus-second spreads; test backwardation-only longs and basis momentum.
@@ -49,6 +83,60 @@ result after costs, and whether it was kept. Failures stay in the record.
 7. **Earnings-day drift and the earnings announcement premium** for single stocks (needs an earnings calendar from trader-analyst).
 
 ## Log
+
+### 2026-11-24: widened plan, part A. Only the market premium survives; no factor ETF beats SPY; the trial bar was too lenient
+
+The user asked to widen the research plan (see "Research plan" above). Four pre-registered studies:
+
+**1. Factor premia before and after publication** (`factors.py`, Ken French data 1926-07 to 2026-09,
+long-short, gross of costs, Newey-West t):
+
+| factor | paper | in-sample mean (t) | after publication (t) | decay | last 10 years (t) | verdict |
+| --- | --- | --- | --- | --- | --- | --- |
+| MKT | equity premium | n/a | +0.75%/month (3.61), from 1990 | n/a | +1.09 (3.41) | SURVIVES |
+| SMB | Banz 1981 | +0.18 (1.28) | +0.04 (0.33) | 78% | -0.22 (-0.80) | no |
+| HML | Fama-French 1992 | +0.42 (2.63) | +0.17 (0.86) | 61% | -0.01 (-0.03) | no |
+| UMD | Jegadeesh-Titman 1993 | +0.82 (4.32) | +0.40 (1.65) | 52% | +0.26 (0.85) | no |
+| RMW | Novy-Marx 2013 | +0.28 (2.55) | +0.15 (0.91) | 46% | +0.18 (0.85) | no |
+| CMA | Fama-French 2015 | +0.32 (3.49) | -0.04 (-0.18) | 112% | -0.04 (-0.17) | no |
+
+The average decay is about 70%, worse than McLean & Pontiff's 58%. Only the plain equity premium
+holds up, and these figures are before costs.
+
+**2. Factor and style ETFs vs SPY** (`factor_etfs.py`, 15 funds, after fund fees, Bonferroni bar
+t >= 2.94). **None adds alpha.**
+- Best alphas: momentum MTUM +1.1%/yr (t 0.48), Nasdaq 100 QQQ +1.2% (t 0.46).
+- Low-volatility funds (USMV, SPLV): smaller drawdowns (19-21% vs 24%) but lower return.
+- World fund VT: -3.3%/yr alpha vs SPY (t -3.12), because US stocks beat the rest of the world from
+  2008 to 2026. That is hindsight: no rule picked the US in 2008.
+
+For the monthly plan, a plain index fund is the right choice. Factor tilts haven't paid.
+
+**3. Lump sum vs spreading in** (`dca.py --lump`, $12,000, all at once vs over 12 months with the
+waiting cash in T-bills):
+- All at once ended ahead 73% of the time (SPY and VT, 10-year horizon), by +2.9% to +3.6% on average.
+- Worst case for all at once: -29% (start in mid-2008).
+
+This matches Vanguard's 2012 study. Spreading in buys peace of mind, not return.
+
+**4. Power of the paper-trial bar** (`power.py`). The trial's exact rules, replayed on 995 sessions
+of 5-minute bars (2022-11 to 2026-11):
+- 422 signal days, 778 trades.
+- Net -1.33 bp a trade at 2 bp cost (t -1.68). The prior is no edge, slightly negative.
+- Same-day trades correlate 0.93, so a per-trade t counts one bet two or three times.
+
+| scenario | passes with per-trade t | passes with daily t |
+| --- | --- | --- |
+| null (zero edge) | **11.2%** | 3.1% |
+| 2022-2026 as it was | 6.3% | 1.8% |
+| real +5 bp edge | 34.2% | 16.3% |
+
+Median trial length: **38 trading days**, not 20, because 30 trades take that long.
+- **Amendment** (`paper/PLAN.md`, stricter only): the bar also needs t >= 2 on daily P&L.
+- Honest reading: the trial mainly guards against luck. With 30 trades it can't confirm a small real
+  edge, and the 4-year replay already leans negative.
+
+Tests: 4 new files, all passing.
 
 ### 2026-11-24: the swarm, 100,000 machine-generated timing rules on 129 ETFs (`swarm.py`). No real edge
 

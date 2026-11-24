@@ -4,6 +4,7 @@
     python3 dca.py                       # $500 a month into SPY and VT, every start since the data begins
     python3 dca.py --monthly 200 --symbols SPY
     python3 dca.py --years 10            # every 10-year window: worst, median, best
+    python3 dca.py --lump 12000          # a lump sum: all at once vs spread over 12 months
 
 Buys on the first trading day of each month at the open, dividend-adjusted prices (dividends
 reinvested), no fees (a broker's commission-free ETF buy). No timing, no selling. Shows the
@@ -76,12 +77,51 @@ def windows(A, monthly, years):
     return out
 
 
+def lump_vs_spread(A, amount, months=12, horizon_years=10):
+    """For every month start with horizon_years of data after it: invest `amount` at that open
+    (lump), or in `months` equal parts at the next month-start opens with the rest in T-bills
+    (spread). Both valued at the horizon. -> list of (start date, lump value, spread value)."""
+    d, o, c, rf = A["d"], A["o"], A["c"], A["rf"]
+    ms = month_starts(d)
+    n = int(round(horizon_years * 252))
+    out = []
+    for k, i in enumerate(ms):
+        if k + months > len(ms) or i + n > len(d):
+            break
+        end = i + n - 1
+        lump = amount / o[i] * c[end]
+        part = amount / months
+        val = 0.0
+        for j in ms[k:k + months]:
+            cash_growth = float(np.prod(1 + rf[i:j]))          # waiting money earns T-bills
+            val += part * cash_growth / o[j] * c[end]
+        out.append((d[i], float(lump), float(val)))
+    return out
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="monthly index-fund plan, historically")
     ap.add_argument("--monthly", type=float, default=500.0)
     ap.add_argument("--symbols", default="SPY,VT")
     ap.add_argument("--years", type=float, default=10.0)
+    ap.add_argument("--lump", type=float, help="compare a lump sum now vs spread over --spread months")
+    ap.add_argument("--spread", type=int, default=12)
     a = ap.parse_args(argv)
+    if a.lump:
+        for sym in a.symbols.split(","):
+            rows = lump_vs_spread(us.load_asset(sym), a.lump, a.spread, a.years)
+            if not rows:
+                continue
+            gap = np.array([(l - s) / s for _, l, s in rows])
+            worst = min(rows, key=lambda r: (r[1] - r[2]) / r[2])
+            print("%s: $%s all at once vs over %d months, valued %g years after the start (%d starts, %s to %s): "
+                  "all at once ended ahead %.0f%% of the time, by %+.1f%% on average (median %+.1f%%); "
+                  "worst case %+.1f%% (start %s)." % (
+                      sym, "{:,.0f}".format(a.lump), a.spread, a.years, len(rows), rows[0][0], rows[-1][0],
+                      100 * (gap > 0).mean(), 100 * gap.mean(), 100 * np.median(gap), 100 * (worst[1] - worst[2]) / worst[2],
+                      worst[0]))
+        print("Money waiting to be invested earns T-bills. History, not a forecast. Research, not financial advice.")
+        return 0
     for sym in a.symbols.split(","):
         A = us.load_asset(sym)
         p = plan(A, a.monthly)

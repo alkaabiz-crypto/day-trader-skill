@@ -212,13 +212,22 @@ def evaluate(rows, cfg):
               "demo_lag_ok": lag is None or lag <= bar["max_demo_lag"]}
     if stress is not None:
         checks["stress_net_positive"] = stress_pnl > 0
+    # Daily t (added 2026-11-24, stricter only): the 2-3 trades of one day are ~0.93 correlated
+    # (power.py), so each day's P&L counts as one observation. Required alongside the per-trade t.
+    by_day = {}
+    for r, x in zip(sh, pnl):
+        by_day[r["date"]] = by_day.get(r["date"], 0.0) + x
+    dv = list(by_day.values())
+    t_daily = (statistics.mean(dv) / statistics.stdev(dv) * math.sqrt(len(dv))) if len(dv) > 2 and statistics.stdev(dv) > 0 else 0.0
+    checks["daily_t_ok"] = t_daily >= bar["min_t"]
     verdict = "IN PROGRESS" if not enough else ("PASS" if all(checks.values()) else "FAIL")
     return {"days": n_days, "trades": len(sh), "net_usd": round(sum(pnl), 2),
             "mean_net_bps": round(statistics.mean(nets), 2) if nets else 0.0, "t": round(t, 2),
             "max_drawdown_usd": round(mdd, 2), "win_rate": (sum(1 for x in nets if x > 0) / len(nets)) if nets else 0.0,
             "demo_trades": len(demo), "demo_lag": lag, "checks": checks, "verdict": verdict,
             "stress_cost_bps": stress, "stress_net_usd": None if stress_pnl is None else round(stress_pnl, 2),
-            "break_even_cost_bps": round(statistics.mean(gross), 2) if gross else None}
+            "break_even_cost_bps": round(statistics.mean(gross), 2) if gross else None,
+            "t_daily": round(t_daily, 2), "trade_days": len(dv)}
 
 
 # ---------------------------------------------------------------- scanner track (simulated, automatic)
@@ -443,6 +452,8 @@ def cmd_report(a):
                                                     r["mean_net_bps"], r["t"], r["max_drawdown_usd"], r["win_rate"] * 100))
     print("Your demo trades recorded: %d%s." % (r["demo_trades"], "" if r["demo_lag"] is None else
                                                 ", lagging the shadow log by %.0f%%" % (r["demo_lag"] * 100)))
+    print("Daily t (each trading day's P&L one observation, %d days): %.2f %s." % (
+        r["trade_days"], r["t_daily"], "ok" if r["checks"]["daily_t_ok"] else "no"))
     print("Bar (needs %d+ days and %d+ trades): net > 0 %s | t >= %.1f %s | drawdown < $%.0f %s | demo lag <= %.0f%% %s" % (
         bar["min_days"], bar["min_trades"], "ok" if r["checks"]["net_positive"] else "no", bar["min_t"],
         "ok" if r["checks"]["t_ok"] else "no", bar["max_drawdown_usd"], "ok" if r["checks"]["drawdown_ok"] else "no",

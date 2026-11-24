@@ -14,12 +14,18 @@ Research, not financial advice. The amounts are yours to choose.
   - VT or a similar global fund holds the whole world, about 9,000 stocks.
   - SPY / VOO / IVV hold the US S&P 500 only.
   - One is enough; a global fund spreads the risk wider.
+  - Factor or "smart beta" funds (momentum, value, quality, low volatility, small value) didn't beat
+    SPY after fees (`factor_etfs.py`, 15 funds, none significant). Their paper premia shrank by about
+    70% after publication (`factors.py`). Keep it plain.
 - **Where:** a broker that sells the real ETF, not a CFD.
   - Exness offers index CFDs, which charge overnight financing (swap) every night, so they're the wrong tool for holding for years.
   - Use a regular stock broker with no commission on ETF buys, and check what the fund and the broker charge each year (aim for under 0.2%).
 - **How:**
   - the same amount on the same day each month
   - set up an automatic buy if the broker offers it
+  - a lump sum you already have: investing it at once beat spreading it over 12 months 73% of the
+    time, by about 3% (`dca.py --lump`). Spreading it is fine if a crash right after would make you
+    quit, since that would cost far more.
   - no timing, no selling when it drops
   - reinvest the dividends
 - **How much:** only money you won't need for at least 5–10 years.
@@ -46,8 +52,9 @@ Halving in a crash is normal on the way. The plan only works if you keep buying 
   then record each result:
   `python3 trader-lab/paper.py record --date YYYY-MM-DD --instrument US500 --side sell --pnl -1.23`.
 - **The bar it must clear:**
-  - at least 20 trading days and 30 trades
-  - net above $0, with t ≥ 2
+  - at least 20 trading days and 30 trades (about 38 trading days in practice)
+  - net above $0, with t ≥ 2 per trade AND t ≥ 2 on daily results (added 2026-11-24, because
+    same-day trades are nearly one bet; `power.py`)
   - drawdown under $60
   - your demo results no more than 30% behind the simulated ones
 - **Costs:** since 2026-11-24 the bar also requires the trial to stay profitable at 5 bp per round
@@ -76,5 +83,7 @@ Halving in a crash is normal on the way. The plan only works if you keep buying 
 - Finish the search across 62 markets, already under way, and log the result.
 - After that, no more giant searches. They make passing harder, not easier. New ideas get tested one
   at a time, from published research, with the rule fixed before looking at the data.
-- **Review date:** when the paper trial reaches 20 trading days, around 2026-12-21. PASS, FAIL or
-  extend, decided by the bar above, not by how it feels.
+- **Review date:** when the paper trial has at least 20 trading days AND 30 trades. The replay puts
+  that at about 38 trading days, around mid-January 2027, not December 21. PASS, FAIL or extend,
+  decided by the bar above, not by how it feels.
+- **Widened research plan:** see "Research plan" in `RESEARCH.md`.

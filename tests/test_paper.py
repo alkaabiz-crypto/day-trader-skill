@@ -133,6 +133,19 @@ class Report(unittest.TestCase):
         self.assertEqual(r["verdict"], "FAIL")
         self.assertAlmostEqual(r["break_even_cost_bps"], 4.6)
 
+    def test_daily_t_counts_a_day_once(self):
+        # 3 identical trades a day: per-trade t is inflated, daily t is not
+        rng = __import__("random").Random(3)
+        rows = []
+        for d in range(1, 29):
+            x = rng.gauss(1.0, 20.0)
+            for _ in range(3):
+                rows.append({"date": "2026-01-%02d" % d, "source": "shadow", "instrument": "US500",
+                             "net_bps": str(x), "pnl_usd": str(x / 10.0)})
+        r = paper.evaluate(rows, dict(CFG, _logged_days=["2026-01-%02d" % d for d in range(1, 29)]))
+        self.assertEqual(r["trade_days"], 28)
+        self.assertAlmostEqual(r["t"] / r["t_daily"], 3 ** 0.5, delta=0.1)
+
     def test_journal_round_trip(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = os.path.join(tmp, "j.csv")

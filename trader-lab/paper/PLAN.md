@@ -65,3 +65,16 @@ the assumed 2 bp (`stress_cost_bps` in `config.json`). This is a stress figure f
 15:30–15:55, not a quoted Exness number. `paper.py report` also prints the cost at which the trial
 breaks even. These trades pay no swap: every one is flat by 15:55 New York, before Exness's rollover.
 Nothing else in the plan changed.
+
+## Amendment 2026-11-24 (2), stricter only
+
+`power.py` replayed these exact rules on 995 sessions (2022-11 to 2026-11). Trades on the same day
+are about 0.93 correlated, so the per-trade t counts one bet two or three times. With zero true edge,
+the bar would pass 11% of the time instead of about 2.5%.
+- The bar now also needs **t >= 2 on daily P&L** (each trading day's total is one observation). With
+  that check the false-pass rate is about 3%.
+- The median trial takes about 38 trading days to reach 30 trades. The review is when both minimums
+  are met, not on a fixed date.
+- The same replay nets -1.33 bp a trade at 2 bp cost (t -1.68), so the honest prior is no edge.
+
+Nothing else changed.
