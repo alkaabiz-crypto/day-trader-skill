@@ -29,11 +29,37 @@ retried by accident.
   Report Wednesday 10:30 ET; Baker Hughes rig count Friday 13:00 ET; NYMEX settlement
   14:28-14:30 ET; CFTC Commitments of Traders Friday 15:30 ET (Tuesday data).
 - **Holidays thin the market:** Thanksgiving (closed Thursday, early close Friday).
-- Literature notes: see "Academic evidence" (filled from the literature review).
+- Literature: see "Academic evidence" below.
 
 ## Academic evidence
 
-_Pending the literature review of 2026-11-24._
+From a literature review on 2026-11-24 (web search summaries of abstracts; paper tables not
+read directly because ssrn.com / nber.org were unreachable, so treat unlisted numbers as
+unverified). Grades: **A** replicated and alive after 2010; **B** published, thin or mixed;
+**C** weak, decayed or not tradable.
+
+| topic | key papers | what they say | grade |
+|---|---|---|---|
+| Curve shape / carry | Szymanowska et al. 2014 JF; Gorton, Hayashi & Rouwenhorst 2013 RoF; Koijen et al. 2018 JFE "Carry"; Erb & Harvey 2006 FAJ | Backwardation (low inventories) earns a premium, mostly **across** commodities. For crude alone, "long when backwardated" is weak (Peterson 2015: mostly random) | A cross-section, B-/C single oil |
+| Basis-momentum | Boons & Porras Prado 2019 JF | 12m return of nearby minus 2nd contract predicts returns, beats basis and momentum (cross-section) | A- cross-section |
+| Time-series momentum | Moskowitz, Ooi & Pedersen 2012 JFE; Hurst, Ooi & Pedersen 2017 | 12m sign, vol-scaled, works across 58 futures; century of evidence Sharpe ~0.77 for a diversified portfolio. Whipsaw years 2009-2013 | A portfolio, noisy for oil alone |
+| Cross-sectional momentum | Miffre & Rallis 2007 JBF; Fuertes, Miffre & Rallis 2010 | Long winners / short losers across 20-30 commodities | B+, needs a broad universe |
+| Hedging pressure (COT) | De Roon et al. 2000 JF; Kang, Rouwenhorst & Tang 2020 JF; Maréchal 2023 | Short-term changes in hedgers' positions earn a liquidity premium (prices rise after hedgers buy); the level premium does not survive | B+ for changes; C for levels in crude |
+| EIA report | Halova, Kurov & Kucher 2014; Ye & Karali 2016; Geman & Li; Rousse & Sévi | A surprise build lowers prices within minutes; overshoot then partial reversal; informed trading before 10:30 | A direction (needs consensus data) |
+| EIA-day intraday momentum | Wen, Indriawan, Lien & Xu 2023 Energy J; Wen et al. 2021 | 10:30-11:00 return predicts the last half hour on EIA days (USO) | B |
+| Goldman roll front-running | Mou 2011 | 3.6%/yr transferred from index rolls (pre-2010); now arbitraged | C |
+| USO roll days | Bessembinder et al. 2016 JFE | ~30 bp cost per roll; deeper books and narrower spreads on roll days; no predatory front-running | B (fact) |
+| Seasonality / weekday | CXO; JP Morgan 2015; Auer 2014 | Mar-May strong, Nov-Dec weak, but too noisy; seasonality factor failed since 2010; Monday weak, not significant | C |
+| Oil -> stocks | Driesprong et al. 2008 JFE; Ready 2018; Thorbecke 2019 | Lagged negative effect pre-2008; decayed; shale era flipped the sign at times | C |
+| OPEC cuts | Demirer & Kutan 2010; IMF 2022 | Drift after cut announcements (1983-2008); later: ~3% jump that fades | B- |
+| Variance risk premium | Trolle & Schwartz 2010 | Implied oil vol exceeds realized on average; needs options | B, not tradable here |
+| Short-term reversal | mixed (Fin. Res. Letters 2020) | No reliable reversal profit across 29 commodities 1979-2017 | C |
+| Liquidity / costs | Chung, Van Ness & Van Ness; Chan et al. (1990s) | Spreads U-shaped by time of day, widest after the open | practical rule: skip the first 5-15 minutes |
+
+**What the literature implies for us:** the robust oil premia (carry, momentum, basis-momentum,
+hedging pressure) are slow (monthly) and strongest in a **diversified cross-section** of
+commodities, not in oil alone. Short-horizon effects (EIA, OPEC, reversal) are either about
+information we do not have (consensus forecasts) or too small after costs.
 
 ## Results log
 
@@ -93,6 +119,26 @@ the report adds noise, not a pattern. Matches the lab's earlier hourly finding
 (skipping Wednesdays did not help). CL=F hourly bars start on the hour, not at :30, so the
 futures test was not valid; USO answers the question.
 
+### 2026-11-24, study 5 (`study5.py`): literature's top intraday and curve ideas. 0 PASS of 9
+
+Intraday momentum into the last half hour (Wen et al. 2021, 2023), hourly USO 2023-12 to 2026-11:
+
+| rule | n | mean at 2 bp | t | win |
+|---|---|---|---|---|
+| EIA Wed: sign(10:30-11:30) -> 15:30-16:00 | 146 | -3.5 bp | -2.00 | 42% |
+| same, only big first moves | 79 | -3.0 bp | -1.26 | 43% |
+| control: other days | 577 | -1.6 bp | -1.36 | 41% |
+| non-EIA: sign(prev close -> 10:30) -> 15:30-16:00 | 577 | -3.0 bp | -2.63 | 39% |
+| control: Wednesdays | 146 | -0.4 bp | -0.22 | 49% |
+
+The published effect is **absent** after publication: gross returns are about zero to slightly
+negative, so costs make it a loser. Do not retry with other bar times (that would be a search).
+
+Basis-momentum proxy (USO minus USL return), month-end, 2009 on:
+252d long/short: OOS 0.42, HOLDOUT 0.37, post-2014 Sharpe 0.39, t 1.39, placebo 0.05, FAIL;
+252d long/flat: t 1.31, FAIL; 63d long/short: t 1.18, FAIL; 63d long/flat: t 1.11, FAIL.
+Positive like the paper says, but for oil alone too weak to clear t >= 2.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
@@ -102,9 +148,19 @@ Neither is a 1-3 day trading edge.
 
 ## Idea queue (top first)
 
-1. Literature review results: add the top hypotheses with precise rules.
-2. ~~Check momentum candidates for crash dependence~~ done (study 3): crash-driven.
-3. ~~EIA 10:30 Wednesday reaction~~ done (study 4): nothing. Still open: settlement 14:30 effect.
+1. **Diversified commodity trend + carry** (where the literature is strongest): equal-weight,
+   vol-scaled TSMOM (Hurst 1/3/12m blend) across liquid commodity ETFs on Yahoo (USO, BNO, UNG,
+   UGA, GLD, SLV, CPER, DBA, CORN, WEAT, SOYB), monthly; then add carry where a 12-month ETF
+   pair exists (USO/USL, UNG/UNL). Long-only alternative: DBC.
+2. CFTC COT liquidity premium (Kang, Rouwenhorst & Tang 2020): weekly change in producer/merchant
+   net position in crude; needs www.cftc.gov (ask the user to allow the host).
+3. Fade extreme non-roll days, split by OVX above/below its 1-year median, hold 1/3/5 days.
 4. Brent-WTI spread (BNO vs USO) mean reversion.
-5. Crack spread (RB + HO vs CL) as a signal for refiners / oil.
-6. CFTC positioning (hedging pressure) if a free data host can be reached.
+5. Crack spread (UGA vs USO) as a signal for oil / refiners.
+6. OPEC cut drift: needs a hand-built list of meeting dates.
+7. ~~Check momentum candidates for crash dependence~~ done (study 3): crash-driven.
+8. ~~EIA 10:30 Wednesday reaction~~ done (study 4); ~~EIA-day intraday momentum~~ done (study 5).
+9. ~~Basis-momentum on USO/USL~~ done (study 5): positive, not significant.
+
+**Rules tried so far: 36** (study 1: 9, study 2: 14, study 4: 4, study 5: 9; study 3 re-scored
+old rules). At this count, a couple of t = 2 results are expected by chance alone.
