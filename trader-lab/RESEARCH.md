@@ -84,6 +84,25 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 
 ## Log
 
+### 2026-11-24: stocks in play and end-of-day reversal on 40 names x 4 years (`sip_long.py`). FAIL
+
+Pre-registered (commit 66d2f0a) while the download had 5 of 40 names. lab.backtest's own gates, unchanged:
+IS = first 50% of the 995 sessions (to 2024-11-19), OOS to 2025-11-21, HOLDOUT after; PASS at both 3 and
+5 bps round trip. Tiingo IEX 5-minute bars, half days cut at 13:00. `results/sip-long.json`.
+
+| strategy | chosen on IS | 3 bps: IS t / after IS | 5 bps: IS t / after IS | verdict |
+| --- | --- | --- | --- | --- |
+| stocks in play (Zarattini, Barbon & Aziz 2024) | top 5, rvol 1.5, bar stop | 0.69 / +9.6 bp/day, t 2.02 | 0.31 / +7.6 bp/day, t 1.60 | FAIL |
+| end-of-day reversal (Baltussen, Da & Soebhag 2025) | long losers, k 8 / k 4 | -2.96 / -1.3 bp/day, t -0.66 | -4.25 / -4.1 bp/day, t -1.74 | FAIL |
+
+Stocks in play is the closest any 5-minute rule has come: positive in OOS and HOLDOUT (6.5 and 8.6 bp a day
+at 5 bps), with every bar-stop variant positive after IS. But it did nothing in the period it was chosen in (IS
+t 0.31-0.69) and stays under the t >= 3 bar. With 40 survivors instead of the paper's top 20 of 7,000 stocks,
+this is "not shown here", not refuted; it goes on the watch list, not into the signal. The paper's
+10%-of-ATR stop loses heavily (t -4.5 to -7.4; 10-11% win rate): that stop is too tight for these names.
+End-of-day reversal did the opposite of the paper: buying the day's biggest losers at 15:30 lost money in
+every variant (both sides, k 8: IS t -9.2, after IS t -3.8). Into the close, losers kept losing.
+
 ### 2026-11-24: news as a signal, post-earnings drift on 30 stocks (`news_events.py`). FAIL, no news edge
 
 Pre-registered (commit d30874a, text fix a0e96c0) before any data was fetched. Events: every SEC 8-K with
