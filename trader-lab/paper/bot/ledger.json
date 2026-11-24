@@ -155,6 +155,42 @@
    "risk_usd": 7.32,
    "setup": "opening-range breakout",
    "id": "S-2026-11-24-AAPL"
+  },
+  {
+   "symbol": "BNB-USD",
+   "side": "sell",
+   "entry_est": 544.2000122070312,
+   "stop": 551.3635820661273,
+   "target": 529.8728724888393,
+   "risk_usd": 10.0,
+   "notional_usd": 759.68,
+   "cost_bps": 10.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 17:38Z",
+   "start_ts": 1795539600,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-2026-11-24 17:38Z-BNB-USD"
+  },
+  {
+   "symbol": "USDJPY=X",
+   "side": "buy",
+   "entry_est": 159.15199279785156,
+   "stop": 158.84053203037806,
+   "target": 159.77491433279855,
+   "risk_usd": 10.0,
+   "notional_usd": 5109.86,
+   "cost_bps": 2.0,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 17:38Z",
+   "start_ts": 1795539600,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-2026-11-24 17:38Z-USDJPY=X"
   }
  ],
  "last_fx": {
@@ -164,44 +200,33 @@
   "ETH-USD": [
    "breakdown_20h"
   ],
-  "SOL-USD": [
-   "breakdown_20h"
-  ],
+  "SOL-USD": [],
   "XRP-USD": [
    "breakdown_20h"
   ],
-  "BNB-USD": [],
-  "DOGE-USD": [
+  "BNB-USD": [
    "breakdown_20h"
   ],
-  "ADA-USD": [
-   "breakdown_20h"
-  ],
+  "DOGE-USD": [],
+  "ADA-USD": [],
   "AVAX-USD": [
    "breakdown_20h"
   ],
-  "LINK-USD": [
-   "breakdown_20h"
-  ],
-  "LTC-USD": [
-   "breakdown_20h"
-  ],
+  "LINK-USD": [],
+  "LTC-USD": [],
   "DOT-USD": [
    "breakdown_20h"
   ],
-  "BCH-USD": [
-   "breakdown_20h"
-  ],
+  "BCH-USD": [],
   "EURUSD=X": [],
   "GBPUSD=X": [
-   "breakout_20d",
    "overbought"
   ],
-  "USDJPY=X": [],
-  "AUDUSD=X": [],
-  "USDCAD=X": [
-   "oversold_bounce"
+  "USDJPY=X": [
+   "reclaim_ma20"
   ],
+  "AUDUSD=X": [],
+  "USDCAD=X": [],
   "USDCHF=X": [
    "oversold",
    "breakdown_20h"
@@ -212,6 +237,7 @@
   "EURGBP=X": [],
   "AUDJPY=X": [],
   "EURCHF=X": [
+   "oversold",
    "breakdown_20h"
   ],
   "EURAUD=X": [
