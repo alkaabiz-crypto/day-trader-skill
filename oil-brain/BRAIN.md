@@ -282,6 +282,29 @@ while oil keeps falling; the 11 rallies that began there are found only in hinds
 more weeks when nothing followed. Positioning tells you where the risk is, not when it turns.
 Rules tried: +4.
 
+### 2026-11-24, combo lab (`combo/`): STRATEGY (daily regime) x INDICATOR (entry) x SKILLS (exits, sizing)
+
+**Round 1, hourly** (`combo_lab.py`, 6 markets, Dec 2023 - Nov 2026, 390 systems): selected on Dec 2023 -
+Jun 2025, judged on Jul 2025 - Nov 2026. The 15 best in-sample systems were 53% positive out of sample
+(luck ~50%); in-sample vs out-of-sample t correlation 0.15. No survivor. Lessons: trend filters beat
+trading both ways; trailing exits beat fixed targets; RSI pullbacks were worst intraday; gold with the
+200-day filter and a trailing stop was positive out of sample for 5 of 6 entries (none significant alone).
+
+**Round 2, daily** (`combo_daily.py`, 9 markets, ~20 years, 324 systems): gates = positive avg R in
+2014-19 and 2020+ (BTC: 2019-21, 2022+), post t >= 2, positive at 2x cost, and beating random entries
+(same exits and regime, 200 runs) at p <= 0.01. 30 pass the period gates (~16 expected by luck),
+**12 also beat random entries**:
+- 11 x BTC: 20/55-day breakouts, mostly in the 200-day trend's direction, stop 2 x ATR, 4R target or
+  trailing; post t 2.0-3.3, placebo p 0.00-0.01 (e.g. BTC R2 D1 T2: 74 trades, avg +0.79R, t 3.28).
+- 1 x GLD: above the 200-day average, buy RSI(2) < 10, stop 2 x ATR, trail 3 x ATR: 54 trades, avg
+  +0.86R, t 2.09, p 0.01 (4 neighbours t 1.84-1.94).
+- Best oil: USO 55-day breakout with the 200-day trend, trailing stop: 2014-19 +1.02R, 2020+ +0.42R,
+  t 1.5 (not a pass).
+About 714 combos tried across both rounds: a few p = 0.01 passes are expected by luck. The BTC family is
+too large and consistent to be luck; gold is borderline.
+**Live:** `combo/combo_live.py` paper-trades BTC_BREAKOUT, GLD_PULLBACK and USO_TURTLE (forward only)
+with $2,000 each from 2026-11-24, 1% risk per trade, issuing tickets after each close.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
