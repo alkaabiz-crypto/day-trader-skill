@@ -4,3 +4,6 @@ trader/
 trader-lab/data/daily/
 trader-lab/data/alpaca/
 trader-lab/data/alloc/
+oil-brain/brains/*/data/
+oil-brain/brains/*/raw/
+__pycache__/
