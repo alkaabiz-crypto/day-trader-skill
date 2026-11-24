@@ -34,6 +34,9 @@ Two more paper books run in the same pass, each with its own $10,000 and ledger:
        resting stop order at that candle's high (green candle, buy) or low (red candle, sell short), stop one
        candle-range away, out at the end of the day. $2,000 each, 5 bps round trip. An order fills only on candles
        after it was placed.
+2026-11-24 16:20 New York, at the owner's request: the "orb" book takes NO NEW BUYS (ORB_NEW_BUYS = False). It
+duplicated bot.py's stock bot, which the owner kept. Its open positions are still managed and sold as before,
+and its record stays. The fed and sip books are unchanged.
 Research, not financial advice.
 """
 
@@ -54,6 +57,7 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 
 BOOK = os.path.join(HERE, "autopaper")
+ORB_NEW_BUYS = False      # owner, 2026-11-24: one stock bot (bot.py); the orb book only winds down
 RESULT = os.path.join(HERE, "results", "autopaper.json")
 CONFIG = {"start_cash": 10000.0, "risk_usd": 50.0, "max_open": 3, "max_buys_day": 4, "daily_stop_usd": 150.0,
           "last_entry": "15:00", "flatten_at": "15:50", "slip_bps": 2.0, "cost_bps_round_trip": 5.0,
@@ -529,8 +533,11 @@ def cmd_run(a):
     closed, marks = manage(state, bars_of, now)
     if CONFIG["universe"] == "full" and not os.path.exists(os.path.join(ROOT, "trader", "universe.txt")):
         run_skill(["trader-scanner/scan.py", "universe"], timeout=120)   # Nasdaq Trader's lists, about 2 seconds
-    new, log = find_buys(state, marks, now, None if CONFIG["universe"] == "full" else lab.UNIVERSE,
-                         live_now=a.now is None)
+    if ORB_NEW_BUYS:
+        new, log = find_buys(state, marks, now, None if CONFIG["universe"] == "full" else lab.UNIVERSE,
+                             live_now=a.now is None)
+    else:
+        new, log = [], ["orb: no new buys (the owner kept bot.py as the one stock bot)"]
     if len(log) > 8:
         log = log[:7] + ["... %d more" % (len(log) - 7)]
     extra = []

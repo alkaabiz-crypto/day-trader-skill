@@ -168,3 +168,10 @@ class Books(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class OrbBookOff(unittest.TestCase):
+    def test_orb_takes_no_new_buys(self):
+        from _load import load
+        ap = load("trader-lab", "autopaper")
+        self.assertFalse(ap.ORB_NEW_BUYS)       # owner, 2026-11-24: bot.py is the one stock bot
