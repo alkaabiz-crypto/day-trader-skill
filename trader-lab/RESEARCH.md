@@ -50,6 +50,45 @@ result after costs, and whether it was kept. Failures stay in the record.
 
 ## Log
 
+### 2026-11-24: the swarm, 100,000 machine-generated timing rules on 129 ETFs (`swarm.py`). No real edge
+
+Pre-registered (commit 89b6f14) before any rule was scored: 100,000 random rules from a grammar of 28
+features (past returns, distance from averages, RSI, distance from highs/lows, volatility ratio), IS
+percentile thresholds, an optional second condition and a 1-20 day hold; long only; one day of delay; 10
+and 20 bps per turnover. 129 ETFs, 1998-2026. IS 1998-2012 picks the top 1,000; OOS 2013-2019 keeps those
+passing a 5% false discovery rate; HOLDOUT 2020+ needs t >= 3. Luck benchmark: the same pipeline on rules
+whose signals are slid in time.
+
+| | rules | best IS t | IS t >= 3 | OOS survivors | HOLDOUT PASS |
+| --- | --- | --- | --- | --- | --- |
+| real | 100,000 | 5.20 | 1,576 | 850 | 2 |
+| luck (time-shifted) | 1,000 | 1.92 | 0 | 0 | 0 |
+
+Nearly every survivor is one idea: **buy funds trading far below their 52-week high, hold 5-20 days**.
+The two "passes" were `ret_120 < p50 AND hi_250 < p5, hold 5d` (HOLDOUT t 3.01) and
+`ret_250 < p10 AND ret_20 > p30, hold 20d` (t 3.22).
+
+**They are an artifact of my scoring, not edges.** The pre-registered score subtracted each fund's
+trailing 250-day mean return to remove market drift. After a deep fall that trailing mean is strongly
+negative, so merely holding a beaten-down fund on a flat day counted as a gain, which rewards exactly
+"buy deep drawdowns". Re-scored fairly (10 bps):
+
+| rule | baseline | IS t | OOS t | HOLDOUT t |
+| --- | --- | --- | --- | --- |
+| A (ret_120, hi_250, 5d) | trailing drift (as run) | 4.34 | 3.24 | 3.01 |
+| A | raw return | 2.70 | 1.72 | 2.01 |
+| A | vs all funds' average that day | 3.26 | 1.18 | 1.07 |
+| B (ret_250, ret_20, 20d) | trailing drift (as run) | 3.90 | 1.99 | 3.22 |
+| B | raw return | 2.05 | 0.21 | 1.87 |
+| B | vs all funds' average that day | 2.20 | -1.27 | -0.07 |
+
+Against the fair baselines neither rule is significant after 2012. Verdict: **FAIL; the design flaw was
+mine and is recorded here so it is not repeated.** What survives as a weak, honest observation: deeply
+beaten-down ETFs rebounded slightly more than the average fund in 1998-2012 (IS t 3.26), much less since
+(t about 1). That is the dip-buying family again (R3, RSI(2)), and it fades the same way. A rerun would
+score timing against the same-day cross-sectional average; it would be a new pre-registration, not a
+retune of this one.
+
 ### 2026-11-24: the plan, a cost stress test for the paper trial, and the index-fund yardstick
 
 The user asked what is smart to do now and approved the plan in `INVESTING-PLAN.md`:
