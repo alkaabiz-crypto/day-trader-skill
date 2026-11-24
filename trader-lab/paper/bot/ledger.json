@@ -246,66 +246,153 @@
    "risk_usd": 8.46,
    "setup": "opening-range breakout",
    "id": "S-fresh-2026-11-24-BA"
+  },
+  {
+   "symbol": "USDCAD=X",
+   "side": "sell",
+   "entry_est": 1.4276800155639648,
+   "stop": 1.4306607033525194,
+   "target": 1.4217186399868555,
+   "risk_usd": 10.0,
+   "notional_usd": 4789.77,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 18:34Z",
+   "start_ts": 1795543200,
+   "status": "open",
+   "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
+   "id": "F-live-2026-11-24 18:34Z-USDCAD=X"
+  },
+  {
+   "symbol": "USDCAD=X",
+   "side": "sell",
+   "entry_est": 1.4276800155639648,
+   "stop": 1.4306607033525194,
+   "target": 1.4217186399868555,
+   "risk_usd": 10.0,
+   "notional_usd": 4789.77,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 18:34Z",
+   "start_ts": 1795543200,
+   "status": "open",
+   "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-24 18:34Z-USDCAD=X"
+  },
+  {
+   "symbol": "AUDUSD=X",
+   "side": "buy",
+   "entry_est": 0.66454017162323,
+   "stop": 0.6628404621567044,
+   "target": 0.6679395905562809,
+   "risk_usd": 10.0,
+   "notional_usd": 3909.73,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 18:34Z",
+   "start_ts": 1795543200,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-btctrend-2026-11-24 18:34Z-AUDUSD=X"
+  },
+  {
+   "symbol": "USDCAD=X",
+   "side": "sell",
+   "entry_est": 1.4276800155639648,
+   "stop": 1.4306607033525194,
+   "target": 1.4217186399868555,
+   "risk_usd": 10.0,
+   "notional_usd": 4789.77,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 18:34Z",
+   "start_ts": 1795543200,
+   "status": "open",
+   "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
+   "id": "F-noweekend-2026-11-24 18:34Z-USDCAD=X"
+  },
+  {
+   "symbol": "AUDUSD=X",
+   "side": "buy",
+   "entry_est": 0.66454017162323,
+   "stop": 0.6628404621567044,
+   "target": 0.6679395905562809,
+   "risk_usd": 10.0,
+   "notional_usd": 3909.73,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 18:34Z",
+   "start_ts": 1795543200,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-noweekend-2026-11-24 18:34Z-AUDUSD=X"
   }
  ],
  "last_fx": {
-  "BTC-USD": [
-   "breakdown_20h"
-  ],
-  "ETH-USD": [
-   "breakdown_20h"
-  ],
+  "BTC-USD": [],
+  "ETH-USD": [],
   "SOL-USD": [],
-  "XRP-USD": [
-   "breakdown_20h"
-  ],
-  "BNB-USD": [
-   "breakdown_20h"
-  ],
+  "XRP-USD": [],
+  "BNB-USD": [],
   "DOGE-USD": [],
   "ADA-USD": [],
-  "AVAX-USD": [
-   "breakdown_20h"
-  ],
+  "AVAX-USD": [],
   "LINK-USD": [],
   "LTC-USD": [],
-  "DOT-USD": [
-   "breakdown_20h"
-  ],
+  "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [],
   "GBPUSD=X": [
+   "breakout_20d",
    "overbought"
   ],
-  "USDJPY=X": [
+  "USDJPY=X": [],
+  "AUDUSD=X": [
    "reclaim_ma20"
   ],
-  "AUDUSD=X": [],
-  "USDCAD=X": [],
-  "USDCHF=X": [
+  "USDCAD=X": [
    "oversold",
    "breakdown_20h"
+  ],
+  "USDCHF=X": [
+   "oversold",
+   "oversold_bounce"
   ],
   "NZDUSD=X": [],
   "EURJPY=X": [],
-  "GBPJPY=X": [],
-  "EURGBP=X": [],
-  "AUDJPY=X": [],
-  "EURCHF=X": [
-   "oversold",
-   "breakdown_20h"
-  ],
-  "EURAUD=X": [
+  "GBPJPY=X": [
    "breakout_20d"
   ],
-  "GBPCHF=X": [
+  "EURGBP=X": [
    "breakdown_20h"
   ],
-  "GC=F": [
-   "breakdown_20h"
+  "AUDJPY=X": [],
+  "EURCHF=X": [
+   "oversold_bounce"
   ],
-  "SI=F": [
-   "breakdown_20h"
-  ]
+  "EURAUD=X": [],
+  "GBPCHF=X": [],
+  "GC=F": [],
+  "SI=F": []
  }
 }
