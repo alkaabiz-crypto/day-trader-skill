@@ -346,6 +346,31 @@
    "status": "open",
    "setup": "reclaimed the 20-hour average",
    "id": "F-noweekend-2026-11-24 18:34Z-AUDUSD=X"
+  },
+  {
+   "symbol": "ROIV",
+   "side": "buy",
+   "entry_est": 42.53,
+   "stop": 41.33,
+   "target": 44.93,
+   "shares": 8,
+   "max_loss_usd": 9.6,
+   "cost_bps": 7.82,
+   "reward_bps": 564.3,
+   "premarket_hit": false,
+   "or_low": 40.24,
+   "or_high": 42.41,
+   "pct_over": 0.09,
+   "track": "stocks",
+   "variant": "fresh",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 19:20Z",
+   "decided_at": "14:20",
+   "slot": 58,
+   "status": "open",
+   "risk_usd": 9.6,
+   "setup": "opening-range breakout",
+   "id": "S-fresh-2026-11-24-ROIV"
   }
  ],
  "last_fx": {
