@@ -12,15 +12,15 @@ got faster (Chordia et al. 2009; Martineau 2022), so this tests whether it is st
 
 PRE-REGISTERED 2026-11-24, before any SEC or price data was fetched. Not to be changed after the first run:
 
-  Stocks: the 21 single stocks in lab.UNIVERSE (ETFs file no earnings). Today's names, so survivor-biased;
-    stated up front.
+  Stocks: the 30 single stocks in lab.UNIVERSE (ETFs file no earnings). Today's names, so survivor-biased;
+    stated up front. Foreign filers (SHOP, ARM) report on 6-K, not 8-K, so they may contribute no events.
   Events: every 8-K whose items include 2.02, from the company's full SEC submissions history. Reaction day
     = the first trading day whose close comes after the filing's acceptance time (New York): a filing after
     16:00 or on a non-trading day reacts the next session. Reaction = that close / the previous close - 1.
   Rule: if |reaction| >= k%, take the reaction's side (long after a jump up, short after a drop; variant
     long-only), enter at the NEXT day's close, hold H trading days, exit at that close.
     Grid: k in {2, 4}, H in {5, 20, 60}, sides in {both, long} = 12 variants, chosen on IS only.
-  Score: each trade's return minus the same-window equal-weight return of all 21 stocks (so market moves
+  Score: each trade's return minus the same-window equal-weight return of all 30 stocks (so market moves
     don't count), minus costs of 10 bps per round trip (re-run at 20 bps).
   Periods (by entry date): IS 2006-2014, OOS 2015-2020, HOLDOUT 2021 on.
   Statistics: trades in the same calendar month are averaged first; t is over months (overlapping holds
