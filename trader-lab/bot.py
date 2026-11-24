@@ -10,7 +10,8 @@ The owner asked on 2026-11-24 that the trade calls be the bot's. These rules wer
 first bot trade (RESEARCH.md, 2026-11-24) and are not tuned on results:
 
 STOCKS  whole-market opening-range breakout (scan.py orb, 15-minute range), ranked by today's traded
-        value, and only while the price is still above the range high. Long only. At most 2 new a run, 5 a day, $50 total risk a day, no entries after 15:00.
+        value, and only while the price is still above the range high. Long only. At most 4 new a run, 20 a day, $200 total risk a day,
+        no entries after 15:00 (raised from 2 / 5 / $50 on 2026-11-24 at the owner's request).
         Stop at the opening-range midpoint, target 2R, $10 risk, $1,000 a position at most, the
         paper.py cost filter. Entered at the open of the next 5-minute bar after the decision, out by
         15:55 (paper.fill_long).
@@ -53,7 +54,7 @@ import scan  # noqa: E402
 import fxcrypto  # noqa: E402
 
 LEDGER = os.path.join(HERE, "paper", "bot", "ledger.json")
-STOCK = {"per_run": 2, "per_day": 5, "day_risk_usd": 50.0, "last_entry": "15:00", "target_r": 2.0}
+STOCK = {"per_run": 4, "per_day": 20, "day_risk_usd": 200.0, "last_entry": "15:00", "target_r": 2.0}
 FX = {"per_run": 2, "max_open": 6, "atr_n": 14, "atr_mult": 1.5, "target_r": 2.0, "risk_usd": 10.0,
       "max_hours": 24}
 GROUP_CAP = {"crypto": 1, "metal": 1, "forex": 2}
@@ -340,7 +341,7 @@ def cmd_stocks(a):
     rooms = {v: stock_caps([t for t in led["trades"] if variant_of(t) == v], date) for v in STOCK_VARIANTS}
     if not any(rooms.values()):
         save(led)
-        print("Bot (stocks): today's limit is reached (5 trades or $50 risk). No new entry.")
+        print("Bot (stocks): today's limit is reached (%d trades or $%.0f risk)" % (STOCK["per_day"], STOCK["day_risk_usd"]) + ". No new entry.")
         return 0
     out = subprocess.run([sys.executable, paper.SCAN, "orb", "--json", "--no-write"], capture_output=True,
                          text=True, cwd=ROOT)

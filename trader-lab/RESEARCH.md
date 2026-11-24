@@ -1223,3 +1223,11 @@ the rest of the day across the US market. What they seem to say in one month fli
 with the candle-pattern literature (Marshall, Young & Rose 2006) and with the lab's earlier ORB and
 stocks-in-play results. **Verdict: FAIL**, not changed after the result.
 
+### 2026-11-24: stock bot limits raised at the owner's request (rule change, not from results)
+
+The owner asked for a limit of 20. `bot.py` STOCK is now 4 a run, 20 a day and $200 of risk a day, up
+from 2, 5 and $50. The time window, stops, targets and the $10 risk a trade are unchanged. This scales the
+same rule up. The backtest (bot_backtest.py, 2026-11-24) puts the rule at about −$1.11 a trade after costs,
+so more trades are expected to lose more on paper, not less. The bot's record is reported from this date
+with the new limits noted.
+
