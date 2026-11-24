@@ -1231,3 +1231,4 @@ same rule up. The backtest (bot_backtest.py, 2026-11-24) puts the rule at about 
 so more trades are expected to lose more on paper, not less. The bot's record is reported from this date
 with the new limits noted.
 
+Later the same day the owner raised the limit again, to 50 trades a day: 10 a run and $500 of risk a day. The rule itself is unchanged.

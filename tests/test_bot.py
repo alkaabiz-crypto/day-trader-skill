@@ -71,11 +71,11 @@ class Fx(unittest.TestCase):
 class Stocks(unittest.TestCase):
     def test_caps(self):
         t = lambda d, r=10.0: {"track": "stocks", "date": d, "risk_usd": r}
-        self.assertEqual(bot.stock_caps([], "2026-11-24"), 4)
-        self.assertEqual(bot.stock_caps([t("2026-11-24")] * 18, "2026-11-24"), 2)
-        self.assertEqual(bot.stock_caps([t("2026-11-24")] * 20, "2026-11-24"), 0)
-        self.assertEqual(bot.stock_caps([t("2026-11-24", 60.0)] * 3, "2026-11-24"), 2)   # $180 of $200 risk used
-        self.assertEqual(bot.stock_caps([t("2026-11-23")] * 20, "2026-11-24"), 4)
+        self.assertEqual(bot.stock_caps([], "2026-11-24"), 10)
+        self.assertEqual(bot.stock_caps([t("2026-11-24")] * 48, "2026-11-24"), 2)
+        self.assertEqual(bot.stock_caps([t("2026-11-24")] * 50, "2026-11-24"), 0)
+        self.assertEqual(bot.stock_caps([t("2026-11-24", 160.0)] * 3, "2026-11-24"), 2)   # $480 of $500 risk used
+        self.assertEqual(bot.stock_caps([t("2026-11-23")] * 50, "2026-11-24"), 10)
 
     def test_failed_breakout_is_skipped(self):
         self.assertTrue(bot.still_above({"or_high": 100.0}, 100.5))

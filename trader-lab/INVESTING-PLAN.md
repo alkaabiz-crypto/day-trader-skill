@@ -84,8 +84,8 @@ Halving in a crash is normal on the way. The plan only works if you keep buying 
 
 - Since 2026-11-24 the trade calls are the bot's, not yours (your request). `trader-lab/bot.py`:
   - **Stocks**, each hourly scan, 10:17 a.m. to 3:17 p.m. New York:
-    - takes up to 4 of the most-traded opening-range breakouts that are still above the range
-    - at most 20 a day and $200 of total risk a day (raised from 5 and $50 on 2026-11-24, your request)
+    - takes up to 10 of the most-traded opening-range breakouts that are still above the range
+    - at most 50 a day and $500 of total risk a day (raised from 5 and $50 on 2026-11-24, your request)
     - $10 risk each, stop at the range midpoint, target 2R, out by 3:55
   - **Crypto and forex**, every hour, 24/7:
     - takes up to 2 fresh trend setups: long a 20-hour high breakout or reclaim, short a 20-hour low break
