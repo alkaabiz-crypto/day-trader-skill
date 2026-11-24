@@ -1,0 +1,47 @@
+{
+ "cash": 1802.5104999999985,
+ "positions": [
+  {
+   "symbol": "CRM",
+   "qty": 7,
+   "entry": 193.7387,
+   "stop": 187.19,
+   "target": 206.84,
+   "date": "2026-11-24",
+   "entry_time": "2026-11-24 10:46",
+   "entry_bar_end": "10:45"
+  },
+  {
+   "symbol": "MSFT",
+   "qty": 8,
+   "entry": 494.2688,
+   "stop": 490.76,
+   "target": 501.29,
+   "date": "2026-11-24",
+   "entry_time": "2026-11-24 10:46",
+   "entry_bar_end": "10:45"
+  },
+  {
+   "symbol": "NFLX",
+   "qty": 49,
+   "entry": 58.9218,
+   "stop": 57.91,
+   "target": 60.94,
+   "date": "2026-11-24",
+   "entry_time": "2026-11-24 10:46",
+   "entry_bar_end": "10:45"
+  }
+ ],
+ "buys": {
+  "2026-11-24": 3
+ },
+ "realized": {},
+ "start": "2026-11-24",
+ "traded": {
+  "2026-11-24": [
+   "CRM",
+   "MSFT",
+   "NFLX"
+  ]
+ }
+}

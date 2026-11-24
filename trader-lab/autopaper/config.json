@@ -1,0 +1,15 @@
+{
+ "start_cash": 10000.0,
+ "risk_usd": 50.0,
+ "max_open": 3,
+ "max_buys_day": 4,
+ "daily_stop_usd": 150.0,
+ "last_entry": "15:00",
+ "flatten_at": "15:50",
+ "slip_bps": 2.0,
+ "cost_bps_round_trip": 5.0,
+ "fresh_minutes": 60,
+ "min_days": 60,
+ "min_t": 2.0,
+ "frozen": "2026-11-24"
+}

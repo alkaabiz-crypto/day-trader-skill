@@ -165,6 +165,13 @@ def scoreboard():
         v = j.get("verdict", {})
         add("crypto coin momentum, %d coins, weekly" % j.get("coins_with_data", 0),
             "PASS" if "PASS" in v.values() else "FAIL", json.dumps(v))
+    j = _load("autopaper.json")
+    if j:
+        spy = j.get("spy_same_days_usd")
+        add("auto paper bots (scan > entry > exit > size > risk, hourly)", j.get("verdict", "PAPER"),
+            "%d days, %d trades, P&L %+.2f on $10,000 (SPY same days %s), %d open" % (
+                j.get("days", 0), j.get("trades", 0), j.get("pnl_usd", 0.0),
+                "n/a" if spy is None else "%+.2f" % spy, j.get("open_positions", 0)))
     j = _load("sip-forward.json")
     if j:
         r = j.get("cost_5", {})
