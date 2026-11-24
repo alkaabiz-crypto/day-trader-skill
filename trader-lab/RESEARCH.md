@@ -48,7 +48,7 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 2. **Forward ledger.** Score every rule that ever came close (`results/frozen.json`) on new data
    only, monthly, in the daily run. Out of sample in real time is the one test that can't be
    overfitted.
-3. **Crypto cross-sectional factors.** Liu, Tsyvinski & Wu (2022, JF) "Common Risk Factors in
+3. ~~**Crypto cross-sectional factors.**~~ Done 2026-11-24 (`crypto_xs.py`): FAIL, see Log. Liu, Tsyvinski & Wu (2022, JF) "Common Risk Factors in
    Cryptocurrency": coin momentum, size and market. Pre-registered, weekly, on the top coins. Caveat:
    dead coins are missing from Yahoo, so a pass would need a survivorship audit.
 4. **FOMC and CPI days.** Lucca & Moench (2015) pre-FOMC drift, using the Fed's public meeting
@@ -83,6 +83,78 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 7. **Earnings-day drift and the earnings announcement premium** for single stocks (needs an earnings calendar from trader-analyst).
 
 ## Log
+
+### 2026-11-24: plan B3, crypto coin momentum (`crypto_xs.py`, Liu, Tsyvinski & Wu 2022). FAIL
+
+Pre-registered in 9f6bff6 before any coin data was downloaded: 78 coins fixed in advance (dead ones
+included), weekly, past 3-week return, terciles, 25 bps a side, judged on weeks from 2021, PASS needs t >= 3.
+Yahoo served 74 (MIOTA, MATIC, LUNA1 and COMP were missing, so they were dropped mechanically). That leaves
+468 weeks, Dec 2017 to Nov 2026, with an average of 53 eligible coins.
+
+| at 25 bps | 2018-2020 (160 wk) | 2021 on (308 wk) | verdict |
+| --- | --- | --- | --- |
+| H1 long top third, short bottom third | +1.27%/wk, t 1.95 | -0.40%/wk, t -1.18 | FAIL |
+| H2 top third minus all coins | +0.73%/wk, t 1.89 | -0.22%/wk, t -1.05 | FAIL |
+
+At 10 bps the judged period is still negative (H1 -0.17%/wk, t -0.50). The momentum the paper found in
+its own 2014-2020 sample is there in 2018-2020 and gone after publication, which is the usual pattern. The
+shuffled-rank placebo (p 0.11 / 0.17) is lenient here: random ranks trade far more, so they pay far more in
+costs. It doesn't change the verdict. LUNA's absence makes the result, if anything, too kind to the long
+side. Not kept.
+
+### 2026-11-24: stocks in play and end-of-day reversal on 40 names x 4 years (`sip_long.py`). FAIL
+
+Pre-registered (commit 66d2f0a) while the download had 5 of 40 names. lab.backtest's own gates, unchanged:
+IS = first 50% of the 995 sessions (to 2024-11-19), OOS to 2025-11-21, HOLDOUT after; PASS at both 3 and
+5 bps round trip. Tiingo IEX 5-minute bars, half days cut at 13:00. `results/sip-long.json`.
+
+| strategy | chosen on IS | 3 bps: IS t / after IS | 5 bps: IS t / after IS | verdict |
+| --- | --- | --- | --- | --- |
+| stocks in play (Zarattini, Barbon & Aziz 2024) | top 5, rvol 1.5, bar stop | 0.69 / +9.6 bp/day, t 2.02 | 0.31 / +7.6 bp/day, t 1.60 | FAIL |
+| end-of-day reversal (Baltussen, Da & Soebhag 2025) | long losers, k 8 / k 4 | -2.96 / -1.3 bp/day, t -0.66 | -4.25 / -4.1 bp/day, t -1.74 | FAIL |
+
+Stocks in play is the closest any 5-minute rule has come: positive in OOS and HOLDOUT (6.5 and 8.6 bp a day
+at 5 bps), with every bar-stop variant positive after IS. But it did nothing in the period it was chosen in (IS
+t 0.31-0.69) and stays under the t >= 3 bar. With 40 survivors instead of the paper's top 20 of 7,000 stocks,
+this is "not shown here", not refuted; it goes on the watch list, not into the signal. The paper's
+10%-of-ATR stop loses heavily (t -4.5 to -7.4; 10-11% win rate): that stop is too tight for these names.
+End-of-day reversal did the opposite of the paper: buying the day's biggest losers at 15:30 lost money in
+every variant (both sides, k 8: IS t -9.2, after IS t -3.8). Into the close, losers kept losing.
+
+### 2026-11-24: news as a signal, post-earnings drift on 30 stocks (`news_events.py`). FAIL, no news edge
+
+Pre-registered (commit d30874a, text fix a0e96c0) before any data was fetched. Events: every SEC 8-K with
+item 2.02 (earnings release) for the 30 single stocks, 2,320 reaction days; reaction day = first close after
+the filing's acceptance time in New York. Rule: after a reaction of at least k%, follow it (or long only),
+enter at the next close, hold H days; score = return minus the equal-weight return of all 30 stocks, minus
+10 or 20 bps. Grid of 12 (k 2/4, H 5/20/60, both/long), chosen on IS 2006-2014; OOS 2015-2020; HOLDOUT
+2021+. t-stats over monthly averages. Placebo: the same rule on big moves with no earnings filing within 5
+trading days, resampled to the same trade count 1,000 times.
+
+Chosen on IS: **k 4%, hold 20 days, long only** (long after an earnings jump of 4%+). Means are bp per
+trade (20-day hold), averaged by month:
+
+| cost | IS t (207 tr, mean) | OOS (178 tr) | HOLDOUT (208 tr) | post-IS t (386 tr, mean) | big moves w/o earnings | placebo p |
+| --- | --- | --- | --- | --- | --- | --- |
+| 10 bp | 1.12 (56.3 bp) | 84.3 bp, t 1.43 | 37.3 bp, t 0.32 | 0.92 (60.4 bp) | 89.6 bp | 0.625 |
+| 20 bp | 0.92 (46.3 bp) | 74.3 bp, t 1.26 | 27.3 bp, t 0.24 | 0.77 (50.4 bp) | 79.6 bp | 0.625 |
+
+Verdict: **FAIL**. Not even the best IS variant reaches t 2 (1.12), post-IS t is under 1, and the placebo
+kills it outright: buying after big up days *without* earnings news earned more (89.6 bp) than after
+earnings jumps (60.4 bp); 62.5% of random placebo draws beat the real trades. Whatever positive drift there
+is in these names (survivor-biased winners) comes from "big move", not from the news. Consistent with the
+literature saying post-earnings drift has largely gone in large caps. The news skill stays a context tool,
+not a signal.
+
+Data checks: about 4 earnings 8-Ks a year for US filers (SHOP 8, ARM 0: foreign filers, as stated). Spot
+checks: AAPL 2015-01-27 after close -> 2015-01-28 +5.7%; NFLX 2013-10-21 -> 10-22 -9.1%; META 2022-02-02 ->
+02-03 -26.4%; XOM's pre-market filings react the same day. Two execution fixes made after the first fetch
+and before the test ever ran (design untouched): (1) SEC's acceptanceDateTime is UTC, not Eastern as the
+code assumed (Apple's 16:30 ET releases are stamped 20:30Z/21:30Z), now converted to New York time; (2)
+SEC's ticker map points only at today's registrant, which had dropped history for XOM (2 events; a 2026
+holding-company reorganisation), GOOGL (Google Inc. before 2015) and AVGO (Avago, Broadcom Ltd); their
+predecessor CIKs are now included (XOM 128, GOOGL 93, AVGO 72). Results: `results/news-events.json`.
+Research, not financial advice.
 
 ### 2026-11-24: plan item B1, stock / bond / gold mixes (`mixes.py`, descriptive)
 

@@ -1,0 +1,26 @@
+{
+ "freeze": "2026-11-24",
+ "params": {
+  "min_rvol": 1.5,
+  "stop": "bar",
+  "top": 5
+ },
+ "names": 40,
+ "cost_5": {
+  "days": 0,
+  "trades": 0,
+  "mean_bp_day": 0.0,
+  "t": 0.0,
+  "first": null,
+  "last": null
+ },
+ "cost_3": {
+  "days": 0,
+  "trades": 0,
+  "mean_bp_day": 0.0,
+  "t": 0.0,
+  "first": null,
+  "last": null
+ },
+ "verdict": "FORWARD-TEST"
+}

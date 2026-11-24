@@ -160,6 +160,19 @@ def scoreboard():
         v = j.get("verdict", {})
         add("stocks in play / end-of-day reversal, 40 names x 4 years",
             "PASS" if "PASS" in v.values() else "FAIL", json.dumps(v))
+    j = _load("crypto-xs.json")
+    if j:
+        v = j.get("verdict", {})
+        add("crypto coin momentum, %d coins, weekly" % j.get("coins_with_data", 0),
+            "PASS" if "PASS" in v.values() else "FAIL", json.dumps(v))
+    j = _load("sip-forward.json")
+    if j:
+        r = j.get("cost_5", {})
+        fv = j.get("verdict", "FORWARD-TEST")
+        add("stocks in play, FORWARD test (frozen %s)" % j.get("freeze"),
+            {"PROMOTE": "PASS"}.get(fv, fv),
+            "%d of 60 new sessions, %.1f bp/day, t %.2f at 5 bps" % (
+                r.get("days", 0), r.get("mean_bp_day", 0.0), r.get("t", 0.0)))
     any_pass = any(r["verdict"] == "PASS" for r in rows)
     return {"rows": rows, "any_pass": any_pass,
             "bottom_line": ("a rule passed: see its row" if any_pass else
