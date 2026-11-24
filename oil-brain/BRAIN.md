@@ -63,15 +63,37 @@ _Pending the literature review of 2026-11-24._
   includes two huge oil crashes (2014-15, 2020) where trend rules shine. 23 rules tried so
   far. Treat as candidates for a forward paper test, not as an edge.
 
+### 2026-11-24, study 3 (`study3.py`): is momentum just the crashes? Mostly yes
+
+Post-2014 Sharpe with the two crash windows removed (2014-07..2016-02, 2020-01-15..2020-06):
+
+| rule | post-2014 | without crashes | t without | long leg | short leg | years positive |
+|---|---|---|---|---|---|---|
+| TSMOM 10d | 0.58 | 0.16 | 0.51 | 0.35 | 0.47 | 9/13 |
+| TSMOM 21d | 0.47 | 0.13 | 0.41 | 0.25 | 0.41 | 10/13 |
+| TSMOM 42d | 0.56 | 0.11 | 0.36 | 0.32 | 0.47 | 9/13 |
+| TSMOM 63d | 0.33 | -0.01 | -0.02 | 0.14 | 0.32 | 6/13 |
+| TSMOM 126d | 0.70 | 0.33 | 1.08 | 0.41 | 0.56 | 10/13 |
+| carry + TSMOM | 0.60 | 0.17 | 0.54 | 0.51 | 0.37 | 8/13 |
+
+TSMOM 42d by year: 2014 +45%, 2015 +39%, 2016 -4%, 2017 +21%, 2018 +21%, 2019 -17%, 2020 +48%,
+2021 +4%, 2022 +13%, 2023 -11%, 2024 -21%, 2025 +13%, 2026 +20% (to Nov 23).
+
+**Reading:** oil momentum is "crisis alpha": most of the profit comes from riding the big
+crashes short. In normal years it is close to zero (t < 1.1). That matches the trend-following
+literature. Useful as insurance inside a portfolio; not a steady edge for short-term trading.
+
 ## Candidates for forward paper testing
 
-1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 42 or 126 days.
+1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
+   (the most robust: positive without crashes too, but t only 1.08). Crisis-alpha profile.
 2. Carry + momentum average.
+Neither is a 1-3 day trading edge.
 
 ## Idea queue (top first)
 
 1. Literature review results: add the top hypotheses with precise rules.
-2. Check momentum candidates for crash dependence: drop 2014-15 and 2020 and re-score.
+2. ~~Check momentum candidates for crash dependence~~ done (study 3): crash-driven.
 3. Hourly data (Yahoo, ~2 years): EIA 10:30 Wednesday reaction and drift; settlement 14:30.
 4. Brent-WTI spread (BNO vs USO) mean reversion.
 5. Crack spread (RB + HO vs CL) as a signal for refiners / oil.
