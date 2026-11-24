@@ -95,64 +95,112 @@
    "risk_usd": 8.17,
    "setup": "opening-range breakout",
    "id": "S-2026-11-24-UNH"
+  },
+  {
+   "symbol": "SI=F",
+   "side": "sell",
+   "entry_est": 40.779998779296875,
+   "stop": 41.596426827566965,
+   "target": 39.147142682756694,
+   "risk_usd": 10.0,
+   "notional_usd": 499.49,
+   "cost_bps": 2.0,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 16:34Z",
+   "start_ts": 1795536000,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-2026-11-24 16:34Z-SI=F"
+  },
+  {
+   "symbol": "LTC-USD",
+   "side": "sell",
+   "entry_est": 40.04999923706055,
+   "stop": 40.84521280016218,
+   "target": 38.45957211085728,
+   "risk_usd": 10.0,
+   "notional_usd": 503.64,
+   "cost_bps": 10.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 16:34Z",
+   "start_ts": 1795536000,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-2026-11-24 16:34Z-LTC-USD"
   }
  ],
  "last_fx": {
-  "BTC-USD": [],
-  "ETH-USD": [],
-  "SOL-USD": [],
-  "XRP-USD": [],
-  "BNB-USD": [],
-  "DOGE-USD": [],
-  "ADA-USD": [],
-  "AVAX-USD": [],
-  "LINK-USD": [],
-  "LTC-USD": [],
-  "DOT-USD": [],
-  "BCH-USD": [],
-  "EURUSD=X": [
-   "breakout_20d",
-   "overbought"
+  "BTC-USD": [
+   "breakdown_20h"
   ],
+  "ETH-USD": [
+   "breakdown_20h"
+  ],
+  "SOL-USD": [
+   "breakdown_20h"
+  ],
+  "XRP-USD": [
+   "breakdown_20h"
+  ],
+  "BNB-USD": [],
+  "DOGE-USD": [
+   "breakdown_20h"
+  ],
+  "ADA-USD": [
+   "breakdown_20h"
+  ],
+  "AVAX-USD": [
+   "breakdown_20h"
+  ],
+  "LINK-USD": [
+   "breakdown_20h"
+  ],
+  "LTC-USD": [
+   "breakdown_20h"
+  ],
+  "DOT-USD": [
+   "breakdown_20h"
+  ],
+  "BCH-USD": [
+   "breakdown_20h"
+  ],
+  "EURUSD=X": [],
   "GBPUSD=X": [
    "breakout_20d",
    "overbought"
   ],
-  "USDJPY=X": [
-   "reclaim_ma20"
-  ],
-  "AUDUSD=X": [
-   "breakout_20d"
-  ],
+  "USDJPY=X": [],
+  "AUDUSD=X": [],
   "USDCAD=X": [
-   "oversold",
-   "breakdown_20h"
+   "oversold_bounce"
   ],
   "USDCHF=X": [
    "oversold",
    "breakdown_20h"
   ],
-  "NZDUSD=X": [
-   "breakout_20d",
-   "overbought"
-  ],
-  "EURJPY=X": [
-   "breakout_20d",
-   "overbought"
-  ],
-  "GBPJPY=X": [
-   "breakout_20d"
-  ],
+  "NZDUSD=X": [],
+  "EURJPY=X": [],
+  "GBPJPY=X": [],
   "EURGBP=X": [],
-  "AUDJPY=X": [
+  "AUDJPY=X": [],
+  "EURCHF=X": [
+   "breakdown_20h"
+  ],
+  "EURAUD=X": [
    "breakout_20d"
   ],
-  "EURCHF=X": [],
-  "EURAUD=X": [],
   "GBPCHF=X": [
    "breakdown_20h"
   ],
-  "GC=F": [],
-  "SI=F": []
+  "GC=F": [
+   "breakdown_20h"
+  ],
+  "SI=F": [
+   "breakdown_20h"
+  ]
  }
 }
