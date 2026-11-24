@@ -183,10 +183,16 @@ def scoreboard():
     j = _load("autopaper.json")
     if j:
         spy = j.get("spy_same_days_usd")
-        add("auto paper bots (scan > entry > exit > size > risk, hourly)", j.get("verdict", "PAPER"),
-            "%d days, %d trades, P&L %+.2f on $10,000 (SPY same days %s), %d open" % (
-                j.get("days", 0), j.get("trades", 0), j.get("pnl_usd", 0.0),
+        add("paper bots: orb, full market every 15 min (scan > entry > exit > size > risk)", j.get("verdict", "PAPER"),
+            "%d days (%d since v2), %d trades, P&L %+.2f on $10,000 (SPY same days %s), %d open" % (
+                j.get("days", 0), j.get("days_since_v2", 0), j.get("trades", 0), j.get("pnl_usd", 0.0),
                 "n/a" if spy is None else "%+.2f" % spy, j.get("open_positions", 0)))
+        for name, label in (("fed", "paper bots: fed night (buy SPY before FOMC, sell at the open)"),
+                            ("sip", "paper bots: stocks in play (resting orders, 40 names)")):
+            b = (j.get("books") or {}).get(name)
+            if b:
+                add(label, "PAPER", "%d days, %d trades, P&L %+.2f on $10,000" % (
+                    b.get("days", 0), b.get("trades", 0), b.get("pnl_usd", 0.0)))
     j = _load("sip-forward.json")
     if j:
         r = j.get("cost_5", {})
