@@ -25,7 +25,25 @@ class Fx(unittest.TestCase):
         self.assertAlmostEqual(p["target"], 1.094)
         self.assertAlmostEqual(p["notional_usd"] * 0.003 / 1.10, 10.0, places=1)
         self.assertEqual(p["cost_bps"], 2.0)
-        self.assertEqual(bot.fx_plan("BTC-USD", "buy", 60000, 300)["cost_bps"], 10.0)
+        self.assertEqual(bot.fx_plan("BTC-USD", "buy", 60000, 300)["cost_bps"], 6.0)
+        self.assertEqual(bot.fx_plan("LTC-USD", "buy", 40, 0.3)["cost_bps"], 15.0)
+        self.assertEqual(bot.fx_plan("GBPJPY=X", "buy", 208, 0.3)["cost_bps"], 3.0)
+
+    def test_groups_nights_and_variants(self):
+        self.assertEqual([bot.group(s) for s in ("BTC-USD", "SI=F", "EURUSD=X")], ["crypto", "metal", "forex"])
+        self.assertEqual(bot.nights(86400 * 10 + 3600 * 22, 86400 * 11 + 3600 * 2), 1)
+        self.assertEqual(bot.nights(86400 * 10 + 3600, 86400 * 10 + 3600 * 20), 0)
+        import datetime as dt
+        sat = dt.datetime(2026, 11, 28, 12)
+        self.assertFalse(bot.fx_variant_ok("noweekend", "EURUSD=X", "buy", sat, None))
+        self.assertTrue(bot.fx_variant_ok("btctrend", "EURUSD=X", "buy", sat, -1))     # FX unaffected
+        self.assertFalse(bot.fx_variant_ok("btctrend", "ETH-USD", "buy", sat, -1))
+        self.assertTrue(bot.fx_variant_ok("btctrend", "ETH-USD", "sell", sat, -1))
+        self.assertTrue(bot.stock_variant_ok("fresh", {"bar_start": "11:05"}, "11:17", None))
+        self.assertFalse(bot.stock_variant_ok("fresh", {"bar_start": "09:45"}, "11:17", None))
+        self.assertTrue(bot.stock_variant_ok("first", {}, "10:17", None))
+        self.assertFalse(bot.stock_variant_ok("first", {}, "11:17", None))
+        self.assertFalse(bot.stock_variant_ok("spytrend", {}, "11:17", False))
 
     def test_atr(self):
         bars = [(i, 10, 11, 9, 10) for i in range(20)]
@@ -34,9 +52,9 @@ class Fx(unittest.TestCase):
     def test_fill_stop_first_and_short_sign(self):
         H = 3600
         bars = [(0, 100, 101, 99, 100), (H, 100, 100.5, 99.5, 100), (2 * H, 100, 103, 97, 100)]
-        e, x, how, t0 = bot.fill_hourly(bars, H, "buy", 98, 102, 24, 10 * H)
-        self.assertEqual((e, x, how, t0), (100, 98, "stop", H))
-        e, x, how, _ = bot.fill_hourly(bars, H, "sell", 102, 98, 24, 10 * H)
+        e, x, how, t0, t1 = bot.fill_hourly(bars, H, "buy", 98, 102, 24, 10 * H)
+        self.assertEqual((e, x, how, t0, t1), (100, 98, "stop", H, 3 * H))
+        e, x, how, _, _ = bot.fill_hourly(bars, H, "sell", 102, 98, 24, 10 * H)
         self.assertEqual((x, how), (102, "stop"))
         self.assertLess(bot.pnl_usd("sell", 100, 102, 1000, 0), 0)
         self.assertAlmostEqual(bot.pnl_usd("sell", 100, 98, 1000, 2), 20 - 0.2)
@@ -45,7 +63,7 @@ class Fx(unittest.TestCase):
         H = 3600
         bars = [(i * H, 100, 100.5, 99.5, 100 + i * 0.01) for i in range(30)]
         self.assertIsNone(bot.fill_hourly(bars[:10], 0, "buy", 90, 110, 24, 10 * H))
-        e, x, how, _ = bot.fill_hourly(bars, 0, "buy", 90, 110, 24, 30 * H)
+        e, x, how, _, _ = bot.fill_hourly(bars, 0, "buy", 90, 110, 24, 30 * H)
         self.assertEqual(how, "time")
         self.assertAlmostEqual(x, 100.23)
 

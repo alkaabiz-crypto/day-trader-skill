@@ -12,3 +12,5 @@ trader-lab/data/crypto_xs/
 trader-lab/data/seasonal_xs/
 trader-lab/data/fomc/
 trader-lab/data/candles/
+trader-lab/data/wm5/
+trader-lab/data/fx1h/
