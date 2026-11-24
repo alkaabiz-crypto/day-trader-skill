@@ -2,13 +2,13 @@
  "frozen": "2026-11-24",
  "start": "2026-11-24",
  "days": 1,
- "equity": 10000.0,
- "pnl_usd": 0.0,
+ "equity": 10013.94,
+ "pnl_usd": 13.94000000000051,
  "trades": 0,
  "win_rate": null,
  "max_drawdown_usd": 0.0,
  "open_positions": 3,
  "daily_t": 0.0,
- "spy_same_days_usd": -107.85111609355357,
+ "spy_same_days_usd": -114.28934546977688,
  "verdict": "PAPER"
 }
