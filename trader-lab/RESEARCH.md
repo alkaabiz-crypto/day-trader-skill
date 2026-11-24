@@ -84,6 +84,24 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 
 ## Log
 
+### 2026-11-24: same-month seasonality across sector and country ETFs (`seasonal_xs.py`). FAIL
+
+Pre-registered in 6db6e66 before any data was downloaded (Heston & Sadka 2008; Keloharju, Linnainmaa & Nyberg
+2016). The universe is 9 sector SPDRs and 20 country ETFs, all 29 served. The signal is each ETF's mean return
+in the same calendar month over the past 5 years. Each month the portfolio is ranked into thirds: H1 is top
+minus bottom, H2 is top minus the set. Costs are 10 bps a side, and the judged period starts in 2012.
+
+| at 10 bps | 2001-2011 (129 mo) | 2012 on (178 mo) | placebo p | verdict |
+| --- | --- | --- | --- | --- |
+| H1 top third minus bottom third | -0.52%/mo, t -2.43 | -0.63%/mo, t -4.03 | 0.993 | FAIL |
+| H2 top third minus the set | -0.26%/mo, t -2.16 | -0.33%/mo, t -3.90 | 0.993 | FAIL |
+
+Before costs (descriptive): H1 -0.26%/mo (t -1.19) in-sample and -0.35%/mo (t -2.23) after 2012. That is
+sectors -0.50%/mo and countries -0.20%/mo after 2012. The rest is cost: the thirds change almost completely
+every month. In ETFs the same-month effect doesn't just fail, it points slightly the wrong way. Betting the
+other way was not pre-registered, and its in-sample t is only 1.2, so it is an observation, not a candidate.
+Not kept.
+
 ### 2026-11-24: the bots trade on their own, on paper, every market hour (`autopaper.py`)
 
 The owner asked for the bots to scan, decide and buy without asking. Real orders are out (CLAUDE.md, no broker

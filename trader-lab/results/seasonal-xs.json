@@ -1,0 +1,95 @@
+{
+ "etfs_with_data": [
+  "EWA",
+  "EWC",
+  "EWD",
+  "EWG",
+  "EWH",
+  "EWI",
+  "EWJ",
+  "EWK",
+  "EWL",
+  "EWM",
+  "EWN",
+  "EWO",
+  "EWP",
+  "EWQ",
+  "EWS",
+  "EWT",
+  "EWU",
+  "EWW",
+  "EWY",
+  "EWZ",
+  "XLB",
+  "XLE",
+  "XLF",
+  "XLI",
+  "XLK",
+  "XLP",
+  "XLU",
+  "XLV",
+  "XLY"
+ ],
+ "cost_10": {
+  "H1_top_minus_bottom": {
+   "in_sample": {
+    "months": 129,
+    "mean_pct_mo": -0.524907211382414,
+    "t": -2.427910222359626
+   },
+   "judged": {
+    "months": 178,
+    "mean_pct_mo": -0.631656532907427,
+    "t": -4.033050375777675
+   }
+  },
+  "H2_top_minus_set": {
+   "in_sample": {
+    "months": 129,
+    "mean_pct_mo": -0.2598059212388091,
+    "t": -2.1632652038914215
+   },
+   "judged": {
+    "months": 178,
+    "mean_pct_mo": -0.3275564525346358,
+    "t": -3.90357433825315
+   }
+  }
+ },
+ "cost_25": {
+  "H1_top_minus_bottom": {
+   "in_sample": {
+    "months": 129,
+    "mean_pct_mo": -0.9275041106072203,
+    "t": -4.267041634288491
+   },
+   "judged": {
+    "months": 178,
+    "mean_pct_mo": -1.055532937401809,
+    "t": -6.747478180713513
+   }
+  },
+  "H2_top_minus_set": {
+   "in_sample": {
+    "months": 129,
+    "mean_pct_mo": -0.46369935009137825,
+    "t": -3.8237962235965193
+   },
+   "judged": {
+    "months": 178,
+    "mean_pct_mo": -0.5373879132087931,
+    "t": -6.393610058372887
+   }
+  }
+ },
+ "first": "2001-04",
+ "last": "2026-10",
+ "placebo_p": {
+  "H1": 0.993,
+  "H2": 0.993
+ },
+ "verdict": {
+  "H1": "FAIL",
+  "H2": "FAIL"
+ }
+}

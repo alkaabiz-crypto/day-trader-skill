@@ -165,6 +165,11 @@ def scoreboard():
         v = j.get("verdict", {})
         add("crypto coin momentum, %d coins, weekly" % j.get("coins_with_data", 0),
             "PASS" if "PASS" in v.values() else "FAIL", json.dumps(v))
+    j = _load("seasonal-xs.json")
+    if j:
+        v = j.get("verdict", {})
+        add("same-month seasonality, %d sector/country ETFs" % len(j.get("etfs_with_data", [])),
+            "PASS" if "PASS" in v.values() else "FAIL", json.dumps(v))
     j = _load("autopaper.json")
     if j:
         spy = j.get("spy_same_days_usd")
