@@ -339,6 +339,20 @@ Fading: 2022-now +0.57R (t 1.9). Exness execution: mid-cost case +0.68R, t 2.89.
 trade. New paper sleeve BTC_BREAKOUT_LONG (long-only, 0.5% risk) registered today; demo tickets now
 0.5% risk with shorts optional at half size.
 
+### 2026-11-24, study 14 (`study14.py`): independent check of another chat's findings
+
+| claim | my result | verdict |
+|---|---|---|
+| QQQ volatility control (15% / vol, monthly) is the best | post-2014 Sharpe 0.82 vs holding QQQ 0.86, placebo p 0.55 | **not confirmed**: lower risk, no better risk-adjusted return |
+| same on SPY | 0.73 vs 0.79, p 0.83 | not confirmed |
+| same on GLD | 0.66 vs 0.58, t 2.38, p 0.05 (OOS 0.33, HOLDOUT 0.90) | passes, borderline |
+| BTC weekly trend (4w/8w, half each) | Sharpe 1.04 vs 0.83, t 4.32, p 0.00; 2022+ 0.61 vs 0.36, max DD -39% vs -67% | **confirmed** (same family as our BTC trend) |
+| ETH weekly trend | 0.89 vs 0.53, t 3.21; 2014-19 0.18 fails; 2022+ 0.85 vs 0.11 | mostly confirmed (fails 1 gate) |
+| Permanent Portfolio / risk parity / min variance | 2008-26 Sharpe 0.86 / 0.88 / 0.94 vs SPY 0.62, 60/40 0.75; max DD -19 / -23 / -23% vs -52%; CAGR 6.5 / 8.3 / 8.7% vs 10.8% | **confirmed**: much smaller crashes, lower return |
+| DCA: SPY beats oil; BNO beats USO | $100/month since 2011: SPY +13.8%/yr, BNO +10.8%, USO +5.2% | **confirmed** (USO's roll drag) |
+| 10-stock momentum account | top-10 vs equal-weight same 113 stocks: t 1.26 post-2014 | **no edge** (its +14% week is noise) |
+Not testable here: funding carry, ETF flows, news timing (no data hosts). Rules tried: +10.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
