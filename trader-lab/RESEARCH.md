@@ -1232,3 +1232,39 @@ so more trades are expected to lose more on paper, not less. The bot's record is
 with the new limits noted.
 
 Later the same day the owner raised the limit again, to 50 trades a day: 10 a run and $500 of risk a day. The rule itself is unchanged.
+
+### 2026-11-24: the indices bot (`indexbot.py`), dip in an uptrend on 10 index CFDs. FAIL, runs on paper
+
+The owner asked for an indices bot. It uses the one family that held up on index funds, buying short dips
+inside an uptrend (Connors RSI(2), Double 7s; survivors.py). It trades the Exness index CFDs, priced from the
+fund tracking each:
+
+| CFD | fund |
+| --- | --- |
+| US500 | SPY |
+| USTEC | QQQ |
+| US30 | DIA |
+| US2000 | IWM |
+| DE30 | EWG |
+| UK100 | EWU |
+| JP225 | EWJ |
+| STOXX50 | FEZ |
+| HK50 | EWH |
+| AUS200 | EWA |
+
+Daily data comes from Tiingo, not Yahoo, dividend-adjusted. Costs are CFD costs: 3 bp spread plus 2 bp of
+swap for each night held. Pre-registered in its own commit before any run.
+
+| period | bot per year | Sharpe | max drop | t | US500 hold per year | Sharpe | max drop |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2000-2014 | 3.4% | 0.39 | 16% | 1.51 | 4.2% | 0.30 | 55% |
+| 2015-2026 | 1.6% | 0.23 | 21% | 0.79 | 13.0% | 0.78 | 34% |
+
+- After 2015: 1,059 trades, 68% of them winners, at 24.3 bp a trade before swap.
+- At 2x cost it loses 0.6% a year, and at 3x it loses 2.8% a year.
+- It beats only 56% of 200 placebos.
+
+**Verdict: FAIL.** CFD overnight financing takes most of the dip edge, and outside the US the edge is weaker
+than on US funds (survivors.py's 21 ETFs made 7.8% a year after 2015). Not tuned after the result. It runs
+on paper from 2026-11-24 at the owner's request, with a $10,000 pretend account, after each close.
+

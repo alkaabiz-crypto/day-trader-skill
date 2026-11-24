@@ -186,7 +186,7 @@ def cmd_backtest(a):
     if a.write:
         with open(os.path.join(HERE, "results", "indexbot.json"), "w") as fh:
             json.dump(out, fh, indent=1)
-    print("Indices bot (dip in an uptrend on 10 index CFDs via fund proxies, 5 x 20%%, 3 bp + 2 bp a night):")
+    print("Indices bot (dip in an uptrend on 10 index CFDs via fund proxies, 5 x 20%, 3 bp + 2 bp a night):")
     print("  period      per year  Sharpe  max drop   t   |  US500 hold per year  Sharpe  max drop")
     for n in ("2000-2014", "2015-2026"):
         r, s = out["rule"][n], out["us500"][n]
