@@ -1108,3 +1108,51 @@ above the range. Those two entries were removed unfilled.
 
 The bot's record is reported separately from the pre-registered trial and doesn't change its bar.
 Expectation from the lab: no edge after costs.
+
+### 2026-11-24: the bots' exact rules, backtested (bot_backtest.py), and four upgrades
+
+The bots went live this morning before their exact rules had been tested, so `bot_backtest.py` replays
+them. The variants were written down before any run. Data comes from `bot_data.py`:
+- **Stocks:** 1,444 liquid US stocks, the whole market at the live scanner's floor, over 59 sessions
+  (2026-09-01 to 2026-11-23, Yahoo's 60-day limit for 5-minute bars).
+- **Crypto, forex and metals:** 28 names, 2 years of hourly bars.
+
+**Crypto / forex**, costs as in bot.py (spreads plus swap):
+
+| rule | trades | net | a trade | daily t |
+| --- | --- | --- | --- | --- |
+| live rule, as it was | 11,951 | −$15,155 | −$1.27 | −8.1 |
+| + group cap (now live) | 5,762 | −$7,077 | −$1.23 | −6.8 |
+| + Bitcoin trend | 5,360 | −$6,688 | −$1.25 | −6.6 |
+| + no weekends / rollover | 5,255 | −$5,250 | −$1.00 | −5.2 |
+
+- Before costs the live rule made about $0 (+$850 over 12,000 trades).
+- With random directions at the same times and names, the live rule beat only 12% of 100 placebo draws.
+- The hourly stop is tight, so $10 of risk needs about $5,000 of forex exposure, and costs then take
+  about 10% of the risk on every trade.
+- Metals are the only group near zero (daily t −0.3 to +0.3).
+
+**Stocks**, the opening-range breakout:
+
+| rule | trades | net | a trade | daily t |
+| --- | --- | --- | --- | --- |
+| live rule | 295 | −$328 | −$1.11 | −3.05 |
+| SPY above its 200-day | 280 | −$281 | −$1.00 | −2.71 |
+| 10:17 decision only | 118 | −$153 | −$1.29 | −1.92 |
+| fresh breakouts only | 295 | −$299 | −$1.01 | −2.51 |
+
+- The live rule lost before costs too (−$167).
+- Out of 295 trades, 81 hit the stop and only 13 reached the 2R target.
+- Random names above their range midpoint, at the same times, lost a median $259. The live rule beat
+  only 30% of them.
+
+**Reading:** neither bot has an edge. Both lose about $1 a trade after costs, and the challengers don't
+change that. 59 sessions of stocks is short, but it's long enough to show a loser.
+
+**What stays and what changes:**
+- The bots keep trading on paper, since the owner wants the record. That costs nothing and gives a
+  forward check of this result.
+- Live money stays off, as the plan already says.
+- The group cap and the Exness cost table are now live. They're risk and accounting fixes, not edges.
+- Challengers run forward. One is promoted only on the forward rule written in bot_backtest.py.
+
