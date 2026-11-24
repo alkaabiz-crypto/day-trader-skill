@@ -131,6 +131,30 @@
    "status": "open",
    "setup": "20-hour closing-low breakdown",
    "id": "F-2026-11-24 16:34Z-LTC-USD"
+  },
+  {
+   "symbol": "AAPL",
+   "side": "buy",
+   "entry_est": 352.85,
+   "stop": 349.19,
+   "target": 360.17,
+   "shares": 2,
+   "max_loss_usd": 7.32,
+   "cost_bps": 7.64,
+   "reward_bps": 207.5,
+   "premarket_hit": false,
+   "or_low": 345.88,
+   "or_high": 352.5,
+   "pct_over": 0.13,
+   "track": "stocks",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 17:33Z",
+   "decided_at": "12:33",
+   "slot": 37,
+   "status": "open",
+   "risk_usd": 7.32,
+   "setup": "opening-range breakout",
+   "id": "S-2026-11-24-AAPL"
   }
  ],
  "last_fx": {
