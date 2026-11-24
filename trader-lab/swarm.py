@@ -272,7 +272,7 @@ def describe(rule):
     (f1, q1, o1), c2, h = rule
     s = "%s %s p%d" % (f1, o1, q1)
     if c2:
-        s += " AND %s %s p%d" % (c2[0], c2[1], c2[2])
+        s += " AND %s %s p%d" % (c2[0], c2[2], c2[1])
     return "%s, hold %dd" % (s, h)
 
 
@@ -293,13 +293,33 @@ def norm_sf(t):
     return 0.5 * math.erfc(t / math.sqrt(2))
 
 
-def pipeline(rules, sig_fn, E, label):
-    is_t = np.zeros(len(rules))
-    for k, r in enumerate(rules):
-        port = E.daily(sig_fn(r), COSTS[0])
-        is_t[k] = E.t(port[E.is_m])[0]
-        if (k + 1) % 10000 == 0:
-            print("  %s: %d rules scored" % (label, k + 1), flush=True)
+_G = {}
+
+
+def _is_t_one(k):
+    E, F, T, rules = _G["E"], _G["F"], _G["T"], _G["rules"]
+    return E.t(E.daily(signal(rules[k], F, T), COSTS[0])[E.is_m])[0]
+
+
+def score_is(rules, F, T, E, lo, hi, procs=4):
+    """IS t-stats for rules[lo:hi], in parallel (fork shares the panel). Cached in data/swarm/."""
+    import multiprocessing as mp
+    _G.update(E=E, F=F, T=T, rules=rules)
+    with mp.get_context("fork").Pool(procs) as pool:
+        out = pool.map(_is_t_one, range(lo, hi), chunksize=200)
+    return np.array(out)
+
+
+def cache_path(n):
+    return os.path.join(STORE, "is_t_%d_seed%d.npy" % (n, SEED))
+
+
+def pipeline(rules, sig_fn, E, label, is_t=None):
+    if is_t is None:
+        is_t = np.zeros(len(rules))
+        for k, r in enumerate(rules):
+            port = E.daily(sig_fn(r), COSTS[0])
+            is_t[k] = E.t(port[E.is_m])[0]
     top = np.argsort(-is_t)[:TOP_IS]
     rows = []
     for k in top:
@@ -326,7 +346,25 @@ def cmd_test(a):
     T = thresholds(F, E.is_m)
     names = sorted(F)
     rules = draw_rules(names, a.rules)
-    real = pipeline(rules, lambda r: signal(r, F, T), E, "real")
+    cp = cache_path(a.rules)
+    part = cp + ".part.npy"
+    done = np.load(part) if os.path.exists(part) else np.zeros(0)
+    if os.path.exists(cp):
+        is_t = np.load(cp)
+    else:
+        step = a.chunk
+        while len(done) < len(rules):
+            lo, hi = len(done), min(len(done) + step, len(rules))
+            done = np.concatenate([done, score_is(rules, F, T, E, lo, hi)])
+            np.save(part, done)
+            print("  IS-scored %d / %d rules" % (len(done), len(rules)), flush=True)
+            if a.only_score:
+                return 0
+        np.save(cp, done)
+        is_t = done
+        if a.only_score:
+            return 0
+    real = pipeline(rules, lambda r: signal(r, F, T), E, "real", is_t=is_t)
     # luck benchmark: 1,000 rules whose signals are circularly shifted per fund by a random offset
     rnd = np.random.default_rng(SEED)
     luck_rules = rules[:1000]
@@ -362,6 +400,8 @@ def main(argv=None):
     sub.add_parser("fetch")
     p = sub.add_parser("test")
     p.add_argument("--rules", type=int, default=100000)
+    p.add_argument("--chunk", type=int, default=25000, help="rules IS-scored per step (saved after each)")
+    p.add_argument("--only-score", action="store_true", help="IS-score one chunk, save it and stop")
     p.add_argument("--write", nargs="?", const=os.path.join(RESULTS, "swarm.json"))
     a = ap.parse_args(argv)
     try:
