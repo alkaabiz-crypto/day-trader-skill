@@ -206,8 +206,8 @@ def run_events(evs, spy, rf, hold=HOLD, cost_bps=COST_BPS, min_price=MIN_PRICE, 
     bh, v = [], p5.START
     for k in range(1, len(spy["d"])):
         d = spy["d"][k]
-        v *= spy["a"][k] / spy["a"][k - 1]
-        if days and d >= days[0]:
+        if days and d >= days[0]:          # SPY bought and held from the account's first day, not from 1993
+            v *= spy["a"][k] / spy["a"][k - 1]
             bh.append((d, v))
     res["usd_judged"], res["usd_all"] = p5.dollars(path, split), p5.dollars(path)
     res["spy_usd_judged"], res["spy_usd_all"] = p5.dollars(bh, split), p5.dollars(bh)

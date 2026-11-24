@@ -1,0 +1,63 @@
+{
+ "first": "1994-01-03",
+ "last": "2026-11-24",
+ "results": {
+  "H1": {
+   "in_sample": {
+    "n": 3087,
+    "mean_bps": 8.82669354416659,
+    "t": 3.9857592791937853
+   },
+   "judged": {
+    "n": 1313,
+    "mean_bps": 1.9696590304607624,
+    "t": 0.629177122849284
+   },
+   "days_in_market_share": 0.531,
+   "usd_judged": 724.0472777411245,
+   "usd_all": 13724.81430831795,
+   "spy_usd_judged": 1871.1196689737878,
+   "spy_usd_all": 13777.385425207225,
+   "verdict": "FAIL",
+   "name": "FOMC cycle, even weeks"
+  },
+  "H2": {
+   "in_sample": {
+    "n": 139,
+    "mean_bps": 5.4843979837150485,
+    "t": 0.578996853815598
+   },
+   "judged": {
+    "n": 153,
+    "mean_bps": 10.502791117725021,
+    "t": 1.7315930949609797
+   },
+   "days_in_market_share": 0.035,
+   "usd_judged": 752.1841102079479,
+   "usd_all": 1404.3487590157908,
+   "spy_usd_judged": 4330.779349479015,
+   "spy_usd_all": 13777.385425207225,
+   "verdict": "FAIL",
+   "name": "Day before a holiday"
+  },
+  "H3": {
+   "in_sample": {
+    "n": 192,
+    "mean_bps": 24.330401196686054,
+    "t": 1.2773382667130913
+   },
+   "judged": {
+    "n": 203,
+    "mean_bps": 0.9327039217581938,
+    "t": 0.05700413414717005
+   },
+   "days_in_market_share": 0.234,
+   "usd_judged": 622.8378377222,
+   "usd_all": 1594.0501647741032,
+   "spy_usd_judged": 4330.779349479015,
+   "spy_usd_all": 13777.385425207225,
+   "verdict": "FAIL",
+   "name": "Options-expiration week"
+  }
+ }
+}
