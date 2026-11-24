@@ -180,6 +180,18 @@ def scoreboard():
             "since 2012 %+.1f bp/event t %.2f; forward %d events; next FOMC %s: buy SPY at the close the day "
             "before, sell at the open (paper)" % (h2.get("mean_bps", 0), h2.get("t", 0), fw.get("n", 0),
                                                  j.get("next_event")))
+    j = _load("calendar2.json")
+    if j:
+        for k, r in sorted(j.get("results", {}).items()):
+            add("$500 test: %s (SPY)" % r.get("name", k), r.get("verdict", "FAIL"),
+                "judged t %.2f; $500 -> $%.0f vs $%.0f in SPY" % (
+                    r["judged"]["t"], r.get("usd_judged") or 0, r.get("spy_usd_judged") or 0))
+    for f, label in (("insiders.json", "$500 test: copy insider buying clusters"),
+                     ("congress.json", "$500 test: copy House members' stock buys")):
+        j = _load(f)
+        if j:
+            add(label, j.get("verdict", "FAIL"), "judged %+.2f%%/month vs SPY, t %.2f; $500 -> $%.0f vs $%.0f in SPY" % (
+                j["judged"]["mean_pct"], j["judged"]["t"], j.get("usd_judged") or 0, j.get("spy_usd_judged") or 0))
     j = _load("autopaper.json")
     if j:
         spy = j.get("spy_same_days_usd")

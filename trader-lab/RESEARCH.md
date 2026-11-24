@@ -84,6 +84,32 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 
 ## Log
 
+### 2026-11-24: four more ideas, each backtested on a $500 account (`calendar2.py`, `insiders.py`, `congress.py`). All FAIL
+
+Pre-registered in 9c02e46 before any data was downloaded or any return computed. "$500 became" holds the rule's
+positions and T-bills otherwise, net of costs, over the judged years. The SPY column is $500 bought and held over
+the same years.
+
+| idea | before | judged | $500 became (judged) | $500 in SPY | verdict |
+| --- | --- | --- | --- | --- | --- |
+| FOMC cycle, even weeks (Cieslak et al. 2019) | 1994-2016 +8.8 bp/day, t 3.99 | 2017 on +2.0 bp/day, t 0.63 | $724 | $1,871 | FAIL |
+| Day before a holiday (Ariel 1990) | before 2010 +5.5 bp, t 0.58 | 2010 on +10.5 bp, t 1.73 | $752 | $4,331 | FAIL |
+| Options-expiration week | before 2010 +24 bp/week, t 1.28 | 2010 on +0.9 bp, t 0.06 | $623 | $4,331 | FAIL |
+| Insider buying clusters (3+ insiders, $100k+, SEC Form 4) | 2014-19 +1.15%/mo vs SPY, t 2.05 | 2020 on -1.15%/mo, t -1.60 | $431 | $1,228 | FAIL |
+| Copying House members' disclosed stock buys | 2019-21 +0.34%/mo vs SPY, t 0.48 | 2022 on -0.89%/mo, t -2.18 | $616 | $806 | FAIL |
+
+Notes:
+- The FOMC cycle is the clearest case of a published effect disappearing. It is strong in the paper's own
+  sample (t 4) and gone after it.
+- Insiders: 9,378 clusters from 372,233 open-market purchases (2014 Q1 to 2026 Q1). Yahoo had no prices for
+  3,763 of them, mostly delisted companies. That survivor bias flatters the result, and it still failed.
+- Congress: 4,627 House PTRs (2019 to today), 3,808 readable (the rest are scanned paper), 10,835 stock
+  purchases. Entry is on the public filing date, not the trade date, because a copier can't know before that.
+- The timing rules sit in T-bills most of the time, so they lag buy-and-hold badly even where their days earn
+  a little.
+
+Nothing here is kept.
+
 ### 2026-11-24 13:12: the paper bots, version 2 (owner's request): full market, every 15 minutes, three books
 
 - **orb**: the same skill chain (scan > entry > exit > size > risk), but the scanner now covers the full US
