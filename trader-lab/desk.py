@@ -190,7 +190,7 @@ def congress():
     j, err = run(["trader-pelosi/ptr.py", "new", "--json"], timeout=120)
     if j is None:
         return {"error": err}
-    rows = j if isinstance(j, list) else j.get("filings", j.get("rows", []))
+    rows = j if isinstance(j, list) else j.get("new", j.get("filings", j.get("rows", [])))
     return {"new": rows[:20]}
 
 
@@ -287,7 +287,12 @@ def text(rep):
         if n.get("sec") == "off":
             L.append("   (SEC 8-K filings off: no SEC access or no sec_user_agent set)")
     c = rep["congress"]
-    L.append("   Congress trades: " + ("unavailable: " + c["error"] if "error" in c else "%d new filings" % len(c["new"])))
+    if "error" in c:
+        L.append("   Congress trades: unavailable: " + c["error"])
+    else:
+        L.append("   Congress trades: %d new filings (up to 45 days late by law)" % len(c["new"]))
+        for f in c["new"][:5]:
+            L.append("      %s  %s (%s)" % (f.get("filed", "?"), f.get("name", "?"), f.get("district", "")))
     L += ["", "5. CANDIDATES (scanner hits, each with what the lab learned about its setup)"]
     cd = rep["candidates"]
     if "error" in cd:
