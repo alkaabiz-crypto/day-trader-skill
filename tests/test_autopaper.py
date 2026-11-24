@@ -93,6 +93,21 @@ class Autopaper(unittest.TestCase):
         self.assertTrue(any("BBB: risk BLOCK" in x for x in log))
 
 
+class HalfDay(unittest.TestCase):
+    def test_half_day_sells_at_the_last_candle(self):
+        # the day after Thanksgiving closes at 13:00: the 15:52 run sells at the 12:55 candle's close
+        s = state(cash=9000.0, positions=[pos(day="2026-11-27", bar_end="10:50")])
+        bars = [bar("10:55", 100, 100.5, 99.5, 100.2), bar("12:55", 100.2, 100.6, 100.0, 100.4)]
+        closed, _ = ap.manage(s, lambda _: bars, datetime.datetime(2026, 11, 27, 15, 52))
+        self.assertEqual(closed[0]["why"], "end of day")
+        self.assertAlmostEqual(closed[0]["exit"], 100.4)
+        self.assertEqual(closed[0]["exit_time"], "2026-11-27 12:55")
+
+    def test_no_buys_after_the_half_day_close_without_fresh_breakouts(self):
+        now = datetime.datetime(2026, 11, 27, 13, 37)
+        self.assertFalse(ap.fresh("12:50", now, 30))     # the last candle closed 12:55, 42 minutes before
+
+
 class Books(unittest.TestCase):
     def test_fresh_window(self):
         now = datetime.datetime(2026, 11, 25, 10, 22)

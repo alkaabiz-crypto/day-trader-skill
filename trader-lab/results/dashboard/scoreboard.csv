@@ -1,0 +1,19 @@
+study,verdict,detail
+"5-minute strategies (lab.py, 40 names)",FAIL,kept: none (needs OOS t >= 3)
+"daily rule R3 (Connors, dip-buying)",UNPROVEN,"passed on 40 survivor stocks, FAILED on 110 fresh ETFs (r3_etfs.py)"
+frozen near-misses (daily.py forward),FORWARD-TEST,9 rules scored on new days only
+video strategy: ORB + 20 EMA pullback,FAIL,orb-ema.json
+5-minute rules on 4 years SPY/QQQ/IWM,FAIL,long-3etf.json
+monthly trend/momentum/vol-targeting,FAIL,"absmom FAIL, gem FAIL, gtaa FAIL, sma FAIL, topk FAIL, volman FAIL"
+short volatility (SVXY contango),FAIL,"contango FAIL, trend FAIL"
+risk parity / equal weight,FAIL,"ew9 FAIL, ivol4 FAIL, ivol9 FAIL"
+"swarm: 100,000 machine-made rules",FAIL,the 2 holdout 'passes' were a scoring artifact (RESEARCH.md 2026-11-24)
+"news: earnings-day drift (SEC 8-K 2.02, 30 stocks)",FAIL,"chosen {""k"": 4.0, ""h"": 20, ""sides"": ""long""}"
+"stocks in play / end-of-day reversal, 40 names x 4 years",FAIL,"{""eodrev"": ""FAIL"", ""sip"": ""FAIL""}"
+"crypto coin momentum, 74 coins, weekly",FAIL,"{""H1"": ""FAIL"", ""H2"": ""FAIL""}"
+"same-month seasonality, 29 sector/country ETFs",FAIL,"{""H1"": ""FAIL"", ""H2"": ""FAIL""}"
+pre-Fed night: SPY close before to open of FOMC day (scheduled meetings),BACKTEST-PASS,"since 2012 +13.7 bp/event t 3.53; forward 0 events; next FOMC 2026-12-09: buy SPY at the close the day before, sell at the open (paper)"
+"paper bots: orb, full market every 15 min (scan > entry > exit > size > risk)",PAPER,"1 days (0 since v2), 1 trades, P&L +43.20 on $10,000 (SPY same days -62.30), 3 open"
+"paper bots: fed night (buy SPY before FOMC, sell at the open)",PAPER,"1 days, 0 trades, P&L +0.00 on $10,000"
+"paper bots: stocks in play (resting orders, 40 names)",PAPER,"1 days, 0 trades, P&L +0.00 on $10,000"
+"stocks in play, FORWARD test (frozen 2026-11-24)",FORWARD-TEST,"0 of 60 new sessions, 0.0 bp/day, t 0.00 at 5 bps"
