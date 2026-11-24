@@ -51,6 +51,7 @@ COST_BPS, REF_COST_BPS = 2.0, 5.0
 SPLIT_YEAR = 2012
 T_BAR = 3.0
 PLACEBO_DRAWS = 1000
+FREEZE = "2026-11-24"   # H2 passed on this date; events after it are the forward test (added after the result)
 MONTHS = {m: i + 1 for i, m in enumerate(["january", "february", "march", "april", "may", "june", "july",
                                           "august", "september", "october", "november", "december"])}
 ABBR = {k[:3]: v for k, v in MONTHS.items()}
@@ -115,9 +116,12 @@ def cmd_fetch(a):
         dates += parse_historical(get(FED + "fomchistorical%d.htm" % y), y)
         time.sleep(0.5)
     dates += [d for d in parse_current(get(FED + "fomccalendars.htm")) if d.year > LAST_HISTORICAL]
+    upcoming = sorted(set(d for d in dates if d > datetime.date.today()))
     dates = sorted(set(d for d in dates if d <= datetime.date.today()))
     with open(os.path.join(STORE, "events.json"), "w") as fh:
         json.dump([d.isoformat() for d in dates], fh)
+    with open(os.path.join(STORE, "upcoming.json"), "w") as fh:
+        json.dump([d.isoformat() for d in upcoming], fh)
     for sym in ("SPY", "^IRX"):
         b = daily.parse_daily(daily.fetch_daily(sym))
         with gzip.open(os.path.join(STORE, sym.replace("^", "_") + ".json.gz"), "wt") as fh:
@@ -200,6 +204,13 @@ def cmd_run(a):
             if 1e4 * statistics.mean(vals) >= real[k]:
                 beat[k] += 1
     out["placebo_p"] = {k: v / PLACEBO_DRAWS for k, v in beat.items()}
+    fwd = [days[d][1] - COST_BPS / 1e4 for d in events if d > FREEZE and days[d][1] is not None]
+    out["forward_H2"] = {"freeze": FREEZE, **stats(fwd)}
+    up = os.path.join(STORE, "upcoming.json")
+    if os.path.exists(up):
+        with open(up) as fh:
+            nxt = json.load(fh)
+        out["next_event"] = nxt[0] if nxt else None
     out["verdict"] = {}
     for k, key in (("H1", "H1_close_to_close"), ("H2", "H2_close_to_open")):
         s = out["cost_%g" % COST_BPS][key]

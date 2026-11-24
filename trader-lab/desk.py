@@ -170,6 +170,16 @@ def scoreboard():
         v = j.get("verdict", {})
         add("same-month seasonality, %d sector/country ETFs" % len(j.get("etfs_with_data", [])),
             "PASS" if "PASS" in v.values() else "FAIL", json.dumps(v))
+    j = _load("fomc.json")
+    if j:
+        v = j.get("verdict", {})
+        h2 = j.get("cost_2", {}).get("H2_close_to_open", {}).get("judged", {})
+        fw = j.get("forward_H2", {})
+        add("pre-Fed night: SPY close before to open of FOMC day (scheduled meetings)",
+            "BACKTEST-PASS" if v.get("H2") == "PASS" else "FAIL",
+            "since 2012 %+.1f bp/event t %.2f; forward %d events; next FOMC %s: buy SPY at the close the day "
+            "before, sell at the open (paper)" % (h2.get("mean_bps", 0), h2.get("t", 0), fw.get("n", 0),
+                                                 j.get("next_event")))
     j = _load("autopaper.json")
     if j:
         spy = j.get("spy_same_days_usd")

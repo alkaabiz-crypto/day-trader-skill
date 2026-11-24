@@ -51,7 +51,7 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 3. ~~**Crypto cross-sectional factors.**~~ Done 2026-11-24 (`crypto_xs.py`): FAIL, see Log. Liu, Tsyvinski & Wu (2022, JF) "Common Risk Factors in
    Cryptocurrency": coin momentum, size and market. Pre-registered, weekly, on the top coins. Caveat:
    dead coins are missing from Yahoo, so a pass would need a survivorship audit.
-4. **FOMC and CPI days.** Lucca & Moench (2015) pre-FOMC drift, using the Fed's public meeting
+4. ~~**FOMC and CPI days.**~~ FOMC done 2026-11-24 (`fomc.py`): overnight version PASS, on forward test; CPI not done. Lucca & Moench (2015) pre-FOMC drift, using the Fed's public meeting
    calendar, run as a control (reported dead after 2015).
 5. **FX carry.** Lustig, Roussanov & Verdelhan (2011) carry needs each country's interest rate. On
    Exness, carry *is* the swap, so test the swap-inclusive version only. Needs a rates source; FRED
@@ -83,6 +83,36 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 7. **Earnings-day drift and the earnings announcement premium** for single stocks (needs an earnings calendar from trader-analyst).
 
 ## Log
+
+### 2026-11-24: plan B4, pre-FOMC drift (`fomc.py`, Lucca & Moench 2015). H1 FAIL, **H2 PASS (first pre-registered pass)**
+
+Pre-registered in b6d3290 before any return was computed. The events are the 263 scheduled FOMC announcements
+from Feb 1994 to Oct 2026, taken from the Fed's own pages (federalreserve.gov, newly allowed in the environment).
+Conference calls, notation votes, unscheduled and cancelled meetings are excluded. The rule as written counts
+the Fed's separate 15 and 16 Sep 2003 entries twice: one extra in-sample event, kept as registered. Costs are
+2 bps round trip, and the judged period starts in 2012.
+
+| | 1994-2011 (145) | 2012 on (118) | placebo p | verdict |
+| --- | --- | --- | --- | --- |
+| H1 SPY close before to close of FOMC day, over T-bills | +30.4 bp, t 2.96 | +8.1 bp, t 0.84 | 0.318 | FAIL |
+| H2 SPY close before to the open of FOMC day | +9.5 bp, t 1.62 | **+13.7 bp, t 3.53** | 0.024 | **PASS** |
+
+At 5 bps, H2 after 2012 is +10.7 bp, t 2.76. Checks that don't change the verdict:
+- both halves are positive: 2012-18 +6.9 bp (t 1.65), 2019-26 +19.8 bp (t 3.16);
+- without the best 5 events: +7.8 bp, t 2.66;
+- 61% of events are positive, median +6.7 bp;
+- no event day is ex-dividend;
+- ordinary nights since 2012 average +2.8 bp, and non-FOMC Wednesday nights +4.8 bp;
+- the FOMC day's own open-to-close is -4.9 bp, t -0.59.
+
+The drift has moved: it now comes overnight, before the open, rather than in the paper's 2pm-to-2pm window.
+Close-to-close it's gone.
+
+What it's worth: about +14 bp on each of 8 nights a year, roughly 1% a year of the money used. It's real
+evidence but small. It's one pass among about a dozen pre-registered hypotheses today. At t 3.5 chance is an
+unlikely explanation, but not impossible. **Kept as a forward test, not live:** events after 2026-11-24 are
+scored separately (`forward_H2`). The desk shows the next date: FOMC 2026-12-09, so the rule buys SPY at the
+2026-12-08 close and sells at the 12-09 open, on paper.
 
 ### 2026-11-24: same-month seasonality across sector and country ETFs (`seasonal_xs.py`). FAIL
 
