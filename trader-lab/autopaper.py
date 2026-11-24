@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Autopaper: the bots trade on their own, every market hour, on PAPER only.
+"""Autopaper: the bots trade on their own, every 15 minutes, on PAPER only. Three paper books.
 
-    python3 autopaper.py run [--now "2026-11-24 10:52"]   # one hourly pass: manage positions, then buy on signals
+    python3 autopaper.py run [--now "2026-11-24 10:52"]   # one pass: manage positions, then buy on signals
     python3 autopaper.py report                           # equity, P&L, trades, vs SPY, verdict
 
 The skills already in this repo decide, and nobody approves each trade:
-  1. trader-scanner  scan.py orb       opening-range breakouts on the lab's 40 liquid names
+  1. trader-scanner  scan.py orb       opening-range breakouts on the full US market (trader/universe.txt,
+                                        price >= $5, >= 500k shares traded today); the lab's 40 if it fails
   2. trader-entry    entry.py check    the breakout is still live (last close above the range high)
   3. trader-exit     exit.py plan      stop at the range midpoint, target 2R, flat by 15:55
   4. trader-budget   size.py           shares for the account and the $ risk limit
@@ -21,6 +22,18 @@ FROZEN 2026-11-24 before the first run (config.json is written from CONFIG on th
   Verdict: PAPER until 60 trading days. Then LIVE-REVIEW only if net P&L > 0, it beats SPY bought and held over
   the same days on the same $10,000, and the daily P&L t >= 2; otherwise FAIL. It's evidence for the
   owner to weigh, not a switch.
+
+VERSION 2, 2026-11-24 13:10 New York, at the owner's request: the "orb" book now scans the full market every
+15 minutes (was 40 names, hourly) and only takes breakouts whose trigger candle closed in the last 30 minutes
+(was about 2 hours), so it buys close to the signal. Its 60-day clock restarts on 2026-11-25. Limits unchanged.
+Two more paper books run in the same pass, each with its own $10,000 and ledger:
+  fed  the one pre-registered PASS (fomc.py H2): buy SPY with the whole book at the last run of the day before a
+       scheduled FOMC announcement (15:50 or later), sell at the announcement day's opening price. 2 bps round trip.
+  sip  the closest near-miss (sip_long.py, frozen in sip_forward.py): at the first run after 9:35, the lab's 40
+       names ranked by the first 5-minute candle's volume vs its 14-day average; the top 5 with ratio >= 1.5 get a
+       resting stop order at that candle's high (green candle, buy) or low (red candle, sell short), stop one
+       candle-range away, out at the end of the day. $2,000 each, 5 bps round trip. An order fills only on candles
+       after it was placed.
 Research, not financial advice.
 """
 
@@ -44,7 +57,11 @@ BOOK = os.path.join(HERE, "autopaper")
 RESULT = os.path.join(HERE, "results", "autopaper.json")
 CONFIG = {"start_cash": 10000.0, "risk_usd": 50.0, "max_open": 3, "max_buys_day": 4, "daily_stop_usd": 150.0,
           "last_entry": "15:00", "flatten_at": "15:50", "slip_bps": 2.0, "cost_bps_round_trip": 5.0,
-          "fresh_minutes": 60, "min_days": 60, "min_t": 2.0, "frozen": "2026-11-24"}
+          "fresh_minutes": 30, "min_days": 60, "min_t": 2.0, "frozen": "2026-11-24", "version": 2,
+          "universe": "full", "min_price": 5.0, "min_volume": 500000, "clock_start": "2026-11-25"}
+FED = {"cash": 10000.0, "cost_bps_round_trip": 2.0, "buy_at": "15:50"}
+SIP = {"cash": 10000.0, "per_trade": 2000.0, "top": 5, "min_rvol": 1.5, "lookback": 14, "cost_bps_round_trip": 5.0,
+       "flatten_at": "15:50", "place_by": "10:30"}
 TRADE_FIELDS = ["date", "symbol", "qty", "entry_time", "entry", "stop", "target", "exit_time", "exit", "why",
                 "gross_usd", "cost_usd", "pnl_usd"]
 NY = "America/New_York"
@@ -87,6 +104,15 @@ def yahoo_bars(sym, day, now):
             continue
         out.append({"t": t.strftime("%H:%M"), "o": o, "h": h, "l": l, "c": c})
     return out
+
+
+def fresh(bar_start, now, minutes):
+    """True if the trigger candle (start HH:MM, 5 minutes long) closed within `minutes` of `now`."""
+    if not bar_start:
+        return False
+    h, m = (int(x) for x in bar_start.split(":"))
+    closed = now.replace(hour=h, minute=m) + datetime.timedelta(minutes=5)
+    return datetime.timedelta(0) <= now - closed <= datetime.timedelta(minutes=minutes)
 
 
 def run_skill(args, timeout=180):
@@ -207,14 +233,24 @@ def find_buys(state, marks, now, symbols, live_now, cfg=CONFIG, skill=run_skill)
     if not ok:
         return new, [why]
     nowarg = [] if live_now else ["--now", now.strftime("%Y-%m-%d %H:%M")]
-    scan, err = skill(["trader-scanner/scan.py", "orb", "--symbols", ",".join(symbols), "--no-write", "--json"]
-                      + nowarg)
+    if symbols is None:      # the full market
+        scan, err = skill(["trader-scanner/scan.py", "orb", "--min-price", str(cfg["min_price"]), "--min-volume",
+                           str(cfg["min_volume"]), "--no-write", "--json", "--quiet"] + nowarg, timeout=420)
+        if scan is None:
+            import lab
+            log.append("full scan failed (%s): the lab's 40 instead" % err)
+            symbols = lab.UNIVERSE
+    if symbols is not None:
+        scan, err = skill(["trader-scanner/scan.py", "orb", "--symbols", ",".join(symbols), "--no-write", "--json"]
+                          + nowarg)
     if scan is None:
         return new, ["scanner failed: %s" % err]
     held = {p["symbol"] for p in state["positions"]}
     traded_today = set(state.get("traded", {}).get(now.date().isoformat(), []))
     hits = [h for h in scan.get("hits", []) if h["symbol"] not in held and h["symbol"] not in traded_today]
-    log.append("scanner: %d breakouts" % len(hits))
+    n_all = len(hits)
+    hits = [h for h in hits if fresh(h.get("bar_start"), now, cfg["fresh_minutes"])]
+    log.append("scanner: %d breakouts, %d from the last %d minutes" % (n_all, len(hits), cfg["fresh_minutes"]))
     tmp = tempfile.mkdtemp(prefix="autopaper-")
     for h in hits:
         ok, why = may_buy(state, marks, now, cfg)
@@ -228,8 +264,8 @@ def find_buys(state, marks, now, symbols, live_now, cfg=CONFIG, skill=run_skill)
             log.append("%s: entry %s" % (s, (ent or {}).get("status", err)))
             continue
         last = ent.get("last") or {}
-        if (ent.get("minutes_since") or 0) > cfg["fresh_minutes"] + 60 or (last.get("vs_level_pct") or -1) < 0:
-            log.append("%s: breakout no longer live (last close %s%% vs the range high)" % (s, last.get("vs_level_pct")))
+        if (last.get("vs_level_pct") or -1) < 0:
+            log.append("%s: fell back under the range high" % s)
             continue
         px = round(last["close"] * (1 + cfg["slip_bps"] / 1e4), 4)
         pp = os.path.join(tmp, s + "-plan.json")
@@ -269,6 +305,202 @@ def find_buys(state, marks, now, symbols, live_now, cfg=CONFIG, skill=run_skill)
     return new, log
 
 
+
+# ---------------------------------------------------------------- extra books: fed and sip
+
+def load_book(name, cash):
+    p = os.path.join(BOOK, name + "_state.json")
+    if os.path.exists(p):
+        with open(p) as fh:
+            return json.load(fh)
+    return {"cash": cash, "positions": [], "orders": [], "realized": {}, "start": None, "done": []}
+
+
+def book_close(st, pos, px, when, why, cost_bps):
+    qty, side = pos["qty"], pos.get("side", 1)
+    gross = side * (px - pos["entry"]) * qty
+    cost = (pos["entry"] + px) * qty * cost_bps / 2 / 1e4
+    st["cash"] += gross + pos["entry"] * qty - cost if side > 0 else gross - cost + pos["entry"] * qty
+    d = when[:10]
+    st["realized"][d] = st["realized"].get(d, 0.0) + gross - cost
+    return {"date": pos["date"], "symbol": pos["symbol"], "qty": side * qty, "entry_time": pos["entry_time"],
+            "entry": round(pos["entry"], 4), "stop": pos.get("stop"), "target": None, "exit_time": when,
+            "exit": round(px, 4), "why": why, "gross_usd": round(gross, 2), "cost_usd": round(cost, 2),
+            "pnl_usd": round(gross - cost, 2)}
+
+
+def book_equity(st, marks):
+    return st["cash"] + sum(p["qty"] * (p["entry"] + p.get("side", 1) * (marks.get(p["symbol"], p["entry"]) - p["entry"]))
+                            for p in st["positions"])
+
+
+def fomc_dates():
+    """Scheduled FOMC announcement days (ISO), from fomc.py's store, else straight from the Fed's calendar page."""
+    import fomc
+    out = set()
+    for name in ("events.json", "upcoming.json"):
+        p = os.path.join(fomc.STORE, name)
+        if os.path.exists(p):
+            with open(p) as fh:
+                out |= set(json.load(fh))
+    if not any(d > datetime.date.today().isoformat() for d in out):
+        try:
+            out |= {d.isoformat() for d in fomc.parse_current(fomc.get(fomc.FED + "fomccalendars.htm"))}
+        except Exception:  # noqa: BLE001
+            pass
+    return sorted(out)
+
+
+def prev_weekday(d):
+    d -= datetime.timedelta(days=1)
+    while d.weekday() >= 5:
+        d -= datetime.timedelta(days=1)
+    return d
+
+
+def run_fed(now, bars_of, dates, cfg=FED):
+    """Buy SPY at the last run of the day before an FOMC announcement; sell at the announcement day's open."""
+    st, log, closed = load_book("fed", cfg["cash"]), [], []
+    today = now.date().isoformat()
+    spy = bars_of("SPY")
+    for pos in list(st["positions"]):
+        if today > pos["date"] and spy:              # the announcement day (or later): out at today's open
+            closed.append(book_close(st, pos, spy[0]["o"], "%s %s" % (today, spy[0]["t"]), "FOMC-day open",
+                                     cfg["cost_bps_round_trip"]))
+            st["positions"].remove(pos)
+    tomorrow_fomc = [d for d in dates if d > today and prev_weekday(datetime.date.fromisoformat(d)).isoformat() == today]
+    if tomorrow_fomc and not st["positions"] and now.strftime("%H:%M") >= cfg["buy_at"] and spy \
+            and today not in st["done"]:
+        px = spy[-1]["c"]
+        qty = int(st["cash"] // px)
+        if qty > 0:
+            st["cash"] -= qty * px
+            st["positions"].append({"symbol": "SPY", "qty": qty, "entry": px, "side": 1, "date": today,
+                                    "entry_time": now.strftime("%Y-%m-%d %H:%M"), "stop": None})
+            st["done"].append(today)
+            log.append("fed: BUY %d SPY @ %.2f (FOMC %s)" % (qty, px, tomorrow_fomc[0]))
+    nxt = [d for d in dates if d >= today]
+    if not log and not closed:
+        log.append("fed: waiting (next FOMC %s)" % (nxt[0] if nxt else "unknown"))
+    st["start"] = st["start"] or today
+    return st, closed, log
+
+
+def yahoo_days(sym, rng="1mo"):
+    """{date: [5-minute candles with volume]} for the last month, New York time, regular session only."""
+    import daily
+    url = "https://query2.finance.yahoo.com/v8/finance/chart/%s?interval=5m&range=%s" % (sym, rng)
+    req = urllib.request.Request(url, headers={"User-Agent": daily.UA, "Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        res = json.loads(r.read().decode("utf-8", "replace"))["chart"]["result"][0]
+    off = (res.get("meta") or {}).get("gmtoffset", -18000) or -18000
+    q = res["indicators"]["quote"][0]
+    days = {}
+    for i, ts in enumerate(res.get("timestamp") or []):
+        t = datetime.datetime(1970, 1, 1) + datetime.timedelta(seconds=int(ts) + off)
+        if t.minute % 5 or not ("09:30" <= t.strftime("%H:%M") < "16:00"):
+            continue
+        row = [q[k][i] for k in ("open", "high", "low", "close", "volume")]
+        if None in row:
+            continue
+        days.setdefault(t.date().isoformat(), []).append(
+            {"t": t.strftime("%H:%M"), "o": row[0], "h": row[1], "l": row[2], "c": row[3], "v": row[4]})
+    return days
+
+
+def sip_pick(days_by_sym, today, cfg=SIP):
+    """[(sym, side, level, dist, rvol)] for today's stocks in play, the lab's rule (s_sip, stop = candle range)."""
+    rows = []
+    for s, days in days_by_sym.items():
+        if today not in days or not days[today] or days[today][0]["t"] != "09:30":
+            continue
+        prior = [d for d in sorted(days) if d < today and days[d] and days[d][0]["t"] == "09:30"][-cfg["lookback"]:]
+        if len(prior) < cfg["lookback"]:
+            continue
+        avg = sum(days[d][0]["v"] for d in prior) / len(prior)
+        b = days[today][0]
+        if avg <= 0 or b["c"] == b["o"]:
+            continue
+        rows.append((s, b, b["v"] / avg))
+    rows.sort(key=lambda r: -r[2])
+    out = []
+    for s, b, rv in rows[:cfg["top"]]:
+        if rv < cfg["min_rvol"]:
+            continue
+        side = 1 if b["c"] > b["o"] else -1
+        out.append((s, side, b["h"] if side > 0 else b["l"], b["h"] - b["l"], rv))
+    return out
+
+
+def sip_step(st, bars_of, now, cfg=SIP):
+    """Fill resting orders on candles after they were placed, manage stops, flatten at the end of the day."""
+    closed, log, marks = [], [], {}
+    today = now.date().isoformat()
+    for o in list(st["orders"]):
+        if o["date"] != today:
+            st["orders"].remove(o)
+            continue
+        for b in bars_of(o["symbol"]):
+            if b["t"] < o["active_from"]:
+                continue
+            hit = b["h"] >= o["level"] if o["side"] > 0 else b["l"] <= o["level"]
+            if hit:
+                px = max(o["level"], b["o"]) if o["side"] > 0 else min(o["level"], b["o"])
+                qty = int(cfg["per_trade"] // px)
+                if qty > 0:
+                    st["cash"] -= qty * px
+                    st["positions"].append({"symbol": o["symbol"], "qty": qty, "entry": px, "side": o["side"],
+                                            "date": today, "entry_time": "%s %s" % (today, b["t"]),
+                                            "stop": px - o["side"] * o["dist"], "bar": b["t"]})
+                    log.append("sip: %s %d %s @ %.2f" % ("BUY" if o["side"] > 0 else "SHORT", qty, o["symbol"], px))
+                st["orders"].remove(o)
+                break
+    flatten = now.strftime("%H:%M") >= cfg["flatten_at"]
+    for pos in list(st["positions"]):
+        bars = bars_of(pos["symbol"])
+        done = None
+        for b in bars:
+            if b["t"] < pos["bar"]:
+                continue
+            if (pos["side"] > 0 and b["l"] <= pos["stop"]) or (pos["side"] < 0 and b["h"] >= pos["stop"]):
+                px = min(b["o"], pos["stop"]) if pos["side"] > 0 else max(b["o"], pos["stop"])
+                done = (px, "%s %s" % (today, b["t"]), "stop")
+                break
+        if done is None and (flatten or pos["date"] < today) and bars:
+            done = (bars[-1]["c"], "%s %s" % (today, bars[-1]["t"]), "end of day")
+        if done:
+            closed.append(book_close(st, pos, done[0], done[1], done[2], cfg["cost_bps_round_trip"]))
+            st["positions"].remove(pos)
+        elif bars:
+            marks[pos["symbol"]] = bars[-1]["c"]
+    if flatten:
+        st["orders"] = []
+    return closed, log, marks
+
+
+def run_sip(now, bars_of, cfg=SIP):
+    import lab
+    st = load_book("sip", cfg["cash"])
+    today = now.date().isoformat()
+    log = []
+    if today not in st["done"] and "09:35" <= now.strftime("%H:%M") <= cfg["place_by"]:
+        days = {}
+        for s in lab.UNIVERSE:
+            try:
+                days[s] = yahoo_days(s)
+            except Exception:  # noqa: BLE001
+                pass
+        picks = sip_pick(days, today, cfg)
+        for s, side, level, dist, rv in picks:
+            st["orders"].append({"symbol": s, "side": side, "level": level, "dist": dist, "date": today,
+                                 "active_from": now.replace(minute=now.minute - now.minute % 5).strftime("%H:%M")})
+        st["done"].append(today)
+        log.append("sip: orders %s" % (", ".join("%s %s@%.2f (rvol %.1f)" % (s, "buy" if k > 0 else "short", lv, rv)
+                                                  for s, k, lv, _, rv in picks) or "none (no name with rvol >= 1.5)"))
+    closed, l2, marks = sip_step(st, bars_of, now, cfg)
+    st["start"] = st["start"] or today
+    return st, closed, log + l2, marks
+
 # ---------------------------------------------------------------- commands
 
 def cmd_run(a):
@@ -295,7 +527,31 @@ def cmd_run(a):
         return 0
     state["start"] = state["start"] or day.isoformat()
     closed, marks = manage(state, bars_of, now)
-    new, log = find_buys(state, marks, now, lab.UNIVERSE, live_now=a.now is None)
+    if CONFIG["universe"] == "full" and not os.path.exists(os.path.join(ROOT, "trader", "universe.txt")):
+        run_skill(["trader-scanner/scan.py", "universe"], timeout=120)   # Nasdaq Trader's lists, about 2 seconds
+    new, log = find_buys(state, marks, now, None if CONFIG["universe"] == "full" else lab.UNIVERSE,
+                         live_now=a.now is None)
+    if len(log) > 8:
+        log = log[:7] + ["... %d more" % (len(log) - 7)]
+    extra = []
+    for name, fn in (("fed", lambda: run_fed(now, bars_of, fomc_dates()) + ({},)),
+                     ("sip", lambda: run_sip(now, bars_of))):
+        try:
+            st, b_closed, b_log, b_marks = fn()
+        except Exception as e:  # noqa: BLE001  (one book failing must not stop the others)
+            extra.append("%s: error %s" % (name, e))
+            continue
+        for p in st["positions"]:
+            b_marks.setdefault(p["symbol"], (bars_of(p["symbol"]) or [{"c": p["entry"]}])[-1]["c"])
+        append_csv(name + "_trades.csv", TRADE_FIELDS, b_closed)
+        append_csv(name + "_equity.csv", ["time", "cash", "open", "equity"],
+                   [{"time": now.strftime("%Y-%m-%d %H:%M"), "cash": round(st["cash"], 2),
+                     "open": len(st["positions"]), "equity": round(book_equity(st, b_marks), 2)}])
+        save_json(os.path.join(BOOK, name + "_state.json"), st)
+        extra.append("%s $%.2f%s %s" % (name, book_equity(st, b_marks),
+                                         (" sold " + ", ".join("%s %s %+.2f" % (t["symbol"], t["why"], t["pnl_usd"])
+                                                               for t in b_closed)) if b_closed else "",
+                                         "; ".join(b_log)))
     for p in new:
         marks[p["symbol"]] = p["entry"]
     eq = equity(state, marks)
@@ -305,8 +561,8 @@ def cmd_run(a):
                  "open": len(state["positions"]), "equity": round(eq, 2)}])
     save_json(os.path.join(BOOK, "state.json"), state)
     sold = ["%s %s %+.2f" % (t["symbol"], t["why"], t["pnl_usd"]) for t in closed]
-    line = "%s equity $%.2f | sold: %s | %s" % (now.strftime("%Y-%m-%d %H:%M"), eq, ", ".join(sold) or "none",
-                                                "; ".join(log))
+    line = "%s orb $%.2f | sold: %s | %s || %s" % (now.strftime("%Y-%m-%d %H:%M"), eq, ", ".join(sold) or "none",
+                                                   "; ".join(log), " || ".join(extra))
     append_csv("runs.csv", ["time", "summary"], [{"time": now.strftime("%Y-%m-%d %H:%M"), "summary": line}])
     print(line)
     write_report()
@@ -349,13 +605,30 @@ def write_report(spy_fn=None):
         except Exception:  # noqa: BLE001
             spy = None
     out["spy_same_days_usd"] = None if spy is None else CONFIG["start_cash"] * spy
-    if out["days"] < CONFIG["min_days"]:
+    out["days_since_v2"] = len([d for d in days if d >= CONFIG["clock_start"]])
+    out["books"] = {n: book_summary(n) for n in ("fed", "sip")}
+    if out["days_since_v2"] < CONFIG["min_days"]:
         out["verdict"] = "PAPER"
     else:
         beat = spy is not None and out["pnl_usd"] > out["spy_same_days_usd"]
         out["verdict"] = "LIVE-REVIEW" if (out["pnl_usd"] > 0 and beat and out["daily_t"] >= CONFIG["min_t"]) else "FAIL"
     save_json(RESULT, out)
     return out
+
+
+def book_summary(name):
+    trades, rows = [], []
+    for f, sink in (("_trades.csv", trades), ("_equity.csv", rows)):
+        p = os.path.join(BOOK, name + f)
+        if os.path.exists(p):
+            with open(p) as fh:
+                sink.extend(csv.DictReader(fh))
+    last = {}
+    for r in rows:
+        last[r["time"][:10]] = float(r["equity"])
+    eq = last[max(last)] if last else 10000.0
+    return {"days": len(last), "trades": len(trades), "equity": eq, "pnl_usd": eq - 10000.0,
+            "win_rate": (sum(float(t["pnl_usd"]) > 0 for t in trades) / len(trades)) if trades else None}
 
 
 def spy_return(first, last):

@@ -84,6 +84,19 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 
 ## Log
 
+### 2026-11-24 13:12: the paper bots, version 2 (owner's request): full market, every 15 minutes, three books
+
+- **orb**: the same skill chain (scan > entry > exit > size > risk), but the scanner now covers the full US
+  market. That is 5,925 names from Nasdaq Trader's lists, of which about 800 are liquid enough (price >= $5,
+  >= 500k shares). Runs are every 15 minutes, 9:37 to 15:52. Only breakouts whose trigger candle closed in the
+  last 30 minutes are bought. Its 60-day clock restarts 2026-11-25. First v2 buy: BBY at 13:12.
+- **fed**: the pre-registered PASS (`fomc.py` H2) traded on paper. It buys SPY at the 15:52 run before each
+  scheduled FOMC announcement and sells at the next open. First trade: buy 2026-12-08, sell 2026-12-09.
+- **sip**: stocks in play (the near-miss) traded live on paper with resting stop orders placed at 9:37 on
+  the lab's 40 names. Its first orders are on 2026-11-25.
+
+Each book has its own $10,000, ledger (`trader-lab/autopaper/<book>_*.csv`) and line on the desk. No real orders.
+
 ### 2026-11-24: plan B4, pre-FOMC drift (`fomc.py`, Lucca & Moench 2015). H1 FAIL, **H2 PASS (first pre-registered pass)**
 
 Pre-registered in b6d3290 before any return was computed. The events are the 263 scheduled FOMC announcements
