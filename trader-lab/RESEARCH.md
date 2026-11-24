@@ -84,6 +84,18 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 
 ## Log
 
+### 2026-11-24: the bots trade on their own, on paper, every market hour (`autopaper.py`)
+
+The owner asked for the bots to scan, decide and buy without asking. Real orders are out (CLAUDE.md, no broker
+access here, and no rule has a proven edge), so this is fully automatic **paper** trading. Every weekday at
+:52 past each hour from 9:52 to 15:52 New York, the skills run in a chain: scan (ORB, 40 names), then entry
+check, exit plan (stop at the range midpoint, 2R target), sizing, and the risk check. A PASS is filled on paper
+at the last 5-minute close plus 2 bps. The rules were frozen before the first run: $10,000 account, $50 risk a
+trade, 3 open, 4 buys a day, no buys after 15:00 or once the day is down $150, everything sold at 15:50+,
+5 bps round trip. Verdict after 60 trading days: LIVE-REVIEW only if P&L > 0, it beats SPY over the same days,
+and the daily t >= 2. Otherwise FAIL. The lab's ORB results so far (none passed after costs) say to expect FAIL.
+The ledger is in `trader-lab/autopaper/`. First run 10:46: paper buys CRM, MSFT, NFLX.
+
 ### 2026-11-24: plan B3, crypto coin momentum (`crypto_xs.py`, Liu, Tsyvinski & Wu 2022). FAIL
 
 Pre-registered in 9f6bff6 before any coin data was downloaded: 78 coins fixed in advance (dead ones
