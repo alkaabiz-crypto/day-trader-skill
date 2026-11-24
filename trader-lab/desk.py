@@ -160,6 +160,11 @@ def scoreboard():
         v = j.get("verdict", {})
         add("stocks in play / end-of-day reversal, 40 names x 4 years",
             "PASS" if "PASS" in v.values() else "FAIL", json.dumps(v))
+    j = _load("crypto-xs.json")
+    if j:
+        v = j.get("verdict", {})
+        add("crypto coin momentum, %d coins, weekly" % j.get("coins_with_data", 0),
+            "PASS" if "PASS" in v.values() else "FAIL", json.dumps(v))
     j = _load("sip-forward.json")
     if j:
         r = j.get("cost_5", {})

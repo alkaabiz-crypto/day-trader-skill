@@ -84,6 +84,24 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 
 ## Log
 
+### 2026-11-24: plan B3, crypto coin momentum (`crypto_xs.py`, Liu, Tsyvinski & Wu 2022). FAIL
+
+Pre-registered in 9f6bff6 before any coin data was downloaded: 78 coins fixed in advance (dead ones
+included), weekly, past 3-week return, terciles, 25 bps a side, judged on weeks from 2021, PASS needs t >= 3.
+Yahoo served 74 (MIOTA, MATIC, LUNA1 and COMP were missing, so they were dropped mechanically). That leaves
+468 weeks, Dec 2017 to Nov 2026, with an average of 53 eligible coins.
+
+| at 25 bps | 2018-2020 (160 wk) | 2021 on (308 wk) | verdict |
+| --- | --- | --- | --- |
+| H1 long top third, short bottom third | +1.27%/wk, t 1.95 | -0.40%/wk, t -1.18 | FAIL |
+| H2 top third minus all coins | +0.73%/wk, t 1.89 | -0.22%/wk, t -1.05 | FAIL |
+
+At 10 bps the judged period is still negative (H1 -0.17%/wk, t -0.50). The momentum the paper found in
+its own 2014-2020 sample is there in 2018-2020 and gone after publication, which is the usual pattern. The
+shuffled-rank placebo (p 0.11 / 0.17) is lenient here: random ranks trade far more, so they pay far more in
+costs. It doesn't change the verdict. LUNA's absence makes the result, if anything, too kind to the long
+side. Not kept.
+
 ### 2026-11-24: stocks in play and end-of-day reversal on 40 names x 4 years (`sip_long.py`). FAIL
 
 Pre-registered (commit 66d2f0a) while the download had 5 of 40 names. lab.backtest's own gates, unchanged:
