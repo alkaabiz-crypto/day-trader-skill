@@ -1294,3 +1294,36 @@ swap for each night held. Pre-registered in its own commit before any run.
 than on US funds (survivors.py's 21 ETFs made 7.8% a year after 2015). Not tuned after the result. It runs
 on paper from 2026-11-24 at the owner's request, with a $10,000 pretend account, after each close.
 
+### 2026-11-24 (daily run): bots, trial, oil, engines
+
+**Bots, paper, first day:**
+- **Stocks:** 19 trades, net −$9.38. 7 won, 12 lost, and none reached its stop or target (all were out
+  at 15:55). That's in line with the backtest's −$1.11 a trade.
+- **Crypto/forex:** 1 closed (the LTC stop, −$10.86) and 4 open (short silver, BNB, USDCAD; long USDJPY).
+- **Fresh-breakout challenger:** 3 trades, −$4.16.
+
+**Paper trial:** 2 days, 4 shadow trades, net +$14.46. Today's ticket was a USTEC buy after QQQ fell
+2.45% by 15:30; it made +$4.56. Still IN PROGRESS: it needs 20+ days and 30+ trades, about mid-January.
+- **Scanner track** (not part of the trial's bar): 6 trades, −$23.74. Today AFRM and BAC hit their stops
+  and SAP made +$4.77.
+
+**Oil:**
+- The DCA ladder holds 1 layer on each of USOIL and UKOIL.
+- The MA-cross candidate says BUY USOIL at the next open, and UKOIL is flat.
+- 0 oil candidates have passed every gate.
+
+**Engines rerun:** lab, hourly, daily, trend, the daily forward test, the long-store 5-minute rules
+and the costs table.
+- Nothing new passes. The daily engine's chosen s_r3 still shows its old in-sample PASS label, but it
+  failed on 110 fresh ETFs (2026-11-23).
+- Long store: end-of-day reversal −3.3 bp a trade (t −3.19); gaps about zero.
+- Trend positions for November:
+  - tsmom: 4% in each of 16 funds, 30% cash
+  - sma: 15 funds, 35% cash
+  - xsmom: DBC, XLE and XLK
+  - dual: EFA
+
+No new strategy was searched tonight. Today's own work already covered it (bot backtests, survivors,
+daybrain, indexbot, all FAIL), and the plan is to stop adding rules and let the forward records run.
+The Polygon 2-year download for daybrain resumed after a container restart (61 of 500 names).
+

@@ -931,7 +931,8 @@
   "USDJPY=X": [],
   "AUDUSD=X": [],
   "USDCAD=X": [
-   "oversold"
+   "oversold",
+   "breakdown_20h"
   ],
   "USDCHF=X": [
    "oversold",
@@ -945,11 +946,7 @@
   "EURCHF=X": [],
   "EURAUD=X": [],
   "GBPCHF=X": [],
-  "GC=F": [
-   "breakdown_20h"
-  ],
-  "SI=F": [
-   "breakdown_20h"
-  ]
+  "GC=F": [],
+  "SI=F": []
  }
 }
