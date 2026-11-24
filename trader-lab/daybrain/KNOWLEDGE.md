@@ -62,7 +62,7 @@ CLV = ((C - L) - (H - C)) / (H - L), from -1 (close at the low) to +1 (close at 
 |---|---|---|---|
 | Caginalp & Laurent (1998), "The predictive power of price patterns", *Applied Mathematical Finance* 5(3-4):181-205 ([RePEc](https://econpapers.repec.org/RePEc:taf:apmtfi:v:5:y:1998:i:3-4:p:181-205)) | Daily OHLC, all S&P 500 stocks, 1992-1996 | Three-day reversal patterns: out-of-sample significance and almost 1% profit over a 2-day hold (abstract). | Short, single sample; later US large-cap studies did not find value (below). |
 | Marshall, Young & Rose (2006), "Candlestick technical trading strategies: Can they create value for investors?", *J. Banking & Finance* 30(8):2303-2323 ([RePEc](https://econpapers.repec.org/RePEc:eee:jbfina:v:30:y:2006:i:8:p:2303-2323)) | Daily, DJIA stocks, 1992-2002 | Candlestick strategies did not have value for these US large caps (bootstrap). Companion paper: "not generally profitable when applied to large U.S. stocks". | Negative result; consistent with later work. Full text not read. |
-| Lu, Shiu & Liu (2012), "Profitable candlestick trading strategies—The evidence from a new perspective", *Review of Financial Economics* 21(2):63-68 ([RePEc](https://econpapers.repec.org/RePEc:eee:revfin:v:21:y:2012:i:2:p:63-68)) | Daily, Taiwan Top 50 stocks, 2002-2008 | Three two-day bullish reversal patterns profitable, with out-of-sample test and bootstrap. | Emerging market, daily bars; cost and post-publication tests not verified. |
+| Lu, Shiu & Liu (2012), "Profitable candlestick trading strategies-The evidence from a new perspective", *Review of Financial Economics* 21(2):63-68 ([RePEc](https://econpapers.repec.org/RePEc:eee:revfin:v:21:y:2012:i:2:p:63-68)) | Daily, Taiwan Top 50 stocks, 2002-2008 | Three two-day bullish reversal patterns profitable, with out-of-sample test and bootstrap. | Emerging market, daily bars; cost and post-publication tests not verified. |
 | Duvinage, Mazza & Petitjean (2013), "The intra-day performance of market timing strategies and trading systems based on Japanese candlesticks", *Quantitative Finance* 13(7):1059-1070 ([RePEc](https://econpapers.repec.org/RePEc:taf:quantf:v:13:y:2013:i:7:p:1059-1070), [working paper](https://dial.uclouvain.be/pr/boreal/en/object/boreal%3A136070/datastream/PDF_02/view)) | **5-minute bars**, 30 DJIA stocks, 83 rules | About a third of rules beat buy-and-hold before costs; after costs only a few remain; after a data-snooping correction (SSPA) **no rule beats buy-and-hold after costs**; combined systems also fail. | The most relevant study for intraday use, and it is negative. |
 | Jamaloodeen, Heinz & Pollacia (2018), "A statistical analysis of the predictive power of Japanese candlesticks", *J. Int'l & Interdisciplinary Business Research* 5:62-94 ([PDF](https://core.ac.uk/download/214528289.pdf)) | Daily S&P 500 index, 60+ years | Hammer / shooting star: little reliability measured on closes; reported reliable when measured on the low (hammer) / high (shooting star). | Small journal; index only; no costs. Treat as weak. |
 
@@ -195,7 +195,7 @@ trade-price data.
 | Barbon, Beckmeyer, Buraschi & Moerke (2021), "Liquidity provision to leveraged ETFs and equity options rebalancing flows: Evidence from end-of-day stock prices", SSRN 3925725 ([SSRN](https://papers.ssrn.com/abstract=3925725)) | US stocks | Large negative (positive) gamma imbalance relative to dollar volume gives end-of-day momentum (reversal), which reverts at the next open [secondary]. | Working paper. |
 
 **What a day trader should take from it.** Short-horizon reversals in a single stock are real but
-are largely the price of liquidity (bid-ask bounce, temporary imbalances) — i.e. they are the market
+are largely the price of liquidity (bid-ask bounce, temporary imbalances), i.e. they are the market
 maker's income, not easily captured by someone paying the spread. Use bar closes with care: a
 signal based on the last trade of a bar inherits bounce. Midpoint prices or volume-weighted bar
 prices reduce this.
@@ -334,7 +334,7 @@ these as features, and correct for multiple testing.
 | Feature | Definition | Grounding |
 |---|---|---|
 | `price` | `O_1`; filter e.g. > $5 | Zarattini filter [secondary]; costs |
-| `spread_proxy` | if quotes unavailable, Corwin-Schultz high-low estimator over bars 1..k, or `(H_1 - L_1)` as an upper bound | Costs (Section 8) — estimator choice is a modelling decision |
+| `spread_proxy` | if quotes unavailable, Corwin-Schultz high-low estimator over bars 1..k, or `(H_1 - L_1)` as an upper bound | Costs (Section 8), estimator choice is a modelling decision |
 | `earnings_day` | 1 if the company reported after the prior close or before today's open | News continuation (Section 3, 9) |
 | `ssr_active` | 1 if prior-day close <= 0.9 x close two days earlier, or SSR triggered yesterday | Rule 201 |
 | `opex_day`, `rebalance_day`, `month_end` | calendar flags (monthly options expiry Friday; Russell reconstitution; last trading day of month) | Section 9 |

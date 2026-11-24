@@ -120,11 +120,49 @@ def rows_for(sessions, min_price=5.0, min_dollar_vol=5e6):
     return out
 
 
-def panel(data):
+def rows_from_days(days, min_price=5.0, min_dollar_vol=5e6):
+    """Alpaca day summaries {date: [o1 h1 l1 c1 v1 o2 c71 c76 c77 dh dl dvol n]} -> {date: (features, target)},
+    the same feature definitions as rows_for."""
+    ds = sorted(days)
+    out = {}
+    for k in range(15, len(ds)):
+        o1, h1, l1, c1, v1, o2, c71, c76, c77, dh, dl, dvol, n = days[ds[k]]
+        p = days[ds[k - 1]]
+        p2 = days[ds[k - 2]]
+        hist = [days[x] for x in ds[k - 14:k]]
+        R1 = h1 - l1
+        if not (o1 and c1 and o2 and R1 > 0) or c1 < min_price or p[11] < min_dollar_vol:
+            continue
+        drange = np.mean([(x[9] - x[10]) / x[8] for x in hist])
+        v1h = np.mean([x[4] for x in hist])
+        if not v1h or not drange or v1 <= 0:
+            continue
+        f = [c1 / o1 - 1, o1 / p[8] - 1, (h1 - max(o1, c1)) / R1, (min(o1, c1) - l1) / R1, abs(c1 - o1) / R1,
+             (c1 - l1) / R1 - 0.5, (R1 / c1) / drange, math.log(v1 / v1h), p[8] / p2[8] - 1,
+             (p[8] - p[10]) / (p[9] - p[10]) - 0.5 if p[9] > p[10] else 0.0, p[8] / p[6] - 1, 0.0]
+        f[11] = f[0] * f[7]
+        out[ds[k]] = (f, c76 / o2 - 1)
+    return out
+
+
+def load_alpaca():
+    """data/alpaca_days/*.json.gz -> {SYM: {date: summary}}"""
+    d = os.path.join(LAB, "data", "alpaca_days")
+    out = {}
+    for f in sorted(os.listdir(d)):
+        if f.endswith(".json.gz"):
+            with gzip.open(os.path.join(d, f), "rt") as fh:
+                for s, days in json.load(fh).items():
+                    out.setdefault(s, {}).update(days)
+    return out
+
+
+def panel(data, rows=None):
     """-> {date: (symbols, X[n,12], y[n])}"""
     by = {}
+    rows = rows or rows_for
     for s, sess in data.items():
-        for d, (f, y) in rows_for(sess).items():
+        for d, (f, y) in rows(sess).items():
             by.setdefault(d, []).append((s, f, y))
     out = {}
     for d in sorted(by):
@@ -187,7 +225,7 @@ def long_short(P, days, w, frac=0.10, k_min=None, cost=COST_BPS):
 
 
 def cmd_study(a):
-    P = panel(load_wm5())
+    P = panel(load_alpaca(), rows_from_days) if a.store == "alpaca" else panel(load_wm5())
     days = sorted(P)
     half = len(days) // 2
     disc, val = days[:half], days[half:]
@@ -227,7 +265,7 @@ def cmd_study(a):
     out["verdict"] = "PASS" if passed else "FAIL"
     print("Verdict: %s. History, not a forecast; research, not financial advice." % out["verdict"])
     if a.write:
-        with open(os.path.join(LAB, "results", "daybrain.json"), "w") as fh:
+        with open(os.path.join(LAB, "results", "daybrain%s.json" % ("-alpaca" if a.store == "alpaca" else "")), "w") as fh:
             json.dump(out, fh, indent=1)
     return 0
 
@@ -237,6 +275,8 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd")
     p = sub.add_parser("study")
     p.add_argument("--write", action="store_true")
+    p.add_argument("--store", choices=["yahoo", "alpaca"], default="yahoo",
+                   help="yahoo: 60 days of whole-market bars (bot_data.py); alpaca: years of day summaries (alpaca_days.py)")
     a = ap.parse_args(argv)
     if a.cmd == "study":
         return cmd_study(a)

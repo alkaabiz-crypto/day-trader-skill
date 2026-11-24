@@ -47,8 +47,8 @@ Research, not financial advice. Nothing here places an order.
 | End-of-day | Strong closes continue | Single stocks tend to reverse in the last 30 minutes (working paper) | −0.15, then −0.66; 4 years −1.83 | No edge |
 | VWAP | Above VWAP means buy | No evidence found | Earlier lab tests: VWAP trend and reclaim all negative | No edge |
 | Market intraday momentum | The first half hour predicts the last | Replicated in futures; one variant faded after publication | Earlier lab test on SPY: negative | No edge for us |
-| All 12 combined (the brain) | More signals means better | — | Learning days +23.6 bp a day (t 0.74); **check days −100.7 bp a day (t −3.22)**; 4 years −21.3 bp a day (t −3.55) | **Fails** |
-| Day traders as a group | Many earn a living | Taiwan: losses after fees in every year studied, under 1% reliably profitable. Brazil: 1.1% earned more than the minimum wage | — | The base rate |
+| All 12 combined (the brain) | More signals means better |, | Learning days +23.6 bp a day (t 0.74); **check days −100.7 bp a day (t −3.22)**; 4 years −21.3 bp a day (t −3.55) | **Fails** |
+| Day traders as a group | Many earn a living | Taiwan: losses after fees in every year studied, under 1% reliably profitable. Brazil: 1.1% earned more than the minimum wage |, | The base rate |
 
 ## What the brain has learned
 
