@@ -145,6 +145,17 @@ def rows_from_days(days, min_price=5.0, min_dollar_vol=5e6):
     return out
 
 
+def load_polygon():
+    """data/polygon_days/<SYM>.json.gz -> {SYM: {date: summary}}"""
+    d = os.path.join(LAB, "data", "polygon_days")
+    out = {}
+    for f in sorted(os.listdir(d)):
+        if f.endswith(".json.gz"):
+            with gzip.open(os.path.join(d, f), "rt") as fh:
+                out[f[:-8]] = json.load(fh)
+    return out
+
+
 def load_alpaca():
     """data/alpaca_days/*.json.gz -> {SYM: {date: summary}}"""
     d = os.path.join(LAB, "data", "alpaca_days")
@@ -225,7 +236,12 @@ def long_short(P, days, w, frac=0.10, k_min=None, cost=COST_BPS):
 
 
 def cmd_study(a):
-    P = panel(load_alpaca(), rows_from_days) if a.store == "alpaca" else panel(load_wm5())
+    if a.store == "alpaca":
+        P = panel(load_alpaca(), rows_from_days)
+    elif a.store == "polygon":
+        P = panel(load_polygon(), rows_from_days)
+    else:
+        P = panel(load_wm5())
     days = sorted(P)
     half = len(days) // 2
     disc, val = days[:half], days[half:]
@@ -265,7 +281,7 @@ def cmd_study(a):
     out["verdict"] = "PASS" if passed else "FAIL"
     print("Verdict: %s. History, not a forecast; research, not financial advice." % out["verdict"])
     if a.write:
-        with open(os.path.join(LAB, "results", "daybrain%s.json" % ("-alpaca" if a.store == "alpaca" else "")), "w") as fh:
+        with open(os.path.join(LAB, "results", "daybrain%s.json" % ("" if a.store == "yahoo" else "-" + a.store)), "w") as fh:
             json.dump(out, fh, indent=1)
     return 0
 
@@ -275,7 +291,7 @@ def main(argv=None):
     sub = ap.add_subparsers(dest="cmd")
     p = sub.add_parser("study")
     p.add_argument("--write", action="store_true")
-    p.add_argument("--store", choices=["yahoo", "alpaca"], default="yahoo",
+    p.add_argument("--store", choices=["yahoo", "alpaca", "polygon"], default="yahoo",
                    help="yahoo: 60 days of whole-market bars (bot_data.py); alpaca: years of day summaries (alpaca_days.py)")
     a = ap.parse_args(argv)
     if a.cmd == "study":
