@@ -1,0 +1,381 @@
+{
+ "asset": "ORCL",
+ "class": "stock",
+ "peer": "QQQ",
+ "cost_bps": 3.0,
+ "is_end": "2014-12-31",
+ "first_day": "2000-01-03",
+ "candidates": 874137,
+ "conditions": 200,
+ "days_post": 2991,
+ "days_pre": 3773,
+ "bh_sharpe_post": 0.37735534883266875,
+ "reality_check": {
+  "M": 874137,
+  "n": 2991,
+  "best_mean_bps": 8.677394864118394,
+  "best_t": 4.160539985302953,
+  "rc_p": 0.245,
+  "spa_p": 0.82,
+  "bonferroni_z": 5.427342594865725,
+  "rw_crit_t": 7.031709352138916,
+  "rw_rejects": 0,
+  "passes": false,
+  "across_markets": {
+   "alpha": 0.000819672131147541,
+   "rw_crit_t": 8.857955824866027,
+   "rw_rejects": 0,
+   "passes": false
+  }
+ },
+ "n_t3": 205,
+ "n_bonferroni": 0,
+ "n_sharpe_over_bh": 125796,
+ "best_sharpe": 1.1288639679312216,
+ "share_positive_post": 0.4167035601970858,
+ "best_post": [
+  {
+   "rule": "pair:c>ma200+10%&rv_pct>90",
+   "params": {
+    "hold": 30,
+    "dir": "long_unless"
+   },
+   "post_t": 4.160539985302953,
+   "is_t": 0.5594785799161892,
+   "alpha_bp_day": 5.582278806987712,
+   "sharpe": 0.8130809753722362
+  },
+  {
+   "rule": "pair:ret126>0&rv_pct>90",
+   "params": {
+    "hold": 30,
+    "dir": "long_unless"
+   },
+   "post_t": 4.102059088840961,
+   "is_t": 0.4686221637225643,
+   "alpha_bp_day": 5.942373595817209,
+   "sharpe": 0.8285938629043851
+  },
+  {
+   "rule": "pair:c>ma200+10%&rv_pct>90",
+   "params": {
+    "hold": 30,
+    "dir": "short_when"
+   },
+   "post_t": 3.9339608451845667,
+   "is_t": 0.24863185317959768,
+   "alpha_bp_day": 5.305306941643739,
+   "sharpe": 1.0725998707689204
+  },
+  {
+   "rule": "andnot:rv_pct>90&!ret126<0",
+   "params": {
+    "hold": 30,
+    "dir": "short_when"
+   },
+   "post_t": 3.821686575322047,
+   "is_t": 0.27439624709733884,
+   "alpha_bp_day": 5.563342083664142,
+   "sharpe": 0.9510837878002844
+  },
+  {
+   "rule": "pair:ret126>0&rv_pct>90",
+   "params": {
+    "hold": 30,
+    "dir": "short_when"
+   },
+   "post_t": 3.821686575322047,
+   "is_t": 0.27439624709733884,
+   "alpha_bp_day": 5.563342083664142,
+   "sharpe": 0.9510837878002844
+  },
+  {
+   "rule": "pair:c>ma200&rv_pct>90",
+   "params": {
+    "hold": 30,
+    "dir": "long_unless"
+   },
+   "post_t": 3.752934361016577,
+   "is_t": 0.3899795952782388,
+   "alpha_bp_day": 5.703664467918436,
+   "sharpe": 0.8290745696375909
+  },
+  {
+   "rule": "pair:c>ma200+5%&rv_pct>90",
+   "params": {
+    "hold": 30,
+    "dir": "long_unless"
+   },
+   "post_t": 3.7271925591386856,
+   "is_t": 0.36692265730107865,
+   "alpha_bp_day": 5.400943219892921,
+   "sharpe": 0.8043242431309858
+  },
+  {
+   "rule": "entry:ret3>0",
+   "params": {
+    "tp": 0.1,
+    "sl": 0.04,
+    "T": 30
+   },
+   "post_t": 3.645540939664336,
+   "is_t": -0.396511401949865,
+   "alpha_bp_day": 7.5410986488954475,
+   "sharpe": 0.9873413940670023
+  },
+  {
+   "rule": "pair:usd_down21&vix>20",
+   "params": {
+    "hold": 30,
+    "dir": "long_when"
+   },
+   "post_t": 3.637047810337808,
+   "is_t": 0.9014660477822203,
+   "alpha_bp_day": 8.360106951500711,
+   "sharpe": 0.9895331040678685
+  },
+  {
+   "rule": "entry:turn_of_month",
+   "params": {
+    "tp": 0.15,
+    "sl": 0.02,
+    "T": 60
+   },
+   "post_t": 3.6216814580181884,
+   "is_t": 0.6451969510699783,
+   "alpha_bp_day": 7.789129105208568,
+   "sharpe": 1.005199455514145
+  }
+ ],
+ "top_is": [
+  {
+   "rule": "entry:rsi2<5",
+   "params": {
+    "tp": 0.06,
+    "sl": 0.15,
+    "T": 60
+   },
+   "post_t": 0.985413693801945,
+   "is_t": 4.446322058957944,
+   "alpha_bp_day": 1.8148106664090398,
+   "sharpe": 0.3868669408351466
+  },
+  {
+   "rule": "entry:down2",
+   "params": {
+    "tp": 0.02,
+    "sl": null,
+    "T": 3
+   },
+   "post_t": 0.1373474912639218,
+   "is_t": 4.276432543143911,
+   "alpha_bp_day": 0.19704958559443836,
+   "sharpe": 0.17769365387524827
+  },
+  {
+   "rule": "entry:down2",
+   "params": {
+    "tp": 0.02,
+    "sl": 0.25,
+    "T": 3
+   },
+   "post_t": 0.1373474912639218,
+   "is_t": 4.276432543143911,
+   "alpha_bp_day": 0.19704958559443836,
+   "sharpe": 0.17769365387524827
+  },
+  {
+   "rule": "pair:down2&ibs<0.2",
+   "params": {
+    "hold": 5,
+    "dir": "long_when"
+   },
+   "post_t": -1.9141610996883178,
+   "is_t": 4.2664471403011035,
+   "alpha_bp_day": -3.9369165261147745,
+   "sharpe": -0.16272846482153486
+  },
+  {
+   "rule": "entry:rsi2<5",
+   "params": {
+    "tp": 0.06,
+    "sl": 0.25,
+    "T": 60
+   },
+   "post_t": 0.8034140406525077,
+   "is_t": 4.19408545588632,
+   "alpha_bp_day": 1.617236280305461,
+   "sharpe": 0.34083672566516887
+  },
+  {
+   "rule": "pair:ibs<0.2&rsi2<5",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 0.3179998834812572,
+   "is_t": 4.161685464262346,
+   "alpha_bp_day": 0.2680341075367857,
+   "sharpe": 0.20562714201694984
+  },
+  {
+   "rule": "entry:rsi2<5",
+   "params": {
+    "tp": 0.04,
+    "sl": 0.25,
+    "T": 60
+   },
+   "post_t": 0.9499603846499978,
+   "is_t": 4.090189210968228,
+   "alpha_bp_day": 1.857365726859123,
+   "sharpe": 0.3632013616913545
+  },
+  {
+   "rule": "pair:rsi2<5&stoch<20",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": -0.4805185587387126,
+   "is_t": 4.078650308392032,
+   "alpha_bp_day": -0.5911258223788758,
+   "sharpe": 0.03254931635472956
+  },
+  {
+   "rule": "entry:rsi2<5",
+   "params": {
+    "tp": 0.06,
+    "sl": null,
+    "T": 60
+   },
+   "post_t": 0.8365139692934555,
+   "is_t": 4.0481722652484216,
+   "alpha_bp_day": 1.7492629799917199,
+   "sharpe": 0.3572362978652643
+  },
+  {
+   "rule": "pair:c>ma10&ibs>0.8",
+   "params": {
+    "hold": 1,
+    "dir": "long_unless"
+   },
+   "post_t": -1.4776828441098144,
+   "is_t": 3.9867155204671842,
+   "alpha_bp_day": -2.1042707147807005,
+   "sharpe": 0.2010586190743467
+  },
+  {
+   "rule": "pair:qqq_down21&rsi2<5",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": -0.06471001014960319,
+   "is_t": 3.911938909956783,
+   "alpha_bp_day": -0.07179009525123807,
+   "sharpe": 0.15497931453750405
+  },
+  {
+   "rule": "pair:ret3<0&vix_jump10",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": -0.2920718966808376,
+   "is_t": 3.908926881191225,
+   "alpha_bp_day": -0.484836934691402,
+   "sharpe": 0.049169364147027585
+  },
+  {
+   "rule": "pair:rsi2<5&spy_ret1<0",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 1.0124934516206558,
+   "is_t": 3.902303207886556,
+   "alpha_bp_day": 1.1260547033574508,
+   "sharpe": 0.4056579085208901
+  },
+  {
+   "rule": "andnot:rsi2<5&!spy_ret1>0",
+   "params": {
+    "hold": 1,
+    "dir": "long_when"
+   },
+   "post_t": 1.0124934516206558,
+   "is_t": 3.902303207886556,
+   "alpha_bp_day": 1.1260547033574508,
+   "sharpe": 0.4056579085208901
+  },
+  {
+   "rule": "pair:ibs>0.8&rsi2>70",
+   "params": {
+    "hold": 1,
+    "dir": "long_unless"
+   },
+   "post_t": -1.0490907086218235,
+   "is_t": 3.89752116371273,
+   "alpha_bp_day": -1.372599883797062,
+   "sharpe": 0.2578207586590837
+  },
+  {
+   "rule": "pair:stoch<20&vix>30",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": 0.45438690327829834,
+   "is_t": 3.8918344853413083,
+   "alpha_bp_day": 0.5502650444960834,
+   "sharpe": 0.26032760965755797
+  },
+  {
+   "rule": "pair:vix>20&vix_jump10",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": -0.002230322881525017,
+   "is_t": 3.8870083240689035,
+   "alpha_bp_day": -0.0036650981141878587,
+   "sharpe": 0.1334394601219794
+  },
+  {
+   "rule": "pair:rel_peer_up20&stoch<20",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": -0.3943455196231232,
+   "is_t": 3.881949942268794,
+   "alpha_bp_day": -0.3365406288514264,
+   "sharpe": 0.06891387486150992
+  },
+  {
+   "rule": "pair:rsi2<30&vix_jump10",
+   "params": {
+    "hold": 2,
+    "dir": "long_when"
+   },
+   "post_t": -0.2217240529874759,
+   "is_t": 3.877177861114201,
+   "alpha_bp_day": -0.36014353633184276,
+   "sharpe": 0.06619102976960921
+  },
+  {
+   "rule": "pair:ibs>0.8&ret2>0",
+   "params": {
+    "hold": 1,
+    "dir": "long_unless"
+   },
+   "post_t": -0.12596366884830815,
+   "is_t": 3.8655793888572676,
+   "alpha_bp_day": -0.18305340229883174,
+   "sharpe": 0.3482042648085934
+  }
+ ],
+ "top_is_mean_post_t": 0.031243603929853776,
+ "corr_is_post_t": 0.33329198263785886,
+ "seconds": 2157
+}
