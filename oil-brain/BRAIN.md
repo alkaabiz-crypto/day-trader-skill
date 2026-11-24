@@ -239,6 +239,32 @@ Sharpe within +/-0.1); paying the spread twice a day turns every version into a 
 Sources: https://www.sciencedirect.com/science/article/abs/pii/S0140988316302110 ,
 https://ideas.repec.org/a/eee/ecmode/v95y2021icp374-384.html , https://ideas.repec.org/a/eee/ecmode/v96y2021icp209-219.html
 
+### 2026-11-24, oil brain v2 (`brain_v2.py`, `study12.py`, `history.py`, `KNOWLEDGE.md`)
+
+New data: EIA weekly petroleum (www.eia.gov allowed 2026-11-24; `fetch_eia.py`): commercial crude,
+SPR, Cushing, production, refinery utilization, gasoline, distillate, imports, exports, product
+supplied, 1982-2026. Each input is lagged to its public release (EIA Wednesday, CFTC Friday).
+Brain v2 = average of 7 votes with signs fixed beforehand: trend, curve, stocks vs 5-year same week,
+4-week draws vs normal, Cushing vs normal, fund crowding (contrarian), dollar.
+
+| rule (weekly, Wednesday close, USO) | IS | OOS | HOLDOUT | post-2014 | t | placebo p | verdict |
+|---|---|---|---|---|---|---|---|
+| B1 brain long/short, |c| >= 0.25 | 0.17 | 0.83 | -0.07 | 0.28 | 1.02 | 0.13 | FAIL |
+| B2 brain long/flat | -0.09 | 0.61 | -0.01 | 0.10 | 0.37 | 0.30 | FAIL |
+| B3 brain scaled by composite | 0.33 | 0.63 | 0.17 | 0.35 | 1.26 | 0.09 | FAIL |
+| C1 stocks vs normal alone | -0.18 | 0.37 | 0.02 | 0.16 | 0.57 | 0.20 | FAIL |
+| C2 4-week draws alone | 1.03 | 0.86 | -0.38 | 0.11 | 0.40 | 0.35 | FAIL |
+| C3 Cushing alone | -0.36 | -0.43 | 0.34 | 0.03 | 0.12 | 0.35 | FAIL |
+| C4 fund crowding alone (contrarian, weekly) | -0.15 | -0.02 | -0.15 | -0.09 | -0.33 | 0.55 | FAIL |
+
+B1 by year: 2014 +41%, 2015 +52%, 2018 +74%, 2020 **-73%** (tight stocks read as bullish into
+COVID), 2023 -19%, 2025 -20%, 2026 +58%. US weekly fundamentals predicted oil until 2019 and not
+since 2020. History study (38 swings of 25%+ since 2008): 11 of 19 rallies began with funds' net long
+in the bottom quarter of 3 years and none with funds above 70%; 7 of 19 crashes began with funds
+crowded, 10 of 19 in backwardation; the brain was bearish (median -0.43) at rally starts.
+**Use:** `python3 oil-brain/oil_brain.py now` gives the reading; `brain_forward.py` scores it from
+2026-11-25. Rules tried: +7 (study 12).
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
@@ -260,5 +286,5 @@ Neither is a 1-3 day trading edge.
 8. ~~EIA 10:30 Wednesday reaction~~ done (study 4); ~~EIA-day intraday momentum~~ done (study 5).
 9. ~~Basis-momentum on USO/USL~~ done (study 5): positive, not significant.
 
-**Rules tried so far: 63** (oil brain; the tournament adds ~2,930) (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
-study 7: 7, study 8: 5, study 9: 2, study 10: 3, study 11: 6; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
+**Rules tried so far: 70** (oil brain; the tournament adds ~2,930) (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
+study 7: 7, study 8: 5, study 9: 2, study 10: 3, study 11: 6, study 12: 7; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
