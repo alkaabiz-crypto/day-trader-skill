@@ -265,6 +265,23 @@ crowded, 10 of 19 in backwardation; the brain was bearish (median -0.43) at rall
 **Use:** `python3 oil-brain/oil_brain.py now` gives the reading; `brain_forward.py` scores it from
 2026-11-25. Rules tried: +7 (study 12).
 
+### 2026-11-24, study 13 (`study13.py`): turning-point brain (funds' positioning extremes). 0 PASS of 4
+
+Built from the history study's pattern on the same data (biased in its favour), and it still fails:
+
+| rule | IS | OOS | HOLDOUT | post-2014 | t | verdict |
+|---|---|---|---|---|---|---|
+| T1 long when funds' net long < 25th percentile | -0.35 | 0.06 | -0.18 | -0.08 | -0.29 | FAIL |
+| T2 same + USO above its 20-day average (turn confirmed) | 0.25 | 0.11 | -0.09 | -0.02 | -0.06 | FAIL |
+| T3 short: crowded (>70%) + backwardation + below 20-day average | -0.03 | 0.12 | -0.03 | 0.05 | 0.18 | FAIL |
+| T4 T2 + T3 | 0.14 | 0.15 | -0.10 | 0.00 | 0.01 | FAIL |
+
+T2: 104 trades, 30% winners, +0.2% average trade, in the market 16% of the time; 2026 +47% but
+2024 -11%, 2025 -21%. **Why the history pattern does not trade:** funds stay "given up" for months
+while oil keeps falling; the 11 rallies that began there are found only in hindsight, among many
+more weeks when nothing followed. Positioning tells you where the risk is, not when it turns.
+Rules tried: +4.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
@@ -286,5 +303,5 @@ Neither is a 1-3 day trading edge.
 8. ~~EIA 10:30 Wednesday reaction~~ done (study 4); ~~EIA-day intraday momentum~~ done (study 5).
 9. ~~Basis-momentum on USO/USL~~ done (study 5): positive, not significant.
 
-**Rules tried so far: 70** (oil brain; the tournament adds ~2,930) (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
-study 7: 7, study 8: 5, study 9: 2, study 10: 3, study 11: 6, study 12: 7; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
+**Rules tried so far: 74** (oil brain; the tournament adds ~2,930) (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
+study 7: 7, study 8: 5, study 9: 2, study 10: 3, study 11: 6, study 12: 7, study 13: 4; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
