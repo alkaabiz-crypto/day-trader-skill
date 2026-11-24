@@ -721,6 +721,86 @@
    "risk_usd": 9.09,
    "setup": "opening-range breakout",
    "id": "S-live-2026-11-24-DIS"
+  },
+  {
+   "symbol": "BCH-USD",
+   "side": "sell",
+   "entry_est": 195.3000030517578,
+   "stop": 198.79178837367468,
+   "target": 188.3164324079241,
+   "risk_usd": 10.0,
+   "notional_usd": 559.31,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 19:38Z",
+   "start_ts": 1795546800,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-24 19:38Z-BCH-USD"
+  },
+  {
+   "symbol": "SI=F",
+   "side": "sell",
+   "entry_est": 40.6150016784668,
+   "stop": 41.42018018450056,
+   "target": 39.00464466639927,
+   "risk_usd": 10.0,
+   "notional_usd": 504.42,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 19:38Z",
+   "start_ts": 1795546800,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-24 19:38Z-SI=F"
+  },
+  {
+   "symbol": "BCH-USD",
+   "side": "sell",
+   "entry_est": 195.3000030517578,
+   "stop": 198.79178837367468,
+   "target": 188.3164324079241,
+   "risk_usd": 10.0,
+   "notional_usd": 559.31,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 19:38Z",
+   "start_ts": 1795546800,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-noweekend-2026-11-24 19:38Z-BCH-USD"
+  },
+  {
+   "symbol": "SI=F",
+   "side": "sell",
+   "entry_est": 40.6150016784668,
+   "stop": 41.42018018450056,
+   "target": 39.00464466639927,
+   "risk_usd": 10.0,
+   "notional_usd": 504.42,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-24",
+   "opened_at": "2026-11-24 19:38Z",
+   "start_ts": 1795546800,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-noweekend-2026-11-24 19:38Z-SI=F"
   }
  ],
  "last_fx": {
@@ -735,16 +815,13 @@
   "LINK-USD": [],
   "LTC-USD": [],
   "DOT-USD": [],
-  "BCH-USD": [],
+  "BCH-USD": [
+   "breakdown_20h"
+  ],
   "EURUSD=X": [],
-  "GBPUSD=X": [
-   "breakout_20d",
-   "overbought"
-  ],
+  "GBPUSD=X": [],
   "USDJPY=X": [],
-  "AUDUSD=X": [
-   "reclaim_ma20"
-  ],
+  "AUDUSD=X": [],
   "USDCAD=X": [
    "oversold",
    "breakdown_20h"
@@ -755,19 +832,19 @@
   ],
   "NZDUSD=X": [],
   "EURJPY=X": [],
-  "GBPJPY=X": [
-   "breakout_20d"
-  ],
+  "GBPJPY=X": [],
   "EURGBP=X": [
    "breakdown_20h"
   ],
   "AUDJPY=X": [],
-  "EURCHF=X": [
-   "oversold_bounce"
-  ],
+  "EURCHF=X": [],
   "EURAUD=X": [],
   "GBPCHF=X": [],
-  "GC=F": [],
-  "SI=F": []
+  "GC=F": [
+   "breakdown_20h"
+  ],
+  "SI=F": [
+   "breakdown_20h"
+  ]
  }
 }
