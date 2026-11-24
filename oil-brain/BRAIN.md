@@ -194,6 +194,20 @@ use until Friday. The level premium is negative, as Maréchal (2023) found.
 Latest report (2026-11-17): commercials net -4.5% of open interest, +0.8 pt on the week;
 managed money net +0.8%, -0.5 pt (speculators trimming longs).
 
+### 2026-11-24, study 9 (`study9.py`): month-end pension rebalancing. 0 PASS of 2
+
+Harvey, Mazzoleni & Melone (2025): balanced funds sell whatever outperformed over the month near
+month-end. Rule: 4 trading days before month-end, bet on IEF minus SPY against the month-to-date
+winner for the last 3 days (10 bp a round trip for two legs).
+
+| rule | IS | OOS | HOLDOUT | post-2014 | t | placebo p | verdict |
+|---|---|---|---|---|---|---|---|
+| R1 against the month-to-date winner | 0.20 | 0.27 | -0.27 | -0.06 | -0.23 | 0.14 | FAIL |
+| R2 only when the gap is > 2% | 0.35 | 0.25 | -0.03 | 0.07 | 0.24 | 0.09 | FAIL |
+
+Right sign before 2020, gone since. The month-end bond effect that the audit found real (IEF over the
+last 3 days) is about bond index extension, not this stock-bond rebalancing flow.
+
 ## Candidates for forward paper testing
 
 1. TSMOM on USO, monthly rebalance, vol-scaled to 20% a year, lookback 126 days
@@ -215,5 +229,5 @@ Neither is a 1-3 day trading edge.
 8. ~~EIA 10:30 Wednesday reaction~~ done (study 4); ~~EIA-day intraday momentum~~ done (study 5).
 9. ~~Basis-momentum on USO/USL~~ done (study 5): positive, not significant.
 
-**Rules tried so far: 52** (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
-study 7: 7, study 8: 5; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
+**Rules tried so far: 54** (oil brain; the tournament adds ~2,930) (study 1: 9, study 2: 14, study 4: 4, study 5: 9, study 6: 4,
+study 7: 7, study 8: 5, study 9: 2; study 3 re-scored old rules). At this count, a couple of t = 2 results are expected by chance alone.
