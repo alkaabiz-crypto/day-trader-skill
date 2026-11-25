@@ -1098,9 +1098,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 09:35Z",
    "start_ts": 1795597200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average, oversold bounce",
-   "id": "F-live-2026-11-25 09:35Z-GC=F"
+   "id": "F-live-2026-11-25 09:35Z-GC=F",
+   "entry": 3561.0,
+   "exit": 3531.053545,
+   "how": "stop",
+   "pnl_usd": -10.36,
+   "closed_at": "2026-11-25 12:35Z"
   },
   {
    "symbol": "LTC-USD",
@@ -1143,9 +1148,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 09:35Z",
    "start_ts": 1795597200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average, oversold bounce",
-   "id": "F-btctrend-2026-11-25 09:35Z-GC=F"
+   "id": "F-btctrend-2026-11-25 09:35Z-GC=F",
+   "entry": 3561.0,
+   "exit": 3531.053545,
+   "how": "stop",
+   "pnl_usd": -10.36,
+   "closed_at": "2026-11-25 12:35Z"
   },
   {
    "symbol": "USDJPY=X",
@@ -1183,9 +1193,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 09:35Z",
    "start_ts": 1795597200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average, oversold bounce",
-   "id": "F-noweekend-2026-11-25 09:35Z-GC=F"
+   "id": "F-noweekend-2026-11-25 09:35Z-GC=F",
+   "entry": 3561.0,
+   "exit": 3531.053545,
+   "how": "stop",
+   "pnl_usd": -10.36,
+   "closed_at": "2026-11-25 12:35Z"
   },
   {
    "symbol": "LTC-USD",
@@ -1391,31 +1406,167 @@
    "status": "open",
    "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
    "id": "F-noweekend-2026-11-25 11:35Z-USDCHF=X"
+  },
+  {
+   "symbol": "AVAX-USD",
+   "side": "sell",
+   "entry_est": 6.395999908447266,
+   "stop": 6.481071250779288,
+   "target": 6.225857223783221,
+   "risk_usd": 10.0,
+   "notional_usd": 751.84,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 12:35Z",
+   "start_ts": 1795608000,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-live-2026-11-25 12:35Z-AVAX-USD"
+  },
+  {
+   "symbol": "XRP-USD",
+   "side": "sell",
+   "entry_est": 0.9077000021934509,
+   "stop": 0.9195392919438226,
+   "target": 0.8840214226927076,
+   "risk_usd": 10.0,
+   "notional_usd": 766.68,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 12:35Z",
+   "start_ts": 1795608000,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-live-2026-11-25 12:35Z-XRP-USD"
+  },
+  {
+   "symbol": "AVAX-USD",
+   "side": "sell",
+   "entry_est": 6.395999908447266,
+   "stop": 6.481071250779288,
+   "target": 6.225857223783221,
+   "risk_usd": 10.0,
+   "notional_usd": 751.84,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 12:35Z",
+   "start_ts": 1795608000,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-25 12:35Z-AVAX-USD"
+  },
+  {
+   "symbol": "BNB-USD",
+   "side": "sell",
+   "entry_est": 538.1699829101562,
+   "stop": 544.0028403145926,
+   "target": 526.5042681012835,
+   "risk_usd": 10.0,
+   "notional_usd": 922.65,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 12:35Z",
+   "start_ts": 1795608000,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-25 12:35Z-BNB-USD"
+  },
+  {
+   "symbol": "AVAX-USD",
+   "side": "sell",
+   "entry_est": 6.395999908447266,
+   "stop": 6.481071250779288,
+   "target": 6.225857223783221,
+   "risk_usd": 10.0,
+   "notional_usd": 751.84,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 12:35Z",
+   "start_ts": 1795608000,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-noweekend-2026-11-25 12:35Z-AVAX-USD"
+  },
+  {
+   "symbol": "BNB-USD",
+   "side": "sell",
+   "entry_est": 538.1699829101562,
+   "stop": 544.0028403145926,
+   "target": 526.5042681012835,
+   "risk_usd": 10.0,
+   "notional_usd": 922.65,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 12:35Z",
+   "start_ts": 1795608000,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-noweekend-2026-11-25 12:35Z-BNB-USD"
   }
  ],
  "last_fx": {
-  "BTC-USD": [],
-  "ETH-USD": [],
-  "SOL-USD": [],
-  "XRP-USD": [],
-  "BNB-USD": [],
+  "BTC-USD": [
+   "breakdown_20h"
+  ],
+  "ETH-USD": [
+   "breakdown_20h"
+  ],
+  "SOL-USD": [
+   "breakdown_20h"
+  ],
+  "XRP-USD": [
+   "breakdown_20h"
+  ],
+  "BNB-USD": [
+   "breakdown_20h"
+  ],
   "DOGE-USD": [
    "breakdown_20h"
   ],
-  "ADA-USD": [],
-  "AVAX-USD": [],
+  "ADA-USD": [
+   "breakdown_20h"
+  ],
+  "AVAX-USD": [
+   "breakdown_20h"
+  ],
   "LINK-USD": [
    "breakdown_20h"
   ],
   "LTC-USD": [],
-  "DOT-USD": [],
-  "BCH-USD": [],
+  "DOT-USD": [
+   "breakdown_20h"
+  ],
+  "BCH-USD": [
+   "breakdown_20h"
+  ],
   "EURUSD=X": [],
   "GBPUSD=X": [],
   "USDJPY=X": [],
-  "AUDUSD=X": [
-   "oversold_bounce"
-  ],
+  "AUDUSD=X": [],
   "USDCAD=X": [],
   "USDCHF=X": [
    "oversold",
@@ -1423,7 +1574,9 @@
   ],
   "NZDUSD=X": [],
   "EURJPY=X": [],
-  "GBPJPY=X": [],
+  "GBPJPY=X": [
+   "breakdown_20h"
+  ],
   "EURGBP=X": [],
   "AUDJPY=X": [],
   "EURCHF=X": [
@@ -1436,6 +1589,8 @@
    "breakdown_20h"
   ],
   "GC=F": [],
-  "SI=F": []
+  "SI=F": [
+   "breakdown_20h"
+  ]
  }
 }
