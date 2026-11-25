@@ -1468,3 +1468,37 @@ Pre-registered in `oilbrain/brain.py` and committed before the run (d97d888):
   2024-04, so the rule is flat after that.
 - The two simulated oil tracks (the DCA ladder and the frozen MA 40/50 cross) are unchanged.
 - `oilbrain/brain.py today` shows each reading. It is information only, not a signal.
+
+## 2026-11-25: TradingView "DTC - 1.3.6" stand-in and 60 indicators on Bitcoin (`dtc_btc.py`). FAIL
+
+The owner asked to use the DTC 1.3.6 indicator on Bitcoin and to test other indicators. DTC is invite-only on
+TradingView with hidden code, so it can't be run here. Its page describes a trend system on a 6-layer EMA
+structure from 30 to 60, and the lab tested the plainest version of that:
+- **Rule:** long when the EMAs 30, 36, 42, 48, 54 and 60 are stacked upward and the close is above EMA 30.
+- **Variants:** long/flat, and a long/short variant that also goes short when the ribbon is stacked downward.
+- **The other indicators:** catalog.py's 60 named strategies, run on Bitcoin alone.
+
+Pre-registered in a271b53:
+- next-bar-open fills;
+- Exness BTCUSD costs: 6 bp a round trip, plus 3 bp swap per night held;
+- the statistic is alpha over holding Bitcoin, with the in-sample period before 2020 and the judged period from 2020;
+- PASS needs t >= 3.5.
+
+| rule | judged t (2020 on) | $500 from 2020 | without swap | max drawdown |
+| --- | --- | --- | --- | --- |
+| DTC-style ribbon, long/flat (daily) | +1.01 | $2,918 | $3,899 | −44% |
+| DTC-style ribbon, long/short (daily) | +0.54 | $858 | $1,405 | −61% |
+| best of the 60 (TTM squeeze) | +2.26 | $1,536 | $1,713 | −34% |
+| best $ of the 60 (Vortex 14) | +1.72 | $6,482 | $9,768 | −63% |
+| Bitcoin held | | $4,378 | | −77% |
+
+The 4-hour and 1-hour DTC-style ribbon over the last 2 years: judged t from −1.47 to +0.05. On 1-hour bars,
+$500 became $305 to $344.
+
+- **0 of 64 pass.** The DTC-style ribbon ranks in the middle. Long/flat cut the worst drawdown from 77% to 44%,
+  but it made less than holding.
+- **The swap is the hidden cost of a Bitcoin CFD.** At 3 bp a night, it eats about 11% a year while a trend rule
+  is in. With Exness costs, the 200-day SMA rule's judged t drops to −0.18, from 3.35 in the catalog, which had
+  no swap and judged from 2016. Holding real coins avoids the swap; the paper bot `btc_trend.py` models
+  spot coins.
+- Mean reversion (CCI, Bollinger, z-score, DPO, stochastic) loses on Bitcoin, as it does everywhere else.
