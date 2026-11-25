@@ -1539,3 +1539,43 @@ Pre-registered in ebee980 before the run. The rule:
 
 - The chosen pairs do no better than random pairs. Any small edge before 2015 is gone after costs. This matches
   the papers that followed GGR: Do & Faff (2010) report the profits shrinking since the 1990s.
+
+### 2026-11-25 (daily run): bots, trial, oil, engines
+
+**Bot (paper):**
+- **Stocks today:** 50 trades (the new daily limit), net +$295.34, 40 won. 10 hit the target, 3 hit the
+  stop, and 37 were out at 15:55. The best were ANT +$21.38 and GE +$20.27; the worst XOM −$8.89.
+- **Stocks total:** 69 trades, +$285.96. This was one strong afternoon (the AI selloff turned up into the
+  close). The 59-session backtest says about −$1.11 a trade, so one day changes nothing.
+- **Crypto/forex** (caps raised to 10 a group today, at the owner's request): 21 closed, +$42.26, 43% won,
+  4 open.
+- **Challengers:** fresh +$293.87 on 48 trades; first +$75.48 on 10; btctrend +$12.87; noweekend +$32.80.
+
+**Paper trial:** 3 days, 5 trades, +$16.16, all winners; the daily t is 2.24. Today's ticket was a USTEC
+buy after QQQ fell 1.01% by 15:30, for +$1.70. Still IN PROGRESS: it needs 20+ days and 30+ trades.
+- **Scanner track:** 9 trades, −$9.56. Today's 3 picks (ENPH, VIST, ADM) were run late at 10:17, after a
+  restart, using the 09:50 bars.
+
+**Oil:**
+- No DCA ladder is open: the earlier layers closed, and neither market is 20% below its 20-day high.
+- The MA-cross candidate holds USOIL (1 of 25 sessions); UKOIL is flat.
+- The oil backtest: 0 of all candidates pass. Today's oil brain (fundamentals: EIA stocks, CFTC
+  positioning, curve) failed too; see its entry.
+
+**Engines rerun:** lab, hourly, daily, trend, the long-store 5-minute rules and the costs table. 0 new
+passes.
+- The daily forward test of the frozen dip rules: 3 sessions, all positive (s_r3 t 5.27, s_rsi2
+  t 3.21). Three sessions right after a sharp fall are what dip rules are built for. They mean nothing
+  until a much longer record.
+- Trend positions are unchanged for November (rebalanced monthly):
+  - tsmom: 16 funds at 4%, 30% cash
+  - sma: 15 funds, 35% cash
+  - xsmom: DBC, XLE, XLK
+  - dual: EFA
+
+**Today's research:** both FAIL; see their entries above.
+- the oil brain (`oilbrain/`)
+- the DTC-style EMA ribbon and 60 indicators on Bitcoin (`dtc_btc.py`)
+
+The Polygon 2-year download for daybrain is at about 395 of 500 names. It keeps being stopped by
+container restarts and is restarted each hour.
