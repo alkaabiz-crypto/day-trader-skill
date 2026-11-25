@@ -1520,3 +1520,22 @@ The test was pre-registered and committed before it ran (2dc1664). It uses the l
   +0.4 bp a setup, t 0.22. The fakes it avoids are traded for later entries.
 - Verdict: no rule found that filters fakes for a profit. The stop-loss is the fake-out defence. The live book
   is unchanged.
+
+## 2026-11-25: Pairs trading on 60 ETFs, GGR distance method (`pairs.py`). FAIL
+
+Pre-registered in ebee980 before the run. The rule:
+- each month, pick the 20 ETF pairs that tracked each other most closely over the past year;
+- for 6 months, when a pair drifts more than 2 standard deviations apart, buy the cheap one and short the dear
+  one at the next close (the one-day wait);
+- close when the pair meets again;
+- costs 5 bp per leg per trade.
+
+| | in-sample 2000–2014 | judged 2015–2026 | $500 since 2015 |
+|---|---|---|---|
+| pairs, 5 bp | +0.05%/mo, t 1.06 | −0.03%/mo, t −0.76 | $476 |
+| pairs, 10 bp | +0.01%/mo, t 0.22 | −0.07%/mo, t −1.71 | $449 |
+| random pairs (control) | −0.10%/mo, t −0.72 | +0.05%/mo, t +0.35 | $525 |
+| SPY held | | | $2,123 |
+
+- The chosen pairs do no better than random pairs. Any small edge before 2015 is gone after costs. This matches
+  the papers that followed GGR: Do & Faff (2010) report the profits shrinking since the 1990s.
