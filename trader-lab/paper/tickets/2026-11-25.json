@@ -1,0 +1,13 @@
+[
+ {
+  "instrument": "USTEC",
+  "proxy": "QQQ",
+  "side": "buy",
+  "move_bps": -101.1,
+  "proxy_1530": 631.6400146484375,
+  "proxy_prev_close": 638.0900268554688,
+  "notional_usd": 1000,
+  "max_loss_usd": 5.0,
+  "stop_pct": 0.5
+ }
+]
