@@ -1331,59 +1331,106 @@
    "status": "open",
    "setup": "20-hour closing-low breakdown",
    "id": "F-noweekend-2026-11-25 10:35Z-ADA-USD"
+  },
+  {
+   "symbol": "USDCHF=X",
+   "side": "sell",
+   "entry_est": 0.8323500156402588,
+   "stop": 0.8342625136886325,
+   "target": 0.8285250195435115,
+   "risk_usd": 10.0,
+   "notional_usd": 4352.16,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 11:35Z",
+   "start_ts": 1795604400,
+   "status": "open",
+   "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
+   "id": "F-live-2026-11-25 11:35Z-USDCHF=X"
+  },
+  {
+   "symbol": "USDCHF=X",
+   "side": "sell",
+   "entry_est": 0.8323500156402588,
+   "stop": 0.8342625136886325,
+   "target": 0.8285250195435115,
+   "risk_usd": 10.0,
+   "notional_usd": 4352.16,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 11:35Z",
+   "start_ts": 1795604400,
+   "status": "open",
+   "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-25 11:35Z-USDCHF=X"
+  },
+  {
+   "symbol": "USDCHF=X",
+   "side": "sell",
+   "entry_est": 0.8323500156402588,
+   "stop": 0.8342625136886325,
+   "target": 0.8285250195435115,
+   "risk_usd": 10.0,
+   "notional_usd": 4352.16,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 11:35Z",
+   "start_ts": 1795604400,
+   "status": "open",
+   "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
+   "id": "F-noweekend-2026-11-25 11:35Z-USDCHF=X"
   }
  ],
  "last_fx": {
   "BTC-USD": [],
   "ETH-USD": [],
-  "SOL-USD": [
-   "breakdown_20h"
-  ],
+  "SOL-USD": [],
   "XRP-USD": [],
   "BNB-USD": [],
   "DOGE-USD": [
    "breakdown_20h"
   ],
-  "ADA-USD": [
-   "breakdown_20h"
-  ],
+  "ADA-USD": [],
   "AVAX-USD": [],
   "LINK-USD": [
    "breakdown_20h"
   ],
   "LTC-USD": [],
-  "DOT-USD": [
-   "breakdown_20h"
-  ],
+  "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [],
-  "GBPUSD=X": [
+  "GBPUSD=X": [],
+  "USDJPY=X": [],
+  "AUDUSD=X": [
+   "oversold_bounce"
+  ],
+  "USDCAD=X": [],
+  "USDCHF=X": [
+   "oversold",
    "breakdown_20h"
   ],
-  "USDJPY=X": [
-   "breakout_20d"
-  ],
-  "AUDUSD=X": [
-   "oversold"
-  ],
-  "USDCAD=X": [
-   "reclaim_ma20"
-  ],
-  "USDCHF=X": [],
   "NZDUSD=X": [],
   "EURJPY=X": [],
   "GBPJPY=X": [],
-  "EURGBP=X": [
-   "breakout_20d"
-  ],
+  "EURGBP=X": [],
   "AUDJPY=X": [],
   "EURCHF=X": [
    "oversold",
    "breakdown_20h"
   ],
-  "EURAUD=X": [
-   "overbought"
-  ],
+  "EURAUD=X": [],
   "GBPCHF=X": [
    "oversold",
    "breakdown_20h"
