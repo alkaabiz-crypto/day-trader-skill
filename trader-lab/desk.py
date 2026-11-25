@@ -192,6 +192,13 @@ def scoreboard():
         if j:
             add(label, j.get("verdict", "FAIL"), "judged %+.2f%%/month vs SPY, t %.2f; $500 -> $%.0f vs $%.0f in SPY" % (
                 j["judged"]["mean_pct"], j["judged"]["t"], j.get("usd_judged") or 0, j.get("spy_usd_judged") or 0))
+    j = _load("orb-retest.json")
+    if j:
+        q = j["markets"]["QQQ"]["3R"]
+        add("video strategy 2: opening range, break and close, buy the retest (QQQ)", j.get("verdict", "FAIL"),
+            "judged %+.1f bp/trade t %.2f, %.0f%% wins; $500 -> $%.0f vs $%.0f holding QQQ" % (
+                q["judged"]["mean_bps"], q["judged"]["t"], 100 * (q["judged"]["win_rate"] or 0), q["usd_judged"],
+                j["markets"]["QQQ"]["hold_usd_judged"] or 0))
     j = _load("bot-types.json")
     if j:
         for k, label in (("B1_dca_bot", "crypto platform bot: DCA (buy more on dips), BTC $500"),

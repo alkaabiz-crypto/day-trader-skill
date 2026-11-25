@@ -84,6 +84,26 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 
 ## Log
 
+### 2026-11-25: the owner's second video strategy, opening range + break-and-close + retest (`orb_retest.py`). FAIL
+
+The video is NAS100. It marks the 9:30-9:45 high and low; on the 5-minute chart it waits for a candle to close
+outside them; "no chase price": it buys the retest of the broken level, with a small stop inside the zone and a
+much bigger target. Pre-registered in 0e563fb:
+- QQQ stands in for NAS100, with SPY and IWM alongside, on 4 years of 5-minute bars;
+- the entry is a limit at the broken level until 11:30;
+- the stop is 25% of the range back inside it, and the target is 3R (2R and 5R reported);
+- worst-case fills, 3 bps costs, judged from 2025.
+
+| QQQ | 2022-2024 | 2025 on | $500 since 2025 |
+| --- | --- | --- | --- |
+| 3R (primary) | 439 trades, -0.5 bp, t -0.48, 29% wins | 395 trades, -2.0 bp, t -1.47, 27% wins | $462 |
+| 2R | -1.0 bp, t -1.15 | -2.6 bp, t -2.41 | $451 |
+| 5R | +0.4 bp, t 0.26 | -3.1 bp, t -1.90 | $442 |
+
+QQQ held over the same time turned $500 into $620. SPY and IWM lose at every target too, in both periods
+(SPY in-sample t -4.4 to -6.3). The retest fills mostly on days the break fails: about 70% of trades stop out.
+FAIL.
+
 ### 2026-11-25: the strategy catalog, 60 named public strategies on 10 markets (`catalog.py`). 0 PASS; trend following on crypto stands out
 
 The owner asked for every strategy on the internet. Posted variants number in the millions, but most are a few
