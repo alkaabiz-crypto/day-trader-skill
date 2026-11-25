@@ -1385,4 +1385,7 @@ The Polygon 2-year download for daybrain resumed after a container restart (61 o
 - Metals have only 2 symbols (gold and silver), so that group can't go past 2. The most at risk at once
   is about $220 (10 + 2 + 10 trades).
 - This is a risk setting, not an edge. The 2-year backtest lost money with the old cap (−$1.23 a trade,
-  daily t −6.8) and without it (−$1.27, t −8.1). A rerun with the new caps is logged below when it ends.
+  daily t −6.8) and without it (−$1.27, t −8.1).
+- Rerun with the new caps (2026-11-25): 11,951 trades, net −$15,155, −$1.27 a trade, win 36%, daily t
+  −8.14, −$31,160 at 2× costs. That's the same as having no cap at all: 10 a group never binds. By group,
+  crypto −$7,799 (t −5.07), forex −$7,237 (t −7.21), metals −$119 (t −0.28).
