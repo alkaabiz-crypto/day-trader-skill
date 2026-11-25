@@ -3828,9 +3828,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 17:34Z",
    "start_ts": 1795626000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-25 17:34Z-LTC-USD"
+   "id": "F-live-2026-11-25 17:34Z-LTC-USD",
+   "entry": 40.880001,
+   "exit": 42.444288,
+   "how": "target",
+   "pnl_usd": 19.49,
+   "closed_at": "2026-11-25 20:18Z"
   },
   {
    "symbol": "BCH-USD",
@@ -3848,9 +3853,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 17:34Z",
    "start_ts": 1795626000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-25 17:34Z-BCH-USD"
+   "id": "F-live-2026-11-25 17:34Z-BCH-USD",
+   "entry": 196.119995,
+   "exit": 203.325001,
+   "how": "target",
+   "pnl_usd": 19.32,
+   "closed_at": "2026-11-25 20:18Z"
   },
   {
    "symbol": "GBPUSD=X",
@@ -3908,9 +3918,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 17:34Z",
    "start_ts": 1795626000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-25 17:34Z-LTC-USD"
+   "id": "F-noweekend-2026-11-25 17:34Z-LTC-USD",
+   "entry": 40.880001,
+   "exit": 42.444288,
+   "how": "target",
+   "pnl_usd": 19.49,
+   "closed_at": "2026-11-25 20:18Z"
   },
   {
    "symbol": "GBPUSD=X",
