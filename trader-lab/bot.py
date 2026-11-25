@@ -55,9 +55,9 @@ import fxcrypto  # noqa: E402
 
 LEDGER = os.path.join(HERE, "paper", "bot", "ledger.json")
 STOCK = {"per_run": 10, "per_day": 50, "day_risk_usd": 500.0, "last_entry": "15:00", "target_r": 2.0}
-FX = {"per_run": 2, "max_open": 6, "atr_n": 14, "atr_mult": 1.5, "target_r": 2.0, "risk_usd": 10.0,
+FX = {"per_run": 2, "max_open": 30, "atr_n": 14, "atr_mult": 1.5, "target_r": 2.0, "risk_usd": 10.0,
       "max_hours": 24}
-GROUP_CAP = {"crypto": 1, "metal": 1, "forex": 2}
+GROUP_CAP = {"crypto": 10, "metal": 10, "forex": 10}   # raised from 1/1/2 on 2026-11-25 (owner)
 MAJORS = {"EURUSD=X", "GBPUSD=X", "USDJPY=X", "AUDUSD=X", "USDCAD=X", "USDCHF=X", "NZDUSD=X"}
 METALS = {"GC=F", "SI=F"}
 STOCK_VARIANTS = ("live", "spytrend", "first", "fresh")

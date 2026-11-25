@@ -1327,3 +1327,14 @@ No new strategy was searched tonight. Today's own work already covered it (bot b
 daybrain, indexbot, all FAIL), and the plan is to stop adding rules and let the forward records run.
 The Polygon 2-year download for daybrain resumed after a container restart (61 of 500 names).
 
+
+## 2026-11-25: crypto/forex bot group cap raised to 10 per group (owner's request)
+
+- The owner asked for 10 trades allowed in each group. `GROUP_CAP` in `bot.py` went from crypto 1,
+  metals 1, forex 2 to 10, 10 and 10, and the overall `max_open` from 6 to 30 so it doesn't bind first.
+- Everything else is unchanged: $10 risk a trade, up to 2 new trades an hour, stop 1.5 × ATR, target 2R,
+  out after 24 hours.
+- Metals have only 2 symbols (gold and silver), so that group can't go past 2. The most at risk at once
+  is about $220 (10 + 2 + 10 trades).
+- This is a risk setting, not an edge. The 2-year backtest lost money with the old cap (−$1.23 a trade,
+  daily t −6.8) and without it (−$1.27, t −8.1). A rerun with the new caps is logged below when it ends.

@@ -89,7 +89,7 @@ Halving in a crash is normal on the way. The plan only works if you keep buying 
     - $10 risk each, stop at the range midpoint, target 2R, out by 3:55
   - **Crypto and forex**, every hour, 24/7:
     - takes up to 2 fresh trend setups: long a 20-hour high breakout or reclaim, short a 20-hour low break
-    - at most 6 open
+    - at most 10 open per group (crypto, metals, forex; raised from 1, 1 and 2 on 2026-11-25, your request)
     - $10 risk, stop 1.5 × the hourly ATR, target 2R, closed after 24 hours
   - Every trade is filled on paper from real prices. `python3 trader-lab/bot.py report` shows the record.
   - Nothing reaches any account. You don't need to place anything.
