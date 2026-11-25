@@ -1389,3 +1389,42 @@ The Polygon 2-year download for daybrain resumed after a container restart (61 o
 - Rerun with the new caps (2026-11-25): 11,951 trades, net −$15,155, −$1.27 a trade, win 36%, daily t
   −8.14, −$31,160 at 2× costs. That's the same as having no cap at all: 10 a group never binds. By group,
   crypto −$7,799 (t −5.07), forex −$7,237 (t −7.21), metals −$119 (t −0.28).
+
+## 2026-11-25: the oil brain (`oilbrain/`), fundamentals plus price. FAIL
+
+The owner asked to upgrade the oil brain. Every earlier oil test (293 hand-built rules, 26,288 universe
+rules) used oil's own price. `oilbrain/` adds the data with the strongest economic case, each dated by
+when it became public:
+- **EIA weekly stocks:** US crude (1982+), Cushing (2004+) and gasoline (1990+), as a surprise against
+  the same week of the previous 5 years. Counted as known from the Thursday close after the week ends.
+- **CFTC Commitments of Traders** (WTI, 2006+): managed money net long as a 3-year percentile, and its
+  4-week change. Counted as known from the Monday close after the Tuesday report date.
+- **The futures curve:** contract 1 over contract 2 (EIA, ends 2024-04).
+- **Price and macro:** USO momentum (21, 63 and 252 days), 20-day volatility, the dollar (UUP), and
+  energy stocks against oil (XLE minus USO).
+
+Pre-registered in `oilbrain/brain.py` and committed before the run (d97d888):
+- Each feature is a trailing z-score. Long or short USO by its sign, with the direction taken from
+  2006-2014 only.
+- Two horizons: the next session, and the next 5 sessions without overlap.
+- Costs: 5 bp per side change and 1 bp a night.
+- Pass needs all of these: t >= 3 after 2014; positive in 2015-2021 and in 2022 on; beating 99.8% of
+  1,000 shifted placebos; positive on Brent (BNO).
+- One ridge "brain" combines all 12 features, fitted on 2006-2014 only.
+
+| best after 2014 | 1 session | 5 sessions |
+| --- | --- | --- |
+| backwardation (long when contract 1 is above contract 2) | +6.0 bp, t 1.49, placebo 84% | +26.5 bp, t 1.35, placebo 83% |
+| COT percentile (follow the crowd) | +1.8 bp, t 0.39 | +11.9 bp, t 0.51 |
+| crude inventory surprise | −5.2 bp, t −1.14 | −2.9 bp, t −0.13 |
+| the combined brain | −1.1 bp, t −0.25 | −1.3 bp, t −0.06 |
+
+- **Verdict: FAIL.** Nothing reaches t 1.5 after 2014. The inventory surprise worked to 2014 and then
+  flipped sign in 2022 on.
+- **The brain overfits.** Its 2006-2014 fit had the highest correlation (0.25 at 5 days) and then went
+  to zero on the new years. That's the same lesson as the day-trading brain.
+- **Backwardation is again the only idea positive in every period.** That matches the seventh run and
+  the roll-yield studies, but it is far from the bar. Its holdout is thin: the EIA curve ends in
+  2024-04, so the rule is flat after that.
+- The two simulated oil tracks (the DCA ladder and the frozen MA 40/50 cross) are unchanged.
+- `oilbrain/brain.py today` shows each reading. It is information only, not a signal.

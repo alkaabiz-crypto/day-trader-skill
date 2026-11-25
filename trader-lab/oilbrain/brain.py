@@ -392,7 +392,7 @@ def cmd_study(a):
     if a.write:
         os.makedirs(os.path.dirname(RESULT), exist_ok=True)
         with open(RESULT, "w") as fh:
-            json.dump({"generated": datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%MZ"),
+            json.dump({"generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%MZ"),
                        "range": [U["d"][0], U["d"][-1]], "rows": rows, "controls": ctrl,
                        "passed": passed, "verdict": verdict}, fh, indent=1)
         print("Wrote %s" % os.path.relpath(RESULT, LAB))
