@@ -84,6 +84,54 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 
 ## Log
 
+### 2026-11-25: the strategy catalog, 60 named public strategies on 10 markets (`catalog.py`). 0 PASS; trend following on crypto stands out
+
+The owner asked for every strategy on the internet. Posted variants number in the millions, but most are a few
+dozen ideas with different settings, and trying settings until one wins is how false discoveries are made. So
+each distinct named strategy appears once, with its published settings. Sources:
+- TradingView's built-in strategies: MACD, Supertrend, Parabolic SAR, Price Channel, InSide/OutSide Bar,
+  Consecutive Up/Down, BarUpDn, Greedy, Volty Expan Close, Stochastic Slow, RSI, MovingAvg Cross / 2Line;
+- Investopedia's indicators: Ichimoku, ADX/DMI, Aroon, Vortex, TRIX, KST, Coppock, CCI, Williams %R, MFI,
+  Ultimate, OBV, Chaikin MF, A/D, Hull, Elder impulse, Heikin Ashi, chandelier, pivots, envelopes, DPO;
+- the classic books: Turtle S1/S2, Keltner, Bollinger, TTM squeeze, NR7, Connors RSI(2);
+- papers: Faber 10-month, 12-month TSMOM, Halloween, low-vol regime.
+
+The rules were pre-registered in 81d9237, before any data was downloaded:
+- markets: SPY QQQ IWM EFA EEM TLT GLD USO BTC ETH;
+- long or flat, with next-open fills;
+- costs of 5 bps (crypto 20 bps);
+- the statistic is the rule's alpha over holding, scaled by its in-sample beta;
+- the judged period starts in 2016, and PASS needs t >= 3.5.
+
+The first run had a bug in the moving-average helper: a leading NaN blanked the rest of the series, so KST and
+Stochastic Slow never traded. It was fixed with tests, and the rerun didn't change any other row.
+
+Results:
+- **0 PASS.** The best are Coppock t 3.49, TRIX t 3.44, 12-month TSMOM t 3.29, golden cross t 3.28, Faber
+  t 3.15 and the 200-day SMA t 3.14. Ten trend rules are Benjamini-Hochberg significant at 5%, but all have
+  in-sample t of only about 1.
+- **Reading:** the judged alpha of every trend rule comes almost entirely from BTC and ETH (BTC t 3.1-3.9),
+  by sitting out crypto's crashes. On stocks, bonds, gold and oil they are t 0-2. Only TRIX ended ahead of
+  holding the 10 markets in equal parts ($17,574 vs $15,928 from $500 since 2016). The others ended behind.
+- **Mean reversion loses everywhere:** RSI 30/50, Bollinger, CCI, Williams %R, IBS, MFI, Keltner, the envelope
+  and the z-score are all negative judged. The one-day bar patterns are the worst: BarUpDn t -4.07, Greedy
+  -3.67, inside bar -2.80.
+- **Lead, not a pass:** trend following on Bitcoin. The lab's crypto_search.py (844k BTC candidates with
+  Reality Check) passed nothing, so this needs its own pre-registered forward test before it means anything.
+
+### 2026-11-25: the bots crypto platforms sell (AstraBit/3Commas/Bybit style), BTC with $500 (`bot_types.py`). FAIL
+
+Pre-registered in a4332f9. It uses BTC 5-minute candles from Nov 2022 to Mar 2025, 0.1% fees and worst-case
+fills inside a candle; the judged period starts in 2024.
+
+| bot | $500 became 2024 to Mar 2025 | BTC held | since Nov 2022 | BTC held | max drawdown | verdict |
+| --- | --- | --- | --- | --- | --- | --- |
+| DCA bot: $100 plus four $100 buys at -2/-4/-6/-8%, +2% target, -15% stop | $572 | $991 | $888 | $2,045 | 22% | FAIL (t 0.73) |
+| Grid bot: 10 levels, +-10%, reset monthly | $558 | $991 | $579 | $2,045 | 8% | FAIL (t 1.09) |
+
+Both make a little and lag holding badly, because small take-profits sell the rallies. These were bull-market
+years, where both designs lag the most. Platform fees (AstraBit $0.33-1.33 a day) are not even charged here.
+
 ### 2026-11-24: four more ideas, each backtested on a $500 account (`calendar2.py`, `insiders.py`, `congress.py`). All FAIL
 
 Pre-registered in 9c02e46 before any data was downloaded or any return computed. "$500 became" holds the rule's

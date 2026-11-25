@@ -53,10 +53,16 @@ T_BAR = 3.5
 # ---------------------------------------------------------------- indicators (numpy, causal: index t uses data <= t)
 
 def sma(x, n):
+    """Simple moving average; a window holding any NaN gives NaN (a leading NaN no longer poisons the rest)."""
+    x = np.asarray(x, float)
     out = np.full(len(x), np.nan)
     if len(x) >= n:
-        c = np.cumsum(np.insert(x, 0, 0.0))
-        out[n - 1:] = (c[n:] - c[:-n]) / n
+        bad = np.isnan(x)
+        c = np.cumsum(np.insert(np.where(bad, 0.0, x), 0, 0.0))
+        k = np.cumsum(np.insert(bad.astype(int), 0, 0))
+        win = (c[n:] - c[:-n]) / n
+        win[(k[n:] - k[:-n]) > 0] = np.nan
+        out[n - 1:] = win
     return out
 
 

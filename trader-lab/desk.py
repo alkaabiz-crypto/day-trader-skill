@@ -192,6 +192,21 @@ def scoreboard():
         if j:
             add(label, j.get("verdict", "FAIL"), "judged %+.2f%%/month vs SPY, t %.2f; $500 -> $%.0f vs $%.0f in SPY" % (
                 j["judged"]["mean_pct"], j["judged"]["t"], j.get("usd_judged") or 0, j.get("spy_usd_judged") or 0))
+    j = _load("bot-types.json")
+    if j:
+        for k, label in (("B1_dca_bot", "crypto platform bot: DCA (buy more on dips), BTC $500"),
+                         ("B2_grid_bot", "crypto platform bot: grid, BTC $500")):
+            r = j.get(k)
+            if r:
+                add(label, r.get("verdict", "FAIL"), "$500 -> $%.0f since 2024 vs $%.0f holding BTC" % (
+                    r.get("usd_judged") or 0, r.get("btc_usd_judged") or 0))
+    j = _load("catalog.json")
+    if j:
+        rules = j.get("rules", [])
+        best = rules[0] if rules else {}
+        add("strategy catalog: %d named public strategies x %d markets" % (len(rules), len(j.get("markets", []))),
+            "PASS" if any(r["verdict"] == "PASS" for r in rules) else "FAIL",
+            "best %s judged t %.2f (bar 3.5); trend rules' edge is crypto only" % (best.get("rule"), best.get("judged_t", 0)))
     j = _load("autopaper.json")
     if j:
         spy = j.get("spy_same_days_usd")
