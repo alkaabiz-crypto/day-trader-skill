@@ -1081,70 +1081,173 @@
    "status": "open",
    "setup": "20-hour closing-low breakdown",
    "id": "F-noweekend-2026-11-25 08:34Z-DOGE-USD"
+  },
+  {
+   "symbol": "GC=F",
+   "side": "buy",
+   "entry_est": 3561.0,
+   "stop": 3531.053545270647,
+   "target": 3620.892909458705,
+   "risk_usd": 10.0,
+   "notional_usd": 1189.12,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 09:35Z",
+   "start_ts": 1795597200,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average, oversold bounce",
+   "id": "F-live-2026-11-25 09:35Z-GC=F"
+  },
+  {
+   "symbol": "LTC-USD",
+   "side": "buy",
+   "entry_est": 40.7130012512207,
+   "stop": 40.170751980372835,
+   "target": 41.79749979291643,
+   "risk_usd": 10.0,
+   "notional_usd": 750.82,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 09:35Z",
+   "start_ts": 1795597200,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-live-2026-11-25 09:35Z-LTC-USD"
+  },
+  {
+   "symbol": "GC=F",
+   "side": "buy",
+   "entry_est": 3561.0,
+   "stop": 3531.053545270647,
+   "target": 3620.892909458705,
+   "risk_usd": 10.0,
+   "notional_usd": 1189.12,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 09:35Z",
+   "start_ts": 1795597200,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average, oversold bounce",
+   "id": "F-btctrend-2026-11-25 09:35Z-GC=F"
+  },
+  {
+   "symbol": "USDJPY=X",
+   "side": "buy",
+   "entry_est": 159.3990020751953,
+   "stop": 159.14946692330497,
+   "target": 159.898072378976,
+   "risk_usd": 10.0,
+   "notional_usd": 6387.84,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 09:35Z",
+   "start_ts": 1795597200,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-btctrend-2026-11-25 09:35Z-USDJPY=X"
+  },
+  {
+   "symbol": "GC=F",
+   "side": "buy",
+   "entry_est": 3561.0,
+   "stop": 3531.053545270647,
+   "target": 3620.892909458705,
+   "risk_usd": 10.0,
+   "notional_usd": 1189.12,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 09:35Z",
+   "start_ts": 1795597200,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average, oversold bounce",
+   "id": "F-noweekend-2026-11-25 09:35Z-GC=F"
+  },
+  {
+   "symbol": "LTC-USD",
+   "side": "buy",
+   "entry_est": 40.7130012512207,
+   "stop": 40.170751980372835,
+   "target": 41.79749979291643,
+   "risk_usd": 10.0,
+   "notional_usd": 750.82,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 09:35Z",
+   "start_ts": 1795597200,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-noweekend-2026-11-25 09:35Z-LTC-USD"
   }
  ],
  "last_fx": {
-  "BTC-USD": [
-   "breakdown_20h"
+  "BTC-USD": [],
+  "ETH-USD": [],
+  "SOL-USD": [],
+  "XRP-USD": [
+   "reclaim_ma20"
   ],
-  "ETH-USD": [
-   "breakdown_20h"
-  ],
-  "SOL-USD": [
-   "breakdown_20h"
-  ],
-  "XRP-USD": [],
-  "BNB-USD": [
-   "breakdown_20h"
-  ],
-  "DOGE-USD": [
-   "breakdown_20h"
-  ],
+  "BNB-USD": [],
+  "DOGE-USD": [],
   "ADA-USD": [],
-  "AVAX-USD": [
-   "breakdown_20h"
+  "AVAX-USD": [],
+  "LINK-USD": [],
+  "LTC-USD": [
+   "reclaim_ma20"
   ],
-  "LINK-USD": [
-   "breakdown_20h"
+  "DOT-USD": [
+   "reclaim_ma20"
   ],
-  "LTC-USD": [],
-  "DOT-USD": [],
-  "BCH-USD": [],
+  "BCH-USD": [
+   "reclaim_ma20"
+  ],
   "EURUSD=X": [],
-  "GBPUSD=X": [
-   "breakdown_20h"
+  "GBPUSD=X": [],
+  "USDJPY=X": [
+   "reclaim_ma20"
   ],
-  "USDJPY=X": [],
   "AUDUSD=X": [
-   "oversold",
+   "oversold_bounce"
+  ],
+  "USDCAD=X": [],
+  "USDCHF=X": [
    "breakdown_20h"
   ],
-  "USDCAD=X": [
-   "reclaim_ma20"
-  ],
-  "USDCHF=X": [],
-  "NZDUSD=X": [
-   "breakdown_20h"
-  ],
-  "EURJPY=X": [
-   "breakdown_20h"
-  ],
-  "GBPJPY=X": [
-   "breakdown_20h"
-  ],
-  "EURGBP=X": [
-   "reclaim_ma20"
-  ],
+  "NZDUSD=X": [],
+  "EURJPY=X": [],
+  "GBPJPY=X": [],
+  "EURGBP=X": [],
   "AUDJPY=X": [
-   "oversold",
-   "breakdown_20h"
+   "oversold_bounce"
   ],
   "EURCHF=X": [
    "oversold",
    "breakdown_20h"
   ],
   "EURAUD=X": [
-   "breakout_20d",
    "overbought"
   ],
   "GBPCHF=X": [
@@ -1152,7 +1255,7 @@
    "breakdown_20h"
   ],
   "GC=F": [
-   "oversold",
+   "reclaim_ma20",
    "oversold_bounce"
   ],
   "SI=F": []
