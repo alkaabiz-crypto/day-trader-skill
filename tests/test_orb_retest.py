@@ -48,5 +48,27 @@ class OrbRetest(unittest.TestCase):
                          (3, 24, 0.25, 3.0, "2025-01-01"))
 
 
+class Fixes(unittest.TestCase):
+    def test_fade_is_the_mirror_of_the_retest(self):
+        import orb_retest_fix as fx
+        b = session(RANGE + [(100.9, 101.6, 100.9, 101.5),      # break up
+                             (101.3, 101.4, 100.95, 101.2),     # retest at 101: the fade sells here
+                             (101.2, 101.2, 99.4, 99.5)])       # fade 3R target = 101 - 1.5 = 99.5
+        side, e, x = fx.trade(b, "fade", 3.0)
+        self.assertEqual((side, e, x), (-1, 101, 99.5))
+
+    def test_breakout_enters_at_the_break_close(self):
+        import orb_retest_fix as fx
+        b = session(RANGE + [(100.9, 101.6, 100.9, 101.5), (101.5, 103.5, 101.4, 103.4)])
+        side, e, x = fx.trade(b, "breakout", 2.0)
+        self.assertEqual((side, e), (1, 101.5))
+        self.assertAlmostEqual(x, 101.5 + 2 * 1.0)             # risk 101.5 - 100.5 = 1, 2R = 103.5
+
+    def test_frozen_grid(self):
+        import orb_retest_fix as fx
+        self.assertEqual(len(fx.FIXES) * 2 * len(fx.TARGETS), 32)
+        self.assertEqual(fx.MIN_IS_TRADES, 150)
+
+
 if __name__ == "__main__":
     unittest.main()
