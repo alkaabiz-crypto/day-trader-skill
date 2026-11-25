@@ -199,6 +199,12 @@ def scoreboard():
             "judged %+.1f bp/trade t %.2f, %.0f%% wins; $500 -> $%.0f vs $%.0f holding QQQ" % (
                 q["judged"]["mean_bps"], q["judged"]["t"], 100 * (q["judged"]["win_rate"] or 0), q["usd_judged"],
                 j["markets"]["QQQ"]["hold_usd_judged"] or 0))
+    j = _load("orb-retest-fix.json")
+    if j:
+        c = j["chosen"]
+        add("video strategy 2, fix round: 32 standard fixes chosen on 2022-2024", j.get("verdict", "FAIL"),
+            "chosen %s %gR: in-sample t %.2f, judged t %.2f; $500 -> $%.0f vs $%.0f holding QQQ" % (
+                c["fix"], c["target_r"], c["in_sample"]["t"], c["judged"]["t"], j["usd_judged"], j["hold_usd_judged"]))
     j = _load("bot-types.json")
     if j:
         for k, label in (("B1_dca_bot", "crypto platform bot: DCA (buy more on dips), BTC $500"),

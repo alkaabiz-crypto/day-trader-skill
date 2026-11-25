@@ -84,6 +84,26 @@ in, and whether our own tests can be trusted. Every item is pre-registered and t
 
 ## Log
 
+### 2026-11-25: fix round for the video strategy, 32 standard fixes chosen on 2022-2024 only (`orb_retest_fix.py`). FAIL
+
+The owner asked to "fix the fails". Pre-registered in b403823. The base was orb_retest on QQQ, with each of these
+fixes alone and each also long-only, at 2R and 3R:
+- trend: prior close vs its 20-day average;
+- rvol: opening-range volume 1.5x its 14-day average;
+- gap direction;
+- narrow or wide range vs the prior 20-day median;
+- fade the break;
+- plain breakout entry with no retest.
+
+The best in-sample version (at least 150 trades) was to be judged once on 2025 on.
+
+- No fix reaches even in-sample t 1. The best is "wide range, 3R" at +1.8 bp, t 0.88. Judged, that one lost
+  -1.6 bp a trade (t -0.64), and $500 became $485 against $620 holding QQQ. FAIL.
+- Fading the break loses most of all (t -7.5 to -10). With the stop inside the zone both ways, the retest level
+  gets whipsawed in both directions. The setup has no direction to exploit, so it can't be fixed with filters.
+- The lab's other fails already had their fix rounds: the 53M-variant searches, the swarm and the catalog. That
+  produced the one lead now on a forward test, the Bitcoin 200-day trend bot.
+
 ### 2026-11-25: the owner's second video strategy, opening range + break-and-close + retest (`orb_retest.py`). FAIL
 
 The video is NAS100. It marks the 9:30-9:45 high and low; on the 5-minute chart it waits for a candle to close
