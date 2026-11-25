@@ -967,28 +967,18 @@
   "BTC-USD": [
    "breakdown_20h"
   ],
-  "ETH-USD": [
-   "breakdown_20h"
-  ],
+  "ETH-USD": [],
   "SOL-USD": [
    "breakdown_20h"
   ],
   "XRP-USD": [],
-  "BNB-USD": [
-   "breakdown_20h"
-  ],
+  "BNB-USD": [],
   "DOGE-USD": [],
-  "ADA-USD": [
-   "breakdown_20h"
-  ],
-  "AVAX-USD": [
-   "breakdown_20h"
-  ],
+  "ADA-USD": [],
+  "AVAX-USD": [],
   "LINK-USD": [],
   "LTC-USD": [],
-  "DOT-USD": [
-   "breakdown_20h"
-  ],
+  "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [],
   "GBPUSD=X": [],
@@ -1011,12 +1001,10 @@
   "EURAUD=X": [
    "breakout_20d"
   ],
-  "GBPCHF=X": [],
-  "GC=F": [
-   "oversold_bounce"
-  ],
-  "SI=F": [
+  "GBPCHF=X": [
    "breakdown_20h"
-  ]
+  ],
+  "GC=F": [],
+  "SI=F": []
  }
 }
