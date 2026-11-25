@@ -5571,21 +5571,14 @@
  "last_fx": {
   "BTC-USD": [],
   "ETH-USD": [],
-  "SOL-USD": [
-   "breakout_20d"
-  ],
+  "SOL-USD": [],
   "XRP-USD": [],
   "BNB-USD": [],
-  "DOGE-USD": [
-   "breakout_20d"
-  ],
+  "DOGE-USD": [],
   "ADA-USD": [],
   "AVAX-USD": [],
   "LINK-USD": [],
-  "LTC-USD": [
-   "breakout_20d",
-   "overbought"
-  ],
+  "LTC-USD": [],
   "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [],
