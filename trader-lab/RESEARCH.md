@@ -1502,3 +1502,21 @@ $500 became $305 to $344.
   no swap and judged from 2016. Holding real coins avoids the swap; the paper bot `btc_trend.py` models
   spot coins.
 - Mean reversion (CCI, Bollinger, z-score, DPO, stochastic) loses on Bitcoin, as it does everywhere else.
+
+## 2026-11-25: Can we spot a fake breakout in advance? (`fakeout.py`)
+
+The test was pre-registered and committed before it ran (2dc1664). It uses the live stocks-in-play setups,
+4 years of 5-minute bars on 40 names, and 3,824 trades. It was chosen on data before 2025 and judged from 2025.
+
+- **Fakes are normal.** About half of all breakouts hit their stop: 51% in-sample, 46% judged. The strategy
+  still made +9 bp a trade from 2025 (t 1.96, not proven), because the winners pay for the fakes.
+- **0 of 7 warning signs pass.** The signs tested: market against, tiny first candle, big gap, weak close,
+  extreme relative volume, instant fill and late fill.
+- Two signs point the opposite way, though not significantly. Big gaps and extreme relative volume had fewer
+  fakes, not more.
+- A tiny first candle does predict stop-outs: 69–72% faked, against about 48%. Those losses are small, though
+  (the stop is small), so skipping them barely changes the money.
+- **Waiting for a candle to close past the level cuts fakes from 46% to 33%.** It doesn't raise profit:
+  +0.4 bp a setup, t 0.22. The fakes it avoids are traded for later entries.
+- Verdict: no rule found that filters fakes for a profit. The stop-loss is the fake-out defence. The live book
+  is unchanged.

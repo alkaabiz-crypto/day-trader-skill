@@ -1,0 +1,218 @@
+{
+ "setups": 4400,
+ "trades": 3824,
+ "base": {
+  "in_sample": {
+   "trades": 1970,
+   "bps": 5.35110185693659,
+   "t": 1.1384730841375679,
+   "fake_rate": 0.5071065989847716,
+   "usd": 2108.3341316330166
+  },
+  "judged": {
+   "trades": 1854,
+   "bps": 8.971939122270676,
+   "t": 1.9635230104323242,
+   "fake_rate": 0.45685005393743255,
+   "usd": 3326.7950265379664
+  }
+ },
+ "flags": {
+  "market_against": {
+   "in_sample": {
+    "n_flagged": 809,
+    "n_clean": 1161,
+    "fake_rate_flagged": 0.49938195302843014,
+    "fake_rate_clean": 0.512489233419466,
+    "bps_flagged": 15.009221831683478,
+    "bps_clean": -1.3788025871376823,
+    "t_clean_minus_flagged": -1.7235224818462733,
+    "usd_all": 2108.3341316330166,
+    "usd_skip_flagged": -320.1579607333698
+   },
+   "judged": {
+    "n_flagged": 763,
+    "n_clean": 1091,
+    "fake_rate_flagged": 0.46788990825688076,
+    "fake_rate_clean": 0.44912923923006415,
+    "bps_flagged": 11.977862743012976,
+    "bps_clean": 6.869721228021018,
+    "t_clean_minus_flagged": -0.5399691072199931,
+    "usd_all": 3326.7950265379664,
+    "usd_skip_flagged": 1498.973171954186
+   },
+   "verdict": "NOT PROVEN"
+  },
+  "tiny_candle": {
+   "in_sample": {
+    "n_flagged": 54,
+    "n_clean": 1916,
+    "fake_rate_flagged": 0.6851851851851852,
+    "fake_rate_clean": 0.5020876826722338,
+    "bps_flagged": 18.493573519976636,
+    "bps_clean": 4.980698167059679,
+    "t_clean_minus_flagged": -0.40490707901866674,
+    "usd_all": 2108.3341316330166,
+    "usd_skip_flagged": 1908.603537617269
+   },
+   "judged": {
+    "n_flagged": 46,
+    "n_clean": 1808,
+    "fake_rate_flagged": 0.717391304347826,
+    "fake_rate_clean": 0.4502212389380531,
+    "bps_flagged": -13.945573671093516,
+    "bps_clean": 9.555017434491225,
+    "t_clean_minus_flagged": 1.3490988487466071,
+    "usd_all": 3326.7950265379664,
+    "usd_skip_flagged": 3455.0943043120265
+   },
+   "verdict": "NOT PROVEN"
+  },
+  "big_gap": {
+   "in_sample": {
+    "n_flagged": 270,
+    "n_clean": 1700,
+    "fake_rate_flagged": 0.44814814814814813,
+    "fake_rate_clean": 0.5164705882352941,
+    "bps_flagged": 23.72089847087003,
+    "bps_clean": 2.433545924135397,
+    "t_clean_minus_flagged": -1.0237558135092077,
+    "usd_all": 2108.3341316330166,
+    "usd_skip_flagged": 827.4056142060351
+   },
+   "judged": {
+    "n_flagged": 365,
+    "n_clean": 1489,
+    "fake_rate_flagged": 0.40821917808219177,
+    "fake_rate_clean": 0.46877098723975824,
+    "bps_flagged": 17.96421960597481,
+    "bps_clean": 6.7676527713290975,
+    "t_clean_minus_flagged": -0.7534945381095409,
+    "usd_all": 3326.7950265379664,
+    "usd_skip_flagged": 2015.406995301805
+   },
+   "verdict": "NOT PROVEN"
+  },
+  "weak_close": {
+   "in_sample": {
+    "n_flagged": 242,
+    "n_clean": 1728,
+    "fake_rate_flagged": 0.5371900826446281,
+    "fake_rate_clean": 0.5028935185185185,
+    "bps_flagged": 5.059330067848559,
+    "bps_clean": 5.391963415362113,
+    "t_clean_minus_flagged": 0.027448522276597193,
+    "usd_all": 2108.3341316330166,
+    "usd_skip_flagged": 1863.4625563491466
+   },
+   "judged": {
+    "n_flagged": 209,
+    "n_clean": 1645,
+    "fake_rate_flagged": 0.5215311004784688,
+    "fake_rate_clean": 0.4486322188449848,
+    "bps_flagged": -5.819385126038002,
+    "bps_clean": 10.851201595156095,
+    "t_clean_minus_flagged": 1.2017604457816036,
+    "usd_all": 3326.7950265379664,
+    "usd_skip_flagged": 3570.0453248063545
+   },
+   "verdict": "NOT PROVEN"
+  },
+  "extreme_rvol": {
+   "in_sample": {
+    "n_flagged": 306,
+    "n_clean": 1664,
+    "fake_rate_flagged": 0.42810457516339867,
+    "fake_rate_clean": 0.5216346153846154,
+    "bps_flagged": 15.906255108080428,
+    "bps_clean": 3.410070069166149,
+    "t_clean_minus_flagged": -0.7524887058127246,
+    "usd_all": 2108.3341316330166,
+    "usd_skip_flagged": 1134.8713190184944
+   },
+   "judged": {
+    "n_flagged": 208,
+    "n_clean": 1646,
+    "fake_rate_flagged": 0.35096153846153844,
+    "fake_rate_clean": 0.47023086269744835,
+    "bps_flagged": 32.875899601696176,
+    "bps_clean": 5.9512685392084,
+    "t_clean_minus_flagged": -1.351572908763547,
+    "usd_all": 3326.7950265379664,
+    "usd_skip_flagged": 1959.1576031074053
+   },
+   "verdict": "NOT PROVEN"
+  },
+  "instant_fill": {
+   "in_sample": {
+    "n_flagged": 1386,
+    "n_clean": 584,
+    "fake_rate_flagged": 0.5310245310245311,
+    "fake_rate_clean": 0.4503424657534247,
+    "bps_flagged": 3.7062254991689048,
+    "bps_clean": 9.254866637529076,
+    "t_clean_minus_flagged": 0.5820197715052026,
+    "usd_all": 2108.3341316330166,
+    "usd_skip_flagged": 1080.9684232633963
+   },
+   "judged": {
+    "n_flagged": 1285,
+    "n_clean": 569,
+    "fake_rate_flagged": 0.4653696498054475,
+    "fake_rate_clean": 0.437609841827768,
+    "bps_flagged": 18.5600997006053,
+    "bps_clean": -12.681463941279398,
+    "t_clean_minus_flagged": -3.464843271604234,
+    "usd_all": 3326.7950265379664,
+    "usd_skip_flagged": -1443.1505965175957
+   },
+   "verdict": "NOT PROVEN"
+  },
+  "late_fill": {
+   "in_sample": {
+    "n_flagged": 149,
+    "n_clean": 1821,
+    "fake_rate_flagged": 0.37583892617449666,
+    "fake_rate_clean": 0.5178473366282262,
+    "bps_flagged": -17.46021826403498,
+    "bps_clean": 7.2175964741934635,
+    "t_clean_minus_flagged": 2.1469691859530555,
+    "usd_all": 2108.3341316330166,
+    "usd_skip_flagged": 2628.6486359012592
+   },
+   "judged": {
+    "n_flagged": 135,
+    "n_clean": 1719,
+    "fake_rate_flagged": 0.3111111111111111,
+    "fake_rate_clean": 0.4682955206515416,
+    "bps_flagged": -4.17188735112625,
+    "bps_clean": 10.004176803427502,
+    "t_clean_minus_flagged": 0.8669441875048716,
+    "usd_all": 3326.7950265379664,
+    "usd_skip_flagged": 3439.435985018375
+   },
+   "verdict": "NOT PROVEN"
+  }
+ },
+ "close_confirm": {
+  "in_sample": {
+   "setups": 2274,
+   "trades": 1764,
+   "bps": 7.744935623431322,
+   "fake_rate": 0.3843537414965986,
+   "paired_bps": 1.37220570869295,
+   "paired_t": 0.7396530323161005,
+   "usd": 2732.4132879465706
+  },
+  "judged": {
+   "setups": 2126,
+   "trades": 1644,
+   "bps": 10.65195961697816,
+   "fake_rate": 0.3290754257907543,
+   "paired_bps": 0.4129099142155521,
+   "paired_t": 0.21541762930252498,
+   "usd": 3502.364322062419
+  },
+  "verdict": "NOT PROVEN"
+ }
+}
