@@ -4941,19 +4941,133 @@
    "status": "open",
    "setup": "20-hour closing-high breakout",
    "id": "F-noweekend-2026-11-25 19:34Z-LINK-USD"
+  },
+  {
+   "symbol": "ADA-USD",
+   "side": "buy",
+   "entry_est": 0.14620999991893768,
+   "stop": 0.1428960668189185,
+   "target": 0.15283786611897604,
+   "risk_usd": 10.0,
+   "notional_usd": 441.2,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 20:34Z",
+   "start_ts": 1795636800,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-live-2026-11-25 20:34Z-ADA-USD"
+  },
+  {
+   "symbol": "DOGE-USD",
+   "side": "buy",
+   "entry_est": 0.055799998342990875,
+   "stop": 0.0546439267428858,
+   "target": 0.05811214154320104,
+   "risk_usd": 10.0,
+   "notional_usd": 482.67,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 20:34Z",
+   "start_ts": 1795636800,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-live-2026-11-25 20:34Z-DOGE-USD"
+  },
+  {
+   "symbol": "GBPJPY=X",
+   "side": "buy",
+   "entry_est": 208.8939971923828,
+   "stop": 208.29431533813477,
+   "target": 210.0933609008789,
+   "risk_usd": 10.0,
+   "notional_usd": 3483.41,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 20:34Z",
+   "start_ts": 1795636800,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-btctrend-2026-11-25 20:34Z-GBPJPY=X"
+  },
+  {
+   "symbol": "ADA-USD",
+   "side": "buy",
+   "entry_est": 0.14620999991893768,
+   "stop": 0.1428960668189185,
+   "target": 0.15283786611897604,
+   "risk_usd": 10.0,
+   "notional_usd": 441.2,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 20:34Z",
+   "start_ts": 1795636800,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-noweekend-2026-11-25 20:34Z-ADA-USD"
+  },
+  {
+   "symbol": "DOGE-USD",
+   "side": "buy",
+   "entry_est": 0.055799998342990875,
+   "stop": 0.0546439267428858,
+   "target": 0.05811214154320104,
+   "risk_usd": 10.0,
+   "notional_usd": 482.67,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-25",
+   "opened_at": "2026-11-25 20:34Z",
+   "start_ts": 1795636800,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-noweekend-2026-11-25 20:34Z-DOGE-USD"
   }
  ],
  "last_fx": {
-  "BTC-USD": [],
-  "ETH-USD": [],
-  "SOL-USD": [],
+  "BTC-USD": [
+   "breakout_20d"
+  ],
+  "ETH-USD": [
+   "breakout_20d"
+  ],
+  "SOL-USD": [
+   "breakout_20d"
+  ],
   "XRP-USD": [
    "breakout_20d"
   ],
-  "BNB-USD": [],
-  "DOGE-USD": [],
-  "ADA-USD": [],
-  "AVAX-USD": [],
+  "BNB-USD": [
+   "breakout_20d"
+  ],
+  "DOGE-USD": [
+   "breakout_20d"
+  ],
+  "ADA-USD": [
+   "breakout_20d"
+  ],
+  "AVAX-USD": [
+   "breakout_20d"
+  ],
   "LINK-USD": [
    "breakout_20d"
   ],
@@ -4966,30 +5080,24 @@
   "BCH-USD": [
    "breakout_20d"
   ],
-  "EURUSD=X": [
-   "breakout_20d",
-   "overbought"
-  ],
-  "GBPUSD=X": [
-   "breakout_20d"
-  ],
+  "EURUSD=X": [],
+  "GBPUSD=X": [],
   "USDJPY=X": [],
   "AUDUSD=X": [],
   "USDCAD=X": [
    "oversold",
-   "breakdown_20h"
-  ],
-  "USDCHF=X": [
-   "oversold",
    "oversold_bounce"
   ],
-  "NZDUSD=X": [
-   "breakout_20d"
+  "USDCHF=X": [
+   "oversold_bounce"
   ],
+  "NZDUSD=X": [],
   "EURJPY=X": [
    "breakout_20d"
   ],
-  "GBPJPY=X": [],
+  "GBPJPY=X": [
+   "breakout_20d"
+  ],
   "EURGBP=X": [],
   "AUDJPY=X": [],
   "EURCHF=X": [],
@@ -4999,7 +5107,7 @@
    "breakout_20d"
   ],
   "SI=F": [
-   "reclaim_ma20"
+   "breakout_20d"
   ]
  }
 }
