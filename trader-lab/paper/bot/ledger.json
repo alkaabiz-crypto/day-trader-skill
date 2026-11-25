@@ -929,24 +929,29 @@
   "EURUSD=X": [],
   "GBPUSD=X": [],
   "USDJPY=X": [],
-  "AUDUSD=X": [],
+  "AUDUSD=X": [
+   "reclaim_ma20"
+  ],
   "USDCAD=X": [
    "oversold",
    "breakdown_20h"
   ],
-  "USDCHF=X": [
-   "oversold",
-   "breakdown_20h"
-  ],
+  "USDCHF=X": [],
   "NZDUSD=X": [],
   "EURJPY=X": [],
   "GBPJPY=X": [],
-  "EURGBP=X": [],
-  "AUDJPY=X": [],
+  "EURGBP=X": [
+   "breakdown_20h"
+  ],
+  "AUDJPY=X": [
+   "reclaim_ma20"
+  ],
   "EURCHF=X": [],
   "EURAUD=X": [],
   "GBPCHF=X": [],
-  "GC=F": [],
+  "GC=F": [
+   "breakdown_20h"
+  ],
   "SI=F": []
  }
 }
