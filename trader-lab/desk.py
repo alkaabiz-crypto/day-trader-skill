@@ -207,6 +207,11 @@ def scoreboard():
         add("strategy catalog: %d named public strategies x %d markets" % (len(rules), len(j.get("markets", []))),
             "PASS" if any(r["verdict"] == "PASS" for r in rules) else "FAIL",
             "best %s judged t %.2f (bar 3.5); trend rules' edge is crypto only" % (best.get("rule"), best.get("judged_t", 0)))
+    j = _load("btc-trend.json")
+    if j and j.get("days"):
+        add("paper bots: Bitcoin trend (hold BTC above its 200-day average)", j.get("verdict", "PAPER"),
+            "%d days, $%.2f vs $%.2f holding BTC; now %s" % (j["days"], j["equity"], j["hold_btc"],
+                                                          "in BTC" if j.get("in_btc") else "in cash"))
     j = _load("autopaper.json")
     if j:
         spy = j.get("spy_same_days_usd")

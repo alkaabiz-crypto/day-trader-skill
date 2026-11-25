@@ -18,7 +18,8 @@ sys.path.insert(0, HERE)
 BOOK = os.path.join(HERE, "autopaper")
 BOOKS = [("orb", "equity.csv", "trades.csv", "state.json", "Breakouts, full market"),
          ("fed", "fed_equity.csv", "fed_trades.csv", "fed_state.json", "Fed night"),
-         ("sip", "sip_equity.csv", "sip_trades.csv", "sip_state.json", "Stocks in play")]
+         ("sip", "sip_equity.csv", "sip_trades.csv", "sip_state.json", "Stocks in play"),
+         ("btc", "btc_equity.csv", "btc_trades.csv", "btc_state.json", "Bitcoin trend")]
 
 
 def rows(path):
