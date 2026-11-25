@@ -978,8 +978,12 @@
   "AVAX-USD": [],
   "LINK-USD": [],
   "LTC-USD": [],
-  "DOT-USD": [],
-  "BCH-USD": [],
+  "DOT-USD": [
+   "breakdown_20h"
+  ],
+  "BCH-USD": [
+   "reclaim_ma20"
+  ],
   "EURUSD=X": [],
   "GBPUSD=X": [],
   "USDJPY=X": [],
@@ -987,7 +991,9 @@
    "breakdown_20h"
   ],
   "USDCAD=X": [],
-  "USDCHF=X": [],
+  "USDCHF=X": [
+   "reclaim_ma20"
+  ],
   "NZDUSD=X": [],
   "EURJPY=X": [],
   "GBPJPY=X": [],
@@ -1004,7 +1010,13 @@
   "GBPCHF=X": [
    "breakdown_20h"
   ],
-  "GC=F": [],
-  "SI=F": []
+  "GC=F": [
+   "oversold",
+   "breakdown_20h"
+  ],
+  "SI=F": [
+   "oversold",
+   "breakdown_20h"
+  ]
  }
 }
