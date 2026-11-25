@@ -5569,60 +5569,34 @@
   }
  ],
  "last_fx": {
-  "BTC-USD": [
-   "breakout_20d"
-  ],
-  "ETH-USD": [
-   "breakout_20d"
-  ],
+  "BTC-USD": [],
+  "ETH-USD": [],
   "SOL-USD": [
    "breakout_20d"
   ],
-  "XRP-USD": [
-   "breakout_20d"
-  ],
-  "BNB-USD": [
-   "breakout_20d"
-  ],
+  "XRP-USD": [],
+  "BNB-USD": [],
   "DOGE-USD": [
    "breakout_20d"
   ],
-  "ADA-USD": [
-   "breakout_20d"
-  ],
-  "AVAX-USD": [
-   "breakout_20d"
-  ],
-  "LINK-USD": [
-   "breakout_20d"
-  ],
+  "ADA-USD": [],
+  "AVAX-USD": [],
+  "LINK-USD": [],
   "LTC-USD": [
-   "breakout_20d"
+   "breakout_20d",
+   "overbought"
   ],
-  "DOT-USD": [
-   "breakout_20d"
-  ],
-  "BCH-USD": [
-   "breakout_20d"
-  ],
+  "DOT-USD": [],
+  "BCH-USD": [],
   "EURUSD=X": [],
   "GBPUSD=X": [],
   "USDJPY=X": [],
   "AUDUSD=X": [],
-  "USDCAD=X": [
-   "oversold",
-   "oversold_bounce"
-  ],
-  "USDCHF=X": [
-   "oversold_bounce"
-  ],
+  "USDCAD=X": [],
+  "USDCHF=X": [],
   "NZDUSD=X": [],
-  "EURJPY=X": [
-   "breakout_20d"
-  ],
-  "GBPJPY=X": [
-   "breakout_20d"
-  ],
+  "EURJPY=X": [],
+  "GBPJPY=X": [],
   "EURGBP=X": [],
   "AUDJPY=X": [],
   "EURCHF=X": [],
