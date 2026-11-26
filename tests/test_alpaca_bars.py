@@ -13,7 +13,7 @@ class Records(unittest.TestCase):
     def test_breakout_recorded_and_flat_day_not(self):
         flat = session([100.0] * 78)
         self.assertEqual(ab.records(flat)["d"], {})
-        up = session([100.0] * 3 + [100.0 + 0.2 * i for i in range(1, 76)])
+        up = session([100.0] * 3 + [103.0 + 0.2 * i for i in range(75)])     # a clear break, worth its costs
         rec = ab.records(up)
         self.assertIn("09:50", rec["d"])
         self.assertIn("10:17", rec["d"])
