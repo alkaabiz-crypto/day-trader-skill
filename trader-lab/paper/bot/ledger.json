@@ -6363,9 +6363,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 13:35Z",
    "start_ts": 1795698000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-26 13:35Z-EURUSD=X"
+   "id": "F-live-2026-11-26 13:35Z-EURUSD=X",
+   "entry": 1.097936,
+   "exit": 1.096921,
+   "how": "stop",
+   "pnl_usd": -10.87,
+   "closed_at": "2026-11-26 23:34Z"
   },
   {
    "symbol": "EURUSD=X",
@@ -6383,9 +6388,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 13:35Z",
    "start_ts": 1795698000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-26 13:35Z-EURUSD=X"
+   "id": "F-noweekend-2026-11-26 13:35Z-EURUSD=X",
+   "entry": 1.097936,
+   "exit": 1.096921,
+   "how": "stop",
+   "pnl_usd": -10.87,
+   "closed_at": "2026-11-26 23:34Z"
   },
   {
    "symbol": "BNB-USD",
@@ -6721,46 +6731,106 @@
    "status": "open",
    "setup": "20-hour closing-high breakout",
    "id": "F-live-2026-11-26 22:36Z-SOL-USD"
+  },
+  {
+   "symbol": "EURAUD=X",
+   "side": "buy",
+   "entry_est": 1.6543699502944946,
+   "stop": 1.65154886671475,
+   "target": 1.660012117453984,
+   "risk_usd": 10.0,
+   "notional_usd": 5864.31,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 23:34Z",
+   "start_ts": 1795734000,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-live-2026-11-26 23:34Z-EURAUD=X"
+  },
+  {
+   "symbol": "XRP-USD",
+   "side": "sell",
+   "entry_est": 0.9463000297546387,
+   "stop": 0.9557928911277226,
+   "target": 0.9273143070084708,
+   "risk_usd": 10.0,
+   "notional_usd": 996.85,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 23:34Z",
+   "start_ts": 1795734000,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-26 23:34Z-XRP-USD"
+  },
+  {
+   "symbol": "EURGBP=X",
+   "side": "buy",
+   "entry_est": 0.8370500206947327,
+   "stop": 0.8363257348537445,
+   "target": 0.838498592376709,
+   "risk_usd": 10.0,
+   "notional_usd": 11556.9,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 23:34Z",
+   "start_ts": 1795734000,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-btctrend-2026-11-26 23:34Z-EURGBP=X"
   }
  ],
  "last_fx": {
   "BTC-USD": [],
   "ETH-USD": [],
-  "SOL-USD": [
-   "breakout_20d"
-  ],
+  "SOL-USD": [],
   "XRP-USD": [
-   "reclaim_ma20"
+   "breakdown_20h"
   ],
   "BNB-USD": [],
   "DOGE-USD": [],
   "ADA-USD": [],
   "AVAX-USD": [],
-  "LINK-USD": [
-   "breakout_20d",
-   "overbought"
-  ],
-  "LTC-USD": [
-   "breakout_20d"
-  ],
+  "LINK-USD": [],
+  "LTC-USD": [],
   "DOT-USD": [],
-  "BCH-USD": [
-   "breakout_20d",
-   "overbought"
+  "BCH-USD": [],
+  "EURUSD=X": [
+   "reclaim_ma20"
   ],
-  "EURUSD=X": [],
   "GBPUSD=X": [],
   "USDJPY=X": [],
   "AUDUSD=X": [],
   "USDCAD=X": [],
   "USDCHF=X": [],
-  "NZDUSD=X": [],
+  "NZDUSD=X": [
+   "breakdown_20h"
+  ],
   "EURJPY=X": [],
   "GBPJPY=X": [],
-  "EURGBP=X": [],
-  "AUDJPY=X": [],
+  "EURGBP=X": [
+   "reclaim_ma20"
+  ],
+  "AUDJPY=X": [
+   "breakdown_20h"
+  ],
   "EURCHF=X": [],
-  "EURAUD=X": [],
+  "EURAUD=X": [
+   "reclaim_ma20"
+  ],
   "GBPCHF=X": [],
   "GC=F": [
    "breakout_20d"
