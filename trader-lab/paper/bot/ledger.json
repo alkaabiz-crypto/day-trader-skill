@@ -6096,6 +6096,106 @@
    "status": "open",
    "setup": "reclaimed the 20-hour average",
    "id": "F-noweekend-2026-11-26 07:34Z-USDCAD=X"
+  },
+  {
+   "symbol": "GBPCHF=X",
+   "side": "buy",
+   "entry_est": 1.0921000242233276,
+   "stop": 1.0900761187076569,
+   "target": 1.0961478352546692,
+   "risk_usd": 10.0,
+   "notional_usd": 5396.0,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 09:35Z",
+   "start_ts": 1795683600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-live-2026-11-26 09:35Z-GBPCHF=X"
+  },
+  {
+   "symbol": "USDCHF=X",
+   "side": "buy",
+   "entry_est": 0.8332300186157227,
+   "stop": 0.8319700189999172,
+   "target": 0.8357500178473336,
+   "risk_usd": 10.0,
+   "notional_usd": 6612.94,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 09:35Z",
+   "start_ts": 1795683600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-live-2026-11-26 09:35Z-USDCHF=X"
+  },
+  {
+   "symbol": "GBPCHF=X",
+   "side": "buy",
+   "entry_est": 1.0921000242233276,
+   "stop": 1.0900761187076569,
+   "target": 1.0961478352546692,
+   "risk_usd": 10.0,
+   "notional_usd": 5396.0,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 09:35Z",
+   "start_ts": 1795683600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-btctrend-2026-11-26 09:35Z-GBPCHF=X"
+  },
+  {
+   "symbol": "GBPCHF=X",
+   "side": "buy",
+   "entry_est": 1.0921000242233276,
+   "stop": 1.0900761187076569,
+   "target": 1.0961478352546692,
+   "risk_usd": 10.0,
+   "notional_usd": 5396.0,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 09:35Z",
+   "start_ts": 1795683600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-noweekend-2026-11-26 09:35Z-GBPCHF=X"
+  },
+  {
+   "symbol": "USDCHF=X",
+   "side": "buy",
+   "entry_est": 0.8332300186157227,
+   "stop": 0.8319700189999172,
+   "target": 0.8357500178473336,
+   "risk_usd": 10.0,
+   "notional_usd": 6612.94,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 09:35Z",
+   "start_ts": 1795683600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-noweekend-2026-11-26 09:35Z-USDCHF=X"
   }
  ],
  "last_fx": {
@@ -6107,12 +6207,16 @@
   "DOGE-USD": [],
   "ADA-USD": [],
   "AVAX-USD": [],
-  "LINK-USD": [],
-  "LTC-USD": [],
-  "DOT-USD": [],
-  "BCH-USD": [
+  "LINK-USD": [
+   "breakout_20d"
+  ],
+  "LTC-USD": [
    "overbought"
   ],
+  "DOT-USD": [
+   "breakout_20d"
+  ],
+  "BCH-USD": [],
   "EURUSD=X": [],
   "GBPUSD=X": [],
   "USDJPY=X": [],
@@ -6120,17 +6224,21 @@
   "USDCAD=X": [
    "reclaim_ma20"
   ],
-  "USDCHF=X": [],
-  "NZDUSD=X": [],
-  "EURJPY=X": [
-   "reclaim_ma20"
+  "USDCHF=X": [
+   "breakout_20d"
   ],
+  "NZDUSD=X": [],
+  "EURJPY=X": [],
   "GBPJPY=X": [],
   "EURGBP=X": [],
   "AUDJPY=X": [],
-  "EURCHF=X": [],
+  "EURCHF=X": [
+   "breakout_20d"
+  ],
   "EURAUD=X": [],
-  "GBPCHF=X": [],
+  "GBPCHF=X": [
+   "breakout_20d"
+  ],
   "GC=F": [
    "breakout_20d"
   ],
