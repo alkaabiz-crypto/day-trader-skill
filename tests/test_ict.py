@@ -29,5 +29,15 @@ class Manage(unittest.TestCase):
         self.assertIsNone(ict.manage(bars, 0, 1, 102, 99, 2.0, 1))
 
 
+class Full(unittest.TestCase):
+    def test_pooled_averages_markets_per_day(self):
+        by = {"A": [{"date": "2024-05-01", "ret": 0.02}, {"date": "2025-02-01", "ret": -0.01}],
+              "B": [{"date": "2024-05-01", "ret": 0.0}]}
+        ins, jud = ict.pooled(by)
+        self.assertEqual(ins, [0.01])
+        self.assertEqual(jud, [-0.01])
+        self.assertEqual(set(ict.FULL_SETUPS), {"silver_bullet", "silver_bullet_pm", "judas_swing"})
+
+
 if __name__ == "__main__":
     unittest.main()
