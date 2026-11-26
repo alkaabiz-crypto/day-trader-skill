@@ -1,0 +1,118 @@
+{
+ "variants": {
+  "rsi_bot": {
+   "trades": 8249,
+   "net_usd": -11408.12,
+   "per_trade": -1.383,
+   "win_rate": 0.362,
+   "days": 910,
+   "t_daily": -6.71,
+   "gross_usd": -567.25,
+   "at_2x": -22248.98,
+   "by_group": {
+    "crypto": {
+     "trades": 3482,
+     "net_usd": -3805.41,
+     "per_trade": -1.093,
+     "win_rate": 0.357,
+     "days": 660,
+     "t_daily": -3.0
+    },
+    "forex": {
+     "trades": 4151,
+     "net_usd": -6900.69,
+     "per_trade": -1.662,
+     "win_rate": 0.365,
+     "days": 706,
+     "t_daily": -6.77
+    },
+    "metal": {
+     "trades": 616,
+     "net_usd": -702.01,
+     "per_trade": -1.14,
+     "win_rate": 0.369,
+     "days": 384,
+     "t_daily": -2.03
+    }
+   },
+   "placebo_beats": 0.06,
+   "verdict": "FAIL"
+  },
+  "rsi_mean": {
+   "trades": 8272,
+   "net_usd": -10638.09,
+   "per_trade": -1.286,
+   "win_rate": 0.374,
+   "days": 910,
+   "t_daily": -6.18,
+   "gross_usd": 215.94,
+   "at_2x": -21492.12,
+   "by_group": {
+    "crypto": {
+     "trades": 3480,
+     "net_usd": -3190.71,
+     "per_trade": -0.917,
+     "win_rate": 0.351,
+     "days": 660,
+     "t_daily": -2.41
+    },
+    "forex": {
+     "trades": 4174,
+     "net_usd": -6598.28,
+     "per_trade": -1.581,
+     "win_rate": 0.391,
+     "days": 707,
+     "t_daily": -6.71
+    },
+    "metal": {
+     "trades": 618,
+     "net_usd": -849.09,
+     "per_trade": -1.374,
+     "win_rate": 0.382,
+     "days": 386,
+     "t_daily": -2.51
+    }
+   },
+   "placebo_beats": 0.0,
+   "verdict": "FAIL"
+  },
+  "band_mean": {
+   "trades": 14554,
+   "net_usd": -18733.89,
+   "per_trade": -1.287,
+   "win_rate": 0.43,
+   "days": 938,
+   "t_daily": -9.62,
+   "gross_usd": 1794.32,
+   "at_2x": -39262.11,
+   "by_group": {
+    "crypto": {
+     "trades": 6176,
+     "net_usd": -6926.08,
+     "per_trade": -1.121,
+     "win_rate": 0.398,
+     "days": 725,
+     "t_daily": -4.66
+    },
+    "forex": {
+     "trades": 7335,
+     "net_usd": -11357.33,
+     "per_trade": -1.548,
+     "win_rate": 0.454,
+     "days": 729,
+     "t_daily": -9.46
+    },
+    "metal": {
+     "trades": 1043,
+     "net_usd": -450.47,
+     "per_trade": -0.432,
+     "win_rate": 0.444,
+     "days": 529,
+     "t_daily": -1.07
+    }
+   },
+   "placebo_beats": 0.0,
+   "verdict": "FAIL"
+  }
+ }
+}

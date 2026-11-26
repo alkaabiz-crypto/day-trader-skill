@@ -1629,3 +1629,24 @@ The rule, sizing and costs are unchanged. The 10-index backtest stays available 
 `backtest`. Why: the US-only backtest was better on every line (3.1% against 1.6% a year, t 1.81 against
 0.78), and the non-US CFDs were priced from US-hours fund prices. It is still a FAIL, so the paper record
 is a forward check only. No position was open at the switch.
+
+### 2026-11-26: buy low, sell high on the crypto/forex bot's markets (`fx_meanrev.py`). FAIL
+
+The owner asked why the crypto bot doesn't buy low and sell high. The test was pre-registered in 3383f9e
+and uses the bot's 2 years of 1-hour bars, its sizing ($10 risk), its group cap and Exness costs. The live
+bot is unchanged.
+
+| variant | trades | net | $ a trade | gross (before costs) | win rate | daily t | placebo beats |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| RSI(14) dips, bot's exits (1.5 ATR stop, 2R) | 8,249 | −$11,408 | −$1.38 | −$567 | 36% | −6.71 | 6% |
+| RSI(14) dips, target the 20-hour average | 8,272 | −$10,638 | −$1.29 | +$216 | 37% | −6.18 | 0% |
+| Bollinger 2-sd dips, target the 20-hour average | 14,554 | −$18,734 | −$1.29 | +$1,794 | 43% | −9.62 | 0% |
+| (the live breakout rule, for comparison) | 11,951 | −$15,155 | −$1.27 | +$850 | 36% | −8.14 | |
+
+- **All three FAIL.** They lose in crypto, forex and metals alike, and doubling costs doubles the losses.
+- **Before costs, buy low/sell high is about break-even.** At best it makes +$0.12 a trade, while the
+  spread and swap cost about $1.40 a trade.
+- **It loses to random coin-flip directions** (placebo 0-6%). On these markets, fading the hour's big
+  move is worse than chance, not better.
+- **Same reading as the breakout rule:** short-term hourly trading on these markets has no edge after
+  Exness costs, whichever direction the bot takes.
