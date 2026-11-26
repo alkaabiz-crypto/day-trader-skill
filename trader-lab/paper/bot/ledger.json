@@ -5686,6 +5686,86 @@
    "status": "open",
    "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
    "id": "F-noweekend-2026-11-26 01:34Z-LTC-USD"
+  },
+  {
+   "symbol": "XRP-USD",
+   "side": "buy",
+   "entry_est": 0.9513000249862671,
+   "stop": 0.9322178768260139,
+   "target": 0.9894643213067736,
+   "risk_usd": 10.0,
+   "notional_usd": 498.53,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 02:34Z",
+   "start_ts": 1795658400,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-live-2026-11-26 02:34Z-XRP-USD"
+  },
+  {
+   "symbol": "DOT-USD",
+   "side": "buy",
+   "entry_est": 0.6654999852180481,
+   "stop": 0.6506178442920957,
+   "target": 0.6952642670699528,
+   "risk_usd": 10.0,
+   "notional_usd": 447.18,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 02:34Z",
+   "start_ts": 1795658400,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-live-2026-11-26 02:34Z-DOT-USD"
+  },
+  {
+   "symbol": "XRP-USD",
+   "side": "buy",
+   "entry_est": 0.9513000249862671,
+   "stop": 0.9322178768260139,
+   "target": 0.9894643213067736,
+   "risk_usd": 10.0,
+   "notional_usd": 498.53,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 02:34Z",
+   "start_ts": 1795658400,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-noweekend-2026-11-26 02:34Z-XRP-USD"
+  },
+  {
+   "symbol": "DOT-USD",
+   "side": "buy",
+   "entry_est": 0.6654999852180481,
+   "stop": 0.6506178442920957,
+   "target": 0.6952642670699528,
+   "risk_usd": 10.0,
+   "notional_usd": 447.18,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 02:34Z",
+   "start_ts": 1795658400,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-noweekend-2026-11-26 02:34Z-DOT-USD"
   }
  ],
  "last_fx": {
@@ -5698,23 +5778,32 @@
   "SOL-USD": [
    "breakout_20d"
   ],
-  "XRP-USD": [],
+  "XRP-USD": [
+   "breakout_20d"
+  ],
   "BNB-USD": [
    "breakout_20d"
   ],
   "DOGE-USD": [
    "breakout_20d"
   ],
-  "ADA-USD": [],
+  "ADA-USD": [
+   "breakout_20d"
+  ],
   "AVAX-USD": [
    "breakout_20d"
   ],
-  "LINK-USD": [],
+  "LINK-USD": [
+   "breakout_20d",
+   "overbought"
+  ],
   "LTC-USD": [
    "breakout_20d",
    "overbought"
   ],
-  "DOT-USD": [],
+  "DOT-USD": [
+   "breakout_20d"
+  ],
   "BCH-USD": [
    "breakout_20d",
    "overbought"
@@ -5722,9 +5811,7 @@
   "EURUSD=X": [],
   "GBPUSD=X": [],
   "USDJPY=X": [],
-  "AUDUSD=X": [
-   "breakout_20d"
-  ],
+  "AUDUSD=X": [],
   "USDCAD=X": [],
   "USDCHF=X": [],
   "NZDUSD=X": [],
@@ -5732,12 +5819,8 @@
   "GBPJPY=X": [],
   "EURGBP=X": [],
   "AUDJPY=X": [],
-  "EURCHF=X": [
-   "reclaim_ma20"
-  ],
-  "EURAUD=X": [
-   "breakdown_20h"
-  ],
+  "EURCHF=X": [],
+  "EURAUD=X": [],
   "GBPCHF=X": [],
   "GC=F": [],
   "SI=F": []
