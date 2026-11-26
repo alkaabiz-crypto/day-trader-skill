@@ -33,6 +33,9 @@ class NyamIdx(unittest.TestCase):
         b = self.build(skip)["2026-11-24"]
         self.assertEqual(b[61], (b[60][3],) * 4)
 
+    def test_no_candle_before_0500_skips(self):
+        self.assertEqual(self.build(set(range(0, 14))), {})   # first candle 05:10: nothing to fill 05:00 from
+
     def test_regular_hours_must_be_there(self):
         self.assertEqual(self.build(set(range(70, 75))), {})   # 5 regular-hours candles missing
 

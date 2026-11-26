@@ -13,6 +13,8 @@ PRE-REGISTERED 2026-11-26, committed before any index data was downloaded. Not t
   Pre-market is thin, so a day counts if at least 75 of the 79 regular-hours candles 09:30-16:00 are there and at
     least 24 of the 48 range candles 05:00-08:55; every missing candle from the first one at or after 04:00 is
     filled with the previous close (a flat candle).
+    Fix 2026-11-26, after the first run crashed and before any result was printed: a day with no candle from
+    04:00 to 05:00 has nothing to fill the range's first candles from, so it is skipped.
   Rules: exactly nyam2.day_trade (05:00-09:00 range, close beyond it from 09:00 to 11:55, full engulfing candle
     back the other way, last 45-minute candle agrees, stop at the sweep's extreme, target the opposite side of
     the range, out at 16:00).
@@ -114,6 +116,8 @@ def idx_days(sym):
                 or sum(s in b for s in range(nyam.RANGE_FROM, nyam.RANGE_TO)) < MIN_RANGE):
             continue
         first = min(s for s in b if s >= FILL_FROM)
+        if first > nyam.RANGE_FROM:     # nothing to fill 05:00 from (fix 2026-11-26, a crash, before any result)
+            continue
         for s in range(first + 1, nyam.CLOSE_SLOT + 1):
             if s not in b:
                 c = b[s - 1][3]
