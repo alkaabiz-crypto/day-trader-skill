@@ -1757,3 +1757,16 @@ downloaded). The data is Tiingo 5-minute gold (XAU/USD) and EUR/USD from 2022-11
 | EUR/USD | 59 trades, −0.8 bp, t −0.46 | 57 trades, −2.4 bp, t −1.53 | $493 | $530 |
 
 - **FAIL on both.** The NY AM range sweep lost on Bitcoin, Ether, gold and the euro, before and after 2025.
+
+**Round 4, on stock indices** (`nyam_idx.py`, pre-registered in 3f9df1c before any index data was downloaded). The
+data is Alpaca SIP 5-minute SPY and QQQ from 2016, including the 05:00 pre-market, with the round-2 rules and 5 bp
+a round trip. One fix (424b65a) came before any result: the first run crashed on days with no candle before 05:00,
+and those days are now skipped.
+
+| | in-sample 2016–2024 | judged 2025+ | $500 since 2025 | held |
+|---|---|---|---|---|
+| SPY | 404 trades, −6.8 bp, t −4.06 | 59 trades, −7.3 bp, t −1.83 | $479 | $619 |
+| QQQ | 349 trades, −7.3 bp, t −2.89 | 58 trades, −9.7 bp, t −1.24 | $472 | $620 |
+
+- **FAIL on both.** The losses are clear in nine years of in-sample data. Before costs it is still slightly
+  negative (SPY −1.8 bp in-sample), so the 05:00–09:00 sweep reversal has no edge on indices either.
