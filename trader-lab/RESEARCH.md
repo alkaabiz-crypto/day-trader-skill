@@ -1727,3 +1727,22 @@ of the AM range. The 45-minute check was set as "the last completed 45-minute ca
 - **FAIL.** The full rules fire only about once a month. They lost clearly before 2025 and roughly broke even after.
 - The page says it's meant for indices, forex and futures. The lab has no 24-hour data for those; this is the
   crypto test only.
+
+### 2026-11-26: ICT full backtest, 40 markets, about 4 years each (`ict.py full`). FAIL
+
+The owner asked to test ICT on more days. The extension was pre-registered in 491ddf2. It covers the silver
+bullet, ICT's afternoon silver bullet (14:00-15:00) and the Judas swing, with the same rules, on all 40 stocks
+and funds in data/long. The statistic is pooled: one observation per day, the average over the markets that
+traded.
+
+| setup (2R) | trades | win rate | in-sample (to 2024) | judged (2025 on) | markets positive since 2025 |
+| --- | --- | --- | --- | --- | --- |
+| silver bullet (10-11) | 25,732 | 36% | −0.2 bp/day, t −0.20 | −1.2 bp/day, t −0.98 | 12 of 40 |
+| silver bullet PM (2-3) | 25,912 | 35% | −1.6 bp/day, t −2.56 | −2.4 bp/day, t −3.40 | 4 of 40 |
+| Judas swing | 13,262 | 40% | −2.2 bp/day, t −1.22 | −1.1 bp/day, t −0.48 | 17 of 40 |
+
+- **All three FAIL** on about 65,000 trades.
+- **The afternoon silver bullet reliably loses** (t −3.4 judged). Only 4 of 40 markets are positive.
+- **The 3R targets are no better.**
+- With 40 times more trades than the QQQ-only test, the answer is the same: ICT's fair value gap entries lose
+  slightly before costs and more after them.

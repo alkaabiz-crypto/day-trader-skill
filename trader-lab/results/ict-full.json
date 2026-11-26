@@ -1,0 +1,121 @@
+{
+ "markets": [
+  "AAPL",
+  "AMD",
+  "AMZN",
+  "ARM",
+  "AVGO",
+  "BA",
+  "COIN",
+  "COST",
+  "CRM",
+  "CRWD",
+  "DIA",
+  "GLD",
+  "GOOGL",
+  "INTC",
+  "IWM",
+  "JPM",
+  "LLY",
+  "META",
+  "MSFT",
+  "MSTR",
+  "MU",
+  "NFLX",
+  "NKE",
+  "NVDA",
+  "ORCL",
+  "PLTR",
+  "QQQ",
+  "SHOP",
+  "SMCI",
+  "SMH",
+  "SPY",
+  "TLT",
+  "TSLA",
+  "UBER",
+  "UNH",
+  "WMT",
+  "XLE",
+  "XLF",
+  "XLK",
+  "XOM"
+ ],
+ "setups": {
+  "silver_bullet": {
+   "2R": {
+    "trades": 25732,
+    "is_days": 522,
+    "is_bp": -0.22455996662290192,
+    "is_t": -0.20027075173177522,
+    "j_days": 473,
+    "j_bp": -1.2259325919220625,
+    "j_t": -0.9755535341027087,
+    "markets_positive_judged": 12,
+    "win_rate": 0.35749261619773043,
+    "verdict": "FAIL"
+   },
+   "3R": {
+    "trades": 25732,
+    "is_days": 522,
+    "is_bp": 1.316259357717801,
+    "is_t": 0.9676900943038025,
+    "j_days": 473,
+    "j_bp": -1.7433157879314258,
+    "j_t": -1.2344651990540638,
+    "markets_positive_judged": 12,
+    "win_rate": 0.3128789056427794
+   }
+  },
+  "silver_bullet_pm": {
+   "2R": {
+    "trades": 25912,
+    "is_days": 521,
+    "is_bp": -1.569008902631265,
+    "is_t": -2.5631324679736,
+    "j_days": 474,
+    "j_bp": -2.4106324277321023,
+    "j_t": -3.4044918284370183,
+    "markets_positive_judged": 4,
+    "win_rate": 0.3472522383451683,
+    "verdict": "FAIL"
+   },
+   "3R": {
+    "trades": 25912,
+    "is_days": 521,
+    "is_bp": -1.3560247870662356,
+    "is_t": -1.8567817622187943,
+    "j_days": 474,
+    "j_bp": -2.3883696788624538,
+    "j_t": -3.077971200727006,
+    "markets_positive_judged": 4,
+    "win_rate": 0.300710095708552
+   }
+  },
+  "judas_swing": {
+   "2R": {
+    "trades": 13262,
+    "is_days": 515,
+    "is_bp": -2.1589816489881857,
+    "is_t": -1.215819325745534,
+    "j_days": 469,
+    "j_bp": -1.1234004901662558,
+    "j_t": -0.4783069363460147,
+    "markets_positive_judged": 17,
+    "win_rate": 0.4022771829286684,
+    "verdict": "FAIL"
+   },
+   "3R": {
+    "trades": 13262,
+    "is_days": 515,
+    "is_bp": -2.376769678117606,
+    "is_t": -1.2663047108176575,
+    "j_days": 469,
+    "j_bp": -0.46527533639835894,
+    "j_t": -0.17941768310406572,
+    "markets_positive_judged": 15,
+    "win_rate": 0.3825214899713467
+   }
+  }
+ }
+}
