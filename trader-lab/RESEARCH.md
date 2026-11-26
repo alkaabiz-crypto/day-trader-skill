@@ -1713,3 +1713,17 @@ Costs are 20 bp a round trip. Chosen on data before 2025, judged from 2025.
 - Even at 10 bp costs both still lose (−8.8 and −7.1 bp a trade).
 - Ether agrees: −5.1 bp in-sample for the reversal, −22.7 bp (t −5.02) for the continuation.
 - Both readings beat holding BTC since 2025 only because BTC fell 35%. They spent most of the time in cash.
+
+**Round 2, with the indicator's published rules** (`nyam2.py`, pre-registered in b2fecfc). I read the TradingView
+page directly. It says the setup is a reversal ("trade the other side of that trap"). The engulfing candle must
+cover the previous candle's body and wick. The stop is at the sweep's extreme, and the target is the opposite side
+of the AM range. The 45-minute check was set as "the last completed 45-minute candle has the trade's colour".
+
+| | in-sample | judged 2025+ | $500 since 2025 |
+|---|---|---|---|
+| BTC | 49 trades, −30.0 bp, t −3.17 | 45 trades, −4.6 bp, t −0.50 (+5.4 bp at 10 bp cost) | $489 |
+| ETH | 33 trades, −17.7 bp, t −1.63 | 5 trades | $472 |
+
+- **FAIL.** The full rules fire only about once a month. They lost clearly before 2025 and roughly broke even after.
+- The page says it's meant for indices, forex and futures. The lab has no 24-hour data for those; this is the
+  crypto test only.
