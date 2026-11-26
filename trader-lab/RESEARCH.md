@@ -1795,3 +1795,21 @@ and those days are now skipped.
 
 - **FAIL on both.** The losses are clear in nine years of in-sample data. Before costs it is still slightly
   negative (SPY −1.8 bp in-sample), so the 05:00–09:00 sweep reversal has no edge on indices either.
+
+### 2026-11-26: the crypto bot's rules on 7+ years of Binance hourly candles, swap-free (`crypto_long.py`). FAIL
+
+Before, the crypto/forex bot was backtested on 2 years of Yahoo hourly bars. Binance's public market-data mirror
+(data-api.binance.vision) has hourly candles from 2019 for all 12 of the bot's coins. Pre-registered in 19c5a7b:
+the same code, Exness spreads (BTC/ETH 6 bp, other coins 15 bp a round trip), no swap.
+
+| rule | trades | $ a trade | win rate | daily t | years positive | placebo beats |
+| --- | --- | --- | --- | --- | --- | --- |
+| breakout (the live bot) | 31,006 | −$0.69 | 37% | −6.22 | 1 of 8 | 90% |
+| RSI dips, bot exits | 13,131 | −$1.10 | 36% | −6.42 | 0 of 8 | 0% |
+| RSI dips, target the mean | 13,174 | −$1.14 | 38% | −6.88 | 0 of 8 | 0% |
+| Bollinger dips, target the mean | 24,313 | −$1.02 | 44% | −10.08 | 0 of 8 | 0% |
+
+- **All FAIL, in nearly every year from 2019 to 2026,** bull and bear markets alike.
+- **The breakout rule loses less than the dip rules** (it beats 90% of random directions; the dip rules beat
+  0%). Crypto trends hour to hour, so fading moves is the worst choice.
+- **Both lose after the spread**, even with no swap.
