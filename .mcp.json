@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "basis-charts": {
+      "type": "http",
+      "url": "https://www.basischarts.com/api/mcp"
+    }
+  }
+}
