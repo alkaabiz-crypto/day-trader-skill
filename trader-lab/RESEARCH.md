@@ -1650,3 +1650,17 @@ bot is unchanged.
   move is worse than chance, not better.
 - **Same reading as the breakout rule:** short-term hourly trading on these markets has no edge after
   Exness costs, whichever direction the bot takes.
+
+### 2026-11-26: the day-trading brain on 2 years of Polygon data (481 days, ~479 stocks a day). FAIL again
+
+The Polygon 5-minute download finished: the 500 most-traded US stocks, 2024-12 to 2026-11. `daybrain/brain.py
+study --store polygon` reran the pre-registered study, unchanged, on 481 days instead of 60. That is 8 times as
+many days.
+
+- **No feature passes.** None of the 12 reaches |t| 2.87 on discovery: not the first 5-minute candle (t −1.47,
+  then +0.77), not the wicks (upper −0.93 then +0.06, lower +0.14 then −0.37), not relative volume, not the gap.
+  The closest is yesterday's return (t −2.50, a weak reversal), and it vanishes on validation (−0.22).
+- **The combined brain fails again.** Discovery: −5.2 bp a day (t −0.62). Validation: −27.3 bp a day
+  (t −2.29). The 4-year check is −18.4 bp a day (t −2.98).
+- **The reading is the same as on 60 days, now with 8 times the data.** The first candle and its wicks don't
+  predict the rest of the day across the US market, and combining weak signals fits noise.

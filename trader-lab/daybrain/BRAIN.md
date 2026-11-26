@@ -50,6 +50,12 @@ Research, not financial advice. Nothing here places an order.
 | All 12 combined (the brain) | More signals means better |, | Learning days +23.6 bp a day (t 0.74); **check days −100.7 bp a day (t −3.22)**; 4 years −21.3 bp a day (t −3.55) | **Fails** |
 | Day traders as a group | Many earn a living | Taiwan: losses after fees in every year studied, under 1% reliably profitable. Brazil: 1.1% earned more than the minimum wage |, | The base rate |
 
+## 2-year rerun (2026-11-26, Polygon, 481 days, ~479 stocks a day)
+
+Unchanged study, 8 times as many days. No feature passes; the first candle is t -1.47 then +0.77, the wicks
+under 1 both times, yesterday's return -2.50 then -0.22. The combined brain: validation -27.3 bp a day
+(t -2.29); 4-year check -18.4 bp a day (t -2.98). FAIL again.
+
 ## What the brain has learned
 
 1. **The first 5-minute candle and its wicks don't predict the rest of the day across the US market.** What
