@@ -23,6 +23,10 @@ PRE-REGISTERED 2026-11-24, before this file was run. Fixed; not tuned on the res
             and still positive at 3x costs. Compared with buying and holding US500 (SPY).
 Fund proxies trade in New York hours, so for DE30 / UK100 / JP225 / STOXX50 / HK50 / AUS200 the bot's prices
 are the US-hours prices of the fund, not the CFD's own session. Paper only; nothing reaches any account.
+US-ONLY TEST, PRE-REGISTERED 2026-11-26 (the owner's choice), before it was run: `backtest --universe us` runs the
+  identical rule, sizing (5 slots x 20%, so at most 4 positions), costs and pass bar on US500, USTEC, US30 and
+  US2000 only, whose fund prices trade in the same hours as the CFDs. Placebos draw from the same 4 indices.
+  Result in results/indexbot-us.json. The paper bot keeps all 10 unless the owner decides otherwise.
 Research, not financial advice.
 """
 
@@ -44,6 +48,7 @@ import survivors  # noqa: E402
 CFD = {"SPY": "US500", "QQQ": "USTEC", "DIA": "US30", "IWM": "US2000", "EWG": "DE30", "EWU": "UK100",
        "EWJ": "JP225", "FEZ": "STOXX50", "EWH": "HK50", "EWA": "AUS200"}
 UNIVERSE = list(CFD)
+US_ONLY = ["SPY", "QQQ", "DIA", "IWM"]   # backtest --universe us (pre-registered 2026-11-26)
 SLOTS, SLOT_W, MAX_HOLD = 5, 0.20, 10
 SPREAD_BPS, SWAP_BPS = 3.0, 2.0
 START, JUDGED = "2000-01-03", "2015-01-01"
@@ -90,7 +95,7 @@ def load(drop_partial=True):
 def simulate(data, cost_mult=1.0, placebo=None, rng=None):
     dates = sorted({d for v in data.values() for d in v["d"] if d >= START})
     idx = {s: {d: i for i, d in enumerate(v["d"])} for s, v in data.items()}
-    feats = {s: survivors.features(data[s]["c"]) for s in UNIVERSE}
+    feats = {s: survivors.features(data[s]["c"]) for s in data}
     spread, swap = SPREAD_BPS * cost_mult / 1e4, SWAP_BPS * cost_mult / 1e4
     pos, buys, sells, curve, trades = {}, [], [], [], []
     plan, want = {}, {}
@@ -98,7 +103,7 @@ def simulate(data, cost_mult=1.0, placebo=None, rng=None):
         for y, holds in placebo.items():
             ds = [d for d in dates if d[:4] == y]
             for h in holds:
-                plan.setdefault(rng.choice(ds), []).append((rng.choice(UNIVERSE), h))
+                plan.setdefault(rng.choice(ds), []).append((rng.choice(sorted(data)), h))
     for d in dates:
         r = 0.0
         for s in sells:
@@ -109,7 +114,7 @@ def simulate(data, cost_mult=1.0, placebo=None, rng=None):
                 continue
             x = data[s]["o"][i] / p["mark"] - 1
             r += SLOT_W * (x - spread / 2)
-            trades.append({"in": p["in"], "held": p["held"], "ret": p["cum"] * (1 + x) - 1})
+            trades.append({"sym": s, "in": p["in"], "held": p["held"], "ret": p["cum"] * (1 + x) - 1})
         for s in buys:
             i = idx[s].get(d)
             if s in pos or len(pos) >= SLOTS or i is None:
@@ -138,7 +143,7 @@ def simulate(data, cost_mult=1.0, placebo=None, rng=None):
         free = SLOTS - len(pos) + len(sells)
         if placebo is None:
             cands = []
-            for s in UNIVERSE:
+            for s in data:
                 i = idx[s].get(d)
                 if s in pos or i is None or i < 200:
                     continue
@@ -162,6 +167,8 @@ def buy_hold(data, frm, to=None):
 
 def cmd_backtest(a):
     data = load()
+    if a.universe == "us":
+        data = {k: data[k] for k in US_ONLY}
     curve, trades = simulate(data)
     out = {"rule": {}, "us500": {}, "stress": {}}
     for name, frm, to in (("2000-2014", START, JUDGED), ("2015-2026", JUDGED, None)):
@@ -184,9 +191,10 @@ def cmd_backtest(a):
     ok = base_t >= 2 and (out["placebo"]["beats"] or 0) >= 0.95 and out["stress"]["3x"]["cagr"] > 0
     out["verdict"] = "PASS (backtest only)" if ok else "FAIL"
     if a.write:
-        with open(os.path.join(HERE, "results", "indexbot.json"), "w") as fh:
+        name = "indexbot-us.json" if a.universe == "us" else "indexbot.json"
+        with open(os.path.join(HERE, "results", name), "w") as fh:
             json.dump(out, fh, indent=1)
-    print("Indices bot (dip in an uptrend on 10 index CFDs via fund proxies, 5 x 20%, 3 bp + 2 bp a night):")
+    print("Indices bot (dip in an uptrend on %d index CFDs via fund proxies, 5 x 20%%, 3 bp + 2 bp a night):" % len(data))
     print("  period      per year  Sharpe  max drop   t   |  US500 hold per year  Sharpe  max drop")
     for n in ("2000-2014", "2015-2026"):
         r, s = out["rule"][n], out["us500"][n]
@@ -304,6 +312,7 @@ def main(argv=None):
     sub.add_parser("fetch")
     p = sub.add_parser("backtest")
     p.add_argument("--placebo", type=int, default=200)
+    p.add_argument("--universe", choices=["all", "us"], default="all")
     p.add_argument("--write", action="store_true")
     p = sub.add_parser("today")
     p.add_argument("--force", action="store_true")
