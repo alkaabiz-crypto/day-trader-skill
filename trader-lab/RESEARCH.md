@@ -1690,3 +1690,26 @@ QQQ held from 2025 turned $500 into $616.
   is mostly a bet that pays 2:1 and loses more than two thirds of the time.
 - **Not tested:** order blocks, "smart money" intent and higher-timeframe bias have no single exact
   definition. Testing many versions of them would be a search for a lucky one.
+
+## 2026-11-26: "NY AM range sweep" indicator on Bitcoin and Ether 5-minute bars (`nyam.py`). FAIL
+
+The owner asked to test "nyam". It's the TradingView "NY AM Range Sweep" indicator:
+- mark the 05:00–09:00 New York range;
+- wait for a candle to close beyond it;
+- wait for a 5-minute engulfing candle and a 45-minute check that agree;
+- target 2R.
+
+The TradingView page itself was blocked by the network allowlist, so I wrote the rules down from its public
+description. Both readings were tested: fade the sweep, and follow the break. Pre-registered in 41b81bf.
+Costs are 20 bp a round trip. Chosen on data before 2025, judged from 2025.
+
+| BTC | in-sample | judged 2025+ | $500 since 2025 |
+|---|---|---|---|
+| reversal (fade the sweep) | 115 trades, +27.9 bp, t 2.22 | 131 trades, −18.8 bp, t −2.09 | $388 |
+| continuation (follow the break) | 226 trades, −7.1 bp, t −1.62 | 226 trades, −17.1 bp, t −4.14 | $338 |
+| BTC held | | | $323 |
+
+- **FAIL on both readings.** The fade looked good before 2025 (t 2.22) and then lost money from 2025.
+- Even at 10 bp costs both still lose (−8.8 and −7.1 bp a trade).
+- Ether agrees: −5.1 bp in-sample for the reversal, −22.7 bp (t −5.02) for the continuation.
+- Both readings beat holding BTC since 2025 only because BTC fell 35%. They spent most of the time in cash.
