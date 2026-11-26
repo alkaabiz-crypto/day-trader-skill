@@ -1664,3 +1664,29 @@ many days.
   (t −2.29). The 4-year check is −18.4 bp a day (t −2.98).
 - **The reading is the same as on 60 days, now with 8 times the data.** The first candle and its wicks don't
   predict the rest of the day across the US market, and combining weak signals fits noise.
+
+### 2026-11-26: ICT (Inner Circle Trader) silver bullet and Judas swing (`ict.py`). FAIL
+
+The owner asked to test ICT. Its two setups that can be written as exact rules were pre-registered in 30bc033:
+- **Silver bullet:** the first fair value gap of 10:00-11:00 New York, with a limit entry at the gap and the
+  stop beyond candle 1.
+- **Judas swing:** a sweep of the previous day's low or high, a close back inside it, then the first gap in the
+  reversal's direction before 11:30, with the stop at the sweep extreme.
+
+Both use 2R targets (3R reported), 3 bps a round trip, and 4 years of 5-minute bars (QQQ for NAS100, plus SPY
+and IWM). The in-sample period runs to 2024, and the judged period starts in 2025.
+
+| setup (2R) | QQQ in-sample | QQQ judged | SPY judged | IWM judged | $500 since 2025 (QQQ) |
+| --- | --- | --- | --- | --- | --- |
+| silver bullet | −1.2 bp, t −0.56 (319 trades) | −1.8 bp, t −0.57 (264), 34% wins | −2.6 bp, t −1.26 | +1.5 bp, t +0.52 | $476 |
+| Judas swing | −8.8 bp, t −2.35 (162) | −5.5 bp, t −1.17 (148), 36% wins | −6.3 bp, t −1.52 | +2.9 bp, t +0.55 | $460 |
+
+QQQ held from 2025 turned $500 into $616.
+
+- **Both FAIL.** On QQQ and SPY both lose in both periods. IWM's small judged gains (t 0.5-0.7) come after
+  in-sample losses, so they are noise.
+- **The 3R targets are no better.**
+- **Most trades end at the stop** (silver bullet: 361 stops against 172 targets). A gap entry with a tight stop
+  is mostly a bet that pays 2:1 and loses more than two thirds of the time.
+- **Not tested:** order blocks, "smart money" intent and higher-timeframe bias have no single exact
+  definition. Testing many versions of them would be a search for a lucky one.
