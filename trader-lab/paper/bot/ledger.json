@@ -4238,9 +4238,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 17:34Z",
    "start_ts": 1795626000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-btctrend-2026-11-25 17:34Z-GBPUSD=X"
+   "id": "F-btctrend-2026-11-25 17:34Z-GBPUSD=X",
+   "entry": 1.310565,
+   "exit": 1.310547,
+   "how": "time",
+   "pnl_usd": -1.31,
+   "closed_at": "2026-11-26 17:34Z"
   },
   {
    "symbol": "NZDUSD=X",
@@ -4258,9 +4263,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 17:34Z",
    "start_ts": 1795626000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-btctrend-2026-11-25 17:34Z-NZDUSD=X"
+   "id": "F-btctrend-2026-11-25 17:34Z-NZDUSD=X",
+   "entry": 0.547465,
+   "exit": 0.547256,
+   "how": "time",
+   "pnl_usd": -2.63,
+   "closed_at": "2026-11-26 17:34Z"
   },
   {
    "symbol": "LTC-USD",
@@ -4303,9 +4313,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 17:34Z",
    "start_ts": 1795626000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-25 17:34Z-GBPUSD=X"
+   "id": "F-noweekend-2026-11-25 17:34Z-GBPUSD=X",
+   "entry": 1.310565,
+   "exit": 1.310547,
+   "how": "time",
+   "pnl_usd": -1.31,
+   "closed_at": "2026-11-26 17:34Z"
   },
   {
    "symbol": "NVDA",
@@ -6442,41 +6457,33 @@
   "BTC-USD": [],
   "ETH-USD": [],
   "SOL-USD": [],
-  "XRP-USD": [],
-  "BNB-USD": [
-   "breakdown_20h"
+  "XRP-USD": [
+   "reclaim_ma20"
   ],
+  "BNB-USD": [],
   "DOGE-USD": [],
   "ADA-USD": [],
   "AVAX-USD": [],
   "LINK-USD": [],
   "LTC-USD": [],
-  "DOT-USD": [],
+  "DOT-USD": [
+   "reclaim_ma20"
+  ],
   "BCH-USD": [],
   "EURUSD=X": [],
   "GBPUSD=X": [],
-  "USDJPY=X": [
-   "breakout_20d"
-  ],
+  "USDJPY=X": [],
   "AUDUSD=X": [],
-  "USDCAD=X": [
-   "breakout_20d"
-  ],
+  "USDCAD=X": [],
   "USDCHF=X": [],
-  "NZDUSD=X": [
-   "breakdown_20h"
-  ],
+  "NZDUSD=X": [],
   "EURJPY=X": [],
   "GBPJPY=X": [],
   "EURGBP=X": [],
   "AUDJPY=X": [],
   "EURCHF=X": [],
-  "EURAUD=X": [
-   "reclaim_ma20"
-  ],
-  "GBPCHF=X": [
-   "breakout_20d"
-  ],
+  "EURAUD=X": [],
+  "GBPCHF=X": [],
   "GC=F": [
    "breakout_20d"
   ],
