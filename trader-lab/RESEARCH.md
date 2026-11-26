@@ -1621,3 +1621,11 @@ The owner asked to optimize the strategy. Pre-registered in 7c1af34:
   small; the settings were never the problem.
 - **Even the best setting chosen with hindsight makes 3.6% a year,** against 12.9% for holding US500. The
   limit is time out of the market, not the settings.
+
+### 2026-11-26: the indices paper bot now trades US indices only
+
+At the owner's request, `indexbot.py today` trades only US500, USTEC, US30 and US2000 (`PAPER = US_ONLY`).
+The rule, sizing and costs are unchanged. The 10-index backtest stays available as the default
+`backtest`. Why: the US-only backtest was better on every line (3.1% against 1.6% a year, t 1.81 against
+0.78), and the non-US CFDs were priced from US-hours fund prices. It is still a FAIL, so the paper record
+is a forward check only. No position was open at the switch.

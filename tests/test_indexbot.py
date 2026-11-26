@@ -11,6 +11,7 @@ class IndexBot(unittest.TestCase):
         self.assertEqual(ib.CFD["EWG"], "DE30")
         self.assertEqual(len(ib.UNIVERSE), 10)
         self.assertEqual([ib.CFD[s] for s in ib.US_ONLY], ["US500", "USTEC", "US30", "US2000"])
+        self.assertEqual(ib.PAPER, ib.US_ONLY)     # the paper bot is US-only (owner, 2026-11-26)
 
     def test_simulate_uses_only_the_given_markets(self):
         n = 260

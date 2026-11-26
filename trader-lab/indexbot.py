@@ -26,7 +26,8 @@ are the US-hours prices of the fund, not the CFD's own session. Paper only; noth
 US-ONLY TEST, PRE-REGISTERED 2026-11-26 (the owner's choice), before it was run: `backtest --universe us` runs the
   identical rule, sizing (5 slots x 20%, so at most 4 positions), costs and pass bar on US500, USTEC, US30 and
   US2000 only, whose fund prices trade in the same hours as the CFDs. Placebos draw from the same 4 indices.
-  Result in results/indexbot-us.json. The paper bot keeps all 10 unless the owner decides otherwise.
+  Result in results/indexbot-us.json (3.1% a year, t 1.81: better than 10 indices, still FAIL).
+  From 2026-11-26 the PAPER bot trades only these 4 (the owner's decision, `PAPER`); the rule is unchanged.
 Research, not financial advice.
 """
 
@@ -49,6 +50,7 @@ CFD = {"SPY": "US500", "QQQ": "USTEC", "DIA": "US30", "IWM": "US2000", "EWG": "D
        "EWJ": "JP225", "FEZ": "STOXX50", "EWH": "HK50", "EWA": "AUS200"}
 UNIVERSE = list(CFD)
 US_ONLY = ["SPY", "QQQ", "DIA", "IWM"]   # backtest --universe us (pre-registered 2026-11-26)
+PAPER = US_ONLY   # the paper bot trades US-only from 2026-11-26 (owner's decision; was all 10)
 SLOTS, SLOT_W, MAX_HOLD = 5, 0.20, 10
 SPREAD_BPS, SWAP_BPS = 3.0, 2.0
 START, JUDGED = "2000-01-03", "2015-01-01"
@@ -266,14 +268,14 @@ def cmd_today(a):
         p["swap"] += p["units"] * px * SWAP_BPS / 1e4
         value += p["units"] * px - p["swap"]
     L["equity"] = round(value, 2)
-    feats = {s: survivors.features(data[s]["c"]) for s in UNIVERSE}
+    feats = {s: survivors.features(data[s]["c"]) for s in data}
     sells, cands = [], []
     for s, p in L["positions"].items():
         r2, ab, lo7, hi7 = (f[idx[s][d]] for f in feats[s])
         if survivors.exit_signal(r2, hi7, p["held"]):
             sells.append({"side": "sell", "sym": s, "why": "RSI(2) %.0f" % r2 if r2 and r2 > 70 else
                           "highest close of 7" if hi7 else "10 days held"})
-    for s in UNIVERSE:
+    for s in PAPER:
         i = idx[s].get(d)
         if s in L["positions"] or i is None or i < 200:
             continue
