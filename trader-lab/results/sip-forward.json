@@ -7,20 +7,20 @@
  },
  "names": 40,
  "cost_5": {
-  "days": 0,
-  "trades": 0,
-  "mean_bp_day": 0.0,
+  "days": 1,
+  "trades": 1,
+  "mean_bp_day": -42.374040023339106,
   "t": 0.0,
-  "first": null,
-  "last": null
+  "first": "2026-11-25",
+  "last": "2026-11-25"
  },
  "cost_3": {
-  "days": 0,
-  "trades": 0,
-  "mean_bp_day": 0.0,
+  "days": 1,
+  "trades": 1,
+  "mean_bp_day": -40.374040023339106,
   "t": 0.0,
-  "first": null,
-  "last": null
+  "first": "2026-11-25",
+  "last": "2026-11-25"
  },
  "verdict": "FORWARD-TEST"
 }
