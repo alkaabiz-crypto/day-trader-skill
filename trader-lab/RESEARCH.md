@@ -1746,3 +1746,14 @@ traded.
 - **The 3R targets are no better.**
 - With 40 times more trades than the QQQ-only test, the answer is the same: ICT's fair value gap entries lose
   slightly before costs and more after them.
+
+**Round 3, on the markets the indicator names** (`nyam_fx.py`, pre-registered in 0dafab4 before any FX data was
+downloaded). The data is Tiingo 5-minute gold (XAU/USD) and EUR/USD from 2022-11, with the round-2 rules. Costs are
+5 bp a round trip for gold and 2 bp for EUR/USD.
+
+| | in-sample | judged 2025+ | $500 since 2025 | held |
+|---|---|---|---|---|
+| gold | 45 trades, −9.6 bp, t −2.84 | 48 trades, −3.6 bp, t −0.58 | $491 | $678 |
+| EUR/USD | 59 trades, −0.8 bp, t −0.46 | 57 trades, −2.4 bp, t −1.53 | $493 | $530 |
+
+- **FAIL on both.** The NY AM range sweep lost on Bitcoin, Ether, gold and the euro, before and after 2025.
