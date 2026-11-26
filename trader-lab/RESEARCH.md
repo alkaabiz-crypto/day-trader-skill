@@ -1757,3 +1757,29 @@ downloaded). The data is Tiingo 5-minute gold (XAU/USD) and EUR/USD from 2022-11
 | EUR/USD | 59 trades, −0.8 bp, t −0.46 | 57 trades, −2.4 bp, t −1.53 | $493 | $530 |
 
 - **FAIL on both.** The NY AM range sweep lost on Bitcoin, Ether, gold and the euro, before and after 2025.
+
+### 2026-11-26: every multi-day rule, swap-free (`swapfree.py`; the owner's Exness swap-free account)
+
+The owner now has an Exness swap-free account (standard spreads, no overnight swap). Pre-registered in
+f2ebb44: each engine is rerun unchanged, with only the overnight cost set to zero, judged by its own bar.
+
+| rule (judged period) | with swap | swap-free | bar | verdict |
+| --- | --- | --- | --- | --- |
+| indices bot, 10 indices (2015-26) | 1.6%/yr, t 0.78, placebo 48% | 3.4%/yr, t 1.45, placebo 44% | t >= 2, placebo 95%, +3x cost | FAIL |
+| indices bot, US only (2015-26) | 3.1%/yr, t 1.81, placebo 82% | **4.0%/yr, t 2.33**, placebo 78%, +3.4%/yr at 3x cost | same | FAIL (placebo) |
+| indices walk-forward, US (2015-26) | 3.3%/yr, t 1.85, placebo 84% | **4.3%/yr, t 2.61**, placebo 90%, +3.7%/yr at 3x | same | FAIL (placebo) |
+| US500 held | | 12.9%/yr, t 2.68 | | |
+| Bitcoin: TTM squeeze / Vortex / DTC ribbon / 200-day (2020 on) | t 2.26 / 1.72 / 1.01 / −0.18 | t 2.46 / 2.25 / 1.39 / 0.36 | t >= 3.5 | FAIL |
+| oil: 0 of all candidates (2015 on) | best post t 1.38 | best post t 1.43 (Donchian 20) | t >= 3 | FAIL |
+| crypto/forex bot (2 years) | −$1.27/trade, t −8.14 | −$1.18/trade, t −7.58 | | FAIL |
+| buy low/sell high, 3 variants | −$1.29 to −$1.38/trade | −$1.17 to −$1.27/trade | | FAIL |
+
+- **Swap-free helps the slow rules most.** The US index dip rule now clears t 2 and survives triple costs.
+- **It still fails the placebo.** Random entries into the same uptrending indices with the same hold
+  lengths do almost as well (median t 1.78, and the rule beats only 78-90% of them). The rule's return is
+  mostly from holding the index, not from the timing.
+- **Holding US500 is still three times better** (12.9% against 4.0-4.3% a year).
+- **Short-term rules barely move.** The crypto/forex hourly rules lose about $1.2 a trade on the spread
+  alone, so removing the swap can't save them.
+- No rule passes. Caveat: Exness swap-free accounts can charge a fixed fee after some nights on some
+  instruments; these tests assume zero.
