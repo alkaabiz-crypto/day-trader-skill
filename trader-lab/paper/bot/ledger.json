@@ -6196,34 +6196,72 @@
    "status": "open",
    "setup": "20-hour closing-high breakout",
    "id": "F-noweekend-2026-11-26 09:35Z-USDCHF=X"
+  },
+  {
+   "symbol": "ETH-USD",
+   "side": "buy",
+   "entry_est": 1701.699951171875,
+   "stop": 1682.716347830636,
+   "target": 1739.6671578543526,
+   "risk_usd": 10.0,
+   "notional_usd": 896.41,
+   "cost_bps": 6.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 10:35Z",
+   "start_ts": 1795687200,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-live-2026-11-26 10:35Z-ETH-USD"
+  },
+  {
+   "symbol": "ETH-USD",
+   "side": "buy",
+   "entry_est": 1701.699951171875,
+   "stop": 1682.716347830636,
+   "target": 1739.6671578543526,
+   "risk_usd": 10.0,
+   "notional_usd": 896.41,
+   "cost_bps": 6.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 10:35Z",
+   "start_ts": 1795687200,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-noweekend-2026-11-26 10:35Z-ETH-USD"
   }
  ],
  "last_fx": {
   "BTC-USD": [],
-  "ETH-USD": [],
+  "ETH-USD": [
+   "breakout_20d"
+  ],
   "SOL-USD": [],
   "XRP-USD": [],
   "BNB-USD": [],
   "DOGE-USD": [],
   "ADA-USD": [],
   "AVAX-USD": [],
-  "LINK-USD": [
-   "breakout_20d"
-  ],
+  "LINK-USD": [],
   "LTC-USD": [
    "overbought"
   ],
-  "DOT-USD": [
-   "breakout_20d"
+  "DOT-USD": [],
+  "BCH-USD": [
+   "overbought"
   ],
-  "BCH-USD": [],
   "EURUSD=X": [],
   "GBPUSD=X": [],
   "USDJPY=X": [],
   "AUDUSD=X": [],
-  "USDCAD=X": [
-   "reclaim_ma20"
-  ],
+  "USDCAD=X": [],
   "USDCHF=X": [
    "breakout_20d"
   ],
