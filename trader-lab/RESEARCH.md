@@ -1598,3 +1598,26 @@ fb79de6 before the run.
 - **It still fails its bar.** It needs t >= 2 and to beat 95% of placebos, and it gets t 1.81 and 82%.
 - **Holding US500 still made four times as much.** The dip rule is out of the market most of the time.
 - The paper bot keeps all 10 indices unless the owner chooses otherwise.
+
+### 2026-11-26: walk-forward optimization of the US index dip rule (`indexopt.py`). FAIL
+
+The owner asked to optimize the strategy. Pre-registered in 7c1af34:
+- **The grid:** 48 settings (RSI(2) entry 5/10/15, trend 100/200 days, exit RSI 50/70, hold 5/10 days,
+  sizing 5 x 20% or 4 x 25%) on US500, USTEC, US30 and US2000.
+- **The method:** each year from 2015 is traded with the setting that had the best Sharpe on the years
+  before it only. Only those unseen years are judged, with indexbot's bar.
+
+| 2015-2026 | per year | Sharpe | max drop | t |
+| --- | --- | --- | --- | --- |
+| walk-forward (the judged result) | 3.3% | 0.54 | 20% | 1.85 |
+| current rule, fixed | 3.1% | 0.53 | 14% | 1.81 |
+| best single setting, chosen on the whole history (in-sample, overstates) | 3.6% | 0.64 | 15% | 2.21 |
+| US500 held | 12.9% | 0.78 | 34% | 2.68 |
+
+- **Optimizing adds almost nothing.** The walk-forward beats the fixed rule by 0.2% a year, with a bigger
+  drawdown. It is 0.9% a year at 3x costs, and it beats 84% of placebos (95% needed). FAIL.
+- **The rule is robust, though.** All 48 settings are positive after 2015, and every year picked nearly
+  the same setting (RSI < 10, the 100-day trend, exit at RSI 70, hold 10). The dip effect is real but
+  small; the settings were never the problem.
+- **Even the best setting chosen with hindsight makes 3.6% a year,** against 12.9% for holding US500. The
+  limit is time out of the market, not the settings.
