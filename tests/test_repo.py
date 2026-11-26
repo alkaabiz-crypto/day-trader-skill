@@ -41,7 +41,8 @@ class Repo(unittest.TestCase):
     def test_root_matches_the_reel(self):
         # trader/ is the skills' runtime output folder (gitignored), never part of the repo
         root = sorted(d for d in os.listdir(ROOT) if not d.startswith(".git") and d != "trader")
-        self.assertEqual(root, sorted([".claude-plugin", "CLAUDE.md", "LICENSE", "README.md", "tests"] + SKILLS))
+        # .mcp.json: the basis-charts MCP server, added at the owner's request (2026-11-26)
+        self.assertEqual(root, sorted([".claude-plugin", ".mcp.json", "CLAUDE.md", "LICENSE", "README.md", "tests"] + SKILLS))
 
     def test_frontmatter_name_and_description(self):
         for s in SKILLS:
