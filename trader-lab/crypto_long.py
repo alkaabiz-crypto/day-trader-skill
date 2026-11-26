@@ -55,8 +55,15 @@ def fetch_one(sym):
     rows = []
     while t < end:
         req = urllib.request.Request(URL % (pair(sym), t), headers={"User-Agent": "trader-lab"})
-        with urllib.request.urlopen(req, timeout=60) as r:
-            k = json.loads(r.read().decode())
+        for tries in range(6):
+            try:
+                with urllib.request.urlopen(req, timeout=60) as r:
+                    k = json.loads(r.read().decode())
+                break
+            except (OSError, ValueError):
+                if tries == 5:
+                    raise
+                time.sleep(5 * (tries + 1))
         if not k:
             break
         rows += [[x[0] / 1000.0, float(x[1]), float(x[2]), float(x[3]), float(x[4])] for x in k if x[0] < end]
