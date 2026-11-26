@@ -5408,9 +5408,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 19:34Z",
    "start_ts": 1795633200,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-live-2026-11-25 19:34Z-LINK-USD"
+   "id": "F-live-2026-11-25 19:34Z-LINK-USD",
+   "entry": 8.967,
+   "exit": 9.266,
+   "how": "time",
+   "pnl_usd": 15.49,
+   "closed_at": "2026-11-26 19:35Z"
   },
   {
    "symbol": "SI=F",
@@ -5488,9 +5493,14 @@
    "date": "2026-11-25",
    "opened_at": "2026-11-25 19:34Z",
    "start_ts": 1795633200,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-noweekend-2026-11-25 19:34Z-LINK-USD"
+   "id": "F-noweekend-2026-11-25 19:34Z-LINK-USD",
+   "entry": 8.967,
+   "exit": 9.266,
+   "how": "time",
+   "pnl_usd": 15.49,
+   "closed_at": "2026-11-26 19:35Z"
   },
   {
    "symbol": "ADA-USD",
@@ -6511,25 +6521,117 @@
    "status": "open",
    "setup": "reclaimed the 20-hour average",
    "id": "F-noweekend-2026-11-26 18:36Z-GBPUSD=X"
+  },
+  {
+   "symbol": "LINK-USD",
+   "side": "buy",
+   "entry_est": 9.265999794006348,
+   "stop": 9.155320814677648,
+   "target": 9.48735775266375,
+   "risk_usd": 10.0,
+   "notional_usd": 837.2,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 19:35Z",
+   "start_ts": 1795719600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-live-2026-11-26 19:35Z-LINK-USD"
+  },
+  {
+   "symbol": "AVAX-USD",
+   "side": "buy",
+   "entry_est": 6.64300012588501,
+   "stop": 6.569928577968052,
+   "target": 6.789143221718924,
+   "risk_usd": 10.0,
+   "notional_usd": 909.11,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 19:35Z",
+   "start_ts": 1795719600,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-live-2026-11-26 19:35Z-AVAX-USD"
+  },
+  {
+   "symbol": "LINK-USD",
+   "side": "buy",
+   "entry_est": 9.265999794006348,
+   "stop": 9.155320814677648,
+   "target": 9.48735775266375,
+   "risk_usd": 10.0,
+   "notional_usd": 837.2,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 19:35Z",
+   "start_ts": 1795719600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-noweekend-2026-11-26 19:35Z-LINK-USD"
+  },
+  {
+   "symbol": "AVAX-USD",
+   "side": "buy",
+   "entry_est": 6.64300012588501,
+   "stop": 6.569928577968052,
+   "target": 6.789143221718924,
+   "risk_usd": 10.0,
+   "notional_usd": 909.11,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-26",
+   "opened_at": "2026-11-26 19:35Z",
+   "start_ts": 1795719600,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-noweekend-2026-11-26 19:35Z-AVAX-USD"
   }
  ],
  "last_fx": {
   "BTC-USD": [],
-  "ETH-USD": [],
-  "SOL-USD": [],
-  "XRP-USD": [],
-  "BNB-USD": [],
-  "DOGE-USD": [],
-  "ADA-USD": [],
-  "AVAX-USD": [],
-  "LINK-USD": [],
-  "LTC-USD": [],
-  "DOT-USD": [],
-  "BCH-USD": [],
-  "EURUSD=X": [],
-  "GBPUSD=X": [
+  "ETH-USD": [
    "reclaim_ma20"
   ],
+  "SOL-USD": [
+   "breakout_20d"
+  ],
+  "XRP-USD": [],
+  "BNB-USD": [],
+  "DOGE-USD": [
+   "breakout_20d"
+  ],
+  "ADA-USD": [
+   "breakout_20d"
+  ],
+  "AVAX-USD": [
+   "reclaim_ma20"
+  ],
+  "LINK-USD": [
+   "breakout_20d"
+  ],
+  "LTC-USD": [],
+  "DOT-USD": [],
+  "BCH-USD": [
+   "breakout_20d"
+  ],
+  "EURUSD=X": [],
+  "GBPUSD=X": [],
   "USDJPY=X": [],
   "AUDUSD=X": [],
   "USDCAD=X": [],
