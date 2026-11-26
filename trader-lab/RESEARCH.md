@@ -1579,3 +1579,22 @@ passes.
 
 The Polygon 2-year download for daybrain is at about 395 of 500 names. It keeps being stopped by
 container restarts and is restarted each hour.
+
+### 2026-11-26: indices bot on US indices only (`indexbot.py backtest --universe us`). Better, still FAIL
+
+The owner chose to test the US-only version. For the 6 non-US CFDs, the 10-index bot uses US-listed
+fund prices, which trade in New York hours rather than each CFD's own session. The US-only version keeps
+the identical rule, sizing, costs and pass bar, on US500, USTEC, US30 and US2000. It was pre-registered in
+fb79de6 before the run.
+
+| 2015-2026 | per year | Sharpe | max drop | t | trades | win rate | bp a trade (before swap) | at 3x cost | placebo |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 10 indices (rerun) | 1.6% | 0.23 | 21% | 0.78 | 1,060 | 68% | 24.1 | −2.9% a year | beats 48% |
+| **US only** | **3.1%** | **0.53** | **14%** | **1.81** | 594 | 75% | 43.9 | +0.6% a year | beats 82% |
+| US500 held | 12.9% | 0.78 | 34% | | | | | | |
+
+- **The US-only version is better on every line.** It earns nearly twice as much per trade, it stays
+  positive at 3x costs, and its worst drop is smaller.
+- **It still fails its bar.** It needs t >= 2 and to beat 95% of placebos, and it gets t 1.81 and 82%.
+- **Holding US500 still made four times as much.** The dip rule is out of the market most of the time.
+- The paper bot keeps all 10 indices unless the owner chooses otherwise.
