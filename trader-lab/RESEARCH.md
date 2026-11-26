@@ -1813,3 +1813,29 @@ the same code, Exness spreads (BTC/ETH 6 bp, other coins 15 bp a round trip), no
 - **The breakout rule loses less than the dip rules** (it beats 90% of random directions; the dip rules beat
   0%). Crypto trends hour to hour, so fading moves is the worst choice.
 - **Both lose after the spread**, even with no swap.
+
+### 2026-11-26 (daily run, Thanksgiving): bots, trial, oil, and the day's tests
+
+The US stock and futures markets were closed today. The stock/ETF data refreshes and engine reruns were
+skipped: there was no new bar, so they would reproduce yesterday's results.
+
+- **Stock bot:** no trading today. 69 trades, +$285.96.
+- **Crypto/forex bot:** 27 closed, +$46.93, 44% won, 19 open. Today the BTC and ETH buys and the BNB short
+  hit their stops, while LINK, ADA and DOGE timed out in profit.
+- **Paper trial:** no ticket (holiday). 3 days, 5 trades, +$16.16. IN PROGRESS.
+- **Oil:** no DCA ladder open (USOIL needs 135.06 or lower, UKOIL 57.11 or lower). MA cross: HOLD USOIL,
+  UKOIL flat. Oil candidates passed so far: 0.
+
+**Today's tests, all FAIL (entries above):**
+- the index bot on US only, then optimized walk-forward
+- buy-low/sell-high on crypto/forex
+- the day-trading brain on 2 years of Polygon data
+- ICT on 3 markets, then on 40 markets
+- the swap-free reruns of every multi-day rule
+- the crypto bot's rules on 7 years of Binance data
+
+**Closest to passing:** the US index dip rule, swap-free (t 2.33 to 2.61). It fails only its placebo bar:
+random entries in the same indices do nearly as well.
+
+The indices paper bot now trades US indices only (the owner's choice). The Alpaca 7-year whole-market
+download is at 16 of 95 months and restarts after each container restart.

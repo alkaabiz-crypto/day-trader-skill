@@ -6403,9 +6403,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 16:34Z",
    "start_ts": 1795708800,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-low breakdown",
-   "id": "F-live-2026-11-26 16:34Z-BNB-USD"
+   "id": "F-live-2026-11-26 16:34Z-BNB-USD",
+   "entry": 550.200012,
+   "exit": 554.955006,
+   "how": "stop",
+   "pnl_usd": -11.74,
+   "closed_at": "2026-11-26 21:42Z"
   },
   {
    "symbol": "NZDUSD=X",
@@ -6443,9 +6448,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 16:34Z",
    "start_ts": 1795708800,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-low breakdown",
-   "id": "F-btctrend-2026-11-26 16:34Z-BNB-USD"
+   "id": "F-btctrend-2026-11-26 16:34Z-BNB-USD",
+   "entry": 550.200012,
+   "exit": 554.955006,
+   "how": "stop",
+   "pnl_usd": -11.74,
+   "closed_at": "2026-11-26 21:42Z"
   },
   {
    "symbol": "BNB-USD",
@@ -6463,9 +6473,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 16:34Z",
    "start_ts": 1795708800,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-low breakdown",
-   "id": "F-noweekend-2026-11-26 16:34Z-BNB-USD"
+   "id": "F-noweekend-2026-11-26 16:34Z-BNB-USD",
+   "entry": 550.200012,
+   "exit": 554.955006,
+   "how": "stop",
+   "pnl_usd": -11.74,
+   "closed_at": "2026-11-26 21:42Z"
   },
   {
    "symbol": "NZDUSD=X",
@@ -6689,33 +6704,27 @@
   }
  ],
  "last_fx": {
-  "BTC-USD": [
-   "reclaim_ma20"
-  ],
+  "BTC-USD": [],
   "ETH-USD": [],
   "SOL-USD": [],
   "XRP-USD": [],
-  "BNB-USD": [
-   "reclaim_ma20"
-  ],
-  "DOGE-USD": [
-   "breakout_20d"
-  ],
+  "BNB-USD": [],
+  "DOGE-USD": [],
   "ADA-USD": [
    "breakout_20d"
   ],
   "AVAX-USD": [],
-  "LINK-USD": [],
+  "LINK-USD": [
+   "breakout_20d"
+  ],
   "LTC-USD": [
-   "reclaim_ma20"
+   "breakout_20d"
   ],
   "DOT-USD": [],
   "BCH-USD": [
    "breakout_20d"
   ],
-  "EURUSD=X": [
-   "reclaim_ma20"
-  ],
+  "EURUSD=X": [],
   "GBPUSD=X": [],
   "USDJPY=X": [],
   "AUDUSD=X": [],
@@ -6725,9 +6734,7 @@
   "EURJPY=X": [],
   "GBPJPY=X": [],
   "EURGBP=X": [],
-  "AUDJPY=X": [
-   "reclaim_ma20"
-  ],
+  "AUDJPY=X": [],
   "EURCHF=X": [],
   "EURAUD=X": [],
   "GBPCHF=X": [],
