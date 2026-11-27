@@ -8781,73 +8781,108 @@
    "risk_usd": 6.69,
    "setup": "opening-range breakout",
    "id": "S-fresh-2026-11-27-ABNB"
+  },
+  {
+   "symbol": "NZDUSD=X",
+   "side": "sell",
+   "entry_est": 0.5463585257530212,
+   "stop": 0.547639012336731,
+   "target": 0.5437975525856018,
+   "risk_usd": 10.0,
+   "notional_usd": 4266.8,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 16:34Z",
+   "start_ts": 1795795200,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-live-2026-11-27 16:34Z-NZDUSD=X"
+  },
+  {
+   "symbol": "NZDUSD=X",
+   "side": "sell",
+   "entry_est": 0.5463585257530212,
+   "stop": 0.547639012336731,
+   "target": 0.5437975525856018,
+   "risk_usd": 10.0,
+   "notional_usd": 4266.8,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 16:34Z",
+   "start_ts": 1795795200,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-27 16:34Z-NZDUSD=X"
+  },
+  {
+   "symbol": "NZDUSD=X",
+   "side": "sell",
+   "entry_est": 0.5463585257530212,
+   "stop": 0.547639012336731,
+   "target": 0.5437975525856018,
+   "risk_usd": 10.0,
+   "notional_usd": 4266.8,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 16:34Z",
+   "start_ts": 1795795200,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-noweekend-2026-11-27 16:34Z-NZDUSD=X"
   }
  ],
  "last_fx": {
   "BTC-USD": [
-   "oversold",
-   "breakdown_20h"
+   "oversold_bounce"
   ],
   "ETH-USD": [
-   "oversold",
-   "breakdown_20h"
+   "oversold_bounce"
   ],
-  "SOL-USD": [
-   "breakdown_20h"
-  ],
-  "XRP-USD": [
-   "breakdown_20h"
-  ],
-  "BNB-USD": [
-   "breakdown_20h"
-  ],
+  "SOL-USD": [],
+  "XRP-USD": [],
+  "BNB-USD": [],
   "DOGE-USD": [],
-  "ADA-USD": [
-   "breakdown_20h"
-  ],
-  "AVAX-USD": [
-   "breakdown_20h"
-  ],
-  "LINK-USD": [
-   "breakdown_20h"
-  ],
-  "LTC-USD": [
-   "breakdown_20h"
-  ],
-  "DOT-USD": [
-   "breakdown_20h"
-  ],
-  "BCH-USD": [
-   "breakdown_20h"
-  ],
+  "ADA-USD": [],
+  "AVAX-USD": [],
+  "LINK-USD": [],
+  "LTC-USD": [],
+  "DOT-USD": [],
+  "BCH-USD": [],
   "EURUSD=X": [
    "breakdown_20h"
   ],
   "GBPUSD=X": [],
   "USDJPY=X": [],
   "AUDUSD=X": [],
-  "USDCAD=X": [
-   "reclaim_ma20"
-  ],
+  "USDCAD=X": [],
   "USDCHF=X": [],
-  "NZDUSD=X": [],
+  "NZDUSD=X": [
+   "breakdown_20h"
+  ],
   "EURJPY=X": [
    "breakdown_20h"
   ],
   "GBPJPY=X": [],
   "EURGBP=X": [
-   "oversold_bounce"
+   "oversold"
   ],
   "AUDJPY=X": [],
   "EURCHF=X": [],
   "EURAUD=X": [],
   "GBPCHF=X": [],
-  "GC=F": [
-   "breakout_20d"
-  ],
-  "SI=F": [
-   "breakout_20d",
-   "overbought"
-  ]
+  "GC=F": [],
+  "SI=F": []
  }
 }
