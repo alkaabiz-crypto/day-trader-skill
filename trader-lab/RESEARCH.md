@@ -1847,3 +1847,26 @@ half-day session never has, so their trades would have stayed open forever. `pap
 now gives 12:55 on NYSE early-close days (`lab.nyse_early_close`) and 15:55 otherwise. `bot.py settle` and
 `paper.py log` use it, and a test was added. This is a mechanics fix, not a rule change: the rule was
 always "flat before the close".
+
+### 2026-11-27 (daily run, half day): bots, trial, oil, and the overnight/intraday tug of war (`tugofwar.py`). FAIL
+
+- **Bot.** Stocks: 88 closed, net $+307.96, 67% won, 11 open. Those 11 are NYSE names whose last two half-day
+  5-minute bars (12:50, 12:55) Yahoo had not published by the evening run; the Nasdaq names settled with the
+  half-day fix. The next settle retries them; bot.py rules unchanged. Crypto/forex: 55 closed, net $+156.34,
+  51% won, 8 open (the 17:34 and 19:34 UTC runs were missed by session restarts; settles catch up).
+- **Paper trial.** 3 trading days, 5 shadow trades, net $+16.16, t 6.28, IN PROGRESS (needs 20+ days, 30+ trades).
+  No ticket today: no 15:30 price on a 13:00 close.
+- **Oil.** DCA ladder: WAIT on USOIL (137.77, trigger 135.06) and UKOIL (58.93, trigger 57.11). MA cross track:
+  USOIL HOLD (2 of 25 sessions), UKOIL FLAT. Oil backtest: 0 candidates pass every gate (still zero).
+- **Reruns.** 5-minute engine (recent and the 4-year Tiingo store on SPY/QQQ/IWM, 997 sessions): no pass.
+  Hourly: no pass. Daily: s_r3 again clears the daily gates, but R3 stays unproven (it failed after 2014 on the
+  wider ETF set and has no survivorship-free test); the audit's one-day delay weakens it (t 2.68).
+  Trend: nothing beats equal-weight buy-and-hold. Forward ledger: 4 sessions, too few to read.
+- **New: tug of war** (Lou, Polk & Skouras 2019, JFE), pre-registered and committed before the run, 19 ETFs,
+  1996-2026, judged 2015+, rank by 12-month overnight return, 2 bp a round trip per leg:
+  overnight long-short +0.31 bp/day after costs (t +0.32), intraday reversal +0.51 bp/day (t +0.44),
+  monthly close-to-close -0.41 bp/day (t -0.27). All FAIL. Reading: the overnight spread is real before costs
+  (about 4 bp a day, it beats every random ranking), but trading it every night costs 4 bp, so nothing is left.
+- **Blocked.** CPI release dates: bls.gov answers 403 through the proxy, so the CPI-day test (plan B4) waits.
+
+Honest reading: still no rule that beats luck after costs. Research, not financial advice.
