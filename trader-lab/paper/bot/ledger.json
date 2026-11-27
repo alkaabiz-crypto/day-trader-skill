@@ -6703,9 +6703,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 18:36Z",
    "start_ts": 1795716000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-26 18:36Z-GBPUSD=X"
+   "id": "F-live-2026-11-26 18:36Z-GBPUSD=X",
+   "entry": 1.310908,
+   "exit": 1.309981,
+   "how": "time",
+   "pnl_usd": -7.84,
+   "closed_at": "2026-11-27 18:34Z"
   },
   {
    "symbol": "GBPUSD=X",
@@ -6723,9 +6728,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 18:36Z",
    "start_ts": 1795716000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-btctrend-2026-11-26 18:36Z-GBPUSD=X"
+   "id": "F-btctrend-2026-11-26 18:36Z-GBPUSD=X",
+   "entry": 1.310908,
+   "exit": 1.309981,
+   "how": "time",
+   "pnl_usd": -7.84,
+   "closed_at": "2026-11-27 18:34Z"
   },
   {
    "symbol": "GBPUSD=X",
@@ -6743,9 +6753,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 18:36Z",
    "start_ts": 1795716000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-26 18:36Z-GBPUSD=X"
+   "id": "F-noweekend-2026-11-26 18:36Z-GBPUSD=X",
+   "entry": 1.310908,
+   "exit": 1.309981,
+   "how": "time",
+   "pnl_usd": -7.84,
+   "closed_at": "2026-11-27 18:34Z"
   },
   {
    "symbol": "LINK-USD",
@@ -9356,19 +9371,137 @@
    "risk_usd": 8.69,
    "setup": "opening-range breakout",
    "id": "S-fresh-2026-11-27-AMGN"
+  },
+  {
+   "symbol": "DOGE-USD",
+   "side": "buy",
+   "entry_est": 0.05778999999165535,
+   "stop": 0.05677642832909312,
+   "target": 0.05981714331677982,
+   "risk_usd": 10.0,
+   "notional_usd": 570.16,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 18:34Z",
+   "start_ts": 1795802400,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-live-2026-11-27 18:34Z-DOGE-USD"
+  },
+  {
+   "symbol": "GBPCHF=X",
+   "side": "buy",
+   "entry_est": 1.0952199697494507,
+   "stop": 1.092647475855691,
+   "target": 1.1003649575369698,
+   "risk_usd": 10.0,
+   "notional_usd": 4257.42,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 18:34Z",
+   "start_ts": 1795802400,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-live-2026-11-27 18:34Z-GBPCHF=X"
+  },
+  {
+   "symbol": "GC=F",
+   "side": "buy",
+   "entry_est": 3674.60009765625,
+   "stop": 3631.8180018833705,
+   "target": 3760.164289202009,
+   "risk_usd": 10.0,
+   "notional_usd": 858.91,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 18:34Z",
+   "start_ts": 1795804200,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-btctrend-2026-11-27 18:34Z-GC=F"
+  },
+  {
+   "symbol": "GBPCHF=X",
+   "side": "buy",
+   "entry_est": 1.0952199697494507,
+   "stop": 1.092647475855691,
+   "target": 1.1003649575369698,
+   "risk_usd": 10.0,
+   "notional_usd": 4257.42,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 18:34Z",
+   "start_ts": 1795802400,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-btctrend-2026-11-27 18:34Z-GBPCHF=X"
+  },
+  {
+   "symbol": "DOGE-USD",
+   "side": "buy",
+   "entry_est": 0.05778999999165535,
+   "stop": 0.05677642832909312,
+   "target": 0.05981714331677982,
+   "risk_usd": 10.0,
+   "notional_usd": 570.16,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 18:34Z",
+   "start_ts": 1795802400,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-noweekend-2026-11-27 18:34Z-DOGE-USD"
+  },
+  {
+   "symbol": "GBPCHF=X",
+   "side": "buy",
+   "entry_est": 1.0952199697494507,
+   "stop": 1.092647475855691,
+   "target": 1.1003649575369698,
+   "risk_usd": 10.0,
+   "notional_usd": 4257.42,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 18:34Z",
+   "start_ts": 1795802400,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-noweekend-2026-11-27 18:34Z-GBPCHF=X"
   }
  ],
  "last_fx": {
-  "BTC-USD": [
-   "oversold_bounce"
-  ],
-  "ETH-USD": [
-   "oversold_bounce"
-  ],
+  "BTC-USD": [],
+  "ETH-USD": [],
   "SOL-USD": [],
   "XRP-USD": [],
   "BNB-USD": [],
-  "DOGE-USD": [],
+  "DOGE-USD": [
+   "reclaim_ma20"
+  ],
   "ADA-USD": [],
   "AVAX-USD": [],
   "LINK-USD": [],
@@ -9376,28 +9509,34 @@
   "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [
+   "oversold",
    "breakdown_20h"
   ],
   "GBPUSD=X": [],
   "USDJPY=X": [],
   "AUDUSD=X": [],
-  "USDCAD=X": [],
-  "USDCHF=X": [],
-  "NZDUSD=X": [
-   "breakdown_20h"
+  "USDCAD=X": [
+   "reclaim_ma20"
   ],
+  "USDCHF=X": [],
+  "NZDUSD=X": [],
   "EURJPY=X": [
    "breakdown_20h"
   ],
   "GBPJPY=X": [],
-  "EURGBP=X": [
-   "oversold"
-  ],
+  "EURGBP=X": [],
   "AUDJPY=X": [],
   "EURCHF=X": [],
   "EURAUD=X": [],
-  "GBPCHF=X": [],
-  "GC=F": [],
-  "SI=F": []
+  "GBPCHF=X": [
+   "reclaim_ma20"
+  ],
+  "GC=F": [
+   "breakout_20d"
+  ],
+  "SI=F": [
+   "breakout_20d",
+   "overbought"
+  ]
  }
 }
