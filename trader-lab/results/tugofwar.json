@@ -1,0 +1,49 @@
+{
+ "etfs": [
+  "DIA",
+  "EEM",
+  "EFA",
+  "GLD",
+  "IWM",
+  "MDY",
+  "QQQ",
+  "SMH",
+  "SPY",
+  "TLT",
+  "XLB",
+  "XLE",
+  "XLF",
+  "XLI",
+  "XLK",
+  "XLP",
+  "XLU",
+  "XLV",
+  "XLY"
+ ],
+ "variants": {
+  "overnight": {
+   "in_sample_bp_day": 0.6,
+   "judged_bp_day": 0.31,
+   "judged_t": 0.32,
+   "judged_ann_pct": 0.78,
+   "placebo_beats": 1.0,
+   "verdict": "FAIL"
+  },
+  "intraday": {
+   "in_sample_bp_day": 0.52,
+   "judged_bp_day": 0.51,
+   "judged_t": 0.44,
+   "judged_ann_pct": 1.28,
+   "placebo_beats": 1.0,
+   "verdict": "FAIL"
+  },
+  "monthly": {
+   "in_sample_bp_day": -0.15,
+   "judged_bp_day": -0.41,
+   "judged_t": -0.27,
+   "judged_ann_pct": -1.04,
+   "placebo_beats": 0.42,
+   "verdict": "FAIL"
+  }
+ }
+}
