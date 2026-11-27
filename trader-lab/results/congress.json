@@ -1,0 +1,28 @@
+{
+ "in_sample": {
+  "events": 3185,
+  "months": 36,
+  "mean_pct": 0.3429225197173192,
+  "t": 0.47538751528567347
+ },
+ "judged": {
+  "events": 6523,
+  "months": 56,
+  "mean_pct": -0.8874324140927885,
+  "t": -2.184207564473705
+ },
+ "dropped": {
+  "no_ticker": 0,
+  "no_prices": 780,
+  "too_cheap": 8,
+  "too_recent": 339
+ },
+ "usd_judged": 616.3472725756552,
+ "usd_all": 1281.8953633935723,
+ "spy_usd_judged": 805.9590316318603,
+ "spy_usd_all": 1595.258592684594,
+ "first": "2019-01-07",
+ "last": "2026-11-24",
+ "verdict": "FAIL",
+ "purchase_events": 10835
+}

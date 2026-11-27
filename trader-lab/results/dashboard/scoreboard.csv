@@ -1,0 +1,30 @@
+study,verdict,detail
+"5-minute strategies (lab.py, 40 names)",FAIL,kept: none (needs OOS t >= 3)
+"daily rule R3 (Connors, dip-buying)",UNPROVEN,"passed on 40 survivor stocks, FAILED on 110 fresh ETFs (r3_etfs.py)"
+frozen near-misses (daily.py forward),FORWARD-TEST,9 rules scored on new days only
+video strategy: ORB + 20 EMA pullback,FAIL,orb-ema.json
+5-minute rules on 4 years SPY/QQQ/IWM,FAIL,long-3etf.json
+monthly trend/momentum/vol-targeting,FAIL,"absmom FAIL, gem FAIL, gtaa FAIL, sma FAIL, topk FAIL, volman FAIL"
+short volatility (SVXY contango),FAIL,"contango FAIL, trend FAIL"
+risk parity / equal weight,FAIL,"ew9 FAIL, ivol4 FAIL, ivol9 FAIL"
+"swarm: 100,000 machine-made rules",FAIL,the 2 holdout 'passes' were a scoring artifact (RESEARCH.md 2026-11-24)
+"news: earnings-day drift (SEC 8-K 2.02, 30 stocks)",FAIL,"chosen {""k"": 4.0, ""h"": 20, ""sides"": ""long""}"
+"stocks in play / end-of-day reversal, 40 names x 4 years",FAIL,"{""eodrev"": ""FAIL"", ""sip"": ""FAIL""}"
+"crypto coin momentum, 74 coins, weekly",FAIL,"{""H1"": ""FAIL"", ""H2"": ""FAIL""}"
+"same-month seasonality, 29 sector/country ETFs",FAIL,"{""H1"": ""FAIL"", ""H2"": ""FAIL""}"
+pre-Fed night: SPY close before to open of FOMC day (scheduled meetings),BACKTEST-PASS,"since 2012 +13.7 bp/event t 3.53; forward 0 events; next FOMC 2026-12-09: buy SPY at the close the day before, sell at the open (paper)"
+"$500 test: FOMC cycle, even weeks (SPY)",FAIL,judged t 0.63; $500 -> $724 vs $1871 in SPY
+$500 test: Day before a holiday (SPY),FAIL,judged t 1.73; $500 -> $752 vs $4331 in SPY
+$500 test: Options-expiration week (SPY),FAIL,judged t 0.06; $500 -> $623 vs $4331 in SPY
+$500 test: copy insider buying clusters,FAIL,"judged -1.15%/month vs SPY, t -1.60; $500 -> $431 vs $1228 in SPY"
+$500 test: copy House members' stock buys,FAIL,"judged -0.89%/month vs SPY, t -2.18; $500 -> $616 vs $806 in SPY"
+"video strategy 2: opening range, break and close, buy the retest (QQQ)",FAIL,"judged -2.0 bp/trade t -1.47, 27% wins; $500 -> $462 vs $620 holding QQQ"
+"video strategy 2, fix round: 32 standard fixes chosen on 2022-2024",FAIL,"chosen wide 3R: in-sample t 0.88, judged t -0.64; $500 -> $485 vs $620 holding QQQ"
+"crypto platform bot: DCA (buy more on dips), BTC $500",FAIL,$500 -> $572 since 2024 vs $991 holding BTC
+"crypto platform bot: grid, BTC $500",FAIL,$500 -> $558 since 2024 vs $991 holding BTC
+strategy catalog: 60 named public strategies x 10 markets,FAIL,best coppock judged t 3.49 (bar 3.5); trend rules' edge is crypto only
+paper bots: Bitcoin trend (hold BTC above its 200-day average),PAPER,"2 days, $10000.00 vs $10339.72 holding BTC; now in cash"
+"paper bots: orb, full market every 15 min (scan > entry > exit > size > risk)",PAPER,"2 days (1 since v2), 4 trades, P&L -13.40 on $10,000 (SPY same days -77.39), 0 open"
+"paper bots: fed night (buy SPY before FOMC, sell at the open)",PAPER,"2 days, 0 trades, P&L +0.00 on $10,000"
+"paper bots: stocks in play (resting orders, 40 names)",PAPER,"2 days, 4 trades, P&L -78.60 on $10,000"
+"stocks in play, FORWARD test (frozen 2026-11-24)",FORWARD-TEST,"1 of 60 new sessions, -136.0 bp/day, t 0.00 at 5 bps"

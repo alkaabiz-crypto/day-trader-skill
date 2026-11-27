@@ -1,0 +1,373 @@
+{
+ "asset": "TSLA",
+ "class": "stock",
+ "peer": "QQQ",
+ "cost_bps": 3.0,
+ "is_end": "2014-12-31",
+ "first_day": "2010-06-29",
+ "candidates": 864914,
+ "conditions": 200,
+ "days_post": 2991,
+ "days_pre": 1136,
+ "bh_sharpe_post": 0.7287371346334034,
+ "reality_check": {
+  "M": 864914,
+  "n": 2991,
+  "best_mean_bps": 15.973505274517521,
+  "best_t": 4.687194156121293,
+  "rc_p": 0.095,
+  "spa_p": 0.505,
+  "bonferroni_z": 5.425448441140378,
+  "rw_crit_t": 6.519141035859195,
+  "rw_rejects": 0,
+  "passes": false,
+  "across_markets": {
+   "alpha": 0.000819672131147541,
+   "rw_crit_t": 8.639891488645178,
+   "rw_rejects": 0,
+   "passes": false
+  }
+ },
+ "n_t3": 1635,
+ "n_bonferroni": 0,
+ "n_sharpe_over_bh": 63844,
+ "best_sharpe": 1.4081070198332317,
+ "share_positive_post": 0.42772460614581337,
+ "best_post": [
+  {
+   "rule": "andnot:pres_y2&!c<ma150",
+   "params": {
+    "hold": 1,
+    "dir": "short_when"
+   },
+   "post_t": 4.687194156121293,
+   "is_t": 0.548541666500505,
+   "alpha_bp_day": 10.7094760371983,
+   "sharpe": 0.9263034583340203
+  },
+  {
+   "rule": "pair:copper_gold_up21&turn_of_month",
+   "params": {
+    "hold": 14,
+    "dir": "long_unless"
+   },
+   "post_t": 4.671749473278751,
+   "is_t": 1.48385149231576,
+   "alpha_bp_day": 15.567101515676992,
+   "sharpe": 1.3778353060156294
+  },
+  {
+   "rule": "pair:c>ma150&pres_y2",
+   "params": {
+    "hold": 1,
+    "dir": "long_unless"
+   },
+   "post_t": 4.563348211403529,
+   "is_t": -0.012840048599412256,
+   "alpha_bp_day": 7.971321158636284,
+   "sharpe": 1.0301283274572048
+  },
+  {
+   "rule": "andnot:turn_of_month&!copper_gold_down21",
+   "params": {
+    "hold": 14,
+    "dir": "short_when"
+   },
+   "post_t": 4.5628421153833,
+   "is_t": 1.9196504575819187,
+   "alpha_bp_day": 15.58781934237258,
+   "sharpe": 0.4018302131120592
+  },
+  {
+   "rule": "pair:c>ma150&pres_y2",
+   "params": {
+    "hold": 1,
+    "dir": "short_when"
+   },
+   "post_t": 4.418984353475338,
+   "is_t": -0.020782265141781203,
+   "alpha_bp_day": 7.746607949675481,
+   "sharpe": 0.9263034583340203
+  },
+  {
+   "rule": "pair:c>ma200+5%&pres_y2",
+   "params": {
+    "hold": 3,
+    "dir": "long_unless"
+   },
+   "post_t": 4.397366196803291,
+   "is_t": -0.05377994449393451,
+   "alpha_bp_day": 7.471687374446059,
+   "sharpe": 0.9821756971243535
+  },
+  {
+   "rule": "pair:copper_gold_up21&turn_of_month",
+   "params": {
+    "hold": 14,
+    "dir": "short_when"
+   },
+   "post_t": 4.392751244437099,
+   "is_t": 1.4718313512806267,
+   "alpha_bp_day": 14.664210010998488,
+   "sharpe": 0.4018302131120592
+  },
+  {
+   "rule": "pair:narrow_range&pres_y4",
+   "params": {
+    "hold": 10,
+    "dir": "long_when"
+   },
+   "post_t": 4.3897805853074505,
+   "is_t": 0.47633461101214164,
+   "alpha_bp_day": 9.678413262669368,
+   "sharpe": 1.3798892054064436
+  },
+  {
+   "rule": "andnot:pres_y2&!c<ma200",
+   "params": {
+    "hold": 1,
+    "dir": "short_when"
+   },
+   "post_t": 4.33381880529943,
+   "is_t": 0.37716980253036775,
+   "alpha_bp_day": 10.359202524262045,
+   "sharpe": 0.7901571733770903
+  },
+  {
+   "rule": "andnot:pres_y2&!c<ma250",
+   "params": {
+    "hold": 1,
+    "dir": "short_when"
+   },
+   "post_t": 4.312528438614848,
+   "is_t": 0.5712224450673526,
+   "alpha_bp_day": 10.589513896640328,
+   "sharpe": 0.7611832259724876
+  }
+ ],
+ "top_is": [
+  {
+   "rule": "pair:3m_up63&up_on_vol",
+   "params": {
+    "hold": 5,
+    "dir": "long_unless"
+   },
+   "post_t": -0.44732467090634614,
+   "is_t": 3.6065469047794316,
+   "alpha_bp_day": -0.9684202753490014,
+   "sharpe": 0.6804130983064403
+  },
+  {
+   "rule": "pair:3m_up63&up_on_vol",
+   "params": {
+    "hold": 5,
+    "dir": "short_when"
+   },
+   "post_t": -0.5883900176268314,
+   "is_t": 3.6043296916124925,
+   "alpha_bp_day": -1.2799398661891837,
+   "sharpe": -0.29751195790657275
+  },
+  {
+   "rule": "pair:peer_ret1<0&rsi2>95",
+   "params": {
+    "hold": 2,
+    "dir": "long_unless"
+   },
+   "post_t": -1.692333349866052,
+   "is_t": 3.5126118123886014,
+   "alpha_bp_day": -2.5664391096616956,
+   "sharpe": 0.5942569946136933
+  },
+  {
+   "rule": "andnot:up_on_vol&!wide_range",
+   "params": {
+    "hold": 1,
+    "dir": "short_when"
+   },
+   "post_t": -0.5707125038460571,
+   "is_t": 3.500937170770824,
+   "alpha_bp_day": -0.7368955207984553,
+   "sharpe": -0.30950959261446404
+  },
+  {
+   "rule": "pair:next_m3&stoch>80",
+   "params": {
+    "hold": 3,
+    "dir": "long_unless"
+   },
+   "post_t": -0.022281821414803376,
+   "is_t": 3.48998961067094,
+   "alpha_bp_day": -0.02105343648687442,
+   "sharpe": 0.7295893760286837
+  },
+  {
+   "rule": "andnot:low5&!spy_ret5>0",
+   "params": {
+    "hold": 30,
+    "dir": "long_when"
+   },
+   "post_t": -0.12366570250523219,
+   "is_t": 3.477893293975018,
+   "alpha_bp_day": -0.20173890686597853,
+   "sharpe": 0.6546801631559918
+  },
+  {
+   "rule": "pair:next_m3&stoch>80",
+   "params": {
+    "hold": 3,
+    "dir": "short_when"
+   },
+   "post_t": -0.05146204611761754,
+   "is_t": 3.4778775309837404,
+   "alpha_bp_day": -0.04858309291119168,
+   "sharpe": -0.053616900561441784
+  },
+  {
+   "rule": "pair:peer_ret1<0&rsi2>95",
+   "params": {
+    "hold": 2,
+    "dir": "short_when"
+   },
+   "post_t": -1.6855427724570085,
+   "is_t": 3.4739944277024493,
+   "alpha_bp_day": -2.534257731508009,
+   "sharpe": -0.6533267519885761
+  },
+  {
+   "rule": "andnot:ret1<0&!vol<0.5x",
+   "params": {
+    "hold": 3,
+    "dir": "long_when"
+   },
+   "post_t": -0.5895659463883084,
+   "is_t": 3.4413827691405916,
+   "alpha_bp_day": -1.4565111726106565,
+   "sharpe": 0.5503694137758075
+  },
+  {
+   "rule": "pair:ret10<0&rv_pct>90",
+   "params": {
+    "hold": 10,
+    "dir": "long_when"
+   },
+   "post_t": 1.7383672067661529,
+   "is_t": 3.3434013307978296,
+   "alpha_bp_day": 5.5062184491974975,
+   "sharpe": 0.518757525591475
+  },
+  {
+   "rule": "andnot:rv_pct>90&!ret5>0",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 1.599047833635201,
+   "is_t": 3.3093833259822953,
+   "alpha_bp_day": 5.317298257823519,
+   "sharpe": 0.5144682303262911
+  },
+  {
+   "rule": "pair:ret5<0&rv_pct>90",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 1.599047833635201,
+   "is_t": 3.3093833259822953,
+   "alpha_bp_day": 5.317298257823519,
+   "sharpe": 0.5144682303262911
+  },
+  {
+   "rule": "andnot:up3&!ret42<0",
+   "params": {
+    "hold": 1,
+    "dir": "short_when"
+   },
+   "post_t": -1.4230262018929134,
+   "is_t": 3.307578282004007,
+   "alpha_bp_day": -2.890005907247962,
+   "sharpe": -0.6549732134214693
+  },
+  {
+   "rule": "andnot:ret1<0&!vix>30",
+   "params": {
+    "hold": 3,
+    "dir": "long_when"
+   },
+   "post_t": -0.6280326304340594,
+   "is_t": 3.2922137746730624,
+   "alpha_bp_day": -1.8532370716130115,
+   "sharpe": 0.5292505534742172
+  },
+  {
+   "rule": "andnot:peer_ret5>0&!ret21>2sd",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": -0.014675478400397395,
+   "is_t": 3.2783087048266326,
+   "alpha_bp_day": -0.023216219812964945,
+   "sharpe": 0.7104747001725128
+  },
+  {
+   "rule": "andnot:spy_ret5>0&!ret21>2sd",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 0.0543580046768216,
+   "is_t": 3.2783087048266326,
+   "alpha_bp_day": 0.08680244717173397,
+   "sharpe": 0.7158835878707341
+  },
+  {
+   "rule": "andnot:rv_pct>90&!c>ma10",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 1.752535968510913,
+   "is_t": 3.273839000167563,
+   "alpha_bp_day": 5.70897951834721,
+   "sharpe": 0.5542653752090163
+  },
+  {
+   "rule": "pair:c<ma10&rv_pct>90",
+   "params": {
+    "hold": 14,
+    "dir": "long_when"
+   },
+   "post_t": 1.752535968510913,
+   "is_t": 3.273839000167563,
+   "alpha_bp_day": 5.70897951834721,
+   "sharpe": 0.5542653752090163
+  },
+  {
+   "rule": "andnot:up3&!next_m3",
+   "params": {
+    "hold": 1,
+    "dir": "short_when"
+   },
+   "post_t": -1.017170079014491,
+   "is_t": 3.270803352499723,
+   "alpha_bp_day": -2.367318462780015,
+   "sharpe": -0.5738687348601529
+  },
+  {
+   "rule": "andnot:up_on_vol&!next_m5",
+   "params": {
+    "hold": 1,
+    "dir": "short_when"
+   },
+   "post_t": -0.32575892135623147,
+   "is_t": 3.258321085036364,
+   "alpha_bp_day": -0.5213139122640524,
+   "sharpe": -0.21865165585728127
+  }
+ ],
+ "top_is_mean_post_t": -0.034202466324557354,
+ "corr_is_post_t": 0.1944597030985078,
+ "seconds": 1978
+}

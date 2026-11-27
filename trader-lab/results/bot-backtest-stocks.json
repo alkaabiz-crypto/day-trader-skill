@@ -1,0 +1,57 @@
+{
+ "names": 1444,
+ "from": "2026-09-01",
+ "to": "2026-11-23",
+ "sessions": 59,
+ "variants": {
+  "base": {
+   "trades": 295,
+   "net_usd": -328.31,
+   "per_trade": -1.113,
+   "win_rate": 0.39,
+   "days": 59,
+   "t_daily": -3.05,
+   "gross_usd": -167.24,
+   "stops": 81,
+   "targets": 13
+  },
+  "spytrend": {
+   "trades": 280,
+   "net_usd": -281.1,
+   "per_trade": -1.004,
+   "win_rate": 0.396,
+   "days": 56,
+   "t_daily": -2.71,
+   "gross_usd": -129.54,
+   "stops": 74,
+   "targets": 13
+  },
+  "first": {
+   "trades": 118,
+   "net_usd": -152.67,
+   "per_trade": -1.294,
+   "win_rate": 0.347,
+   "days": 59,
+   "t_daily": -1.92,
+   "gross_usd": -80.18,
+   "stops": 41,
+   "targets": 10
+  },
+  "fresh": {
+   "trades": 295,
+   "net_usd": -298.7,
+   "per_trade": -1.013,
+   "win_rate": 0.393,
+   "days": 59,
+   "t_daily": -2.51,
+   "gross_usd": -126.16,
+   "stops": 86,
+   "targets": 15
+  }
+ },
+ "placebo": {
+  "draws": 100,
+  "median_net": -259.04445003030906,
+  "base_percentile": 0.3
+ }
+}

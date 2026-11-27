@@ -1,0 +1,53 @@
+[
+ {
+  "symbol": "ENPH",
+  "side": "buy",
+  "entry_est": 19.53,
+  "stop": 19.28,
+  "target": 19.78,
+  "shares": 40,
+  "max_loss_usd": 10.0,
+  "cost_bps": 2.3,
+  "reward_bps": 128.0,
+  "premarket_hit": true,
+  "or_low": 19.08,
+  "or_high": 19.49,
+  "pct_over": 0.18,
+  "date": "2026-11-25",
+  "decided_at": "09:50"
+ },
+ {
+  "symbol": "VIST",
+  "side": "buy",
+  "entry_est": 49.25,
+  "stop": 48.7,
+  "target": 49.8,
+  "shares": 18,
+  "max_loss_usd": 9.9,
+  "cost_bps": 2.3,
+  "reward_bps": 111.7,
+  "premarket_hit": true,
+  "or_low": 48.24,
+  "or_high": 49.15,
+  "pct_over": 0.2,
+  "date": "2026-11-25",
+  "decided_at": "09:50"
+ },
+ {
+  "symbol": "ADM",
+  "side": "buy",
+  "entry_est": 66.4,
+  "stop": 65.5,
+  "target": 67.3,
+  "shares": 11,
+  "max_loss_usd": 9.9,
+  "cost_bps": 2.3,
+  "reward_bps": 135.5,
+  "premarket_hit": true,
+  "or_low": 64.78,
+  "or_high": 66.22,
+  "pct_over": 0.27,
+  "date": "2026-11-25",
+  "decided_at": "09:50"
+ }
+]

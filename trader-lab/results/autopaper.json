@@ -1,0 +1,31 @@
+{
+ "frozen": "2026-11-24",
+ "start": "2026-11-24",
+ "days": 3,
+ "equity": 9986.6,
+ "pnl_usd": -13.399999999999636,
+ "trades": 4,
+ "win_rate": 0.25,
+ "max_drawdown_usd": 13.399999999999636,
+ "open_positions": 0,
+ "daily_t": -0.9999999999999998,
+ "spy_same_days_usd": 83.48488114626295,
+ "days_since_v2": 2,
+ "books": {
+  "fed": {
+   "days": 3,
+   "trades": 0,
+   "equity": 10000.0,
+   "pnl_usd": 0.0,
+   "win_rate": null
+  },
+  "sip": {
+   "days": 3,
+   "trades": 6,
+   "equity": 9857.23,
+   "pnl_usd": -142.77000000000044,
+   "win_rate": 0.0
+  }
+ },
+ "verdict": "PAPER"
+}

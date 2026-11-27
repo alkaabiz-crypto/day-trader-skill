@@ -73,6 +73,39 @@ class Fills(unittest.TestCase):
         self.assertAlmostEqual(r["pnl_usd"], round(1000 * r["net_bps"] / 1e4, 2))
 
 
+class ScannerTrack(unittest.TestCase):
+    def bars(self, n=N, px=50.0, rng=0.02):
+        return [{"o": px, "h": px + rng, "l": px - rng, "c": px, "v": 1, "slot": i} for i in range(n)]
+
+    def test_plan_sizing_stop_target(self):
+        hit = {"symbol": "ABC", "price": 51.0, "or_high": 50.5, "or_low": 49.5, "pct_over": 1.0}
+        p = paper.scanner_plan(hit, self.bars(4), {"ABC"})
+        self.assertEqual((p["stop"], p["target"]), (50.0, 52.0))
+        self.assertEqual(p["shares"], 10)                    # $10 risk / $1 = 10 (19 by budget)
+        self.assertTrue(p["premarket_hit"])
+        self.assertLessEqual(p["max_loss_usd"], 10.0)
+
+    def test_plan_skips_when_costs_eat_the_reward(self):
+        hit = {"symbol": "ABC", "price": 50.06, "or_high": 50.05, "or_low": 49.95, "pct_over": 0.02}
+        noisy = self.bars(4, rng=0.3)                        # wide bars: a big spread estimate
+        self.assertIsNone(paper.scanner_plan(hit, noisy, set()))
+
+    def test_pick_prefers_premarket_then_fresh(self):
+        hits = [{"symbol": "A", "pct_over": 0.2}, {"symbol": "B", "pct_over": 2.0}, {"symbol": "C", "pct_over": 0.1}]
+        self.assertEqual([h["symbol"] for h in paper.pick_scanner(hits, {"B"}, 3)], ["B", "C", "A"])
+
+    def test_fill_long_target_stop_and_close(self):
+        b = self.bars()
+        b[4] = dict(b[4], o=50.0)
+        b[10] = dict(b[10], h=52.5)
+        self.assertEqual(paper.fill_long(b, 4, 49.0, 52.0), (50.0, 52.0, "target"))
+        b[8] = dict(b[8], l=48.9, h=52.5)                   # both in one bar: counted as the stop
+        self.assertEqual(paper.fill_long(b, 4, 49.0, 52.0)[2], "stop")
+        c = self.bars()
+        self.assertEqual(paper.fill_long(c, 4, 49.0, 52.0)[2], "close")
+        self.assertEqual(paper.slot_of("09:50"), 4)
+
+
 class Report(unittest.TestCase):
     def rows(self, nets, start="2026-01-"):
         return [{"date": "%s%02d" % (start, i % 28 + 1) if i < 28 else "2026-02-%02d" % (i - 27),
@@ -89,6 +122,29 @@ class Report(unittest.TestCase):
         self.assertEqual(paper.evaluate(self.rows(good), dict(CFG, _logged_days=days))["verdict"], "PASS")
         bad = [12.0, -14.0] * 20
         self.assertEqual(paper.evaluate(self.rows(bad), dict(CFG, _logged_days=days))["verdict"], "FAIL")
+
+    def test_cost_stress_can_fail_a_thin_edge(self):
+        days = ["2026-01-%02d" % d for d in range(1, 29)]
+        thin = [3.0, 2.0, 2.5, 3.5, 2.0] * 8          # net 2.6 bp a trade at the assumed 2 bp cost
+        cfg = dict(CFG, _logged_days=days)
+        self.assertEqual(paper.evaluate(self.rows(thin), cfg)["verdict"], "PASS")
+        r = paper.evaluate(self.rows(thin), dict(cfg, stress_cost_bps=5.0))
+        self.assertFalse(r["checks"]["stress_net_positive"])
+        self.assertEqual(r["verdict"], "FAIL")
+        self.assertAlmostEqual(r["break_even_cost_bps"], 4.6)
+
+    def test_daily_t_counts_a_day_once(self):
+        # 3 identical trades a day: per-trade t is inflated, daily t is not
+        rng = __import__("random").Random(3)
+        rows = []
+        for d in range(1, 29):
+            x = rng.gauss(1.0, 20.0)
+            for _ in range(3):
+                rows.append({"date": "2026-01-%02d" % d, "source": "shadow", "instrument": "US500",
+                             "net_bps": str(x), "pnl_usd": str(x / 10.0)})
+        r = paper.evaluate(rows, dict(CFG, _logged_days=["2026-01-%02d" % d for d in range(1, 29)]))
+        self.assertEqual(r["trade_days"], 28)
+        self.assertAlmostEqual(r["t"] / r["t_daily"], 3 ** 0.5, delta=0.1)
 
     def test_journal_round_trip(self):
         with tempfile.TemporaryDirectory() as tmp:

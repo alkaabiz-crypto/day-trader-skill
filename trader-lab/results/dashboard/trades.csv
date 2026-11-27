@@ -1,0 +1,9 @@
+account,symbol,shares,bought,entry,sold,exit,reason,pnl_usd
+"Breakouts, full market",MSFT,8,2026-11-24 10:46,494.2688,2026-11-24 12:20,501.29,target,54.18
+"Breakouts, full market",BBY,18,2026-11-24 13:12,101.4503,2026-11-24 15:15,98.77,stop,-49.15
+"Breakouts, full market",CRM,7,2026-11-24 10:46,193.7387,2026-11-24 15:45,192.505,end of day,-9.31
+"Breakouts, full market",NFLX,49,2026-11-24 10:46,58.9218,2026-11-24 15:45,58.765,end of day,-9.12
+Stocks in play,ARM,-13,2026-11-25 09:35,145.9305,2026-11-25 09:55,149.5405,stop,-47.89
+Stocks in play,TLT,24,2026-11-25 09:35,82.415,2026-11-25 09:55,82.33,stop,-3.03
+Stocks in play,CRM,10,2026-11-25 09:55,191.6831,2026-11-25 10:00,189.845,stop,-19.33
+Stocks in play,GLD,-6,2026-11-25 09:35,317.0574,2026-11-25 12:00,318.29,stop,-8.35

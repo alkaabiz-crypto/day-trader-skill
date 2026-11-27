@@ -1,0 +1,154 @@
+{
+ "from": "2024-02-07",
+ "variants": {
+  "base": {
+   "trades": 11951,
+   "net_usd": -15154.98,
+   "per_trade": -1.268,
+   "win_rate": 0.359,
+   "days": 940,
+   "t_daily": -8.14,
+   "stress_2x": -31160.45,
+   "gross_usd": 850.48,
+   "by_group": {
+    "crypto": {
+     "trades": 6433,
+     "net_usd": -7799.0,
+     "per_trade": -1.212,
+     "win_rate": 0.352,
+     "days": 729,
+     "t_daily": -5.07
+    },
+    "forex": {
+     "trades": 4554,
+     "net_usd": -7236.78,
+     "per_trade": -1.589,
+     "win_rate": 0.364,
+     "days": 721,
+     "t_daily": -7.21
+    },
+    "metal": {
+     "trades": 964,
+     "net_usd": -119.2,
+     "per_trade": -0.124,
+     "win_rate": 0.379,
+     "days": 526,
+     "t_daily": -0.28
+    }
+   }
+  },
+  "groupcap": {
+   "trades": 5762,
+   "net_usd": -7077.07,
+   "per_trade": -1.228,
+   "win_rate": 0.36,
+   "days": 936,
+   "t_daily": -6.77,
+   "stress_2x": -14168.83,
+   "gross_usd": 14.69,
+   "by_group": {
+    "crypto": {
+     "trades": 1672,
+     "net_usd": -1563.26,
+     "per_trade": -0.935,
+     "win_rate": 0.365,
+     "days": 717,
+     "t_daily": -2.68
+    },
+    "forex": {
+     "trades": 2985,
+     "net_usd": -5466.79,
+     "per_trade": -1.831,
+     "win_rate": 0.352,
+     "days": 727,
+     "t_daily": -7.08
+    },
+    "metal": {
+     "trades": 1105,
+     "net_usd": -47.02,
+     "per_trade": -0.043,
+     "win_rate": 0.375,
+     "days": 615,
+     "t_daily": -0.11
+    }
+   }
+  },
+  "btctrend": {
+   "trades": 5360,
+   "net_usd": -6687.63,
+   "per_trade": -1.248,
+   "win_rate": 0.358,
+   "days": 915,
+   "t_daily": -6.6,
+   "stress_2x": -13388.99,
+   "gross_usd": 13.73,
+   "by_group": {
+    "crypto": {
+     "trades": 1265,
+     "net_usd": -1083.88,
+     "per_trade": -0.857,
+     "win_rate": 0.361,
+     "days": 636,
+     "t_daily": -2.2
+    },
+    "forex": {
+     "trades": 2991,
+     "net_usd": -5554.29,
+     "per_trade": -1.857,
+     "win_rate": 0.351,
+     "days": 727,
+     "t_daily": -7.19
+    },
+    "metal": {
+     "trades": 1104,
+     "net_usd": -49.47,
+     "per_trade": -0.045,
+     "win_rate": 0.374,
+     "days": 615,
+     "t_daily": -0.11
+    }
+   }
+  },
+  "noweekend": {
+   "trades": 5255,
+   "net_usd": -5250.3,
+   "per_trade": -0.999,
+   "win_rate": 0.365,
+   "days": 729,
+   "t_daily": -5.18,
+   "stress_2x": -11501.64,
+   "gross_usd": 1001.03,
+   "by_group": {
+    "crypto": {
+     "trades": 1240,
+     "net_usd": -1054.16,
+     "per_trade": -0.85,
+     "win_rate": 0.36,
+     "days": 514,
+     "t_daily": -2.16
+    },
+    "forex": {
+     "trades": 2947,
+     "net_usd": -4342.08,
+     "per_trade": -1.473,
+     "win_rate": 0.362,
+     "days": 729,
+     "t_daily": -5.55
+    },
+    "metal": {
+     "trades": 1068,
+     "net_usd": 145.93,
+     "per_trade": 0.137,
+     "win_rate": 0.381,
+     "days": 585,
+     "t_daily": 0.34
+    }
+   }
+  }
+ },
+ "placebo": {
+  "draws": 100,
+  "median_net": -13615.724709464785,
+  "base_percentile": 0.12
+ }
+}

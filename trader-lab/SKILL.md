@@ -67,7 +67,13 @@ python3 "${CLAUDE_SKILL_DIR}/paper.py" tickets                  # at 15:31 New Y
 python3 "${CLAUDE_SKILL_DIR}/paper.py" log                      # after the close: shadow-fill into paper/journal.csv
 python3 "${CLAUDE_SKILL_DIR}/paper.py" record --date D --instrument US500 --side buy --pnl -3.2
 python3 "${CLAUDE_SKILL_DIR}/paper.py" report                   # progress against the fixed pass bar
+python3 "${CLAUDE_SKILL_DIR}/paper.py" scanner                  # 09:50 New York: whole-market ORB picks, simulated
 ```
+
+Both tracks are simulated automatically: the trial's tickets and the scanner's picks are filled
+from real 5-minute prices after the close and logged in `paper/journal.csv`. Nothing is placed.
+To trade the trial on MetaTrader 5 by itself, see `mt5/INSTALL.md` (`ReversalTrial.mq5`, an
+Expert Advisor that ships in dry-run mode, for a demo account).
 
 `audit.py` re-implements the passing rules from scratch and runs the checks that caught real
 errors on 2026-11-22: random-entry placebos, ETFs only (survivorship), costs, a one-day signal

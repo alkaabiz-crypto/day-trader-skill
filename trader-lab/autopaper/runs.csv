@@ -1,0 +1,90 @@
+time,summary
+2026-11-24 10:46,"2026-11-24 10:46 equity $10000.00 | sold: none | scanner: 25 breakouts; AAPL: breakout no longer live (last close -0.45% vs the range high); AMZN: breakout no longer live (last close -0.39% vs the range high); CRM: BUY 7 @ 193.74, stop 187.19, target 206.84 (paper); JPM: breakout no longer live (last close -0.96% vs the range high); MSFT: BUY 8 @ 494.27, stop 490.76, target 501.29 (paper); NFLX: BUY 49 @ 58.92, stop 57.91, target 60.94 (paper); max open positions"
+2026-11-24 11:01,2026-11-24 11:01 equity $10013.94 | sold: none | max open positions
+2026-11-24 11:54,2026-11-24 11:54 equity $10035.73 | sold: none | max open positions
+2026-11-24 12:53,2026-11-24 12:53 equity $10072.27 | sold: MSFT target +54.18 | scanner: 21 breakouts; AAPL: breakout no longer live (last close 0.19% vs the range high); AMZN: breakout no longer live (last close -0.26% vs the range high); JPM: breakout no longer live (last close 0.14% vs the range high); SHOP: breakout no longer live (last close -1.97% vs the range high); SPY: breakout no longer live (last close 0.16% vs the range high); UBER: breakout no longer live (last close 1.0% vs the range high); UNH: breakout no longer live (last close 2.97% vs the range high); XLE: breakout no longer live (last close 0.36% vs the range high); COST: breakout no longer live (last close 1.12% vs the range high); DIA: breakout no longer live (last close 0.45% vs the range high); IWM: breakout no longer live (last close 0.37% vs the range high); WMT: breakout no longer live (last close 0.58% vs the range high); XOM: breakout no longer live (last close -0.07% vs the range high); AVGO: breakout no longer live (last close -0.17% vs the range high); META: breakout no longer live (last close -0.57% vs the range high); QQQ: breakout no longer live (last close -0.25% vs the range high); LLY: breakout no longer live (last close 0.04% vs the range high); ORCL: breakout no longer live (last close -1.76% vs the range high); PLTR: breakout no longer live (last close 0.35% vs the range high); NKE: breakout no longer live (last close 1.99% vs the range high); TLT: breakout no longer live (last close -0.11% vs the range high)
+2026-11-24 13:12,"2026-11-24 13:12 orb $10063.77 | sold: none | scanner: 155 breakouts, 2 from the last 30 minutes; BBY: BUY 18 @ 101.45, stop 98.77, target 106.81 (paper); max open positions || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $10000.00 "
+2026-11-24 13:23,2026-11-24 13:23 orb $10054.17 | sold: none | max open positions || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $10000.00 
+2026-11-24 13:38,2026-11-24 13:38 orb $10055.02 | sold: none | max open positions || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $10000.00 
+2026-11-24 13:53,2026-11-24 13:53 orb $10043.20 | sold: none | max open positions || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $10000.00 
+2026-11-24 14:24,2026-11-24 14:24 orb $10057.86 | sold: none | max open positions || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $10000.00 
+2026-11-24 14:52,2026-11-24 14:52 orb $10045.09 | sold: none | max open positions || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $10000.00 
+2026-11-24 15:07,"2026-11-24 15:07 orb $10025.16 | sold: none | after 15:00, no new buys || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $10000.00 "
+2026-11-24 15:22,"2026-11-24 15:22 orb $9997.53 | sold: BBY stop -49.15 | after 15:00, no new buys || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $10000.00 "
+2026-11-24 15:53,"2026-11-24 15:53 orb $9986.60 | sold: CRM end of day -9.31, NFLX end of day -9.12 | after 15:00, no new buys || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $10000.00 "
+2026-11-25 09:37,"2026-11-25 09:37 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $10000.00 sip: orders CRM buy@191.68 (rvol 2.3), ARM short@145.94 (rvol 1.6), TLT buy@82.42 (rvol 1.6), GLD short@317.06 (rvol 1.5)"
+2026-11-25 09:53,2026-11-25 09:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9998.03 sip: SHORT 13 ARM @ 145.93; sip: BUY 24 TLT @ 82.42; sip: SHORT 6 GLD @ 317.06
+2026-11-25 10:08,"2026-11-25 10:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9924.14 sold ARM stop -47.89, TLT stop -3.03, CRM stop -19.33 sip: BUY 10 CRM @ 191.68"
+2026-11-25 10:23,2026-11-25 10:23 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9945.77 
+2026-11-25 10:39,2026-11-25 10:39 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9934.80 
+2026-11-25 10:53,2026-11-25 10:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9938.43 
+2026-11-25 11:08,2026-11-25 11:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9935.13 
+2026-11-25 11:23,2026-11-25 11:23 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9933.99 
+2026-11-25 11:38,2026-11-25 11:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9932.43 
+2026-11-25 11:53,2026-11-25 11:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9935.46 
+2026-11-25 12:08,2026-11-25 12:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 sold GLD stop -8.35 
+2026-11-25 12:22,2026-11-25 12:22 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 12:38,2026-11-25 12:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 12:53,2026-11-25 12:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 13:08,2026-11-25 13:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 13:22,2026-11-25 13:22 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 13:38,2026-11-25 13:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 13:53,2026-11-25 13:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 14:08,2026-11-25 14:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 14:22,2026-11-25 14:22 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 14:38,2026-11-25 14:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 14:53,2026-11-25 14:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 15:08,2026-11-25 15:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 15:22,2026-11-25 15:22 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 15:37,2026-11-25 15:37 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-25 15:53,2026-11-25 15:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 
+2026-11-26 09:38,2026-11-26 09:38 market closed or no data: nothing done
+2026-11-26 09:53,2026-11-26 09:53 market closed or no data: nothing done
+2026-11-26 10:08,2026-11-26 10:08 market closed or no data: nothing done
+2026-11-26 10:22,2026-11-26 10:22 market closed or no data: nothing done
+2026-11-26 10:38,2026-11-26 10:38 market closed or no data: nothing done
+2026-11-26 10:53,2026-11-26 10:53 market closed or no data: nothing done
+2026-11-26 11:08,2026-11-26 11:08 market closed or no data: nothing done
+2026-11-26 11:22,2026-11-26 11:22 market closed or no data: nothing done
+2026-11-26 11:37,2026-11-26 11:37 market closed or no data: nothing done
+2026-11-26 11:55,2026-11-26 11:55 market closed or no data: nothing done
+2026-11-26 12:09,2026-11-26 12:09 market closed or no data: nothing done
+2026-11-26 12:22,2026-11-26 12:22 market closed or no data: nothing done
+2026-11-26 12:53,2026-11-26 12:53 market closed or no data: nothing done
+2026-11-26 13:08,2026-11-26 13:08 market closed or no data: nothing done
+2026-11-26 13:23,2026-11-26 13:23 market closed or no data: nothing done
+2026-11-26 13:38,2026-11-26 13:38 market closed or no data: nothing done
+2026-11-26 13:53,2026-11-26 13:53 market closed or no data: nothing done
+2026-11-26 14:08,2026-11-26 14:08 market closed or no data: nothing done
+2026-11-26 14:23,2026-11-26 14:23 market closed or no data: nothing done
+2026-11-26 14:38,2026-11-26 14:38 market closed or no data: nothing done
+2026-11-26 15:00,2026-11-26 15:00 market closed or no data: nothing done
+2026-11-26 15:07,2026-11-26 15:07 market closed or no data: nothing done
+2026-11-26 15:23,2026-11-26 15:23 market closed or no data: nothing done
+2026-11-26 15:44,2026-11-26 15:44 market closed or no data: nothing done
+2026-11-26 15:53,2026-11-26 15:53 market closed or no data: nothing done
+2026-11-27 09:38,"2026-11-27 09:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 sip: orders LLY buy@1402.71 (rvol 1.9), ORCL short@104.90 (rvol 1.5)"
+2026-11-27 09:53,2026-11-27 09:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9926.07 sip: BUY 1 LLY @ 1402.71; sip: SHORT 19 ORCL @ 104.90
+2026-11-27 10:08,2026-11-27 10:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9909.25 sold LLY stop -19.56 
+2026-11-27 10:22,2026-11-27 10:22 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9900.13 
+2026-11-27 10:38,2026-11-27 10:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9895.86 
+2026-11-27 10:53,2026-11-27 10:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9878.94 
+2026-11-27 11:08,2026-11-27 11:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9872.49 
+2026-11-27 11:22,2026-11-27 11:22 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9873.53 
+2026-11-27 11:38,2026-11-27 11:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 sold ORCL stop -44.61 
+2026-11-27 11:53,2026-11-27 11:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 12:09,2026-11-27 12:09 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 12:22,2026-11-27 12:22 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 12:38,2026-11-27 12:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 12:53,2026-11-27 12:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 13:08,2026-11-27 13:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 13:22,2026-11-27 13:22 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 13:37,2026-11-27 13:37 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 13:53,2026-11-27 13:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 14:08,2026-11-27 14:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 14:22,2026-11-27 14:22 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 14:38,2026-11-27 14:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 14:52,2026-11-27 14:52 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 15:08,2026-11-27 15:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 15:22,2026-11-27 15:22 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
+2026-11-27 15:38,2026-11-27 15:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9857.23 
