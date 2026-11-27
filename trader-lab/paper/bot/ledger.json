@@ -6791,6 +6791,26 @@
    "status": "open",
    "setup": "reclaimed the 20-hour average",
    "id": "F-btctrend-2026-11-26 23:34Z-EURGBP=X"
+  },
+  {
+   "symbol": "GBPJPY=X",
+   "side": "buy",
+   "entry_est": 208.7050018310547,
+   "stop": 208.4447533743722,
+   "target": 209.22549874441964,
+   "risk_usd": 10.0,
+   "notional_usd": 8019.45,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 00:35Z",
+   "start_ts": 1795737600,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-noweekend-2026-11-27 00:35Z-GBPJPY=X"
   }
  ],
  "last_fx": {
@@ -6808,29 +6828,25 @@
   "LTC-USD": [],
   "DOT-USD": [],
   "BCH-USD": [],
-  "EURUSD=X": [
+  "EURUSD=X": [],
+  "GBPUSD=X": [],
+  "USDJPY=X": [
    "reclaim_ma20"
   ],
-  "GBPUSD=X": [],
-  "USDJPY=X": [],
   "AUDUSD=X": [],
   "USDCAD=X": [],
   "USDCHF=X": [],
-  "NZDUSD=X": [
-   "breakdown_20h"
-  ],
-  "EURJPY=X": [],
-  "GBPJPY=X": [],
-  "EURGBP=X": [
+  "NZDUSD=X": [],
+  "EURJPY=X": [
    "reclaim_ma20"
   ],
-  "AUDJPY=X": [
-   "breakdown_20h"
+  "GBPJPY=X": [
+   "reclaim_ma20"
   ],
+  "EURGBP=X": [],
+  "AUDJPY=X": [],
   "EURCHF=X": [],
-  "EURAUD=X": [
-   "reclaim_ma20"
-  ],
+  "EURAUD=X": [],
   "GBPCHF=X": [],
   "GC=F": [
    "breakout_20d"
