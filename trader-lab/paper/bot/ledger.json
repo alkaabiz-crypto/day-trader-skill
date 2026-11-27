@@ -6458,9 +6458,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 12:35Z",
    "start_ts": 1795694400,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-live-2026-11-26 12:35Z-USDJPY=X"
+   "id": "F-live-2026-11-26 12:35Z-USDJPY=X",
+   "entry": 159.298996,
+   "exit": 159.388,
+   "how": "time",
+   "pnl_usd": 2.42,
+   "closed_at": "2026-11-27 13:22Z"
   },
   {
    "symbol": "USDJPY=X",
@@ -6478,9 +6483,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 12:35Z",
    "start_ts": 1795694400,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-noweekend-2026-11-26 12:35Z-USDJPY=X"
+   "id": "F-noweekend-2026-11-26 12:35Z-USDJPY=X",
+   "entry": 159.298996,
+   "exit": 159.388,
+   "how": "time",
+   "pnl_usd": 2.42,
+   "closed_at": "2026-11-27 13:22Z"
   },
   {
    "symbol": "EURUSD=X",
@@ -7203,9 +7213,14 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 09:35Z",
    "start_ts": 1795770000,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
-   "id": "F-live-2026-11-27 09:35Z-GBPCHF=X"
+   "id": "F-live-2026-11-27 09:35Z-GBPCHF=X",
+   "entry": 1.09745,
+   "exit": 1.095519,
+   "how": "stop",
+   "pnl_usd": -11.47,
+   "closed_at": "2026-11-27 13:22Z"
   },
   {
    "symbol": "EURAUD=X",
@@ -7243,9 +7258,14 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 09:35Z",
    "start_ts": 1795770000,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
-   "id": "F-btctrend-2026-11-27 09:35Z-GBPCHF=X"
+   "id": "F-btctrend-2026-11-27 09:35Z-GBPCHF=X",
+   "entry": 1.09745,
+   "exit": 1.095519,
+   "how": "stop",
+   "pnl_usd": -11.47,
+   "closed_at": "2026-11-27 13:22Z"
   },
   {
    "symbol": "EURAUD=X",
@@ -7283,9 +7303,14 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 09:35Z",
    "start_ts": 1795770000,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
-   "id": "F-noweekend-2026-11-27 09:35Z-GBPCHF=X"
+   "id": "F-noweekend-2026-11-27 09:35Z-GBPCHF=X",
+   "entry": 1.09745,
+   "exit": 1.095519,
+   "how": "stop",
+   "pnl_usd": -11.47,
+   "closed_at": "2026-11-27 13:22Z"
   },
   {
    "symbol": "AVAX-USD",
@@ -7386,21 +7411,75 @@
    "status": "open",
    "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
    "id": "F-noweekend-2026-11-27 10:34Z-XRP-USD"
+  },
+  {
+   "symbol": "USDCHF=X",
+   "side": "buy",
+   "entry_est": 0.834559977054596,
+   "stop": 0.8329592538731438,
+   "target": 0.8377614234175,
+   "risk_usd": 10.0,
+   "notional_usd": 5213.64,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 13:22Z",
+   "start_ts": 1795784400,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-live-2026-11-27 13:22Z-USDCHF=X"
+  },
+  {
+   "symbol": "USDCHF=X",
+   "side": "buy",
+   "entry_est": 0.834559977054596,
+   "stop": 0.8329592538731438,
+   "target": 0.8377614234175,
+   "risk_usd": 10.0,
+   "notional_usd": 5213.64,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 13:22Z",
+   "start_ts": 1795784400,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-btctrend-2026-11-27 13:22Z-USDCHF=X"
+  },
+  {
+   "symbol": "USDCHF=X",
+   "side": "buy",
+   "entry_est": 0.834559977054596,
+   "stop": 0.8329592538731438,
+   "target": 0.8377614234175,
+   "risk_usd": 10.0,
+   "notional_usd": 5213.64,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 13:22Z",
+   "start_ts": 1795784400,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-noweekend-2026-11-27 13:22Z-USDCHF=X"
   }
  ],
  "last_fx": {
   "BTC-USD": [],
   "ETH-USD": [],
-  "SOL-USD": [
-   "overbought"
-  ],
-  "XRP-USD": [
-   "breakout_20d",
-   "overbought"
-  ],
+  "SOL-USD": [],
+  "XRP-USD": [],
   "BNB-USD": [],
   "DOGE-USD": [
-   "breakout_20d",
    "overbought"
   ],
   "ADA-USD": [],
@@ -7410,33 +7489,22 @@
   "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [],
-  "GBPUSD=X": [
-   "breakout_20d"
-  ],
+  "GBPUSD=X": [],
   "USDJPY=X": [],
-  "AUDUSD=X": [
-   "overbought"
-  ],
+  "AUDUSD=X": [],
   "USDCAD=X": [],
-  "USDCHF=X": [],
+  "USDCHF=X": [
+   "reclaim_ma20"
+  ],
   "NZDUSD=X": [],
   "EURJPY=X": [],
-  "GBPJPY=X": [
-   "breakout_20d",
-   "overbought"
-  ],
+  "GBPJPY=X": [],
   "EURGBP=X": [
    "oversold"
   ],
-  "AUDJPY=X": [
-   "breakout_20d",
-   "overbought"
-  ],
+  "AUDJPY=X": [],
   "EURCHF=X": [],
-  "EURAUD=X": [
-   "oversold",
-   "oversold_bounce"
-  ],
+  "EURAUD=X": [],
   "GBPCHF=X": [],
   "GC=F": [
    "breakout_20d"
