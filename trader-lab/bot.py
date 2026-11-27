@@ -252,9 +252,10 @@ def settle(led, now=None):
                     continue
                 sess = dict(lab.sessions_of(lab.parse_chart(lab.fetch_chart(t["symbol"]))))
                 bars = sess.get(t["date"])
-                if not bars or len(bars) <= paper.EXIT_SLOT:
+                xs = paper.exit_slot_for(t["date"])            # 12:55 on early-close days, else 15:55
+                if not bars or len(bars) <= xs:
                     continue
-                e, x, how = paper.fill_long(bars, t["slot"], t["stop"], t["target"])
+                e, x, how = paper.fill_long(bars, t["slot"], t["stop"], t["target"], exit_slot=xs)
                 notional = t["shares"] * e
                 pnl = t["shares"] * (x - e) - notional * t["cost_bps"] / 1e4
             else:

@@ -82,6 +82,12 @@ class Stocks(unittest.TestCase):
         self.assertFalse(bot.still_above({"or_high": 100.0}, 99.9))
         self.assertFalse(bot.still_above({"or_high": 100.0}, 0))
 
+    def test_early_close_days_exit_at_1255(self):
+        self.assertEqual(bot.paper.exit_slot_for("2026-11-27"), 40)      # day after Thanksgiving
+        self.assertEqual(bot.paper.exit_slot_for("2026-11-25"), 76)
+        bars = [{"o": 100.0, "h": 100.2, "l": 99.8, "c": 100.0}] * 42      # a half day: bars to 12:55
+        self.assertEqual(bot.paper.fill_long(bars, 10, 90.0, 110.0, exit_slot=40), (100.0, 100.0, "close"))
+
     def test_next_slot_has_no_look_ahead(self):
         self.assertEqual(bot.next_slot("10:17"), 10)    # 10:20 bar, not the 10:15 one already under way
         self.assertEqual(bot.next_slot("10:20"), 10)

@@ -1839,3 +1839,11 @@ random entries in the same indices do nearly as well.
 
 The indices paper bot now trades US indices only (the owner's choice). The Alpaca 7-year whole-market
 download is at 16 of 95 months and restarts after each container restart.
+
+### 2026-11-27: fix: stock trades on half days now settle (exit 12:55 instead of 15:55)
+
+Today is a 13:00 early close. The stock bot's and the scanner track's settlement waited for a 15:55 bar that a
+half-day session never has, so their trades would have stayed open forever. `paper.exit_slot_for(date)`
+now gives 12:55 on NYSE early-close days (`lab.nyse_early_close`) and 15:55 otherwise. `bot.py settle` and
+`paper.py log` use it, and a test was added. This is a mechanics fix, not a rule change: the rule was
+always "flat before the close".

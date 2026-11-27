@@ -42,6 +42,13 @@ FIELDS = ["date", "source", "instrument", "proxy", "side", "move_bps", "entry", 
 SIGNAL_SLOT = 71          # the 15:25-15:30 bar: its close is the 15:30 price
 ENTRY_SLOT = 72           # enter at the 15:30 bar's open
 EXIT_SLOT = 76            # out at the close of the 15:50-15:55 bar (15:55)
+EARLY_EXIT_SLOT = 40      # on a 13:00 early-close day: out at the close of the 12:50-12:55 bar (12:55)
+
+
+def exit_slot_for(date_iso):
+    """The flat-by slot for a session: 15:55 normally, 12:55 on NYSE early-close days (the session has
+    no bars after 13:00, so a 15:55 exit would never settle)."""
+    return EARLY_EXIT_SLOT if lab.nyse_early_close(datetime.date.fromisoformat(date_iso)) else EXIT_SLOT
 
 
 class PaperError(Exception):
@@ -334,9 +341,10 @@ def log_scanner(date, plans):
     for p in plans:
         sess = dict(lab.sessions_of(lab.parse_chart(lab.fetch_chart(p["symbol"]))))
         bars = sess.get(date)
-        if not bars or len(bars) <= EXIT_SLOT:
+        xs = exit_slot_for(date)
+        if not bars or len(bars) <= xs:
             continue
-        e, x, how = fill_long(bars, slot_of(p["decided_at"]), p["stop"], p["target"])
+        e, x, how = fill_long(bars, slot_of(p["decided_at"]), p["stop"], p["target"], exit_slot=xs)
         notional = p["shares"] * e
         cost_usd = notional * p["cost_bps"] / 1e4
         pnl = p["shares"] * (x - e) - cost_usd
