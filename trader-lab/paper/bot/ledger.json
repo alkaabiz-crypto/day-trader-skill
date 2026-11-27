@@ -9716,6 +9716,66 @@
    "status": "open",
    "setup": "20-hour closing-high breakout",
    "id": "F-noweekend-2026-11-27 20:34Z-USDJPY=X"
+  },
+  {
+   "symbol": "LTC-USD",
+   "side": "buy",
+   "entry_est": 44.36000061035156,
+   "stop": 43.725500515529085,
+   "target": 45.62900079999651,
+   "risk_usd": 10.0,
+   "notional_usd": 699.13,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 22:34Z",
+   "start_ts": 1795816800,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-live-2026-11-27 22:34Z-LTC-USD"
+  },
+  {
+   "symbol": "EURGBP=X",
+   "side": "sell",
+   "entry_est": 0.8344399929046631,
+   "stop": 0.8353057141814914,
+   "target": 0.8327085503510067,
+   "risk_usd": 10.0,
+   "notional_usd": 9638.67,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 22:34Z",
+   "start_ts": 1795816800,
+   "status": "open",
+   "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
+   "id": "F-live-2026-11-27 22:34Z-EURGBP=X"
+  },
+  {
+   "symbol": "EURJPY=X",
+   "side": "sell",
+   "entry_est": 174.38900756835938,
+   "stop": 174.61090360369002,
+   "target": 173.94521549769811,
+   "risk_usd": 10.0,
+   "notional_usd": 7859.04,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 22:34Z",
+   "start_ts": 1795816800,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-27 22:34Z-EURJPY=X"
   }
  ],
  "last_fx": {
@@ -9728,23 +9788,28 @@
   "ADA-USD": [],
   "AVAX-USD": [],
   "LINK-USD": [],
-  "LTC-USD": [],
+  "LTC-USD": [
+   "reclaim_ma20"
+  ],
   "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [
-   "oversold_bounce"
+   "oversold"
   ],
   "GBPUSD=X": [],
-  "USDJPY=X": [
-   "breakout_20d"
-  ],
+  "USDJPY=X": [],
   "AUDUSD=X": [],
   "USDCAD=X": [],
   "USDCHF=X": [],
   "NZDUSD=X": [],
-  "EURJPY=X": [],
+  "EURJPY=X": [
+   "breakdown_20h"
+  ],
   "GBPJPY=X": [],
-  "EURGBP=X": [],
+  "EURGBP=X": [
+   "oversold",
+   "breakdown_20h"
+  ],
   "AUDJPY=X": [],
   "EURCHF=X": [],
   "EURAUD=X": [],
