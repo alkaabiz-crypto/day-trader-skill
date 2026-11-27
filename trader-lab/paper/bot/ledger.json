@@ -9491,6 +9491,46 @@
    "status": "open",
    "setup": "reclaimed the 20-hour average",
    "id": "F-noweekend-2026-11-27 18:34Z-GBPCHF=X"
+  },
+  {
+   "symbol": "USDJPY=X",
+   "side": "buy",
+   "entry_est": 159.56300354003906,
+   "stop": 159.40603474208288,
+   "target": 159.87694113595145,
+   "risk_usd": 10.0,
+   "notional_usd": 10165.27,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 20:34Z",
+   "start_ts": 1795809600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-live-2026-11-27 20:34Z-USDJPY=X"
+  },
+  {
+   "symbol": "USDJPY=X",
+   "side": "buy",
+   "entry_est": 159.56300354003906,
+   "stop": 159.40603474208288,
+   "target": 159.87694113595145,
+   "risk_usd": 10.0,
+   "notional_usd": 10165.27,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 20:34Z",
+   "start_ts": 1795809600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-noweekend-2026-11-27 20:34Z-USDJPY=X"
   }
  ],
  "last_fx": {
@@ -9499,9 +9539,7 @@
   "SOL-USD": [],
   "XRP-USD": [],
   "BNB-USD": [],
-  "DOGE-USD": [
-   "reclaim_ma20"
-  ],
+  "DOGE-USD": [],
   "ADA-USD": [],
   "AVAX-USD": [],
   "LINK-USD": [],
@@ -9509,34 +9547,24 @@
   "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [
-   "oversold",
-   "breakdown_20h"
+   "oversold_bounce"
   ],
   "GBPUSD=X": [],
-  "USDJPY=X": [],
-  "AUDUSD=X": [],
-  "USDCAD=X": [
-   "reclaim_ma20"
+  "USDJPY=X": [
+   "breakout_20d"
   ],
+  "AUDUSD=X": [],
+  "USDCAD=X": [],
   "USDCHF=X": [],
   "NZDUSD=X": [],
-  "EURJPY=X": [
-   "breakdown_20h"
-  ],
+  "EURJPY=X": [],
   "GBPJPY=X": [],
   "EURGBP=X": [],
   "AUDJPY=X": [],
   "EURCHF=X": [],
   "EURAUD=X": [],
-  "GBPCHF=X": [
-   "reclaim_ma20"
-  ],
-  "GC=F": [
-   "breakout_20d"
-  ],
-  "SI=F": [
-   "breakout_20d",
-   "overbought"
-  ]
+  "GBPCHF=X": [],
+  "GC=F": [],
+  "SI=F": []
  }
 }
