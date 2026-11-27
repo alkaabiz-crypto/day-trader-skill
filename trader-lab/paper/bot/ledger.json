@@ -6858,9 +6858,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 20:40Z",
    "start_ts": 1795723200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-btctrend-2026-11-26 20:40Z-EURUSD=X"
+   "id": "F-btctrend-2026-11-26 20:40Z-EURUSD=X",
+   "entry": 1.097454,
+   "exit": 1.09624,
+   "how": "stop",
+   "pnl_usd": -12.26,
+   "closed_at": "2026-11-27 10:34Z"
   },
   {
    "symbol": "BTC-USD",
@@ -7281,6 +7286,106 @@
    "status": "open",
    "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
    "id": "F-noweekend-2026-11-27 09:35Z-GBPCHF=X"
+  },
+  {
+   "symbol": "AVAX-USD",
+   "side": "buy",
+   "entry_est": 6.802000045776367,
+   "stop": 6.728500008583069,
+   "target": 6.949000120162964,
+   "risk_usd": 10.0,
+   "notional_usd": 925.44,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 10:34Z",
+   "start_ts": 1795773600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-live-2026-11-27 10:34Z-AVAX-USD"
+  },
+  {
+   "symbol": "XRP-USD",
+   "side": "buy",
+   "entry_est": 0.9775999784469604,
+   "stop": 0.9666071172271457,
+   "target": 0.9995857008865902,
+   "risk_usd": 10.0,
+   "notional_usd": 889.3,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 10:34Z",
+   "start_ts": 1795773600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
+   "id": "F-live-2026-11-27 10:34Z-XRP-USD"
+  },
+  {
+   "symbol": "EURUSD=X",
+   "side": "sell",
+   "entry_est": 1.0964912176132202,
+   "stop": 1.0977430939674377,
+   "target": 1.0939874649047852,
+   "risk_usd": 10.0,
+   "notional_usd": 8758.78,
+   "cost_bps": 2.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 10:34Z",
+   "start_ts": 1795773600,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-27 10:34Z-EURUSD=X"
+  },
+  {
+   "symbol": "AVAX-USD",
+   "side": "buy",
+   "entry_est": 6.802000045776367,
+   "stop": 6.728500008583069,
+   "target": 6.949000120162964,
+   "risk_usd": 10.0,
+   "notional_usd": 925.44,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 10:34Z",
+   "start_ts": 1795773600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout",
+   "id": "F-noweekend-2026-11-27 10:34Z-AVAX-USD"
+  },
+  {
+   "symbol": "XRP-USD",
+   "side": "buy",
+   "entry_est": 0.9775999784469604,
+   "stop": 0.9666071172271457,
+   "target": 0.9995857008865902,
+   "risk_usd": 10.0,
+   "notional_usd": 889.3,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 10:34Z",
+   "start_ts": 1795773600,
+   "status": "open",
+   "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
+   "id": "F-noweekend-2026-11-27 10:34Z-XRP-USD"
   }
  ],
  "last_fx": {
@@ -7291,6 +7396,7 @@
    "overbought"
   ],
   "XRP-USD": [
+   "breakout_20d",
    "overbought"
   ],
   "BNB-USD": [],
@@ -7299,26 +7405,27 @@
    "overbought"
   ],
   "ADA-USD": [],
-  "AVAX-USD": [],
+  "AVAX-USD": [
+   "breakout_20d"
+  ],
   "LINK-USD": [],
   "LTC-USD": [],
   "DOT-USD": [],
   "BCH-USD": [],
-  "EURUSD=X": [],
-  "GBPUSD=X": [],
+  "EURUSD=X": [
+   "breakdown_20h"
+  ],
+  "GBPUSD=X": [
+   "breakout_20d"
+  ],
   "USDJPY=X": [
    "breakout_20d"
   ],
   "AUDUSD=X": [
-   "breakout_20d",
    "overbought"
   ],
-  "USDCAD=X": [
-   "reclaim_ma20"
-  ],
-  "USDCHF=X": [
-   "breakout_20d"
-  ],
+  "USDCAD=X": [],
+  "USDCHF=X": [],
   "NZDUSD=X": [],
   "EURJPY=X": [],
   "GBPJPY=X": [
@@ -7332,18 +7439,12 @@
    "breakout_20d",
    "overbought"
   ],
-  "EURCHF=X": [
-   "breakout_20d",
-   "overbought"
-  ],
+  "EURCHF=X": [],
   "EURAUD=X": [
    "oversold",
-   "breakdown_20h"
+   "oversold_bounce"
   ],
-  "GBPCHF=X": [
-   "breakout_20d",
-   "overbought"
-  ],
+  "GBPCHF=X": [],
   "GC=F": [
    "breakout_20d"
   ],
