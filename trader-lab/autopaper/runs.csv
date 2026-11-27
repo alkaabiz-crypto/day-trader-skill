@@ -65,3 +65,4 @@ time,summary
 2026-11-26 15:53,2026-11-26 15:53 market closed or no data: nothing done
 2026-11-27 09:38,"2026-11-27 09:38 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9921.40 sip: orders LLY buy@1402.71 (rvol 1.9), ORCL short@104.90 (rvol 1.5)"
 2026-11-27 09:53,2026-11-27 09:53 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9926.07 sip: BUY 1 LLY @ 1402.71; sip: SHORT 19 ORCL @ 104.90
+2026-11-27 10:08,2026-11-27 10:08 orb $9986.60 | sold: none | orb: no new buys (the owner kept bot.py as the one stock bot) || fed $10000.00 fed: waiting (next FOMC 2026-12-09) || sip $9909.25 sold LLY stop -19.56 
