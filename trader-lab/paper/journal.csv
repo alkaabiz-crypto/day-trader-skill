@@ -13,3 +13,4 @@ date,source,instrument,proxy,side,move_bps,entry,exit,stopped,gross_bps,cost_bps
 2026-11-25,scanner-sim,ENPH,ENPH,buy,0.18,19.496,19.78,0,145.67,2.3,143.37,779.84,11.18
 2026-11-25,scanner-sim,VIST,VIST,buy,0.2,49.075,48.7,1,-76.41,2.3,-78.71,883.35,-6.95
 2026-11-25,scanner-sim,ADM,ADM,buy,0.27,66.38,67.3,0,138.6,2.3,136.3,730.18,9.95
+2026-11-27,scanner-day,,,,,,,,,,,,
