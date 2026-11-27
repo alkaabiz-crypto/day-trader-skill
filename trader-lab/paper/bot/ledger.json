@@ -5793,9 +5793,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 02:34Z",
    "start_ts": 1795658400,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-live-2026-11-26 02:34Z-XRP-USD"
+   "id": "F-live-2026-11-26 02:34Z-XRP-USD",
+   "entry": 0.9512,
+   "exit": 0.9481,
+   "how": "time",
+   "pnl_usd": -2.52,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "DOT-USD",
@@ -5813,9 +5818,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 02:34Z",
    "start_ts": 1795658400,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-live-2026-11-26 02:34Z-DOT-USD"
+   "id": "F-live-2026-11-26 02:34Z-DOT-USD",
+   "entry": 0.6655,
+   "exit": 0.6776,
+   "how": "time",
+   "pnl_usd": 7.33,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "XRP-USD",
@@ -5833,9 +5843,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 02:34Z",
    "start_ts": 1795658400,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-noweekend-2026-11-26 02:34Z-XRP-USD"
+   "id": "F-noweekend-2026-11-26 02:34Z-XRP-USD",
+   "entry": 0.9512,
+   "exit": 0.9481,
+   "how": "time",
+   "pnl_usd": -2.52,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "DOT-USD",
@@ -5853,9 +5868,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 02:34Z",
    "start_ts": 1795658400,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-noweekend-2026-11-26 02:34Z-DOT-USD"
+   "id": "F-noweekend-2026-11-26 02:34Z-DOT-USD",
+   "entry": 0.6655,
+   "exit": 0.6776,
+   "how": "time",
+   "pnl_usd": 7.33,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "AUDJPY=X",
@@ -5873,9 +5893,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 03:34Z",
    "start_ts": 1795662000,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-live-2026-11-26 03:34Z-AUDJPY=X"
+   "id": "F-live-2026-11-26 03:34Z-AUDJPY=X",
+   "entry": 105.689003,
+   "exit": 106.113998,
+   "how": "time",
+   "pnl_usd": 9.18,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "AUDUSD=X",
@@ -5893,9 +5918,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 03:34Z",
    "start_ts": 1795662000,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-live-2026-11-26 03:34Z-AUDUSD=X"
+   "id": "F-live-2026-11-26 03:34Z-AUDUSD=X",
+   "entry": 0.664275,
+   "exit": 0.666756,
+   "how": "time",
+   "pnl_usd": 13.68,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "AUDJPY=X",
@@ -5913,9 +5943,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 03:34Z",
    "start_ts": 1795662000,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-btctrend-2026-11-26 03:34Z-AUDJPY=X"
+   "id": "F-btctrend-2026-11-26 03:34Z-AUDJPY=X",
+   "entry": 105.689003,
+   "exit": 106.113998,
+   "how": "time",
+   "pnl_usd": 9.18,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "AUDJPY=X",
@@ -5933,9 +5968,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 03:34Z",
    "start_ts": 1795662000,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-noweekend-2026-11-26 03:34Z-AUDJPY=X"
+   "id": "F-noweekend-2026-11-26 03:34Z-AUDJPY=X",
+   "entry": 105.689003,
+   "exit": 106.113998,
+   "how": "time",
+   "pnl_usd": 9.18,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "AUDUSD=X",
@@ -5953,9 +5993,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 03:34Z",
    "start_ts": 1795662000,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-noweekend-2026-11-26 03:34Z-AUDUSD=X"
+   "id": "F-noweekend-2026-11-26 03:34Z-AUDUSD=X",
+   "entry": 0.664275,
+   "exit": 0.666756,
+   "how": "time",
+   "pnl_usd": 13.68,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "GC=F",
@@ -6018,9 +6063,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 05:34Z",
    "start_ts": 1795669200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-btctrend-2026-11-26 05:34Z-USDJPY=X"
+   "id": "F-btctrend-2026-11-26 05:34Z-USDJPY=X",
+   "entry": 159.177002,
+   "exit": 159.279999,
+   "how": "time",
+   "pnl_usd": 2.27,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "GC=F",
@@ -6083,9 +6133,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 07:34Z",
    "start_ts": 1795676400,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-26 07:34Z-EURJPY=X"
+   "id": "F-live-2026-11-26 07:34Z-EURJPY=X",
+   "entry": 174.554001,
+   "exit": 174.921997,
+   "how": "time",
+   "pnl_usd": 10.78,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "USDCAD=X",
@@ -6103,9 +6158,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 07:34Z",
    "start_ts": 1795676400,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-26 07:34Z-USDCAD=X"
+   "id": "F-live-2026-11-26 07:34Z-USDCAD=X",
+   "entry": 1.42225,
+   "exit": 1.42377,
+   "how": "time",
+   "pnl_usd": 5.99,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "EURJPY=X",
@@ -6123,9 +6183,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 07:34Z",
    "start_ts": 1795676400,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-btctrend-2026-11-26 07:34Z-EURJPY=X"
+   "id": "F-btctrend-2026-11-26 07:34Z-EURJPY=X",
+   "entry": 174.554001,
+   "exit": 174.921997,
+   "how": "time",
+   "pnl_usd": 10.78,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "USDCAD=X",
@@ -6143,9 +6208,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 07:34Z",
    "start_ts": 1795676400,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-btctrend-2026-11-26 07:34Z-USDCAD=X"
+   "id": "F-btctrend-2026-11-26 07:34Z-USDCAD=X",
+   "entry": 1.42225,
+   "exit": 1.42377,
+   "how": "time",
+   "pnl_usd": 5.99,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "EURJPY=X",
@@ -6163,9 +6233,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 07:34Z",
    "start_ts": 1795676400,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-26 07:34Z-EURJPY=X"
+   "id": "F-noweekend-2026-11-26 07:34Z-EURJPY=X",
+   "entry": 174.554001,
+   "exit": 174.921997,
+   "how": "time",
+   "pnl_usd": 10.78,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "USDCAD=X",
@@ -6183,9 +6258,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 07:34Z",
    "start_ts": 1795676400,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-26 07:34Z-USDCAD=X"
+   "id": "F-noweekend-2026-11-26 07:34Z-USDCAD=X",
+   "entry": 1.42225,
+   "exit": 1.42377,
+   "how": "time",
+   "pnl_usd": 5.99,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "GBPCHF=X",
@@ -6203,9 +6283,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 09:35Z",
    "start_ts": 1795683600,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-live-2026-11-26 09:35Z-GBPCHF=X"
+   "id": "F-live-2026-11-26 09:35Z-GBPCHF=X",
+   "entry": 1.09204,
+   "exit": 1.096148,
+   "how": "target",
+   "pnl_usd": 18.41,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "USDCHF=X",
@@ -6223,9 +6308,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 09:35Z",
    "start_ts": 1795683600,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-live-2026-11-26 09:35Z-USDCHF=X"
+   "id": "F-live-2026-11-26 09:35Z-USDCHF=X",
+   "entry": 0.83322,
+   "exit": 0.83575,
+   "how": "target",
+   "pnl_usd": 18.43,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "GBPCHF=X",
@@ -6243,9 +6333,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 09:35Z",
    "start_ts": 1795683600,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-btctrend-2026-11-26 09:35Z-GBPCHF=X"
+   "id": "F-btctrend-2026-11-26 09:35Z-GBPCHF=X",
+   "entry": 1.09204,
+   "exit": 1.096148,
+   "how": "target",
+   "pnl_usd": 18.41,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "GBPCHF=X",
@@ -6263,9 +6358,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 09:35Z",
    "start_ts": 1795683600,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-noweekend-2026-11-26 09:35Z-GBPCHF=X"
+   "id": "F-noweekend-2026-11-26 09:35Z-GBPCHF=X",
+   "entry": 1.09204,
+   "exit": 1.096148,
+   "how": "target",
+   "pnl_usd": 18.41,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "USDCHF=X",
@@ -6283,9 +6383,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 09:35Z",
    "start_ts": 1795683600,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-noweekend-2026-11-26 09:35Z-USDCHF=X"
+   "id": "F-noweekend-2026-11-26 09:35Z-USDCHF=X",
+   "entry": 0.83322,
+   "exit": 0.83575,
+   "how": "target",
+   "pnl_usd": 18.43,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "ETH-USD",
@@ -6468,9 +6573,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 16:34Z",
    "start_ts": 1795708800,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-low breakdown",
-   "id": "F-live-2026-11-26 16:34Z-NZDUSD=X"
+   "id": "F-live-2026-11-26 16:34Z-NZDUSD=X",
+   "entry": 0.547256,
+   "exit": 0.548023,
+   "how": "stop",
+   "pnl_usd": -10.93,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "BNB-USD",
@@ -6538,9 +6648,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 16:34Z",
    "start_ts": 1795708800,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-low breakdown",
-   "id": "F-noweekend-2026-11-26 16:34Z-NZDUSD=X"
+   "id": "F-noweekend-2026-11-26 16:34Z-NZDUSD=X",
+   "entry": 0.547256,
+   "exit": 0.548023,
+   "how": "stop",
+   "pnl_usd": -10.93,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "GBPUSD=X",
@@ -6618,9 +6733,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 19:35Z",
    "start_ts": 1795719600,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-live-2026-11-26 19:35Z-LINK-USD"
+   "id": "F-live-2026-11-26 19:35Z-LINK-USD",
+   "entry": 9.258,
+   "exit": 9.487358,
+   "how": "target",
+   "pnl_usd": 19.23,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "AVAX-USD",
@@ -6638,9 +6758,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 19:35Z",
    "start_ts": 1795719600,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-26 19:35Z-AVAX-USD"
+   "id": "F-live-2026-11-26 19:35Z-AVAX-USD",
+   "entry": 6.642,
+   "exit": 6.569929,
+   "how": "stop",
+   "pnl_usd": -11.5,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "LINK-USD",
@@ -6658,9 +6783,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 19:35Z",
    "start_ts": 1795719600,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-noweekend-2026-11-26 19:35Z-LINK-USD"
+   "id": "F-noweekend-2026-11-26 19:35Z-LINK-USD",
+   "entry": 9.258,
+   "exit": 9.487358,
+   "how": "target",
+   "pnl_usd": 19.23,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "AVAX-USD",
@@ -6678,9 +6808,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 19:35Z",
    "start_ts": 1795719600,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-26 19:35Z-AVAX-USD"
+   "id": "F-noweekend-2026-11-26 19:35Z-AVAX-USD",
+   "entry": 6.642,
+   "exit": 6.569929,
+   "how": "stop",
+   "pnl_usd": -11.5,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "BTC-USD",
@@ -6698,9 +6833,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 20:40Z",
    "start_ts": 1795723200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-26 20:40Z-BTC-USD"
+   "id": "F-live-2026-11-26 20:40Z-BTC-USD",
+   "entry": 60621.03125,
+   "exit": 61766.611886,
+   "how": "target",
+   "pnl_usd": 19.41,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "EURUSD=X",
@@ -6738,9 +6878,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 20:40Z",
    "start_ts": 1795723200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-26 20:40Z-BTC-USD"
+   "id": "F-noweekend-2026-11-26 20:40Z-BTC-USD",
+   "entry": 60621.03125,
+   "exit": 61766.611886,
+   "how": "target",
+   "pnl_usd": 19.41,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "SOL-USD",
@@ -6758,9 +6903,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 22:36Z",
    "start_ts": 1795730400,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-live-2026-11-26 22:36Z-SOL-USD"
+   "id": "F-live-2026-11-26 22:36Z-SOL-USD",
+   "entry": 71.550003,
+   "exit": 73.171429,
+   "how": "target",
+   "pnl_usd": 18.53,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "EURAUD=X",
@@ -6778,9 +6928,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 23:34Z",
    "start_ts": 1795734000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-26 23:34Z-EURAUD=X"
+   "id": "F-live-2026-11-26 23:34Z-EURAUD=X",
+   "entry": 1.65409,
+   "exit": 1.651549,
+   "how": "stop",
+   "pnl_usd": -11.06,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "XRP-USD",
@@ -6798,9 +6953,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 23:34Z",
    "start_ts": 1795734000,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-low breakdown",
-   "id": "F-btctrend-2026-11-26 23:34Z-XRP-USD"
+   "id": "F-btctrend-2026-11-26 23:34Z-XRP-USD",
+   "entry": 0.9462,
+   "exit": 0.955793,
+   "how": "stop",
+   "pnl_usd": -11.9,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "EURGBP=X",
@@ -6818,9 +6978,14 @@
    "date": "2026-11-26",
    "opened_at": "2026-11-26 23:34Z",
    "start_ts": 1795734000,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-btctrend-2026-11-26 23:34Z-EURGBP=X"
+   "id": "F-btctrend-2026-11-26 23:34Z-EURGBP=X",
+   "entry": 0.83704,
+   "exit": 0.836326,
+   "how": "stop",
+   "pnl_usd": -13.91,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "GBPJPY=X",
@@ -6838,9 +7003,14 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 00:35Z",
    "start_ts": 1795737600,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-27 00:35Z-GBPJPY=X"
+   "id": "F-noweekend-2026-11-27 00:35Z-GBPJPY=X",
+   "entry": 208.761993,
+   "exit": 209.225499,
+   "how": "target",
+   "pnl_usd": 15.4,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "ADA-USD",
@@ -6858,9 +7028,14 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 01:35Z",
    "start_ts": 1795741200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-27 01:35Z-ADA-USD"
+   "id": "F-live-2026-11-27 01:35Z-ADA-USD",
+   "entry": 0.14929,
+   "exit": 0.152832,
+   "how": "target",
+   "pnl_usd": 18.74,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "ETH-USD",
@@ -6878,9 +7053,14 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 01:35Z",
    "start_ts": 1795741200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-27 01:35Z-ETH-USD"
+   "id": "F-live-2026-11-27 01:35Z-ETH-USD",
+   "entry": 1699.199951,
+   "exit": 1732.154218,
+   "how": "target",
+   "pnl_usd": 19.17,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "NZDUSD=X",
@@ -6898,9 +7078,14 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 01:35Z",
    "start_ts": 1795741200,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-low breakdown",
-   "id": "F-btctrend-2026-11-27 01:35Z-NZDUSD=X"
+   "id": "F-btctrend-2026-11-27 01:35Z-NZDUSD=X",
+   "entry": 0.546508,
+   "exit": 0.547355,
+   "how": "stop",
+   "pnl_usd": -16.55,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "USDCHF=X",
@@ -6918,9 +7103,14 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 01:35Z",
    "start_ts": 1795741200,
-   "status": "open",
+   "status": "closed",
    "setup": "20-hour closing-high breakout",
-   "id": "F-btctrend-2026-11-27 01:35Z-USDCHF=X"
+   "id": "F-btctrend-2026-11-27 01:35Z-USDCHF=X",
+   "entry": 0.83478,
+   "exit": 0.833505,
+   "how": "stop",
+   "pnl_usd": -11.49,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "ADA-USD",
@@ -6938,9 +7128,14 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 01:35Z",
    "start_ts": 1795741200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-27 01:35Z-ADA-USD"
+   "id": "F-noweekend-2026-11-27 01:35Z-ADA-USD",
+   "entry": 0.14929,
+   "exit": 0.152832,
+   "how": "target",
+   "pnl_usd": 18.74,
+   "closed_at": "2026-11-27 09:35Z"
   },
   {
    "symbol": "ETH-USD",
@@ -6958,58 +7153,197 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 01:35Z",
    "start_ts": 1795741200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-noweekend-2026-11-27 01:35Z-ETH-USD"
+   "id": "F-noweekend-2026-11-27 01:35Z-ETH-USD",
+   "entry": 1699.199951,
+   "exit": 1732.154218,
+   "how": "target",
+   "pnl_usd": 19.17,
+   "closed_at": "2026-11-27 09:35Z"
+  },
+  {
+   "symbol": "EURAUD=X",
+   "side": "sell",
+   "entry_est": 1.6420700550079346,
+   "stop": 1.6455382662160056,
+   "target": 1.6351336325917925,
+   "risk_usd": 10.0,
+   "notional_usd": 4734.63,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 09:35Z",
+   "start_ts": 1795770000,
+   "status": "open",
+   "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
+   "id": "F-live-2026-11-27 09:35Z-EURAUD=X"
+  },
+  {
+   "symbol": "GBPCHF=X",
+   "side": "buy",
+   "entry_est": 1.0974899530410767,
+   "stop": 1.0955185038702828,
+   "target": 1.1014328513826643,
+   "risk_usd": 10.0,
+   "notional_usd": 5566.92,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 09:35Z",
+   "start_ts": 1795770000,
+   "status": "open",
+   "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
+   "id": "F-live-2026-11-27 09:35Z-GBPCHF=X"
+  },
+  {
+   "symbol": "EURAUD=X",
+   "side": "sell",
+   "entry_est": 1.6420700550079346,
+   "stop": 1.6455382662160056,
+   "target": 1.6351336325917925,
+   "risk_usd": 10.0,
+   "notional_usd": 4734.63,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 09:35Z",
+   "start_ts": 1795770000,
+   "status": "open",
+   "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-27 09:35Z-EURAUD=X"
+  },
+  {
+   "symbol": "GBPCHF=X",
+   "side": "buy",
+   "entry_est": 1.0974899530410767,
+   "stop": 1.0955185038702828,
+   "target": 1.1014328513826643,
+   "risk_usd": 10.0,
+   "notional_usd": 5566.92,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 09:35Z",
+   "start_ts": 1795770000,
+   "status": "open",
+   "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
+   "id": "F-btctrend-2026-11-27 09:35Z-GBPCHF=X"
+  },
+  {
+   "symbol": "EURAUD=X",
+   "side": "sell",
+   "entry_est": 1.6420700550079346,
+   "stop": 1.6455382662160056,
+   "target": 1.6351336325917925,
+   "risk_usd": 10.0,
+   "notional_usd": 4734.63,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 09:35Z",
+   "start_ts": 1795770000,
+   "status": "open",
+   "setup": "oversold (RSI under 30), 20-hour closing-low breakdown",
+   "id": "F-noweekend-2026-11-27 09:35Z-EURAUD=X"
+  },
+  {
+   "symbol": "GBPCHF=X",
+   "side": "buy",
+   "entry_est": 1.0974899530410767,
+   "stop": 1.0955185038702828,
+   "target": 1.1014328513826643,
+   "risk_usd": 10.0,
+   "notional_usd": 5566.92,
+   "cost_bps": 3.0,
+   "swap_bps": 0.5,
+   "kind": "forex",
+   "track": "fxcrypto",
+   "variant": "noweekend",
+   "date": "2026-11-27",
+   "opened_at": "2026-11-27 09:35Z",
+   "start_ts": 1795770000,
+   "status": "open",
+   "setup": "20-hour closing-high breakout, overbought (RSI over 70)",
+   "id": "F-noweekend-2026-11-27 09:35Z-GBPCHF=X"
   }
  ],
  "last_fx": {
-  "BTC-USD": [
-   "reclaim_ma20"
+  "BTC-USD": [],
+  "ETH-USD": [],
+  "SOL-USD": [
+   "breakout_20d",
+   "overbought"
   ],
-  "ETH-USD": [
-   "reclaim_ma20"
+  "XRP-USD": [
+   "overbought"
   ],
-  "SOL-USD": [],
-  "XRP-USD": [],
-  "BNB-USD": [
-   "reclaim_ma20"
+  "BNB-USD": [],
+  "DOGE-USD": [
+   "breakout_20d",
+   "overbought"
   ],
-  "DOGE-USD": [],
-  "ADA-USD": [
-   "reclaim_ma20"
-  ],
+  "ADA-USD": [],
   "AVAX-USD": [],
   "LINK-USD": [],
   "LTC-USD": [],
   "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [],
-  "GBPUSD=X": [
-   "breakdown_20h"
-  ],
+  "GBPUSD=X": [],
   "USDJPY=X": [
    "breakout_20d"
   ],
-  "AUDUSD=X": [],
+  "AUDUSD=X": [
+   "breakout_20d",
+   "overbought"
+  ],
   "USDCAD=X": [
-   "breakout_20d"
+   "reclaim_ma20"
   ],
   "USDCHF=X": [
    "breakout_20d"
   ],
-  "NZDUSD=X": [
+  "NZDUSD=X": [],
+  "EURJPY=X": [],
+  "GBPJPY=X": [
+   "breakout_20d"
+  ],
+  "EURGBP=X": [
+   "oversold",
    "breakdown_20h"
   ],
-  "EURJPY=X": [],
-  "GBPJPY=X": [],
-  "EURGBP=X": [],
   "AUDJPY=X": [
-   "reclaim_ma20"
+   "breakout_20d",
+   "overbought"
   ],
-  "EURCHF=X": [],
-  "EURAUD=X": [],
-  "GBPCHF=X": [],
+  "EURCHF=X": [
+   "breakout_20d",
+   "overbought"
+  ],
+  "EURAUD=X": [
+   "oversold",
+   "breakdown_20h"
+  ],
+  "GBPCHF=X": [
+   "breakout_20d",
+   "overbought"
+  ],
   "GC=F": [
    "breakout_20d"
   ],
