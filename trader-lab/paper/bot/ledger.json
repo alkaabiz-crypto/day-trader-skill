@@ -7832,10 +7832,15 @@
    "opened_at": "2026-11-27 15:35Z",
    "decided_at": "10:35",
    "slot": 13,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 8.38,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-ANT"
+   "id": "S-live-2026-11-27-ANT",
+   "entry": 89.910004,
+   "exit": 92.385002,
+   "how": "close",
+   "pnl_usd": 4.89,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "SNDK",
@@ -7857,10 +7862,15 @@
    "opened_at": "2026-11-27 15:35Z",
    "decided_at": "10:35",
    "slot": 13,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.37,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-SNDK"
+   "id": "S-live-2026-11-27-SNDK",
+   "entry": 81.974998,
+   "exit": 83.964996,
+   "how": "close",
+   "pnl_usd": 3.29,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "META",
@@ -7882,10 +7892,15 @@
    "opened_at": "2026-11-27 15:35Z",
    "decided_at": "10:35",
    "slot": 13,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 7.77,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-META"
+   "id": "S-live-2026-11-27-META",
+   "entry": 631.780029,
+   "exit": 629.039978,
+   "how": "close",
+   "pnl_usd": -3.28,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "AMZN",
@@ -7907,10 +7922,15 @@
    "opened_at": "2026-11-27 15:35Z",
    "decided_at": "10:35",
    "slot": 13,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.55,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-AMZN"
+   "id": "S-live-2026-11-27-AMZN",
+   "entry": 251.669998,
+   "exit": 254.190002,
+   "how": "close",
+   "pnl_usd": 6.76,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "COHR",
@@ -7982,10 +8002,15 @@
    "opened_at": "2026-11-27 15:35Z",
    "decided_at": "10:35",
    "slot": 13,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.62,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-TXN"
+   "id": "S-live-2026-11-27-TXN",
+   "entry": 274.910004,
+   "exit": 278.61499,
+   "how": "close",
+   "pnl_usd": 5.87,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "MA",
@@ -8082,10 +8107,15 @@
    "opened_at": "2026-11-27 15:35Z",
    "decided_at": "10:35",
    "slot": 13,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 8.38,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-ANT"
+   "id": "S-fresh-2026-11-27-ANT",
+   "entry": 89.910004,
+   "exit": 92.385002,
+   "how": "close",
+   "pnl_usd": 4.89,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "SNDK",
@@ -8107,10 +8137,15 @@
    "opened_at": "2026-11-27 15:35Z",
    "decided_at": "10:35",
    "slot": 13,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.37,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-SNDK"
+   "id": "S-fresh-2026-11-27-SNDK",
+   "entry": 81.974998,
+   "exit": 83.964996,
+   "how": "close",
+   "pnl_usd": 3.29,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "META",
@@ -8132,10 +8167,15 @@
    "opened_at": "2026-11-27 15:35Z",
    "decided_at": "10:35",
    "slot": 13,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 7.77,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-META"
+   "id": "S-fresh-2026-11-27-META",
+   "entry": 631.780029,
+   "exit": 629.039978,
+   "how": "close",
+   "pnl_usd": -3.28,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "AMZN",
@@ -8157,10 +8197,15 @@
    "opened_at": "2026-11-27 15:35Z",
    "decided_at": "10:35",
    "slot": 13,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.55,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-AMZN"
+   "id": "S-fresh-2026-11-27-AMZN",
+   "entry": 251.669998,
+   "exit": 254.190002,
+   "how": "close",
+   "pnl_usd": 6.76,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "COHR",
@@ -8232,10 +8277,15 @@
    "opened_at": "2026-11-27 15:35Z",
    "decided_at": "10:35",
    "slot": 13,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.62,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-TXN"
+   "id": "S-fresh-2026-11-27-TXN",
+   "entry": 274.910004,
+   "exit": 278.61499,
+   "how": "close",
+   "pnl_usd": 5.87,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "MA",
@@ -8332,10 +8382,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 8.7,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-TSLA"
+   "id": "S-live-2026-11-27-TSLA",
+   "entry": 398.190002,
+   "exit": 398.75,
+   "how": "close",
+   "pnl_usd": 0.47,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "AVGO",
@@ -8357,10 +8412,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 8.44,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-AVGO"
+   "id": "S-live-2026-11-27-AVGO",
+   "entry": 310.929993,
+   "exit": 310.600006,
+   "how": "close",
+   "pnl_usd": -2.34,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "PLTR",
@@ -8382,10 +8442,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 7.46,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-PLTR"
+   "id": "S-live-2026-11-27-PLTR",
+   "entry": 170.979996,
+   "exit": 171.520004,
+   "how": "close",
+   "pnl_usd": 1.0,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "CRWD",
@@ -8407,10 +8472,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 5.21,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-CRWD"
+   "id": "S-live-2026-11-27-CRWD",
+   "entry": 213.149994,
+   "exit": 215.870499,
+   "how": "close",
+   "pnl_usd": 2.14,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "DE",
@@ -8457,10 +8527,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 5.14,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-QCOM"
+   "id": "S-live-2026-11-27-QCOM",
+   "entry": 177.0,
+   "exit": 177.005005,
+   "how": "close",
+   "pnl_usd": -0.05,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "JPM",
@@ -8557,10 +8632,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 5.68,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-ALAB"
+   "id": "S-live-2026-11-27-ALAB",
+   "entry": 199.5,
+   "exit": 200.360001,
+   "how": "close",
+   "pnl_usd": 0.15,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "TSLA",
@@ -8582,10 +8662,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 8.7,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-TSLA"
+   "id": "S-fresh-2026-11-27-TSLA",
+   "entry": 398.190002,
+   "exit": 398.75,
+   "how": "close",
+   "pnl_usd": 0.47,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "PLTR",
@@ -8607,10 +8692,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 7.46,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-PLTR"
+   "id": "S-fresh-2026-11-27-PLTR",
+   "entry": 170.979996,
+   "exit": 171.520004,
+   "how": "close",
+   "pnl_usd": 1.0,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "JPM",
@@ -8707,10 +8797,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 5.68,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-ALAB"
+   "id": "S-fresh-2026-11-27-ALAB",
+   "entry": 199.5,
+   "exit": 200.360001,
+   "how": "close",
+   "pnl_usd": 0.15,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "CRDO",
@@ -8732,10 +8827,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.99,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-CRDO"
+   "id": "S-fresh-2026-11-27-CRDO",
+   "entry": 111.540001,
+   "exit": 112.18,
+   "how": "close",
+   "pnl_usd": 1.74,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "PM",
@@ -8807,10 +8907,15 @@
    "opened_at": "2026-11-27 16:18Z",
    "decided_at": "11:18",
    "slot": 22,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 6.69,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-ABNB"
+   "id": "S-fresh-2026-11-27-ABNB",
+   "entry": 178.869995,
+   "exit": 177.589996,
+   "how": "close",
+   "pnl_usd": -2.83,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "NZDUSD=X",
@@ -8892,10 +8997,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 7.35,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-SPCX"
+   "id": "S-live-2026-11-27-SPCX",
+   "entry": 131.639999,
+   "exit": 132.940002,
+   "how": "close",
+   "pnl_usd": 7.75,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "SKHY",
@@ -8917,10 +9027,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 8.76,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-SKHY"
+   "id": "S-live-2026-11-27-SKHY",
+   "entry": 117.410004,
+   "exit": 117.379997,
+   "how": "close",
+   "pnl_usd": -1.14,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "WMT",
@@ -8942,10 +9057,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 4.9,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-WMT"
+   "id": "S-live-2026-11-27-WMT",
+   "entry": 132.619995,
+   "exit": 132.940002,
+   "how": "close",
+   "pnl_usd": 1.76,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "ADI",
@@ -8967,10 +9087,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 7.62,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-ADI"
+   "id": "S-live-2026-11-27-ADI",
+   "entry": 344.089996,
+   "exit": 341.540009,
+   "how": "close",
+   "pnl_usd": -6.11,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "STX",
@@ -8992,10 +9117,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.29,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-STX"
+   "id": "S-live-2026-11-27-STX",
+   "entry": 497.649994,
+   "exit": 503.63501,
+   "how": "close",
+   "pnl_usd": 5.3,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "SNOW",
@@ -9067,10 +9197,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 6.86,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-ABNB"
+   "id": "S-live-2026-11-27-ABNB",
+   "entry": 178.919998,
+   "exit": 177.589996,
+   "how": "close",
+   "pnl_usd": -2.93,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "RKLB",
@@ -9092,10 +9227,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.84,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-RKLB"
+   "id": "S-live-2026-11-27-RKLB",
+   "entry": 50.09,
+   "exit": 50.5,
+   "how": "close",
+   "pnl_usd": 2.02,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "NXPI",
@@ -9117,10 +9257,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 5.76,
    "setup": "opening-range breakout",
-   "id": "S-live-2026-11-27-NXPI"
+   "id": "S-live-2026-11-27-NXPI",
+   "entry": 253.339996,
+   "exit": 250.440002,
+   "how": "close",
+   "pnl_usd": -3.55,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "SKHY",
@@ -9142,10 +9287,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 8.76,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-SKHY"
+   "id": "S-fresh-2026-11-27-SKHY",
+   "entry": 117.410004,
+   "exit": 117.379997,
+   "how": "close",
+   "pnl_usd": -1.14,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "WMT",
@@ -9167,10 +9317,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 4.9,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-WMT"
+   "id": "S-fresh-2026-11-27-WMT",
+   "entry": 132.619995,
+   "exit": 132.940002,
+   "how": "close",
+   "pnl_usd": 1.76,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "ADI",
@@ -9192,10 +9347,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 7.62,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-ADI"
+   "id": "S-fresh-2026-11-27-ADI",
+   "entry": 344.089996,
+   "exit": 341.540009,
+   "how": "close",
+   "pnl_usd": -6.11,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "PG",
@@ -9267,10 +9427,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.58,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-REGN"
+   "id": "S-fresh-2026-11-27-REGN",
+   "entry": 992.130005,
+   "exit": 990.424988,
+   "how": "close",
+   "pnl_usd": -2.18,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "MCHP",
@@ -9292,10 +9457,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 8.96,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-MCHP"
+   "id": "S-fresh-2026-11-27-MCHP",
+   "entry": 59.669998,
+   "exit": 59.18,
+   "how": "close",
+   "pnl_usd": -3.92,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "SNPS",
@@ -9317,10 +9487,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.22,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-SNPS"
+   "id": "S-fresh-2026-11-27-SNPS",
+   "entry": 420.160004,
+   "exit": 418.130005,
+   "how": "close",
+   "pnl_usd": -4.82,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "ASTS",
@@ -9342,10 +9517,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 9.7,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-ASTS"
+   "id": "S-fresh-2026-11-27-ASTS",
+   "entry": 26.549999,
+   "exit": 26.629999,
+   "how": "close",
+   "pnl_usd": 0.35,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "AMGN",
@@ -9367,10 +9547,15 @@
    "opened_at": "2026-11-27 17:18Z",
    "decided_at": "12:18",
    "slot": 34,
-   "status": "open",
+   "status": "closed",
    "risk_usd": 8.69,
    "setup": "opening-range breakout",
-   "id": "S-fresh-2026-11-27-AMGN"
+   "id": "S-fresh-2026-11-27-AMGN",
+   "entry": 474.700012,
+   "exit": 473.204987,
+   "how": "close",
+   "pnl_usd": -3.55,
+   "closed_at": "2026-11-27 21:41Z"
   },
   {
    "symbol": "DOGE-USD",
