@@ -7392,7 +7392,6 @@
   "BTC-USD": [],
   "ETH-USD": [],
   "SOL-USD": [
-   "breakout_20d",
    "overbought"
   ],
   "XRP-USD": [
@@ -7405,22 +7404,16 @@
    "overbought"
   ],
   "ADA-USD": [],
-  "AVAX-USD": [
-   "breakout_20d"
-  ],
+  "AVAX-USD": [],
   "LINK-USD": [],
   "LTC-USD": [],
   "DOT-USD": [],
   "BCH-USD": [],
-  "EURUSD=X": [
-   "breakdown_20h"
-  ],
+  "EURUSD=X": [],
   "GBPUSD=X": [
    "breakout_20d"
   ],
-  "USDJPY=X": [
-   "breakout_20d"
-  ],
+  "USDJPY=X": [],
   "AUDUSD=X": [
    "overbought"
   ],
@@ -7429,11 +7422,11 @@
   "NZDUSD=X": [],
   "EURJPY=X": [],
   "GBPJPY=X": [
-   "breakout_20d"
+   "breakout_20d",
+   "overbought"
   ],
   "EURGBP=X": [
-   "oversold",
-   "breakdown_20h"
+   "oversold"
   ],
   "AUDJPY=X": [
    "breakout_20d",
