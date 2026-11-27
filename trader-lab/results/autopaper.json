@@ -9,7 +9,7 @@
  "max_drawdown_usd": 13.399999999999636,
  "open_positions": 0,
  "daily_t": -0.9999999999999998,
- "spy_same_days_usd": 36.68920370873741,
+ "spy_same_days_usd": 49.91127682197671,
  "days_since_v2": 2,
  "books": {
   "fed": {
@@ -21,9 +21,9 @@
   },
   "sip": {
    "days": 3,
-   "trades": 5,
-   "equity": 9873.53,
-   "pnl_usd": -126.46999999999935,
+   "trades": 6,
+   "equity": 9857.23,
+   "pnl_usd": -142.77000000000044,
    "win_rate": 0.0
   }
  },
