@@ -9781,6 +9781,26 @@
    "status": "open",
    "setup": "20-hour closing-low breakdown",
    "id": "F-btctrend-2026-11-27 22:34Z-EURJPY=X"
+  },
+  {
+   "symbol": "BCH-USD",
+   "side": "buy",
+   "entry_est": 208.94000244140625,
+   "stop": 205.65928704398019,
+   "target": 215.50143323625838,
+   "risk_usd": 10.0,
+   "notional_usd": 636.87,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-28",
+   "opened_at": "2026-11-28 02:34Z",
+   "start_ts": 1795831200,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-live-2026-11-28 02:34Z-BCH-USD"
   }
  ],
  "last_fx": {
@@ -9789,13 +9809,17 @@
   "SOL-USD": [],
   "XRP-USD": [],
   "BNB-USD": [],
-  "DOGE-USD": [],
+  "DOGE-USD": [
+   "reclaim_ma20"
+  ],
   "ADA-USD": [],
   "AVAX-USD": [],
   "LINK-USD": [],
   "LTC-USD": [],
   "DOT-USD": [],
-  "BCH-USD": [],
+  "BCH-USD": [
+   "reclaim_ma20"
+  ],
   "EURUSD=X": [
    "oversold_bounce"
   ],
