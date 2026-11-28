@@ -9900,19 +9900,11 @@
   "XRP-USD": [],
   "BNB-USD": [],
   "DOGE-USD": [],
-  "ADA-USD": [
-   "breakdown_20h"
-  ],
-  "AVAX-USD": [
-   "breakdown_20h"
-  ],
-  "LINK-USD": [
-   "breakdown_20h"
-  ],
+  "ADA-USD": [],
+  "AVAX-USD": [],
+  "LINK-USD": [],
   "LTC-USD": [],
-  "DOT-USD": [
-   "breakdown_20h"
-  ],
+  "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [
    "oversold_bounce"
