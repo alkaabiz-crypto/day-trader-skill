@@ -9808,9 +9808,14 @@
    "date": "2026-11-28",
    "opened_at": "2026-11-28 02:34Z",
    "start_ts": 1795831200,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-28 02:34Z-BCH-USD"
+   "id": "F-live-2026-11-28 02:34Z-BCH-USD",
+   "entry": 208.839996,
+   "exit": 205.659287,
+   "how": "stop",
+   "pnl_usd": -10.66,
+   "closed_at": "2026-11-28 09:35Z"
   },
   {
    "symbol": "DOT-USD",
@@ -9891,17 +9896,61 @@
    "status": "open",
    "setup": "20-hour closing-low breakdown",
    "id": "F-btctrend-2026-11-28 06:35Z-AVAX-USD"
+  },
+  {
+   "symbol": "ETH-USD",
+   "side": "sell",
+   "entry_est": 1651.280029296875,
+   "stop": 1664.2325439453125,
+   "target": 1625.375,
+   "risk_usd": 10.0,
+   "notional_usd": 1274.87,
+   "cost_bps": 6.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-28",
+   "opened_at": "2026-11-28 09:35Z",
+   "start_ts": 1795856400,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-live-2026-11-28 09:35Z-ETH-USD"
+  },
+  {
+   "symbol": "ETH-USD",
+   "side": "sell",
+   "entry_est": 1651.280029296875,
+   "stop": 1664.2325439453125,
+   "target": 1625.375,
+   "risk_usd": 10.0,
+   "notional_usd": 1274.87,
+   "cost_bps": 6.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-28",
+   "opened_at": "2026-11-28 09:35Z",
+   "start_ts": 1795856400,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-28 09:35Z-ETH-USD"
   }
  ],
  "last_fx": {
   "BTC-USD": [],
-  "ETH-USD": [],
+  "ETH-USD": [
+   "breakdown_20h"
+  ],
   "SOL-USD": [],
   "XRP-USD": [],
   "BNB-USD": [],
   "DOGE-USD": [],
   "ADA-USD": [],
-  "AVAX-USD": [],
+  "AVAX-USD": [
+   "breakdown_20h"
+  ],
   "LINK-USD": [],
   "LTC-USD": [],
   "DOT-USD": [],
