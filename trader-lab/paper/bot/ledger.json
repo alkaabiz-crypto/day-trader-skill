@@ -9956,25 +9956,111 @@
    "status": "open",
    "setup": "reclaimed the 20-hour average",
    "id": "F-live-2026-11-28 10:35Z-BCH-USD"
+  },
+  {
+   "symbol": "SOL-USD",
+   "side": "sell",
+   "entry_est": 70.69000244140625,
+   "stop": 71.37036023821149,
+   "target": 69.32928684779576,
+   "risk_usd": 10.0,
+   "notional_usd": 1039.01,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-28",
+   "opened_at": "2026-11-28 11:37Z",
+   "start_ts": 1795863600,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-live-2026-11-28 11:37Z-SOL-USD"
+  },
+  {
+   "symbol": "ADA-USD",
+   "side": "sell",
+   "entry_est": 0.145579993724823,
+   "stop": 0.14711213697280204,
+   "target": 0.14251570722886495,
+   "risk_usd": 10.0,
+   "notional_usd": 950.17,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-28",
+   "opened_at": "2026-11-28 11:37Z",
+   "start_ts": 1795863600,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-live-2026-11-28 11:37Z-ADA-USD"
+  },
+  {
+   "symbol": "SOL-USD",
+   "side": "sell",
+   "entry_est": 70.69000244140625,
+   "stop": 71.37036023821149,
+   "target": 69.32928684779576,
+   "risk_usd": 10.0,
+   "notional_usd": 1039.01,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-28",
+   "opened_at": "2026-11-28 11:37Z",
+   "start_ts": 1795863600,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-28 11:37Z-SOL-USD"
+  },
+  {
+   "symbol": "ADA-USD",
+   "side": "sell",
+   "entry_est": 0.145579993724823,
+   "stop": 0.14711213697280204,
+   "target": 0.14251570722886495,
+   "risk_usd": 10.0,
+   "notional_usd": 950.17,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "btctrend",
+   "date": "2026-11-28",
+   "opened_at": "2026-11-28 11:37Z",
+   "start_ts": 1795863600,
+   "status": "open",
+   "setup": "20-hour closing-low breakdown",
+   "id": "F-btctrend-2026-11-28 11:37Z-ADA-USD"
   }
  ],
  "last_fx": {
   "BTC-USD": [],
-  "ETH-USD": [],
-  "SOL-USD": [],
+  "ETH-USD": [
+   "breakdown_20h"
+  ],
+  "SOL-USD": [
+   "breakdown_20h"
+  ],
   "XRP-USD": [],
   "BNB-USD": [],
   "DOGE-USD": [],
-  "ADA-USD": [],
-  "AVAX-USD": [],
+  "ADA-USD": [
+   "breakdown_20h"
+  ],
+  "AVAX-USD": [
+   "breakdown_20h"
+  ],
   "LINK-USD": [],
   "LTC-USD": [],
   "DOT-USD": [
    "breakdown_20h"
   ],
-  "BCH-USD": [
-   "reclaim_ma20"
-  ],
+  "BCH-USD": [],
   "EURUSD=X": [
    "oversold_bounce"
   ],
