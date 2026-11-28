@@ -9936,25 +9936,45 @@
    "status": "open",
    "setup": "20-hour closing-low breakdown",
    "id": "F-btctrend-2026-11-28 09:35Z-ETH-USD"
+  },
+  {
+   "symbol": "BCH-USD",
+   "side": "buy",
+   "entry_est": 206.91000366210938,
+   "stop": 204.63857051304407,
+   "target": 211.45286996023995,
+   "risk_usd": 10.0,
+   "notional_usd": 910.92,
+   "cost_bps": 15.0,
+   "swap_bps": 3.0,
+   "kind": "crypto",
+   "track": "fxcrypto",
+   "variant": "live",
+   "date": "2026-11-28",
+   "opened_at": "2026-11-28 10:35Z",
+   "start_ts": 1795860000,
+   "status": "open",
+   "setup": "reclaimed the 20-hour average",
+   "id": "F-live-2026-11-28 10:35Z-BCH-USD"
   }
  ],
  "last_fx": {
   "BTC-USD": [],
-  "ETH-USD": [
-   "breakdown_20h"
-  ],
+  "ETH-USD": [],
   "SOL-USD": [],
   "XRP-USD": [],
   "BNB-USD": [],
   "DOGE-USD": [],
   "ADA-USD": [],
-  "AVAX-USD": [
-   "breakdown_20h"
-  ],
+  "AVAX-USD": [],
   "LINK-USD": [],
   "LTC-USD": [],
-  "DOT-USD": [],
-  "BCH-USD": [],
+  "DOT-USD": [
+   "breakdown_20h"
+  ],
+  "BCH-USD": [
+   "reclaim_ma20"
+  ],
   "EURUSD=X": [
    "oversold_bounce"
   ],
