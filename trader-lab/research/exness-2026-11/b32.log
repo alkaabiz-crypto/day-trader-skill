@@ -1,0 +1,33 @@
+Q1 alt Williams short basket       fail   | pre-24 $+718 t 2.01 | 24-now $+206 t 0.55 | all t 1.78 | 2x $+738 | random 100% | worst $-270 | failed: since_2024, whole_t
+      2022 +641 2023 +77 2024 -126 2025 +182 2026 +151
+Q2 alt NR7 basket                  fail   | pre-24 $+354 t 2.73 | 24-now $+249 t 1.48 | all t 2.84 | 2x $+517 | random 100% | worst $-133 | failed: whole_t
+      2022 +269 2023 +85 2024 +143 2025 +150 2026 -44
+Q3 USTEC Williams long above SMA50 fail   | pre-24 $-12 t -0.06 | 24-now $+26 t 0.29 | all t 0.06 | 2x $-92 | random  36% | worst $-149 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 +4 2014 -42 2015 +2 2016 +22 2017 -9 2018 -28 2019 +6 2020 -36 2021 +33 2022 +63 2023 -25 2024 +62 2025 -22 2026 -14
+Q3 US500 Williams long above SMA50 fail   | pre-24 $-166 t -1.40 | 24-now $-37 t -0.61 | all t -1.52 | 2x $-318 | random   4% | worst $-219 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 -45 2014 -44 2015 -11 2016 -27 2017 -11 2018 -26 2019 +16 2020 +0 2021 -6 2022 -38 2023 +24 2024 -18 2025 +7 2026 -26
+Q3 US30 Williams long above SMA50  fail   | pre-24 $+37 t 0.31 | 24-now $+42 t 0.66 | all t 0.57 | 2x $-11 | random  45% | worst $-221 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 +104 2014 -50 2015 +53 2016 +6 2017 +34 2018 +17 2019 +24 2020 -43 2021 -34 2022 -85 2023 +10 2024 +10 2025 +53 2026 -22
+Q3 GER40 Williams long above SMA50 fail   | pre-24 $+148 t 0.99 | 24-now $+31 t 0.38 | all t 1.05 | 2x $+56 | random  88% | worst $-108 | failed: before_2024, since_2024, whole_t, random_timing
+      2013 +7 2014 -38 2015 +61 2016 -21 2017 +28 2018 +6 2019 +12 2020 +61 2021 +1 2022 +62 2023 -30 2024 -24 2025 +9 2026 +46
+Q3 JP225 Williams long above SMA50 fail   | pre-24 $+80 t 0.45 | 24-now $+139 t 1.26 | all t 1.04 | 2x $+71 | random  92% | worst $-156 | failed: before_2024, whole_t, random_timing
+      2013 -8 2014 +56 2015 -12 2016 -117 2017 +57 2018 -27 2019 -14 2020 +26 2021 +17 2022 +49 2023 +53 2024 +8 2025 +45 2026 +87
+Q4 USTEC Williams short below SMA200 fail   | pre-24 $-24 t -0.10 | 24-now $+32 t 0.40 | all t 0.03 | 2x $-13 | random  68% | worst $-256 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 +0 2014 +0 2015 -140 2016 -9 2017 +0 2018 +119 2019 -30 2020 -143 2021 +0 2022 +236 2023 -58 2024 +0 2025 -29 2026 +61
+Q4 US500 Williams short below SMA200 fail   | pre-24 $-303 t -1.81 | 24-now $-3 t -0.08 | all t -1.77 | 2x $-330 | random   2% | worst $-386 | failed: before_2024, since_2024, whole_t, double_cost, random_timing, worst_drop
+      2013 +0 2014 -16 2015 -46 2016 -60 2017 +0 2018 +38 2019 -26 2020 -238 2021 +0 2022 +59 2023 -15 2024 +0 2025 -17 2026 +13
+Q5 gold Williams short below SMA50 fail   | pre-24 $+432 t 1.12 | 24-now $+162 t 0.74 | all t 1.34 | 2x $+265 | random  97% | worst $-289 | failed: before_2024, since_2024, whole_t
+      2013 +232 2014 +76 2015 -154 2016 +103 2017 -83 2018 -65 2019 -54 2020 +77 2021 +40 2022 +192 2023 +69 2024 +66 2025 -4 2026 +100
+Q6 NR7 JP225                       fail   | pre-24 $+176 t 1.28 | 24-now $+89 t 1.06 | all t 1.65 | 2x $+203 | random  96% | worst $-97 | failed: before_2024, whole_t
+      2013 +3 2014 +41 2015 +45 2016 +46 2017 -14 2018 +9 2019 -63 2020 +68 2021 +4 2022 +48 2023 -10 2024 +5 2025 +17 2026 +68
+Q6 NR7 UK100                       fail   | pre-24 $+81 t 0.73 | 24-now $-30 t -0.74 | all t 0.43 | 2x $-18 | random  67% | worst $-70 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 -6 2014 -23 2015 +68 2016 -17 2017 +27 2018 -12 2019 -20 2020 +79 2021 -1 2022 -31 2023 +20 2024 -45 2025 +9 2026 +6
+
+WORTHY: ['BTC Williams', 'G NR7 BTC', 'USTEC IBS', 'US500 IBS', 'E BTC Williams short below SMA50', 'Coin Williams basket', 'N1 ETH London breakout 0.2 lot']
+  BTC Williams                         max corr 0.00 (-) -> DISTINCT
+  G NR7 BTC                            max corr 0.21 (BTC Williams) -> DISTINCT
+  USTEC IBS                            max corr 0.06 (BTC Williams) -> DISTINCT
+  US500 IBS                            max corr 0.75 (USTEC IBS) -> near-duplicate
+  E BTC Williams short below SMA50     max corr 0.21 (G NR7 BTC) -> DISTINCT
+  Coin Williams basket                 max corr 0.33 (BTC Williams) -> DISTINCT
+  N1 ETH London breakout 0.2 lot       max corr 0.31 (E BTC Williams short) -> DISTINCT

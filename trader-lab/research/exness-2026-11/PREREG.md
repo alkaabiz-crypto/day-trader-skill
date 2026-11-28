@@ -434,3 +434,40 @@ Batch 29 result (record): N1 ETH London breakout at 0.2 lot WORTHY (worst -$259)
  Then distinctness vs all worthy candidates (corr <= 0.5).
 Batch 30 result (record): P1 alt London basket fails (2024-now -$484), P2 BTC US-session fails, P3 ETH US-session fails (before 2024 t 0.90).
 Distinct WORTHY after batches 28-30: BTC Williams, USTEC IBS, coin Williams basket, ETH London breakout at 0.2 lot (US500 IBS worthy but corr 0.75 with USTEC IBS).
+## Batch 31 (written 2026-11-28 10:05 UTC, before running): other Exness markets, calendar, weekly bars, short side, pair, NR7, FX
+Same judge.py bar and distinctness. New markets (Yahoo cash indices; Exness min lots UNVERIFIED, sized at ~$1,000 notional): US30 (^DJI) 1.0 bp,
+GER40 (^GDAXI) 1.5 bp, UK100 (^FTSE) 2 bp, JP225 (^N225, yen -> $ ignored) 2 bp; GBPUSD 1.5 bp, USDJPY 1.2 bp ($1,000 notional; close-only rules,
+Yahoo FX opens are unreliable); silver XAGUSD 0.01 lot = 50 oz (~$1,850) via SLV bars, 4 bp. Judged from 2013.
+ A IBS (< 0.2, exit first up close) on US30, GER40, UK100, JP225.   B turn of month (close before the last day -> close of the 3rd day) on US500, GER40.
+ C pre-holiday US500: hold the last session before a weekday US market holiday (holidays found from gaps in the SPY calendar).
+ D weekly bars (Friday close): weekly IBS < 0.2 -> long next week, on USTEC, US500, BTC.
+ E short side in downtrends: USTEC IBS > 0.8 below SMA200 -> short, exit first down close; BTC and ETH Williams short (open - 0.6 x range) below SMA50.
+ F pair: GER40 vs US500, z-score(20) of the log ratio beyond +-2 -> long the cheap one / short the rich one, $1,000 each, exit at z = 0.
+ G NR7: narrowest range of 7 days -> next day stop entry at the high (close > SMA50) or the low (close < SMA50; not on US indices), out at the close;
+   on BTC, ETH, USTEC, US500, US30, GER40, gold (1 oz), silver.
+ H FX RSI(2) close-to-close: < 10 above SMA200 long, > 90 below SMA200 short, exit RSI2 crosses 50; EURUSD, GBPUSD, USDJPY.
+ I silver IBS above SMA200 and silver Williams (SLV bars).
+Batch 31 result (record): WORTHY and distinct: G NR7 BTC (t 4.80, drop -$94), E BTC Williams short below SMA50 (t 3.58, -$210). Near: US30 IBS t 2.92,
+ETH Williams short t 2.88, gold NR7 t 2.75, GER40/US500 pair t 2.01. Everything else fails (calendar, weekly IBS, FX RSI2, silver, other-index IBS).
+## Batch 32 (written 2026-11-28 10:20 UTC, before running): extend the families that worked, same bar
+ Q1 alt Williams SHORT basket below SMA50 (10 alts, $100 each, 5 bp).   Q2 alt NR7 basket ($100 each, 5 bp, both sides by SMA50).
+ Q3 Williams long only above SMA50 on USTEC, US500, US30, GER40, JP225.   Q4 Williams short only below SMA200 on USTEC, US500.
+ Q5 gold Williams short below SMA50 (GLD bars, 1 oz).   Q6 NR7 on JP225 and UK100 (short side allowed, not US indices).
+Batch 32 result (record): 0 new. Near: alt NR7 basket t 2.84, alt Williams short basket t 1.78. Index Williams long/short, gold short, JP225/UK100 NR7 fail.
+## Batch 33 (written 2026-11-28 10:35 UTC, before running): new timeframes for the crypto families that work, same bar
+ R1 BTC 4-hour NR7: 4h bars from Binance 1h (UTC 00/04/08/...); bar k narrowest of 7 -> next bar stop entry at its high (daily SMA50 up)
+    or low (down), stop at the other side of bar k, exit at the 23:00 UTC close; 0.01 lot, 1.9 bp; judged 2018 on.
+ R2 ETH 4-hour NR7, same, 0.2 lot, 8 bp.
+ R3 BTC weekly Williams: level = Monday 00:00 UTC open + 0.6 x prior week's range; buy when hit (daily bars), exit at the Sunday close; 0.01 lot.
+ R4 ETH weekly Williams, same, 0.2 lot ($330), 8 bp.
+Batch 33 result (record): R3 BTC weekly Williams WORTHY (t 4.43, drop -$245; weekly P&L corr 0.47 with daily BTC Williams: related but under 0.5). R1/R2 4h NR7 and R4 ETH weekly fail.
+Distinctness for weekly rules is measured on weekly P&L sums (daily sums understate overlap).
+## Batch 34 (written 2026-11-28 10:50 UTC, before running)
+ S1 BTC weekly Williams SHORT: level = Monday open - 0.6 x prior week's range, only when the prior week's close < its 140-day SMA; exit Sunday close; 0.01 lot.
+ S3 BTC NR4 daily (narrowest of 4 days), same entry/exit as NR7 (batch 31 G), 0.01 lot.
+ S11 gold weekly Williams (GLD bars, Monday-Friday weeks, exit Friday close), 1 oz.
+ S12 USTEC and US500 weekly Williams long (exit Friday close), only when the prior week closed above SMA200.
+Batch 34 result (record): S3 BTC NR4 WORTHY (t 5.27, drop -$94; corr 0.72 with BTC NR7, so NR4 is the family pick). S1, S11, S12 fail.
+Distinct WORTHY after batches 28-34 (7): BTC Williams, BTC NR4, USTEC IBS, BTC weekly Williams (weekly corr 0.47 with BTC Williams), BTC Williams short
+below SMA50, coin Williams basket, ETH London breakout 0.2 lot. Near-duplicates: US500 IBS (0.75 with USTEC IBS), BTC NR7 (0.72 with NR4).
+Paper from 2026-11-28: btc_more_paper.py (NR4, WSHORT, WWEEK at 0.01 lot).

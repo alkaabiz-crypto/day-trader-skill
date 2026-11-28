@@ -769,3 +769,18 @@ Bar: before 2024 net > 0 and t >= 2; 2024-now net > 0 and t >= 1; whole t >= 3; 
 Failed the bar: Calm USTEC (no better than random timing), BTC Donchian (drop -$447), ETH 7-day momentum, BTC London breakout (t 2.70, drop -$337),
 ETH/BTC US-session breakouts, alt London basket, gold IBS / turn of month / Williams (1 oz drops -$510 to -$660), oil Williams;
 candle brain v2 0 of 19 (inside-day breakouts on BTC/ETH/gold worked before 2024, flat since); oil brain v2 0 of 4 (inventories, COT hedging pressure, curve).
+
+## Batches 31-34: broad search (other indices, FX, silver, calendar, weekly bars, short side, pair, contraction setups)
+About 50 more rules. New WORTHY and distinct: BTC NR4 breakout, BTC Williams short below SMA50, BTC weekly Williams. Seven distinct in all:
+| rank | candidate | size | 2024 / 2025 / 2026 | worst drop | whole t |
+|---|---|---|---|---|---|
+| 1 | BTC Williams breakout | 0.01 | +391 / -21 / +151 | -$237 | 9.32 |
+| 2 | BTC NR4 breakout (both sides by SMA50) | 0.01 | +200 / -42 / +226 | -$94 | 5.27 |
+| 3 | USTEC IBS | 0.05 | +63 / +327 / +65 | -$200 | 4.56 |
+| 4 | BTC weekly Williams | 0.01 | +242 / +25 / +53 | -$245 | 4.43 |
+| 5 | BTC Williams short below SMA50 | 0.01 | +82 / +35 / +85 | -$210 | 3.58 |
+| 6 | Coin Williams basket | $100 x 10 | +640 / +177 / +375 | -$255 | 3.57 |
+| 7 | ETH London breakout | 0.2 lot | +28 / +184 / +114 | -$259 | 3.57 |
+Failed: IBS on GER40/UK100/JP225 (US30 t 2.92 near, but same family), turn of month, pre-holiday, weekly IBS, FX RSI2, silver, index Williams
+long/short, GER40/US500 pair (t 2.01), 4-hour NR7, gold weekly/short Williams, alt short and NR7 baskets (t 1.78 / 2.84). FOMC days not tested (no
+reliable date list offline). Five of the seven are BTC rules: low daily correlation, but one regime.

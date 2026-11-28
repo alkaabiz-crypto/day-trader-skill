@@ -1,0 +1,18 @@
+R1 BTC 4h NR7                      fail   | pre-24 $-709 t -1.94 | 24-now $-159 t -1.00 | all t -2.18 | 2x $-1024 | random   0% | worst $-983 | failed: before_2024, since_2024, whole_t, double_cost, random_timing, worst_drop | trades 1425
+      2018 -158 2019 -214 2020 -113 2021 -2 2022 -297 2023 +75 2024 -146 2025 +5 2026 -17
+R2 ETH 4h NR7 0.2 lot              fail   | pre-24 $+221 t 0.84 | 24-now $-168 t -1.46 | all t 0.19 | 2x $-299 | random  97% | worst $-480 | failed: before_2024, since_2024, whole_t, double_cost, worst_drop | trades 1366
+      2018 +275 2019 -77 2020 -2 2021 +293 2022 -170 2023 -97 2024 -73 2025 -35 2026 -60
+R3 BTC weekly Williams             WORTHY | pre-24 $+2258 t 4.26 | 24-now $+321 t 1.34 | all t 4.43 | 2x $+2555 | random 100% | worst $-245
+      2016 +360 2017 +733 2018 +234 2019 +229 2020 +365 2021 +102 2022 -199 2023 +432 2024 +242 2025 +25 2026 +53
+R4 ETH weekly Williams 0.2 lot     fail   | pre-24 $+947 t 2.75 | 24-now $+212 t 0.95 | all t 2.83 | 2x $+1116 | random 100% | worst $-186 | failed: since_2024, whole_t
+      2018 +282 2019 +129 2020 +262 2021 +226 2022 -70 2023 +118 2024 +202 2025 +93 2026 -82
+
+WORTHY: ['BTC Williams', 'G NR7 BTC', 'USTEC IBS', 'R3 BTC weekly Williams', 'US500 IBS', 'E BTC Williams short below SMA50', 'Coin Williams basket', 'N1 ETH London breakout 0.2 lot']
+  BTC Williams                         max corr 0.00 (-) -> DISTINCT
+  G NR7 BTC                            max corr 0.21 (BTC Williams) -> DISTINCT
+  USTEC IBS                            max corr 0.06 (BTC Williams) -> DISTINCT
+  R3 BTC weekly Williams               max corr 0.01 (BTC Williams) -> DISTINCT
+  US500 IBS                            max corr 0.75 (USTEC IBS) -> near-duplicate
+  E BTC Williams short below SMA50     max corr 0.21 (G NR7 BTC) -> DISTINCT
+  Coin Williams basket                 max corr 0.33 (BTC Williams) -> DISTINCT
+  N1 ETH London breakout 0.2 lot       max corr 0.31 (E BTC Williams short) -> DISTINCT

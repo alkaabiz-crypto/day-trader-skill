@@ -1,0 +1,21 @@
+S1 BTC weekly Williams short       fail   | pre-24 $+165 t 0.42 | 24-now $-32 t -0.23 | all t 0.32 | 2x $+125 | random  92% | worst $-380 | failed: before_2024, since_2024, whole_t, random_timing, worst_drop
+      2016 +0 2017 +0 2018 +371 2019 -95 2020 +88 2021 -300 2022 +137 2023 -37 2024 -98 2025 -22 2026 +88
+S3 BTC NR4                         WORTHY | pre-24 $+2115 t 4.65 | 24-now $+384 t 2.85 | all t 5.27 | 2x $+2430 | random 100% | worst $-94
+      2016 +160 2017 +425 2018 +270 2019 +212 2020 +503 2021 +378 2022 +101 2023 +67 2024 +200 2025 -42 2026 +226
+S11 gold weekly Williams           fail   | pre-24 $-555 t -0.81 | 24-now $+260 t 0.49 | all t -0.34 | 2x $-449 | random  42% | worst $-727 | failed: before_2024, since_2024, whole_t, double_cost, random_timing, worst_drop
+      2013 -696 2014 +250 2015 +46 2016 +136 2017 +93 2018 -23 2019 -152 2020 +265 2021 -229 2022 -160 2023 -83 2024 -119 2025 +414 2026 -35
+S12 USTEC weekly Williams          fail   | pre-24 $+536 t 2.06 | 24-now $-2 t -0.01 | all t 1.72 | 2x $+507 | random 100% | worst $-197 | failed: since_2024, whole_t
+      2013 +123 2014 -24 2015 +96 2016 +1 2017 +62 2018 +40 2019 +14 2020 -24 2021 +156 2022 -32 2023 +125 2024 +140 2025 +23 2026 -165
+S12 US500 weekly Williams          fail   | pre-24 $+308 t 1.91 | 24-now $-2 t -0.03 | all t 1.69 | 2x $+277 | random  98% | worst $-101 | failed: before_2024, since_2024, whole_t
+      2013 +104 2014 +24 2015 +2 2016 +21 2017 +13 2018 +57 2019 +18 2020 -51 2021 +83 2022 -47 2023 +85 2024 +44 2025 +37 2026 -82
+
+WORTHY: ['BTC Williams', 'S3 BTC NR4', 'G NR7 BTC', 'USTEC IBS', 'R3 BTC weekly Williams', 'US500 IBS', 'E BTC Williams short below SMA50', 'Coin Williams basket', 'N1 ETH London breakout 0.2 lot']
+  BTC Williams                         max corr 0.00 (-) -> DISTINCT
+  S3 BTC NR4                           max corr 0.21 (BTC Williams) -> DISTINCT
+  G NR7 BTC                            max corr 0.72 (S3 BTC NR4) -> near-duplicate
+  USTEC IBS                            max corr 0.07 (S3 BTC NR4) -> DISTINCT
+  R3 BTC weekly Williams               max corr 0.47 (BTC Williams) -> DISTINCT
+  US500 IBS                            max corr 0.75 (USTEC IBS) -> near-duplicate
+  E BTC Williams short below SMA50     max corr 0.42 (S3 BTC NR4) -> DISTINCT
+  Coin Williams basket                 max corr 0.33 (BTC Williams) -> DISTINCT
+  N1 ETH London breakout 0.2 lot       max corr 0.31 (E BTC Williams short) -> DISTINCT
