@@ -9733,9 +9733,14 @@
    "date": "2026-11-27",
    "opened_at": "2026-11-27 22:34Z",
    "start_ts": 1795816800,
-   "status": "open",
+   "status": "closed",
    "setup": "reclaimed the 20-hour average",
-   "id": "F-live-2026-11-27 22:34Z-LTC-USD"
+   "id": "F-live-2026-11-27 22:34Z-LTC-USD",
+   "entry": 44.363998,
+   "exit": 45.629001,
+   "how": "target",
+   "pnl_usd": 18.68,
+   "closed_at": "2026-11-28 01:34Z"
   },
   {
    "symbol": "EURGBP=X",
@@ -9788,9 +9793,7 @@
   "ADA-USD": [],
   "AVAX-USD": [],
   "LINK-USD": [],
-  "LTC-USD": [
-   "breakout_20d"
-  ],
+  "LTC-USD": [],
   "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [
