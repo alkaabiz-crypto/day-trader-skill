@@ -9809,17 +9809,13 @@
   "SOL-USD": [],
   "XRP-USD": [],
   "BNB-USD": [],
-  "DOGE-USD": [
-   "reclaim_ma20"
-  ],
+  "DOGE-USD": [],
   "ADA-USD": [],
   "AVAX-USD": [],
   "LINK-USD": [],
   "LTC-USD": [],
   "DOT-USD": [],
-  "BCH-USD": [
-   "reclaim_ma20"
-  ],
+  "BCH-USD": [],
   "EURUSD=X": [
    "oversold_bounce"
   ],
