@@ -220,6 +220,14 @@ def scoreboard():
         add("strategy catalog: %d named public strategies x %d markets" % (len(rules), len(j.get("markets", []))),
             "PASS" if any(r["verdict"] == "PASS" for r in rules) else "FAIL",
             "best %s judged t %.2f (bar 3.5); trend rules' edge is crypto only" % (best.get("rule"), best.get("judged_t", 0)))
+    j = _load("candles.json")
+    if j and j.get("tests"):
+        tests = j["tests"]
+        best = max(tests, key=lambda r: r["judged"]["t"])
+        add("candlesticks: first 5-min candle, 20 daily patterns, ridge combo (%d tests)" % len(tests),
+            "PASS" if any(r.get("verdict") == "PASS" for r in tests) else "FAIL",
+            "0 of %d pass (bar t %.1f); best judged %s %s t %.2f" % (
+                len(tests), j.get("t_bar", 3.5), best["market"], best["rule"], best["judged"]["t"]))
     j = _load("btc-trend.json")
     if j and j.get("days"):
         add("paper bots: Bitcoin trend (hold BTC above its 200-day average)", j.get("verdict", "PAPER"),

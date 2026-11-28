@@ -1870,3 +1870,13 @@ always "flat before the close".
 - **Blocked.** CPI release dates: bls.gov answers 403 through the proxy, so the CPI-day test (plan B4) waits.
 
 Honest reading: still no rule that beats luck after costs. Research, not financial advice.
+
+### 2026-11-27: candlesticks, the full run with Bitcoin and Ethereum (`candles.py`). FAIL, 0 of 81
+
+The pre-registered study (b96edb6) is now complete on every market: 40 stocks, BTC and ETH on the UTC day and in
+the New York session, and 20 daily patterns on 30 markets. Nothing passes (bar: judged t >= 3.5 and in-sample t > 0).
+- **Crypto first candle:** 44 rules on 4 sessions all FAIL. Following the first candle's colour loses on every
+  crypto session (BTC UTC judged -13.9 bp/day, ETH UTC -39.7 bp/day, at 20 bp costs).
+- **Ridge combo:** in-sample t +3.85 (BTC UTC) and +3.86 (BTC NY), then judged t -2.18 and -1.87 after 2025.
+  The model fit the past and did not carry forward.
+- No test is Benjamini-Hochberg significant. Candle shapes, alone or combined, have no edge after costs here.

@@ -1,0 +1,1659 @@
+{
+ "tests": [
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "color",
+   "in_sample": {
+    "days": 522,
+    "trades": 20482,
+    "mean_bps": -4.6197889499853595,
+    "t": -2.027932060214563
+   },
+   "judged": {
+    "days": 473,
+    "trades": 18809,
+    "mean_bps": -0.16960641635058013,
+    "t": -0.06934260957557126
+   },
+   "ref_cost_judged_mean_bps": 1.830393583649421,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "dragonfly",
+   "in_sample": {
+    "days": 129,
+    "trades": 151,
+    "mean_bps": -12.792726299172509,
+    "t": -0.620834693705507
+   },
+   "judged": {
+    "days": 124,
+    "trades": 141,
+    "mean_bps": 6.220253328597684,
+    "t": 0.3295136264299464
+   },
+   "ref_cost_judged_mean_bps": 8.220253328597686,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "gravestone",
+   "in_sample": {
+    "days": 122,
+    "trades": 142,
+    "mean_bps": -30.42569836829481,
+    "t": -1.7026662146135954
+   },
+   "judged": {
+    "days": 115,
+    "trades": 138,
+    "mean_bps": 13.001853824824705,
+    "t": 0.6349594699752545
+   },
+   "ref_cost_judged_mean_bps": 15.001853824824707,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "marubozu_bull",
+   "in_sample": {
+    "days": 384,
+    "trades": 916,
+    "mean_bps": 5.260881186918129,
+    "t": 0.5694114683181504
+   },
+   "judged": {
+    "days": 337,
+    "trades": 703,
+    "mean_bps": 2.857949681173992,
+    "t": 0.302991446494522
+   },
+   "ref_cost_judged_mean_bps": 4.8579496811739915,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "marubozu_bear",
+   "in_sample": {
+    "days": 404,
+    "trades": 938,
+    "mean_bps": -11.802058225484418,
+    "t": -1.3799271541350941
+   },
+   "judged": {
+    "days": 343,
+    "trades": 752,
+    "mean_bps": 5.047314178636543,
+    "t": 0.5396589455645072
+   },
+   "ref_cost_judged_mean_bps": 7.047314178636544,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "hammer",
+   "in_sample": {
+    "days": 385,
+    "trades": 805,
+    "mean_bps": -1.566035713230318,
+    "t": -0.17366927578424737
+   },
+   "judged": {
+    "days": 366,
+    "trades": 734,
+    "mean_bps": 7.811925530479761,
+    "t": 0.8755734244669203
+   },
+   "ref_cost_judged_mean_bps": 9.811925530479762,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "shooting_star",
+   "in_sample": {
+    "days": 353,
+    "trades": 722,
+    "mean_bps": -17.135805661947476,
+    "t": -1.8530138140635704
+   },
+   "judged": {
+    "days": 354,
+    "trades": 712,
+    "mean_bps": 8.258954831480976,
+    "t": 0.839693929569386
+   },
+   "ref_cost_judged_mean_bps": 10.258954831480974,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "long_bull",
+   "in_sample": {
+    "days": 510,
+    "trades": 2261,
+    "mean_bps": 8.06043875287909,
+    "t": 1.140338397494025
+   },
+   "judged": {
+    "days": 459,
+    "trades": 1907,
+    "mean_bps": 7.260696775209522,
+    "t": 0.9896765775463439
+   },
+   "ref_cost_judged_mean_bps": 9.260696775209523,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "long_bear",
+   "in_sample": {
+    "days": 484,
+    "trades": 2018,
+    "mean_bps": -12.189158113522053,
+    "t": -1.884008871015445
+   },
+   "judged": {
+    "days": 450,
+    "trades": 1844,
+    "mean_bps": 5.629153652986043,
+    "t": 0.6833778550346538
+   },
+   "ref_cost_judged_mean_bps": 7.629153652986044,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "lower_wick",
+   "in_sample": {
+    "days": 506,
+    "trades": 3166,
+    "mean_bps": -6.480661633461142,
+    "t": -1.1889587762191978
+   },
+   "judged": {
+    "days": 468,
+    "trades": 2964,
+    "mean_bps": -8.836554325466135,
+    "t": -1.4589222427174149
+   },
+   "ref_cost_judged_mean_bps": -6.836554325466134,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "STOCKS",
+   "rule": "upper_wick",
+   "in_sample": {
+    "days": 516,
+    "trades": 3061,
+    "mean_bps": -17.982050302270306,
+    "t": -3.0712712860724665
+   },
+   "judged": {
+    "days": 468,
+    "trades": 2853,
+    "mean_bps": -0.33400416627996377,
+    "t": -0.04820825472430528
+   },
+   "ref_cost_judged_mean_bps": 1.6659958337200371,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "color",
+   "in_sample": {
+    "days": 792,
+    "trades": 792,
+    "mean_bps": -26.053008483604263,
+    "t": -2.8046016319080502
+   },
+   "judged": {
+    "days": 693,
+    "trades": 693,
+    "mean_bps": -13.868095206614722,
+    "t": -1.6005739806270667
+   },
+   "ref_cost_judged_mean_bps": -3.8680952066147207,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "dragonfly",
+   "in_sample": {
+    "days": 4,
+    "trades": 4,
+    "mean_bps": -9.229851626079691,
+    "t": -0.12483585668343701
+   },
+   "judged": {
+    "days": 7,
+    "trades": 7,
+    "mean_bps": -55.65914148000656,
+    "t": -0.8473571533902324
+   },
+   "ref_cost_judged_mean_bps": -45.659141480006554,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "gravestone",
+   "in_sample": {
+    "days": 7,
+    "trades": 7,
+    "mean_bps": 95.48769374722869,
+    "t": 0.9875158474933724
+   },
+   "judged": {
+    "days": 5,
+    "trades": 5,
+    "mean_bps": 108.31001327801906,
+    "t": 1.7817400453371666
+   },
+   "ref_cost_judged_mean_bps": 118.31001327801904,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "marubozu_bull",
+   "in_sample": {
+    "days": 7,
+    "trades": 7,
+    "mean_bps": -38.22665890027316,
+    "t": -0.7918748539207408
+   },
+   "judged": {
+    "days": 15,
+    "trades": 15,
+    "mean_bps": 27.514930694861302,
+    "t": 0.42398117810987346
+   },
+   "ref_cost_judged_mean_bps": 37.5149306948613,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "marubozu_bear",
+   "in_sample": {
+    "days": 13,
+    "trades": 13,
+    "mean_bps": -90.86426632728252,
+    "t": -1.598015984968514
+   },
+   "judged": {
+    "days": 21,
+    "trades": 21,
+    "mean_bps": 28.18209872619705,
+    "t": 0.581531117095249
+   },
+   "ref_cost_judged_mean_bps": 38.182098726197054,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "hammer",
+   "in_sample": {
+    "days": 37,
+    "trades": 37,
+    "mean_bps": -12.794491168367015,
+    "t": -0.1921583376520622
+   },
+   "judged": {
+    "days": 26,
+    "trades": 26,
+    "mean_bps": -24.706526911122737,
+    "t": -0.7713013671725789
+   },
+   "ref_cost_judged_mean_bps": -14.706526911122735,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "shooting_star",
+   "in_sample": {
+    "days": 31,
+    "trades": 31,
+    "mean_bps": -22.614394444084816,
+    "t": -0.5087835469008526
+   },
+   "judged": {
+    "days": 29,
+    "trades": 29,
+    "mean_bps": -7.956075222716624,
+    "t": -0.2404744554448219
+   },
+   "ref_cost_judged_mean_bps": 2.043924777283376,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "long_bull",
+   "in_sample": {
+    "days": 60,
+    "trades": 60,
+    "mean_bps": -19.375490182104112,
+    "t": -0.6033966510507475
+   },
+   "judged": {
+    "days": 61,
+    "trades": 61,
+    "mean_bps": -42.19937931998123,
+    "t": -1.5493958448541674
+   },
+   "ref_cost_judged_mean_bps": -32.19937931998123,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "long_bear",
+   "in_sample": {
+    "days": 68,
+    "trades": 68,
+    "mean_bps": 9.902441041326803,
+    "t": 0.30126864178725643
+   },
+   "judged": {
+    "days": 73,
+    "trades": 73,
+    "mean_bps": -22.184852854326035,
+    "t": -0.8457253303033825
+   },
+   "ref_cost_judged_mean_bps": -12.184852854326031,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "lower_wick",
+   "in_sample": {
+    "days": 139,
+    "trades": 139,
+    "mean_bps": -12.077535657293396,
+    "t": -0.5002839841529042
+   },
+   "judged": {
+    "days": 103,
+    "trades": 103,
+    "mean_bps": -23.33712146433013,
+    "t": -1.1148481688569212
+   },
+   "ref_cost_judged_mean_bps": -13.33712146433013,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_UTC",
+   "rule": "upper_wick",
+   "in_sample": {
+    "days": 129,
+    "trades": 129,
+    "mean_bps": -30.50059967504155,
+    "t": -1.3865668618947622
+   },
+   "judged": {
+    "days": 111,
+    "trades": 111,
+    "mean_bps": -9.821381516970835,
+    "t": -0.5383854109981321
+   },
+   "ref_cost_judged_mean_bps": 0.17861848302916672,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "color",
+   "in_sample": {
+    "days": 564,
+    "trades": 564,
+    "mean_bps": -22.8355379333366,
+    "t": -2.669204699093976
+   },
+   "judged": {
+    "days": 497,
+    "trades": 497,
+    "mean_bps": -10.906399160322326,
+    "t": -1.4080671179043458
+   },
+   "ref_cost_judged_mean_bps": -0.906399160322327,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "dragonfly",
+   "in_sample": {
+    "days": 3,
+    "trades": 3,
+    "mean_bps": -3.8165659755558594,
+    "t": -0.043659428932331545
+   },
+   "judged": {
+    "days": 5,
+    "trades": 5,
+    "mean_bps": -111.68408335914103,
+    "t": -1.2040879663346753
+   },
+   "ref_cost_judged_mean_bps": -101.68408335914103,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "gravestone",
+   "in_sample": {
+    "days": 2,
+    "trades": 2,
+    "mean_bps": -8.095540103698045,
+    "t": 0.0
+   },
+   "judged": {
+    "days": 2,
+    "trades": 2,
+    "mean_bps": 134.45934143803072,
+    "t": 0.0
+   },
+   "ref_cost_judged_mean_bps": 144.45934143803075,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "marubozu_bull",
+   "in_sample": {
+    "days": 11,
+    "trades": 11,
+    "mean_bps": -40.634404725820524,
+    "t": -0.7598854949457765
+   },
+   "judged": {
+    "days": 12,
+    "trades": 12,
+    "mean_bps": 9.835819795991183,
+    "t": 0.3536333635297
+   },
+   "ref_cost_judged_mean_bps": 19.83581979599118,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "marubozu_bear",
+   "in_sample": {
+    "days": 7,
+    "trades": 7,
+    "mean_bps": 51.81975953516581,
+    "t": 0.6407423472451244
+   },
+   "judged": {
+    "days": 15,
+    "trades": 15,
+    "mean_bps": -60.07575832005432,
+    "t": -1.1849004093467446
+   },
+   "ref_cost_judged_mean_bps": -50.07575832005432,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "hammer",
+   "in_sample": {
+    "days": 27,
+    "trades": 27,
+    "mean_bps": -24.544077614227305,
+    "t": -0.7782943547739328
+   },
+   "judged": {
+    "days": 17,
+    "trades": 17,
+    "mean_bps": 0.12003146888070655,
+    "t": 0.0038679473473671997
+   },
+   "ref_cost_judged_mean_bps": 10.120031468880706,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "shooting_star",
+   "in_sample": {
+    "days": 17,
+    "trades": 17,
+    "mean_bps": -34.804198101585946,
+    "t": -0.8900545398224122
+   },
+   "judged": {
+    "days": 13,
+    "trades": 13,
+    "mean_bps": 29.68902332736169,
+    "t": 0.491767491547893
+   },
+   "ref_cost_judged_mean_bps": 39.68902332736169,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "long_bull",
+   "in_sample": {
+    "days": 45,
+    "trades": 45,
+    "mean_bps": -19.113135659899438,
+    "t": -0.5607749214264837
+   },
+   "judged": {
+    "days": 33,
+    "trades": 33,
+    "mean_bps": -40.429537477645646,
+    "t": -1.3712248699939171
+   },
+   "ref_cost_judged_mean_bps": -30.429537477645653,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "long_bear",
+   "in_sample": {
+    "days": 51,
+    "trades": 51,
+    "mean_bps": -36.05582437085092,
+    "t": -1.1418874580677327
+   },
+   "judged": {
+    "days": 62,
+    "trades": 62,
+    "mean_bps": -5.533943013677028,
+    "t": -0.25148136302080526
+   },
+   "ref_cost_judged_mean_bps": 4.466056986322971,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "lower_wick",
+   "in_sample": {
+    "days": 93,
+    "trades": 93,
+    "mean_bps": -29.565746566859648,
+    "t": -1.3854338589254402
+   },
+   "judged": {
+    "days": 77,
+    "trades": 77,
+    "mean_bps": -26.29190255160278,
+    "t": -1.501657386831885
+   },
+   "ref_cost_judged_mean_bps": -16.29190255160278,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "BTC_NY",
+   "rule": "upper_wick",
+   "in_sample": {
+    "days": 69,
+    "trades": 69,
+    "mean_bps": -13.000136606988303,
+    "t": -0.6535877731426669
+   },
+   "judged": {
+    "days": 66,
+    "trades": 66,
+    "mean_bps": -17.2489971586796,
+    "t": -0.7748851968449476
+   },
+   "ref_cost_judged_mean_bps": -7.2489971586795985,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "color",
+   "in_sample": {
+    "days": 792,
+    "trades": 792,
+    "mean_bps": -42.33534302341915,
+    "t": -3.820734236291605
+   },
+   "judged": {
+    "days": 693,
+    "trades": 693,
+    "mean_bps": -39.659997485311465,
+    "t": -2.9076403257929067
+   },
+   "ref_cost_judged_mean_bps": -29.659997485311465,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "dragonfly",
+   "in_sample": {
+    "days": 6,
+    "trades": 6,
+    "mean_bps": -11.520544753171677,
+    "t": -0.23253133859300523
+   },
+   "judged": {
+    "days": 6,
+    "trades": 6,
+    "mean_bps": -19.287706145553734,
+    "t": -0.3965872433696054
+   },
+   "ref_cost_judged_mean_bps": -9.287706145553738,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "gravestone",
+   "in_sample": {
+    "days": 5,
+    "trades": 5,
+    "mean_bps": -85.83759949364357,
+    "t": -0.7662838289651069
+   },
+   "judged": {
+    "days": 6,
+    "trades": 6,
+    "mean_bps": 133.91249513259135,
+    "t": 1.8614056706870894
+   },
+   "ref_cost_judged_mean_bps": 143.91249513259135,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "marubozu_bull",
+   "in_sample": {
+    "days": 10,
+    "trades": 10,
+    "mean_bps": -35.386192025740655,
+    "t": -0.7150120095194564
+   },
+   "judged": {
+    "days": 15,
+    "trades": 15,
+    "mean_bps": 44.48825289943607,
+    "t": 0.7505686741319719
+   },
+   "ref_cost_judged_mean_bps": 54.488252899436084,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "marubozu_bear",
+   "in_sample": {
+    "days": 14,
+    "trades": 14,
+    "mean_bps": -18.602468032286197,
+    "t": -0.26230957655761566
+   },
+   "judged": {
+    "days": 23,
+    "trades": 23,
+    "mean_bps": 20.044514732182808,
+    "t": 0.2926188284937627
+   },
+   "ref_cost_judged_mean_bps": 30.044514732182808,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "hammer",
+   "in_sample": {
+    "days": 41,
+    "trades": 41,
+    "mean_bps": -34.69283600095356,
+    "t": -0.7257218480643604
+   },
+   "judged": {
+    "days": 36,
+    "trades": 36,
+    "mean_bps": 36.30683120984552,
+    "t": 0.7896124880975641
+   },
+   "ref_cost_judged_mean_bps": 46.30683120984552,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "shooting_star",
+   "in_sample": {
+    "days": 28,
+    "trades": 28,
+    "mean_bps": 47.417925853718536,
+    "t": 0.9353990390397837
+   },
+   "judged": {
+    "days": 27,
+    "trades": 27,
+    "mean_bps": 64.75773829444643,
+    "t": 1.026839186179023
+   },
+   "ref_cost_judged_mean_bps": 74.75773829444643,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "long_bull",
+   "in_sample": {
+    "days": 67,
+    "trades": 67,
+    "mean_bps": -3.2292736362477457,
+    "t": -0.08881124615864572
+   },
+   "judged": {
+    "days": 44,
+    "trades": 44,
+    "mean_bps": -96.01217159067313,
+    "t": -2.4796410032292475
+   },
+   "ref_cost_judged_mean_bps": -86.01217159067315,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "long_bear",
+   "in_sample": {
+    "days": 80,
+    "trades": 80,
+    "mean_bps": -33.55628247385406,
+    "t": -0.9468629947306778
+   },
+   "judged": {
+    "days": 70,
+    "trades": 70,
+    "mean_bps": 18.498747484113803,
+    "t": 0.36022941098880557
+   },
+   "ref_cost_judged_mean_bps": 28.498747484113807,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "lower_wick",
+   "in_sample": {
+    "days": 148,
+    "trades": 148,
+    "mean_bps": 4.1137213333715295,
+    "t": 0.13333533818626794
+   },
+   "judged": {
+    "days": 114,
+    "trades": 114,
+    "mean_bps": 6.428550973144708,
+    "t": 0.23703401180810002
+   },
+   "ref_cost_judged_mean_bps": 16.42855097314471,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_UTC",
+   "rule": "upper_wick",
+   "in_sample": {
+    "days": 122,
+    "trades": 122,
+    "mean_bps": -19.638800211803268,
+    "t": -0.7573871497784844
+   },
+   "judged": {
+    "days": 108,
+    "trades": 108,
+    "mean_bps": -17.080499208127396,
+    "t": -0.5174105597047083
+   },
+   "ref_cost_judged_mean_bps": -7.080499208127393,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "color",
+   "in_sample": {
+    "days": 564,
+    "trades": 564,
+    "mean_bps": -19.12639720595286,
+    "t": -2.154218627920692
+   },
+   "judged": {
+    "days": 496,
+    "trades": 496,
+    "mean_bps": -2.2199236965446882,
+    "t": -0.18972212940747313
+   },
+   "ref_cost_judged_mean_bps": 7.7800763034553135,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "dragonfly",
+   "in_sample": {
+    "days": 4,
+    "trades": 4,
+    "mean_bps": -62.259330043843136,
+    "t": -2.1288061920893706
+   },
+   "judged": {
+    "days": 1,
+    "trades": 1,
+    "mean_bps": 45.081218808866744,
+    "t": 0.0
+   },
+   "ref_cost_judged_mean_bps": 55.081218808866744,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "gravestone",
+   "in_sample": {
+    "days": 4,
+    "trades": 4,
+    "mean_bps": -194.71119780636425,
+    "t": -1.4670377506342247
+   },
+   "judged": {
+    "days": 0,
+    "trades": 0,
+    "mean_bps": 0.0,
+    "t": 0.0
+   },
+   "ref_cost_judged_mean_bps": 0.0,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "marubozu_bull",
+   "in_sample": {
+    "days": 9,
+    "trades": 9,
+    "mean_bps": -104.11630869170061,
+    "t": -1.6270960700659651
+   },
+   "judged": {
+    "days": 6,
+    "trades": 6,
+    "mean_bps": 15.510202552909702,
+    "t": 0.16950998136415557
+   },
+   "ref_cost_judged_mean_bps": 25.510202552909703,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "marubozu_bear",
+   "in_sample": {
+    "days": 10,
+    "trades": 10,
+    "mean_bps": -106.82989052586677,
+    "t": -2.7459425072577184
+   },
+   "judged": {
+    "days": 9,
+    "trades": 9,
+    "mean_bps": -127.70668756228675,
+    "t": -2.579453350792567
+   },
+   "ref_cost_judged_mean_bps": -117.70668756228675,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "hammer",
+   "in_sample": {
+    "days": 19,
+    "trades": 19,
+    "mean_bps": -70.273194011368,
+    "t": -1.1199024985134614
+   },
+   "judged": {
+    "days": 18,
+    "trades": 18,
+    "mean_bps": -5.857421472423777,
+    "t": -0.18122832003996667
+   },
+   "ref_cost_judged_mean_bps": 4.142578527576223,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "shooting_star",
+   "in_sample": {
+    "days": 17,
+    "trades": 17,
+    "mean_bps": -33.002810463627846,
+    "t": -1.0902133033984995
+   },
+   "judged": {
+    "days": 8,
+    "trades": 8,
+    "mean_bps": -3.6456517964074266,
+    "t": -0.04179577788099717
+   },
+   "ref_cost_judged_mean_bps": 6.354348203592574,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "long_bull",
+   "in_sample": {
+    "days": 42,
+    "trades": 42,
+    "mean_bps": -15.398458658021962,
+    "t": -0.4657874849453865
+   },
+   "judged": {
+    "days": 38,
+    "trades": 38,
+    "mean_bps": -44.39057126105842,
+    "t": -1.5270031753615998
+   },
+   "ref_cost_judged_mean_bps": -34.39057126105842,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "long_bear",
+   "in_sample": {
+    "days": 54,
+    "trades": 54,
+    "mean_bps": -34.03066903385135,
+    "t": -1.1996910109850003
+   },
+   "judged": {
+    "days": 46,
+    "trades": 46,
+    "mean_bps": 50.58358361288982,
+    "t": 1.1506062900660199
+   },
+   "ref_cost_judged_mean_bps": 60.58358361288983,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "lower_wick",
+   "in_sample": {
+    "days": 90,
+    "trades": 90,
+    "mean_bps": -51.55644526672389,
+    "t": -2.4136554819332763
+   },
+   "judged": {
+    "days": 82,
+    "trades": 82,
+    "mean_bps": 36.962577720703415,
+    "t": 1.3812587346070542
+   },
+   "ref_cost_judged_mean_bps": 46.96257772070342,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "first_candle",
+   "market": "ETH_NY",
+   "rule": "upper_wick",
+   "in_sample": {
+    "days": 67,
+    "trades": 67,
+    "mean_bps": -21.361147661599823,
+    "t": -1.0293626802677371
+   },
+   "judged": {
+    "days": 65,
+    "trades": 65,
+    "mean_bps": -44.45104388600312,
+    "t": -1.1711281867027665
+   },
+   "ref_cost_judged_mean_bps": -34.45104388600311,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "hammer",
+   "in_sample": {
+    "days": 712,
+    "trades": 1123,
+    "mean_bps": -9.477394958147881,
+    "t": -1.7497285282134016
+   },
+   "judged": {
+    "days": 875,
+    "trades": 1279,
+    "mean_bps": -1.8183890107494516,
+    "t": -0.27256358797545527
+   },
+   "ref_cost_judged_mean_bps": 1.0832490844886444,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "dragonfly",
+   "in_sample": {
+    "days": 382,
+    "trades": 470,
+    "mean_bps": -41.40731080955936,
+    "t": -9.752479311190482
+   },
+   "judged": {
+    "days": 609,
+    "trades": 709,
+    "mean_bps": -43.474782688931846,
+    "t": -9.265415788544537
+   },
+   "ref_cost_judged_mean_bps": -41.304010931953194,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "shooting_star",
+   "in_sample": {
+    "days": 635,
+    "trades": 874,
+    "mean_bps": -7.2137959802060845,
+    "t": -1.478287824960361
+   },
+   "judged": {
+    "days": 823,
+    "trades": 1117,
+    "mean_bps": -9.117598305662758,
+    "t": -1.8480839026793807
+   },
+   "ref_cost_judged_mean_bps": -6.268633041144635,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "gravestone",
+   "in_sample": {
+    "days": 350,
+    "trades": 403,
+    "mean_bps": -47.944676520131175,
+    "t": -9.59707388528099
+   },
+   "judged": {
+    "days": 621,
+    "trades": 730,
+    "mean_bps": -43.08781167349224,
+    "t": -9.302531036717474
+   },
+   "ref_cost_judged_mean_bps": -40.9353693761224,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "marubozu_bull",
+   "in_sample": {
+    "days": 990,
+    "trades": 1781,
+    "mean_bps": -16.850459495424158,
+    "t": -3.802209862020641
+   },
+   "judged": {
+    "days": 1116,
+    "trades": 1883,
+    "mean_bps": -3.1715755074532384,
+    "t": -0.5633089586175599
+   },
+   "ref_cost_judged_mean_bps": 0.03415925957185337,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "marubozu_bear",
+   "in_sample": {
+    "days": 804,
+    "trades": 1465,
+    "mean_bps": -20.61459654102981,
+    "t": -4.054659660293154
+   },
+   "judged": {
+    "days": 830,
+    "trades": 1383,
+    "mean_bps": -11.974564939895648,
+    "t": -1.4515800116782334
+   },
+   "ref_cost_judged_mean_bps": -9.130617722454454,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "long_bull",
+   "in_sample": {
+    "days": 2122,
+    "trades": 6583,
+    "mean_bps": -10.411710018048646,
+    "t": -4.177945800984653
+   },
+   "judged": {
+    "days": 2512,
+    "trades": 7946,
+    "mean_bps": 0.4883953642694586,
+    "t": 0.1482820632525668
+   },
+   "ref_cost_judged_mean_bps": 3.7476430521795696,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "long_bear",
+   "in_sample": {
+    "days": 1997,
+    "trades": 5800,
+    "mean_bps": -16.244870486436568,
+    "t": -5.0805594770322
+   },
+   "judged": {
+    "days": 2284,
+    "trades": 6428,
+    "mean_bps": -15.447881773179219,
+    "t": -3.9152108148777147
+   },
+   "ref_cost_judged_mean_bps": -12.365541934578433,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "bull_engulfing",
+   "in_sample": {
+    "days": 710,
+    "trades": 1076,
+    "mean_bps": -21.7856314692943,
+    "t": -3.617829007289655
+   },
+   "judged": {
+    "days": 858,
+    "trades": 1228,
+    "mean_bps": -10.588057029433639,
+    "t": -1.6747598716451169
+   },
+   "ref_cost_judged_mean_bps": -6.93253477391138,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "bear_engulfing",
+   "in_sample": {
+    "days": 843,
+    "trades": 1427,
+    "mean_bps": -4.289881614293217,
+    "t": -1.0292590883889112
+   },
+   "judged": {
+    "days": 1008,
+    "trades": 1567,
+    "mean_bps": -14.634324882586501,
+    "t": -2.518927389065926
+   },
+   "ref_cost_judged_mean_bps": -11.225991549253166,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "bull_harami",
+   "in_sample": {
+    "days": 694,
+    "trades": 1345,
+    "mean_bps": 0.5251540267804161,
+    "t": 0.08764796744117397
+   },
+   "judged": {
+    "days": 825,
+    "trades": 1381,
+    "mean_bps": -8.766687595926465,
+    "t": -1.4080598755562295
+   },
+   "ref_cost_judged_mean_bps": -5.875859313098181,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "bear_harami",
+   "in_sample": {
+    "days": 827,
+    "trades": 1447,
+    "mean_bps": 0.02722891251164132,
+    "t": 0.005857462725855496
+   },
+   "judged": {
+    "days": 961,
+    "trades": 1575,
+    "mean_bps": -8.957536758122819,
+    "t": -1.5977187107631972
+   },
+   "ref_cost_judged_mean_bps": -5.919451430339258,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "piercing",
+   "in_sample": {
+    "days": 66,
+    "trades": 90,
+    "mean_bps": 25.3242724276349,
+    "t": 1.0443879598744437
+   },
+   "judged": {
+    "days": 90,
+    "trades": 113,
+    "mean_bps": -12.557489194765093,
+    "t": -0.8879805518140259
+   },
+   "ref_cost_judged_mean_bps": -10.379711416987314,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "dark_cloud",
+   "in_sample": {
+    "days": 101,
+    "trades": 129,
+    "mean_bps": -19.25454948528542,
+    "t": -1.28934652909663
+   },
+   "judged": {
+    "days": 129,
+    "trades": 143,
+    "mean_bps": 11.815552096844696,
+    "t": 1.0027035676715779
+   },
+   "ref_cost_judged_mean_bps": 14.063614112348574,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "tweezer_bottom",
+   "in_sample": {
+    "days": 460,
+    "trades": 585,
+    "mean_bps": 1.4256471640777275,
+    "t": 0.20987731848349656
+   },
+   "judged": {
+    "days": 508,
+    "trades": 626,
+    "mean_bps": -18.30245948264793,
+    "t": -1.9361604118856757
+   },
+   "ref_cost_judged_mean_bps": -14.646291503645303,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "tweezer_top",
+   "in_sample": {
+    "days": 591,
+    "trades": 808,
+    "mean_bps": -10.031789714094371,
+    "t": -1.7253910869564084
+   },
+   "judged": {
+    "days": 697,
+    "trades": 862,
+    "mean_bps": -15.44405682968604,
+    "t": -1.9631626868274443
+   },
+   "ref_cost_judged_mean_bps": -11.953095567132236,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "morning_star",
+   "in_sample": {
+    "days": 306,
+    "trades": 501,
+    "mean_bps": -15.375573023137783,
+    "t": -1.7559654445598167
+   },
+   "judged": {
+    "days": 400,
+    "trades": 572,
+    "mean_bps": 4.196698924351096,
+    "t": 0.47919288119062553
+   },
+   "ref_cost_judged_mean_bps": 7.036698924351097,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "evening_star",
+   "in_sample": {
+    "days": 362,
+    "trades": 519,
+    "mean_bps": -10.186999805681033,
+    "t": -1.545188877818001
+   },
+   "judged": {
+    "days": 446,
+    "trades": 599,
+    "mean_bps": -1.731555569991801,
+    "t": -0.1759672934864072
+   },
+   "ref_cost_judged_mean_bps": 1.0068599755986347,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "three_soldiers",
+   "in_sample": {
+    "days": 463,
+    "trades": 722,
+    "mean_bps": -25.2484662506434,
+    "t": -4.342100463270035
+   },
+   "judged": {
+    "days": 641,
+    "trades": 974,
+    "mean_bps": -4.319207134592052,
+    "t": -0.5098019844935892
+   },
+   "ref_cost_judged_mean_bps": -1.115462984826059,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "daily_pattern",
+   "market": "30 markets",
+   "rule": "three_crows",
+   "in_sample": {
+    "days": 329,
+    "trades": 457,
+    "mean_bps": -23.39802064694086,
+    "t": -1.8823323536859944
+   },
+   "judged": {
+    "days": 398,
+    "trades": 559,
+    "mean_bps": -23.35609835289591,
+    "t": -1.7397022466844747
+   },
+   "ref_cost_judged_mean_bps": -20.530701527499083,
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "combined",
+   "market": "STOCKS",
+   "rule": "ridge_first_candle",
+   "in_sample": {
+    "days": 509,
+    "trades": 14173,
+    "mean_bps": 5.541004484717316,
+    "t": 1.777031805600993
+   },
+   "judged": {
+    "days": 474,
+    "trades": 13462,
+    "mean_bps": -1.394606279974024,
+    "t": -0.3206294319186445
+   },
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "combined",
+   "market": "BTC_UTC",
+   "rule": "ridge_first_candle",
+   "in_sample": {
+    "days": 537,
+    "trades": 537,
+    "mean_bps": 43.19643987358512,
+    "t": 3.8455420067115034
+   },
+   "judged": {
+    "days": 484,
+    "trades": 484,
+    "mean_bps": -23.38292249312682,
+    "t": -2.181695088609586
+   },
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "combined",
+   "market": "BTC_NY",
+   "rule": "ridge_first_candle",
+   "in_sample": {
+    "days": 258,
+    "trades": 258,
+    "mean_bps": 47.81658519338035,
+    "t": 3.8562741410451156
+   },
+   "judged": {
+    "days": 240,
+    "trades": 240,
+    "mean_bps": -20.518249150570902,
+    "t": -1.8711185442286324
+   },
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "combined",
+   "market": "ETH_UTC",
+   "rule": "ridge_first_candle",
+   "in_sample": {
+    "days": 537,
+    "trades": 537,
+    "mean_bps": 29.532357803565432,
+    "t": 2.3218285731670916
+   },
+   "judged": {
+    "days": 474,
+    "trades": 474,
+    "mean_bps": -3.021863297472736,
+    "t": -0.17528744197344465
+   },
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "combined",
+   "market": "ETH_NY",
+   "rule": "ridge_first_candle",
+   "in_sample": {
+    "days": 257,
+    "trades": 257,
+    "mean_bps": 33.26808602526822,
+    "t": 2.6717745178688457
+   },
+   "judged": {
+    "days": 252,
+    "trades": 252,
+    "mean_bps": -4.342730601418513,
+    "t": -0.2313358579081008
+   },
+   "verdict": "FAIL",
+   "bh_significant": false
+  },
+  {
+   "part": "combined",
+   "market": "30 markets",
+   "rule": "ridge_daily",
+   "in_sample": {
+    "days": 3112,
+    "trades": 43045,
+    "mean_bps": 5.114813594276654,
+    "t": 3.29696490025677
+   },
+   "judged": {
+    "days": 3891,
+    "trades": 52239,
+    "mean_bps": 1.542137751682074,
+    "t": 0.6626260381445173
+   },
+   "verdict": "FAIL",
+   "bh_significant": false
+  }
+ ],
+ "registered": 81,
+ "t_bar": 3.5,
+ "markets": [
+  "BTC_NY",
+  "BTC_UTC",
+  "ETH_NY",
+  "ETH_UTC",
+  "STOCKS"
+ ],
+ "daily_markets": [
+  "BTC-USD",
+  "DIA",
+  "EEM",
+  "EFA",
+  "ETH-USD",
+  "EURUSD=X",
+  "FXE",
+  "FXY",
+  "GBPUSD=X",
+  "GLD",
+  "IWM",
+  "QQQ",
+  "SLV",
+  "SPY",
+  "TLT",
+  "UNG",
+  "USDJPY=X",
+  "USO",
+  "UUP",
+  "XLB",
+  "XLE",
+  "XLF",
+  "XLI",
+  "XLK",
+  "XLP",
+  "XLU",
+  "XLV",
+  "^FTSE",
+  "^GDAXI",
+  "^N225"
+ ]
+}

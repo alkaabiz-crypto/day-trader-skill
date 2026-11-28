@@ -23,8 +23,9 @@ $500 test: copy House members' stock buys,FAIL,"judged -0.89%/month vs SPY, t -2
 "crypto platform bot: DCA (buy more on dips), BTC $500",FAIL,$500 -> $572 since 2024 vs $991 holding BTC
 "crypto platform bot: grid, BTC $500",FAIL,$500 -> $558 since 2024 vs $991 holding BTC
 strategy catalog: 60 named public strategies x 10 markets,FAIL,best coppock judged t 3.49 (bar 3.5); trend rules' edge is crypto only
-paper bots: Bitcoin trend (hold BTC above its 200-day average),PAPER,"2 days, $10000.00 vs $10339.72 holding BTC; now in cash"
-"paper bots: orb, full market every 15 min (scan > entry > exit > size > risk)",PAPER,"2 days (1 since v2), 4 trades, P&L -13.40 on $10,000 (SPY same days -77.39), 0 open"
-"paper bots: fed night (buy SPY before FOMC, sell at the open)",PAPER,"2 days, 0 trades, P&L +0.00 on $10,000"
-"paper bots: stocks in play (resting orders, 40 names)",PAPER,"2 days, 4 trades, P&L -78.60 on $10,000"
+"candlesticks: first 5-min candle, 20 daily patterns, ridge combo (81 tests)",FAIL,0 of 81 pass (bar t 3.5); best judged ETH_UTC gravestone t 1.86
+paper bots: Bitcoin trend (hold BTC above its 200-day average),PAPER,"3 days, $10000.00 vs $10231.11 holding BTC; now in cash"
+"paper bots: orb, full market every 15 min (scan > entry > exit > size > risk)",PAPER,"3 days (2 since v2), 4 trades, P&L -13.40 on $10,000 (SPY same days +83.48), 0 open"
+"paper bots: fed night (buy SPY before FOMC, sell at the open)",PAPER,"3 days, 0 trades, P&L +0.00 on $10,000"
+"paper bots: stocks in play (resting orders, 40 names)",PAPER,"3 days, 6 trades, P&L -142.77 on $10,000"
 "stocks in play, FORWARD test (frozen 2026-11-24)",FORWARD-TEST,"1 of 60 new sessions, -136.0 bp/day, t 0.00 at 5 bps"

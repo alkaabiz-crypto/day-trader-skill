@@ -101,7 +101,10 @@ fitting period. Full numbers are in `results/candles.json` and RESEARCH.md.
   Yahoo's daily FX candles carry bad high/low prints that create fake dojis, so the doji rows are distorted
   there. Without FX they are still nothing.
 - **Everything combined** (a ridge model on all candle features): FAIL on stocks and on daily markets.
-- **Bitcoin and Ethereum:** see RESEARCH.md once the download finishes.
+- **Bitcoin and Ethereum** (Tiingo 5-minute bars, run 2026-11-27 once both downloads reached that day): all 44
+  first-candle rules FAIL, on the UTC day and in the New York session. The best is ETH's gravestone, t 1.86 on 6
+  days. The ridge combo had in-sample t up to 3.86 on BTC, but after 2025 it turned negative (t -2.18), so it
+  was overfit. Overall, 0 of 81 tests pass and none is Benjamini-Hochberg significant.
 
 Bottom line: candle shapes describe the past period well, but on their own they don't predict the next one
 after costs. The market already reflects that information when the candle closes.
