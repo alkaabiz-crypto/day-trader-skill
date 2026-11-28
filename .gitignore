@@ -4,3 +4,4 @@ trader/
 trader-lab/data/daily/
 trader-lab/data/alpaca/
 trader-lab/data/alloc/
+.pytest_cache/

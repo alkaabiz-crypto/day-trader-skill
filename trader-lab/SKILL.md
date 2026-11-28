@@ -92,6 +92,9 @@ trip in basis points (default 3), `--oos` out-of-sample fraction (default
 | `data/<SYM>.json.gz` | the price store: every regular-session 5-minute bar ever fetched, merged, never shrinks |
 | `results/latest.json` | with `backtest --write`: every variant's stats and the chosen, weighted strategies |
 | `RESEARCH.md` | the research journal: papers, results, what was kept or dropped and why, the queue of ideas |
+| `exness.py` | Exness CFD minimum lots, round-trip cost in $ and bp, leverage and stop check (`table`, `check`) |
+| `judge.py` | the fixed WORTHY bar for daily strategies on a small account (before/since 2024, t, 2x costs, random timing, worst drop) |
+| `research/exness-2026-11/` | the Exness swap-free study: pre-registrations, scripts, results and paper ledgers |
 
 ## How it decides
 
@@ -116,6 +119,15 @@ trip in basis points (default 3), `--oos` out-of-sample fraction (default
 
 Read the t value. Many variants were tried, so an OOS t below about 2.5
 can be luck. The lab says so in every report.
+
+## Exness CFDs (small accounts)
+
+A CFD cannot be sized below the broker's minimum lot, so on a small account the minimum lot
+sets the risk. Before calling any CFD rule tradable, run `python3 exness.py check --symbol <SYM>
+--price <p> --stop <s> --account <$> --max-loss <$>` and judge its daily dollar P&L at the
+minimum lot with `judge.verdict`. Rows marked unverified in `exness.py` (ETH, oil spreads) must
+be checked in the user's MT5 terminal: at 12 bp instead of 3 bp the ETH London breakout drops
+from t 4.1 to t 2.9.
 
 ## How to talk about it
 

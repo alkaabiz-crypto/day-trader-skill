@@ -160,6 +160,13 @@ It never places an order, never edits an order to make it pass, never
 loosens a limit, never blocks a sell that only gets the user out, and never
 treats a PASS as the user's yes.
 
+## CFD orders (Exness)
+
+For a CFD order, also run `../trader-lab/exness.py check` with the order's symbol, price, stop,
+lots and the account size. Reject when the lot is below the minimum, when the loss at the stop
+at the minimum lot is over `max_loss_per_trade_usd` (the position cannot be made smaller), or
+when the position is more than 2x the account.
+
 ## Safety
 
 - Education and tooling, not financial advice. A PASS is a rules check, not a recommendation.
