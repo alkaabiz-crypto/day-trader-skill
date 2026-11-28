@@ -9789,12 +9789,12 @@
   "AVAX-USD": [],
   "LINK-USD": [],
   "LTC-USD": [
-   "reclaim_ma20"
+   "breakout_20d"
   ],
   "DOT-USD": [],
   "BCH-USD": [],
   "EURUSD=X": [
-   "oversold"
+   "oversold_bounce"
   ],
   "GBPUSD=X": [],
   "USDJPY=X": [],
@@ -9802,13 +9802,10 @@
   "USDCAD=X": [],
   "USDCHF=X": [],
   "NZDUSD=X": [],
-  "EURJPY=X": [
-   "breakdown_20h"
-  ],
+  "EURJPY=X": [],
   "GBPJPY=X": [],
   "EURGBP=X": [
-   "oversold",
-   "breakdown_20h"
+   "oversold_bounce"
   ],
   "AUDJPY=X": [],
   "EURCHF=X": [],
