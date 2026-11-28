@@ -1,0 +1,14 @@
+N1 ETH London breakout 0.2 lot     WORTHY | pre-24 $+1280 t 3.23 | 24-now $+326 t 1.52 | all t 3.57 | 2x $+1109 | random 100% | worst $-259
+      2018 +390 2019 +129 2020 +567 2021 +292 2022 -27 2023 -70 2024 +28 2025 +184 2026 +114
+      pre-2024 worst drop $-259
+N2 BTC London breakout 0.01 lot    fail   | pre-24 $+1322 t 2.24 | 24-now $+430 t 1.61 | all t 2.70 | 2x $+1536 | random 100% | worst $-337 | failed: whole_t, worst_drop
+      2018 +250 2019 +137 2020 +657 2021 +260 2022 -108 2023 +126 2024 +288 2025 +53 2026 +89
+      pre-2024 worst drop $-337
+N3 gold IBS above SMA200           fail   | pre-24 $+329 t 0.53 | 24-now $+417 t 0.84 | all t 0.94 | 2x $+603 | random  68% | worst $-519 | failed: before_2024, since_2024, whole_t, random_timing, worst_drop
+      2013 -63 2014 +61 2015 +0 2016 +281 2017 +107 2018 -81 2019 +180 2020 -77 2021 -142 2022 -21 2023 +85 2024 +369 2025 +236 2026 -189
+N4 gold turn of month              fail   | pre-24 $+698 t 0.86 | 24-now $+1082 t 1.51 | all t 1.64 | 2x $+1689 | random  92% | worst $-661 | failed: before_2024, whole_t, random_timing, worst_drop
+      2013 -355 2014 -194 2015 -1 2016 +598 2017 +59 2018 +129 2019 +131 2020 +334 2021 +120 2022 -28 2023 -95 2024 +277 2025 +624 2026 +181
+N5 gold Williams (GLD bars)        fail   | pre-24 $+291 t 0.47 | 24-now $-123 t -0.36 | all t 0.24 | 2x $-485 | random  94% | worst $-510 | failed: before_2024, since_2024, whole_t, double_cost, random_timing, worst_drop
+      2013 +128 2014 +17 2015 -69 2016 +8 2017 -95 2018 -125 2019 +77 2020 +248 2021 +45 2022 -38 2023 +95 2024 -159 2025 +232 2026 -196
+N6 oil Williams (USO bars)         fail   | pre-24 $-256 t -0.76 | 24-now $-347 t -1.66 | all t -1.53 | 2x $-1215 | random  55% | worst $-806 | failed: before_2024, since_2024, whole_t, double_cost, random_timing, worst_drop
+      2013 +71 2014 -46 2015 +89 2016 -71 2017 -154 2018 +66 2019 +32 2020 -130 2021 -76 2022 -58 2023 +23 2024 -92 2025 -36 2026 -220

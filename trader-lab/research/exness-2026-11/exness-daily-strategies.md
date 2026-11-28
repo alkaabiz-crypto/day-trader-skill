@@ -527,3 +527,245 @@ Reading: the chain on its own would have emptied a $1,000 account. The Time Mach
 - At one 0.01 lot from 2024: 368 trades, 52% won, net +$547, worst day -$49, worst drop -$226, $1,000 to $1,547.
 - Gold: strong 2013-2019 (t 4.4), gone since 2020 (t 0.3). Not for gold.
 Verdict: the strongest crypto result in this research. It is a well-known public rule, so the edge may be fading (the last two years are weaker). Demo forward-test candidate alongside USTEC IBS.
+
+## Batch 12: rules that fit $228-$1,000 at minimum lots (BTC 0.01, USTEC 0.05, US500 0.14, EURUSD 0.01). 0 PASS
+Pre-registered 2026-11-27 00:31 UTC. Swap-free costs (BTC 1.5 bp, USTEC 2.12 pt, US500 0.9 pt, EURUSD 1.2 pip). "$ from 2024" is one minimum lot.
+
+| rule | IS t | judged t | 2x cost | placebo | last 2 yrs t | $ from 2024 (worst drop) | verdict |
+|---|---|---|---|---|---|---|---|
+| BTC IBS < 0.2 at the UTC close | -0.22 | 1.47 | 1.41 | 69% | 0.52 | +$298 (-$104) | FAIL |
+| BTC IBS > 0.8 momentum | 3.75 | 0.16 | 0.08 | 14% | -1.18 | -$218 (-$372) | FAIL |
+| BTC RSI2 < 10 above SMA200 | 0.81 | 2.00 | 1.98 | 90% | 1.49 | +$280 (-$160) | FAIL |
+| BTC 3 lower closes | 1.47 | 1.70 | 1.66 | 88% | 1.60 | +$474 (-$85) | FAIL |
+| Williams SHORT, BTC | 4.65 | 2.56 | 2.41 | 100% | 0.75 | +$119 (-$195) | FAIL |
+| Williams long + short, BTC | 9.80 | 6.14 | 5.89 | 100% | 1.14 | +$681 (-$195) | the long side alone already passed; adding the short adds +$134 and no lower drop |
+| Williams SHORT, USTEC | 0.16 | 1.38 | 1.02 | 99% | 1.87 | +$352 (-$106) | FAIL |
+| Williams SHORT, US500 | -1.41 | -1.74 | -2.47 | 48% | 0.19 | -$6 | FAIL |
+| Williams long / short, EURUSD (2022-26 5-min bars, judged 2024-07 on) | -0.67 / -1.26 | 0.22 / 0.75 | | 58% / 96% | | -$25 / +$33 | FAIL |
+| Intraday momentum (Gao et al.): overnight+first 30 min sign -> trade 15:30-16:00, USTEC / US500 | 0.65 / -1.17 | **-2.91 / -3.24** | | | | -$94 / -$123 | FAIL (it ran backwards since 2021) |
+| Same, 9:30-15:30 sign (Baltussen) | -0.45 / -1.22 | -0.62 / -2.52 | | | | -$238 / -$237 | FAIL |
+| Same, both signs must agree | 0.62 / -0.92 | -1.71 / -2.90 | | | | | FAIL |
+(Yahoo's daily EURUSD bars have open = close and can't be used for intraday rules; the repo's 5-minute EURUSD was used instead.)
+
+Reading: none of the small-lot ideas beats the two survivors. BTC RSI2 and 3-lower-closes are mildly positive but under t 2. Intraday momentum, a well-published effect, has reversed on US indices since 2021, so it is not worth a reversal bet either (that would be chosen after seeing the data).
+
+## Batch 13: after-close overnight reversal and crude oil at 0.01 lot. 0 PASS
+| rule | IS t | judged t | 2x cost | Standard | placebo | last 2 yrs t | $ from 2024 at min lot | verdict |
+|---|---|---|---|---|---|---|---|---|
+| USTEC: day down 1%+ -> buy 16:10, sell next 9:30 | 0.16 | 1.02 | 0.90 | 0.67 | 66% | 1.04 | +$258 | FAIL |
+| USTEC: any down day, same | 0.51 | 1.44 | 1.21 | 0.73 | 71% | 1.27 | +$352 | FAIL |
+| US500: day down 1%+ / any down day | 0.44 / 0.96 | 0.79 / 1.07 | | | 65% / 57% | | +$91 / +$141 | FAIL |
+| Oil IBS at the close | 1.87 | -0.91 (1.40 without the Apr-May 2020 negative-price weeks) | | | 28% | 0.45 | +$121 | FAIL |
+| Oil RSI2 | -0.13 | -0.60 | | | | | -$69 | FAIL |
+| Oil Williams long / short | 1.38 / -1.43 | -1.54 / 1.24 | | | 11% / 98% | | -$33 / +$117 | FAIL |
+(Oil cost assumed 5 bp; Exness's oil spread is not measured. Pre-FOMC drift on USTEC was dropped: the Fed calendar site isn't on the network allowlist.)
+
+## Batch 14: "IBS at the close" on other stock indices (daily bars, judged 2013 on, 1.5 bp). No new market passes
+| index | judged t | Sharpe vs hold | Standard | placebo | last 2 yrs t | verdict |
+|---|---|---|---|---|---|---|
+| USTEC (QQQ, check) | **4.66** | 1.25 vs 0.90 | 4.22 | 100% | 1.94 | PASS (as batch 8) |
+| US30 (Dow) | 2.79 | 0.75 vs 0.65 | 2.22 | 98% | 0.81 | FAIL (just short) |
+| US2000 (Russell) | 2.40 | 0.64 vs 0.48 | 1.84 | 98% | 1.28 | FAIL |
+| Nikkei 225 | 1.79 | 0.49 vs 0.68 | 1.29 | 77% | 0.82 | FAIL |
+| DAX, FTSE, STOXX 50, Hang Seng | -0.85 to 0.25 | | | | | FAIL |
+Reading: the IBS bounce is a US-index effect, strongest on the Nasdaq. Europe and Asia show nothing. This supports USTEC IBS being real rather than luck, but it adds no second market. Its last two years are weaker (t 1.94), which the paper ledger will show.
+
+## Batch 15: scanner strategies that trade EVERY day (Hazza's ask: at least 3 daily candidates)
+Universe: the repo's 30 single stocks (stock CFDs; Exness spreads, lots and listings not verified) and the CFD indices/crypto. $1,000 split across the picks, 3 bp round trip. Placebo = buying the same number of RANDOM names from the same list on the same days (this matters: the list is today's winners, so just holding any of them made money).
+
+Daily bars, judged 2019-2026:
+| rule (trades every day) | judged t | 5 / 10 bp | placebo | $ 2019 on | worst drop | $ 2024 on | last 2 yrs t |
+|---|---|---|---|---|---|---|---|
+| D1 3 lowest-IBS stocks, close -> next open | 2.93 | 2.33 / 0.82 | **96%** | +$1,924 | -$380 | +$1,068 | 1.65 |
+| D1b same, close -> next close | 1.90 | | 40% | +$2,014 | -$557 | +$719 | 0.58 |
+| D2 3 lowest RSI2 above SMA200 | 2.36 | | 42% | +$2,164 | -$548 | +$470 | -0.49 |
+| D3 2 biggest gap-downs, open -> close | -0.41 | | 7% | -$465 | -$1,263 | -$962 | -1.37 |
+| D4 3 worst 5-day returns | 1.37 | | 12% | +$1,816 | -$997 | +$772 | 0.38 |
+| D5 lowest-IBS market of US500/USTEC/US30/US2000/BTC/ETH | 2.82 | | 96% | +$4,040 | -$554 | +$885 | 0.97 (look-ahead: BTC/ETH's day closes 3 h after the US close; not usable as is) |
+| D5b same, US indices only | 1.74 | | 54% | +$1,126 | -$423 | +$290 | 0.70 |
+| D6 scanner + Time Machine, relaxed to 1 trade a day (5-min, 2024-26) | -0.37 | | | -$76 | -$289 | | -0.96 (relaxing the gate kills the +$189) |
+Random 3 names held close -> next close made a median +$2,100 since 2019: D1b, D2 and D4 are no better than random.
+
+5-minute check (realistic: decide 15:50, buy the 15:55 bar, sell the next 9:30 open; 2022-12 to 2026-11; the store isn't split-adjusted, so split nights were dropped):
+| rule | t | placebo | total $ | worst drop | $ 2024 on | last 2 yrs t |
+|---|---|---|---|---|---|---|
+| **D7 3 worst intraday losers (9:30-15:50), 15:55 -> 9:30** | 1.65 | 61% | +$987 | -$352 | **+$1,134** | 0.95 |
+| D1 3 lowest IBS, 15:55 -> 9:30 | 1.10 | 38% | +$472 | -$465 | +$413 | -0.55 |
+| USTEC every night, 16:10 -> 9:30, 0.05 lot (from batch 13) | 1.94 | | +$640 | -$264 | +$621 | |
+| random 3 of the 30 stocks, 15:55 -> 9:30 (median of 200) | | | +$651 | | +$534 | |
+Exiting at 9:35 or 10:00 instead of 9:30 cuts D1 and D7 by half or more. 10 bp costs make D1 lose and leave D7 at about breakeven-plus.
+
+Ranking for daily trading (by profit since 2024 and worst drop, realistic fills). **All three are WEAK: none clears t 3, and most of their profit is the ordinary overnight drift that random stocks or plain USTEC also earn.**
+1. D7 intraday-loser scan: +$1,134 since 2024, worst -$352 (above the $300 limit at $1,000; run at $500 for -$176).
+2. USTEC every night at 0.05 lot: +$621, worst -$264, known costs, no scanner.
+3. D1 lowest-IBS scan: +$413, worst -$465; the daily-bar result (t 2.93, placebo 96%) did not survive 5-minute fills.
+All three are on the paper ledger (`ibs_paper/daily_paper.py`, from 2026-11-27, kill -$300 per book). A replay of Nov 2-25 2026: D7 +$43, D1 +$44, USTEC +$46.
+
+### Batch 15c: the stock scans at Exness's real stock-CFD hours. NOT TRADABLE on Exness
+Exness stock CFDs trade only 09:40-15:45 New York and are not swap-free (web lookup 2026-11-27). Retest: decide 15:35, buy 15:40, sell next 09:45, 3 bp + 8%/yr long swap (Friday 3 nights).
+| rule | t | placebo | total $ 2022-26 | worst drop | $ 2024 on |
+|---|---|---|---|---|---|
+| D7 intraday losers | 0.86 | 29% | +$557 | -$436 | +$584 |
+| D1 lowest IBS | -0.17 | 4% | -$84 | -$784 | -$304 |
+| (random 3 names, one draw) | 1.35 | | +$668 | -$354 | +$269 |
+Both fail the pre-set bar (t >= 2 and net > 0 after swap) and were taken off the paper ledger before any paper trade.
+Replacement daily book, same timing as USTEC every night: **US500 every night** at 0.14 lot (16:10 -> 9:30, 0.9 pt cost): 2016-26 +$610 (worst -$326), 2024 on +$337 (worst -$174), t 2.09 since 2024. Weak.
+Daily-trading candidates actually executable on Exness, ranked: 1) USTEC every night (+$621 since 2024, worst -$264); 2) US500 every night (+$337, -$174); 3) BTC Williams, an order every day that fills on about 1 day in 3 (+$562, -$150; the one real pass). NQ and SP move together, so run one of them, not both, on $1,000.
+Update 2026-11-27 01:20 UTC: Hazza says the 09:40-15:45 stock-hours source is wrong, so D7 and D1 are back on the paper ledger as first designed (15:55 -> 9:30, $0 swap, 3 bp), next to NQ and SP. Exness stock hours stay unconfirmed; if the 15:55 entry or 9:30 exit isn't possible in MT5, the 15c numbers apply.
+
+## Batches 16-19: swing "buy low, sell in 2-3 days" and academic anomalies (overnight 2026-11-27)
+All pre-registered (PREREG.md). Indices judged 2013-2026 on 2000-2026 daily data, crypto judged 2020 on, swap-free costs, close fills.
+Pass bar: IS > 0, judged t >= 3, 2x cost positive, placebo >= 95%, Sharpe above holding, both halves positive.
+
+- **Batch 16:** 13 swing/calendar rules on US500, USTEC, US30, US2000, BTC and ETH: 1 PASS of 70.
+  - Rules: Connors RSI2, cumulative RSI, R3, %b, multiple down days, 10-day low hold 3 days, 5-day low hold 2 days, VIX stretch, multi-day IBS, pre-holiday, option-expiration week, Halloween, turn of month.
+  - The pass is US30 %b (t 3.72, 37 trades).
+  - Near: US500 10-day low hold 3 days (t 3.11, Sharpe 0.83 vs hold 0.86). USTEC multi-day IBS (t 2.96).
+  - Calendar effects (pre-holiday, opex week, Halloween, turn of month) all failed since 2013.
+- **Batch 17:**
+  - FX swing on 6 pairs: 0 of 36.
+  - **Vol filter (hold only when 20-day vol < 20%) PASSES:** US500 t 3.69, USTEC t 3.61.
+  - US dip ensemble (R1+R6+R9 on US500 and USTEC): t 3.72, but a -$543 drop since 2024 at min lots.
+  - Connors stock swing (RSI2 < 5 above SMA200, up to 3 names, sell above SMA5, average hold 3.9 days, 67% winners): t 2.66, placebo 96%, +$773 since 2024, worst -$300. Near.
+  - Weekly stock reversal: t 3.13 but placebo 83%. Fail.
+- **Batch 18:**
+  - Vol filter confirmed on US30 (t 3.42), not US2000.
+  - VIX contango filter: placebo fail.
+  - Month-end pension rebalancing: t 2.85, placebo 99%, 4% of days in market. Near.
+  - BTC weekend fade: fail.
+- **Batch 19:** crypto weekly time-series momentum.
+  - ETH 7-day passes bare (t 3.09). BTC 7-day fails (2.49).
+  - The 28-day lookback passes on both (t 3.70 / 3.71), but it was a reported neighbour, and on BTC it is the same trade as Donchian (correlation 0.80).
+
+### Ranked list of everything that passes (distinct ideas, at Exness minimum lots)
+| # | strategy | judged t | $ since 2024 | worst drop since 2020 | trades/yr | notes |
+|---|---|---|---|---|---|---|
+| 1 | USTEC IBS at the close (0.05) | 4.3-4.6 | +$426 | -$154 | ~36 | on paper ledger |
+| 2 | BTC Williams breakout (0.01) | 5.96 | +$562 | -$250 | ~120 | last 2 yrs t 1.2; on paper |
+| 3 | BTC trend: Donchian 20/10 or 28-day momentum (0.01) | 3.0 / 3.7 | +$339 / +$459 | -$385 / -$221 | 5-10 | one idea, two versions |
+| 4 | Vol-managed index: hold USTEC / US500 / US30 only when 20-day vol < 20% | 3.4-3.7 | +$293 (USTEC) / +$321 (US500) | -$211 / -$142 | 2-4 | earns LESS than holding, but halves the worst drop (USTEC 2000-26: -16% vs -83%) |
+| 5 | US30 Bollinger %b dip (min lot unverified) | 3.72 | +$89 | -$147 | ~3 | fragile: 37 trades, flat for 2 years |
+| 6 | ETH weekly momentum, 7-day (ETH min lot unverified) | 3.09 | +$589 | -$502 | ~13 | drop too big for $1,000 |
+| 7 | US dip ensemble, 6 sub-rules at min lots | 3.72 | +$1,476 | -$665 | ~70 | too big for $1,000 (up to 6 lots at once); 0.60 correlated with #1 |
+Near misses (not called strategies): month-end rebalancing (t 2.85), Connors stock swing (t 2.66), US500 10-day low hold 3 days (t 3.11, Sharpe just under hold).
+**Fewer than 10 pass. 7 clear the bar; only #1-#4 are usable on a $1,000 account.**
+Correlations (2020 on): IBS vs Williams 0.13, IBS vs vol filter 0.19, Williams vs Donchian 0.43, Donchian vs BTC 28-day 0.80, IBS vs ensemble 0.60.
+
+## Batch 20: every standard indicator and candlestick signal. 0 of 400 PASS
+- **What was tested:** 50 textbook signals with standard settings:
+  - Oscillators: RSI, Stochastic, StochRSI, Williams %R, CCI, ROC, Momentum, Ultimate, CMO, MACD, PPO, TRIX, Awesome.
+  - Trend: MA crosses, ADX/DI, Parabolic SAR, Supertrend, Ichimoku, Aroon, Donchian, Keltner, Heikin-Ashi, Vortex.
+  - Volatility: Bollinger, squeeze, Keltner touch, big range, NR7.
+  - Volume: OBV, CMF, A/D, MFI, volume spike, Force index.
+  - Candles: engulfing, hammer, morning star, piercing, three soldiers, doji, harami, inside bar, key reversal, three crows.
+- **How:** long entries at the close, hold 1 or 3 days, on US500, USTEC, US30 and BTC, at swap-free costs.
+- **Multiple-testing guard:** 200 sets of random entries matched to each signal's trade count. The 95th percentile of the best random t across the 50 signals was 3.2-4.0 depending on market and hold. In other words, with 50 tries, pure luck reaches t 3-4.
+- **Results:**
+  - Best real signals: USTEC Donchian 20 breakout, hold 1 day, t 3.64 (but in-sample negative). US30 inside bar, hold 3 days, t 3.52 (below its random bar of 3.69). BTC Keltner upper break, hold 3 days, t 3.07 (bar 3.40).
+  - Nothing beats random luck.
+- **Reading:** standard indicators and candlestick patterns used as entry signals add nothing on these markets once you account for how many were tried.
+- **Caution on earlier passes:** results with t 3.0-3.7 (BTC Donchian 3.00, ETH momentum 3.09, US30 %b 3.72, vol filters 3.4-3.7) sit inside the range luck reaches over a large family of tries. Only USTEC IBS at the close (t 4.3-4.6, and it holds on 26 years and on the other US indices) and BTC Williams (t 5.96) clearly clear it.
+
+## Paper strategies backtested before 2024 (daily bars, swap-free costs, fixed min-lot notional: USTEC $1,250, US500 $950, BTC $630, stock books $1,000)
+| strategy | 2000-07 | 2008-12 | 2013-19 | 2020-23 | 2024-now | t before 2024 |
+|---|---|---|---|---|---|---|
+| USTEC IBS at close | +$1,240 (worst -$586) | +$756 (-$208) | +$835 (-$187) | +$1,338 (-$154) | +$426 (-$113) | 3.99 |
+| BTC Williams (from 2014-09) | | | +$4,251 (-$95) | +$2,198 (-$250) | +$562 (-$150) | 10.1 |
+| BTC 20-day breakout | | | +$2,005 (-$473) | +$1,559 (-$385) | +$339 (-$286) | 4.13 |
+| Calm USTEC hold | +$480 (-$179) | +$366 (-$187) | +$1,268 (-$137) | +$532 (-$174) | +$293 (-$211) | 3.81 |
+| USTEC every night | +$1,031 (-$508) | +$255 (-$349) | +$1,010 (-$156) | +$284 (-$395) | +$606 (-$242) | 2.95 |
+| US500 every night | +$252 (-$422) | -$5 (-$258) | +$415 (-$152) | +$120 (-$316) | +$303 (-$168) | 1.49 |
+| Stock scan: biggest losers (from 2005) | +$264 (-$155) | +$553 (-$418) | +$943 (-$338) | +$104 (-$626) | +$1,368 (-$280) | 2.02 |
+| Stock scan: lowest IBS (from 2005) | +$539 (-$67) | +$1,207 (-$173) | +$1,273 (-$244) | +$713 (-$380) | +$1,050 (-$277) | 4.83 |
+Caveats:
+- The stock scans here use daily bars (close to next open). On 5-minute bars from 2022, the IBS scan made far less (t 1.10) and did no better than random stocks.
+- The 30-stock list is today's winners, so its early years flatter it (survivorship bias).
+- Every strategy has made money in every period with data, except US500 every night, which lost $5 in 2008-12. Its t before 2024 is only 1.49.
+- Worst drops over $300 in some periods: USTEC IBS -$586 in 2000-07 (dot-com), BTC breakout -$473, USTEC every night -$508 and -$395, US500 every night -$422 and -$316, biggest-losers scan -$626 in 2020-23, lowest-IBS scan -$380 in 2020-23.
+
+## Batch 22: Supertrend on its own (ATR 7/10/14 x mult 2/3, long-only and long/short). FAIL everywhere
+Earlier tests: Supertrend 10/3 always-in (batches 1-2, 7) and as a 1/3-day entry (batch 20) also failed.
+
+| market | long-only judged t (6 variants) | long/short judged t | verdict |
+|---|---|---|---|
+| USTEC daily | 2.6 to 3.1 | -0.0 to 0.4 | FAIL: Sharpe 0.83 vs 0.91 for just holding (it does cut the worst drop from -35% to -20%) |
+| US500 daily | 1.9 to 2.3 | -0.7 to -0.2 | FAIL |
+| US30 daily | 2.1 to 2.7 | -0.4 to 0.2 | FAIL |
+| Gold daily | 0.3 to 1.7 | -1.1 to 0.9 | FAIL |
+| BTC daily | 2.0 to 2.9 | 0.4 to 1.6 | FAIL |
+| ETH daily | 2.5 to 3.3 (3 of 6 clear every gate) | 1.0 to 2.3 | FAIL (needed 4 of 6); closest; Sharpe 1.01 vs 0.72, worst drop -52% |
+| USTEC 1-hour | 0.8 to 1.8 | -0.6 to 0.9 | FAIL |
+| US500 1-hour | 1.1 to 2.2 | -0.7 to 0.8 | FAIL |
+
+Reading: long-only Supertrend mostly just follows buy-and-hold with smaller drops. The short side loses on every index. Intraday it is weaker still.
+
+## Batch 23: low-risk daily candidates for a $3,000 account (minimum lots, swap-free)
+Single rules (daily bars; judged 2013-now, BTC 2020-now; the pre-2024 slice must be positive):
+| rule | verdict | t | random-timing placebo | pre-2024 per year | 2024-now | worst drop since 2016 |
+|---|---|---|---|---|---|---|
+| USTEC IBS (base) | PASS | 4.56 | 99% | $198 | +$426 | -$154 |
+| F1 IBS only while calm (vol < 20%) | PASS | 3.15 | 97% | $81 | +$87 | -$90 |
+| F2 IBS only above SMA200 | PASS | 4.14 | 100% | $118 | +$338 | -$130 |
+| F3 BTC Williams only above SMA50 | fail (the filter is no better than a random filter, 86%) | 5.39 | 86% | $354 | +$457 | -$140 |
+| F4 buy USTEC after a BTC day down 5%+ | fail | 0.85 | 68% | $37 | +$71 | -$230 |
+| F5 IBS overnight only (close -> next open) | fail | 2.80 | 94% | $56 | +$231 | -$166 |
+| US500 IBS (daily bars) | PASS | 3.61 | 100% | $98 | +$230 | -$155 |
+
+The US500 IBS pass is on daily bars. With realistic 16:10 fills (batch 8) it was weaker (t 2.72). Calm USTEC had a 94% placebo with this seed (96-98% before).
+
+$3,000 portfolios, one minimum lot per rule, no optimisation. BTC is valued at today's 0.01-lot size (~$630) in every year, so the BTC dollars for 2016-2019 are scaled up. The 2024-now column is the realistic one.
+| portfolio | 2016-23 per year (worst drop) | 2024-now per year (worst drop) | per trading day since 2024 | worst drop 2016-now | losing years |
+|---|---|---|---|---|---|
+| P3 USTEC IBS + BTC Williams + Calm USTEC | $1,083 (-$244) | $444 (-$269) | $1.76 | -$269 (9.0%) | 0 of 11 |
+| P5 USTEC IBS + US500 IBS + BTC Williams | $1,046 (-$238) | $422 (-$231) | $1.67 | -$238 (7.9%) | 0 of 11 |
+| P6 USTEC IBS above SMA200 + US500 IBS + BTC Williams | $946 (-$238) | $391 (-$158) | $1.55 | -$238 (7.9%) | 0 of 11 |
+| P1 USTEC IBS + BTC Williams | $934 (-$239) | $342 (-$146) | $1.36 | -$239 (8.0%) | 0 of 11 |
+| P2 P1 + BTC Donchian | $1,375 (-$372) | $460 (-$232) | $1.83 | -$372 (12.4%, over the limit) | 0 of 11 |
+| P4 all four | $1,524 (-$372) | $561 (-$341) | $2.23 | -$372 (12.4%, over) | 0 of 11 |
+
+## Batch 24: new edges (Williams breakout on other markets, pairs)
+- Williams breakout on single alt coins passes: XRP t 3.28, BCH 3.85, LINK 3.71. Every coin tested was positive in-sample. Hourly-built bars confirm the crypto daily data is genuine.
+- 24b, an 11-coin basket ($250 per coin): t 3.69, placebo 100%, about $1,100/yr since 2024, worst drop -$681 (too big). At $100 per coin, scaled: about $440/yr, worst about -$270. Correlation with USTEC IBS 0.17.
+- Stocks Williams fail (t 1.50). USTEC/US500 and ETH/BTC pairs fail.
+- 24c: copper and silver Williams "passes" (t 8.85 / 5.17) were Yahoo futures daily-bar artifacts: on bars built from hourly data they showed t 0.60 / 1.06. Natural gas and platinum fail. IBS on commodities fails.
+- On paper from 2026-11-28: crypto_williams_paper.py (10 coins, $100 each, 5 bp, -$300 basket kill). Replay over Nov 1-27 2026: -$27 (53 fills, 20 won). UNCONFIRMED: Exness alt-coin min lots and spreads.
+
+## Batch 25: free "Bloomberg-style" data as filters (2026-11-28)
+FRED, CBOE, Coinmetrics and Binance downloads were refused in this session, so free Yahoo proxies were used: yield curve (10y-3m), credit (HYG/IEF), VIX term structure, dollar index, MOVE bond vol, SKEW, consumer risk appetite (XLY/XLP), QQQ trend.
+Result: 0 of 31 filter tests helped (chosen on pre-2024, confirmed on 2024-now, against random gates). Filters mostly cut profit more than risk.
+Closest: bond-vol-low on the coin basket (passed pre-2024, failed 2024-now) and on BTC Williams (worst drop -$250 -> -$150, but profit roughly halved, placebo 91%).
+Not tested: jobless claims and financial-conditions index (FRED), funding rates and exchange flows (crypto), because those sources were blocked; oil inventories (no oil candidate).
+
+## Batch 26: hourly and 15-minute rules at full Exness spreads (2026-11-28)
+23 rules: opening-range breakout with daily trend, RSI(2) on 15m and 60m, EMA20/50 trend on 15m and 60m with daily filter, gap fade,
+last-half-hour momentum (USTEC, US500 5-min 2016-26); London breakout, hourly RSI(2), hourly EMA trend (BTC, ETH, gold, hourly 2024-26).
+Result: 0 pass. Index rules: best was USTEC EMA trend 15m (+$753 2016-22, t 1.84, but +$91 2023-26, no better than random times).
+RSI(2) intraday lost in nearly every year (57% win rate, still losing). Near misses (only 2 years of hourly data):
+| rule | trades/wk | 2025 | 2026 | worst | t | placebo |
+|---|---|---|---|---|---|---|
+| ETH London breakout ($1,000) | 4.0 | +$1,008 | +$654 | -$146 | 2.98 | 100% |
+| Gold London breakout (1 oz) | 2.8 | +$70 | +$1,189 | -$410 | 1.82 | 98% |
+| Gold EMA trend 60m | 1.1 | +$710 | +$936 | -$302 | 1.71 | 98% |
+ETH London breakout is on paper as WATCH ONLY from 2026-11-28 (eth_london_paper.py; replay Nov 1-27: 17 trades, +$168).
+
+## Batch 27: hourly near misses before 2024 (Binance hourly data)
+| rule | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 | 2026 | worst drop |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| ETH London breakout ($1,000) | -49 | +1,289 | +487 | +1,815 | +991 | +29 | -98 | +192 | +666 | +437 | -$672 |
+| Gold London breakout (1 oz, PAXG proxy) | | | | -122 | -1,269 | -503 | -983 | -1,245 | -513 | +1,493 | -$4,710 |
+| Gold EMA trend 60m (1 oz, PAXG proxy) | | | | -197 | -493 | -175 | -38 | -258 | +414 | +610 | -$1,212 |
+ETH: PASS on the long data (2017-23 t 3.58, placebo 100%; 2024-now t 2.00), 4 trades a week; at $1,000 the worst drop is -$672, so about $400-500 of ETH
+fits a $3k account (worst about -$270 to -$340). Gold: fail (PAXG is a token proxy, noisier than XAUUSD; the 2024-26 numbers differ from GC=F).
+
+## Batches 28-30: one fixed WORTHY bar (trader-lab/judge.py), candle brain v2, oil brain v2, new session breakouts (2026-11-28)
+Bar: before 2024 net > 0 and t >= 2; 2024-now net > 0 and t >= 1; whole t >= 3; 2x costs positive; beats 95% of random timing; worst drop within -$300 at today's min lot; distinct = corr <= 0.5.
+| rank | candidate | size | yearly $ (2024, 2025, 2026 to Nov) | worst drop | whole t |
+|---|---|---|---|---|---|
+| 1 | BTC Williams breakout | 0.01 lot | +391, -21, +151 | -$237 | 9.32 |
+| 2 | USTEC IBS | 0.05 lot | +63, +327, +65 | -$200 | 4.56 |
+| 3 | Coin Williams basket (10 alts) | $100 each | +640, +177, +375 | -$255 | 3.57 |
+| 4 | ETH London breakout | 0.2 lot (~$330) | +28, +184, +114 | -$259 | 3.57 |
+| (dup) | US500 IBS | 0.14 lot | +118, +131, -3 | -$167 | 3.61 (corr 0.75 with USTEC IBS) |
+Failed the bar: Calm USTEC (no better than random timing), BTC Donchian (drop -$447), ETH 7-day momentum, BTC London breakout (t 2.70, drop -$337),
+ETH/BTC US-session breakouts, alt London basket, gold IBS / turn of month / Williams (1 oz drops -$510 to -$660), oil Williams;
+candle brain v2 0 of 19 (inside-day breakouts on BTC/ETH/gold worked before 2024, flat since); oil brain v2 0 of 4 (inventories, COT hedging pressure, curve).

@@ -1,0 +1,15 @@
+N1 ETH London breakout 0.2 lot     WORTHY | pre-24 $+1280 t 3.23 | 24-now $+326 t 1.52 | all t 3.57 | 2x $+1109 | random 100% | worst $-259
+      2018 +390 2019 +129 2020 +567 2021 +292 2022 -27 2023 -70 2024 +28 2025 +184 2026 +114
+P1 alt London breakout basket      fail   | pre-24 $+678 t 1.48 | 24-now $-484 t -1.78 | all t 0.37 | 2x $-469 | random 100% | worst $-1024 | failed: before_2024, since_2024, whole_t, double_cost, worst_drop
+      2020 +634 2021 +394 2022 -168 2023 -182 2024 -155 2025 -214 2026 -115
+P2 BTC US-session breakout         fail   | pre-24 $+395 t 0.87 | 24-now $+253 t 1.11 | all t 1.28 | 2x $+489 | random  96% | worst $-361 | failed: before_2024, whole_t, worst_drop
+      2018 +82 2019 +113 2020 +311 2021 -53 2022 -148 2023 +91 2024 +163 2025 +51 2026 +38
+P3 ETH US-session breakout         fail   | pre-24 $+266 t 0.90 | 24-now $+443 t 2.40 | all t 2.04 | 2x $+344 | random 100% | worst $-279 | failed: before_2024, whole_t
+      2018 +107 2019 -62 2020 +319 2021 +28 2022 -143 2023 +17 2024 +51 2025 +274 2026 +118
+
+WORTHY: ['BTC Williams', 'USTEC IBS', 'US500 IBS', 'Coin Williams basket', 'N1 ETH London breakout 0.2 lot']
+  BTC Williams                       corr  -> DISTINCT
+  USTEC IBS                          corr BTC Williams 0.06 -> DISTINCT
+  US500 IBS                          corr BTC Williams 0.04, USTEC IBS 0.75 -> near-duplicate
+  Coin Williams basket               corr BTC Williams 0.33, USTEC IBS 0.10 -> DISTINCT
+  N1 ETH London breakout 0.2 lot     corr BTC Williams 0.10, USTEC IBS 0.00, Coin Williams  0.09 -> DISTINCT

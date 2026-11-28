@@ -1,0 +1,71 @@
+=== A. existing candidates
+USTEC IBS                          WORTHY | pre-24 $+2323 t 4.36 | 24-now $+455 t 1.55 | all t 4.56 | 2x $+2722 | random 100% | worst $-200
+      2013 +154 2014 +109 2015 +51 2016 +77 2017 +209 2018 +183 2019 +110 2020 +794 2021 +219 2022 +144 2023 +273 2024 +63 2025 +327 2026 +65
+US500 IBS                          WORTHY | pre-24 $+1153 t 3.31 | 24-now $+247 t 1.44 | all t 3.61 | 2x $+1339 | random 100% | worst $-167
+      2013 +83 2014 +102 2015 +4 2016 +119 2017 +53 2018 -108 2019 +74 2020 +436 2021 +121 2022 +191 2023 +77 2024 +118 2025 +131 2026 -3
+BTC Williams                       WORTHY | pre-24 $+5260 t 9.19 | 24-now $+522 t 2.21 | all t 9.32 | 2x $+5630 | random 100% | worst $-237
+      2016 +722 2017 +1129 2018 +597 2019 +747 2020 +975 2021 +409 2022 +243 2023 +436 2024 +391 2025 -21 2026 +151
+Calm USTEC (vol < 20%)             fail   | pre-24 $+1925 t 3.62 | 24-now $+313 t 0.98 | all t 3.61 | 2x $+2233 | random  66% | worst $-225 | failed: since_2024, random_timing
+      2013 +427 2014 +102 2015 +126 2016 +17 2017 +385 2018 +81 2019 +218 2020 +113 2021 +190 2022 +0 2023 +265 2024 +261 2025 +51 2026 +1
+BTC Donchian 20/10                 fail   | pre-24 $+3329 t 4.27 | 24-now $+319 t 1.05 | all t 4.36 | 2x $+3642 | random 100% | worst $-447 | failed: worst_drop
+      2016 +457 2017 +1264 2018 -212 2019 +348 2020 +833 2021 +450 2022 -226 2023 +415 2024 +326 2025 -50 2026 +44
+ETH 7-day momentum                 fail   | pre-24 $+2244 t 3.01 | 24-now $+274 t 0.73 | all t 3.01 | 2x $+2405 | random 100% | worst $-457 | failed: since_2024, worst_drop
+      2018 +211 2019 +391 2020 +638 2021 +851 2022 +18 2023 +136 2024 +164 2025 +102 2026 +8
+Coin Williams basket               WORTHY | pre-24 $+877 t 2.40 | 24-now $+1191 t 2.66 | all t 3.57 | 2x $+1767 | random 100% | worst $-255
+      2022 +98 2023 +779 2024 +640 2025 +177 2026 +375
+ETH London breakout                fail   | pre-24 $+1940 t 3.23 | 24-now $+493 t 1.52 | all t 3.57 | 2x $+1680 | random 100% | worst $-392 | failed: worst_drop
+      2018 +591 2019 +195 2020 +859 2021 +442 2022 -40 2023 -107 2024 +43 2025 +278 2026 +172
+=== B. candle brain v2
+CB1 USTEC bull candle at 10d low   fail   | pre-24 $-52 t -0.92 | 24-now $+90 t 1.67 | all t 0.48 | 2x $+37 | random  60% | worst $-68 | failed: before_2024, whole_t, random_timing
+      2013 +0 2014 +10 2015 +0 2016 -64 2017 +11 2018 +0 2019 +0 2020 +0 2021 +0 2022 +0 2023 -9 2024 +46 2025 +44 2026 +0
+CB3 USTEC inside-day breakout      fail   | pre-24 $-50 t -0.54 | 24-now $-53 t -0.72 | all t -0.87 | 2x $-124 | random  20% | worst $-115 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 +3 2014 -30 2015 -12 2016 -23 2017 +8 2018 +4 2019 -22 2020 +1 2021 +25 2022 +7 2023 -12 2024 +17 2025 -51 2026 -18
+CB1 US500 bull candle at 10d low   fail   | pre-24 $+46 t 1.88 | 24-now $-8 t -0.40 | all t 1.17 | 2x $+37 | random  93% | worst $-20 | failed: before_2024, since_2024, whole_t, random_timing
+      2013 +0 2014 +0 2015 +0 2016 +0 2017 +0 2018 +8 2019 +0 2020 +10 2021 +18 2022 +9 2023 +0 2024 -8 2025 +0 2026 +0
+CB3 US500 inside-day breakout      fail   | pre-24 $-94 t -1.54 | 24-now $-4 t -0.12 | all t -1.43 | 2x $-121 | random  12% | worst $-113 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 -0 2014 -12 2015 +4 2016 +4 2017 -4 2018 -4 2019 -9 2020 -24 2021 +6 2022 -28 2023 -27 2024 -3 2025 +22 2026 -22
+CB1 BTC bull candle at 10d low     fail   | pre-24 $+159 t 1.65 | 24-now $+4 t 0.35 | all t 1.68 | 2x $+161 | random  88% | worst $-30 | failed: before_2024, since_2024, whole_t, random_timing
+      2016 +2 2017 +22 2018 +56 2019 +0 2020 +21 2021 +36 2022 +0 2023 +21 2024 +4 2025 +0 2026 +0
+CB2 BTC bear candle at 10d high    fail   | pre-24 $-29 t -0.38 | 24-now $+10 t 0.99 | all t -0.24 | 2x $-19 | random  42% | worst $-62 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2016 +0 2017 +0 2018 -26 2019 +0 2020 +0 2021 +0 2022 +6 2023 -9 2024 +0 2025 +0 2026 +10
+CB3 BTC inside-day breakout        fail   | pre-24 $+1530 t 4.47 | 24-now $+16 t 0.13 | all t 4.24 | 2x $+1497 | random 100% | worst $-182 | failed: since_2024
+      2016 +134 2017 +295 2018 +360 2019 +178 2020 +193 2021 +107 2022 +108 2023 +156 2024 +106 2025 -153 2026 +63
+CB1 ETH bull candle at 10d low     fail   | pre-24 $+80 t 1.42 | 24-now $+3 t 0.13 | all t 1.36 | 2x $+80 | random  91% | worst $-19 | failed: before_2024, since_2024, whole_t, random_timing
+      2018 +0 2019 +0 2020 +9 2021 +52 2022 +0 2023 +18 2024 +13 2025 -11 2026 +0
+CB2 ETH bear candle at 10d high    fail   | pre-24 $-64 t -0.69 | 24-now $+0 t nan | all t -0.69 | 2x $-67 | random  22% | worst $-85 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2018 -45 2019 +12 2020 -33 2021 +0 2022 +0 2023 +2 2024 +0 2025 +0 2026 +0
+CB3 ETH inside-day breakout        fail   | pre-24 $+832 t 3.22 | 24-now $+130 t 0.79 | all t 3.14 | 2x $+830 | random 100% | worst $-135 | failed: since_2024
+      2018 +343 2019 -34 2020 +237 2021 +73 2022 +134 2023 +79 2024 -12 2025 +59 2026 +83
+CB1 GOLD bull candle at 10d low    fail   | pre-24 $-95 t -0.94 | 24-now $+0 t nan | all t -0.94 | 2x $-96 | random  17% | worst $-131 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 +0 2014 +0 2015 +0 2016 +0 2017 +0 2018 +0 2019 +0 2020 -83 2021 +0 2022 +0 2023 -12 2024 +0 2025 +0 2026 +0
+CB2 GOLD bear candle at 10d high   fail   | pre-24 $+58 t 1.13 | 24-now $+72 t 1.00 | all t 1.47 | 2x $+128 | random  96% | worst $-0 | failed: before_2024, since_2024, whole_t
+      2013 +0 2014 +51 2015 -0 2016 +0 2017 +0 2018 +2 2019 +0 2020 +0 2021 +0 2022 +5 2023 +0 2024 +0 2025 +0 2026 +72
+CB3 GOLD inside-day breakout       fail   | pre-24 $+833 t 2.57 | 24-now $+3 t 0.02 | all t 2.39 | 2x $+711 | random 100% | worst $-162 | failed: since_2024, whole_t
+      2013 +247 2014 +68 2015 -61 2016 +126 2017 +17 2018 -38 2019 +16 2020 +194 2021 +81 2022 +109 2023 +75 2024 +9 2025 +49 2026 -56
+CB1 OIL bull candle at 10d low     fail   | pre-24 $+35 t 0.81 | 24-now $+14 t 0.24 | all t 0.67 | 2x $+45 | random  76% | worst $-48 | failed: before_2024, since_2024, whole_t, random_timing
+      2013 +0 2014 -16 2015 +0 2016 +0 2017 +0 2018 +19 2019 +0 2020 +7 2021 +24 2022 +0 2023 +0 2024 +2 2025 +0 2026 +13
+CB2 OIL bear candle at 10d high    fail   | pre-24 $-32 t -0.57 | 24-now $-22 t -0.86 | all t -0.88 | 2x $-56 | random  11% | worst $-86 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 -0 2014 +0 2015 +22 2016 +0 2017 -4 2018 +0 2019 -50 2020 +0 2021 +0 2022 +0 2023 +0 2024 +0 2025 +0 2026 -22
+CB3 OIL inside-day breakout        fail   | pre-24 $-194 t -1.37 | 24-now $-49 t -0.51 | all t -1.42 | 2x $-348 | random  22% | worst $-275 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 -34 2014 -16 2015 -31 2016 -6 2017 -31 2018 -40 2019 -10 2020 -51 2021 -2 2022 +26 2023 +2 2024 +26 2025 -76 2026 +2
+CB1 EURUSD bull candle at 10d low  fail   | pre-24 $-92 t -2.91 | 24-now $-28 t -1.10 | all t -2.96 | 2x $-124 | random   0% | worst $-123 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 -19 2014 -4 2015 +0 2016 -14 2017 -8 2018 -6 2019 +0 2020 -9 2021 -13 2022 +0 2023 -19 2024 -10 2025 -13 2026 -5
+CB2 EURUSD bear candle at 10d high fail   | pre-24 $-90 t -1.64 | 24-now $-19 t -1.09 | all t -1.89 | 2x $-113 | random   0% | worst $-123 | failed: before_2024, since_2024, whole_t, double_cost, random_timing
+      2013 -4 2014 -3 2015 -65 2016 -5 2017 +1 2018 -6 2019 -12 2020 -24 2021 +8 2022 +18 2023 +0 2024 -2 2025 -17 2026 -1
+CB3 EURUSD inside-day breakout     fail   | pre-24 $-346 t -9.60 | 24-now $-99 t -4.84 | all t -10.74 | 2x $-475 | random   0% | worst $-445 | failed: before_2024, since_2024, whole_t, double_cost, random_timing, worst_drop
+      2013 -62 2014 -16 2015 -20 2016 -51 2017 -23 2018 -42 2019 -24 2020 -24 2021 -22 2022 -44 2023 -19 2024 -39 2025 -15 2026 -45
+=== C. oil brain v2
+O1 oil IBS when stocks below seasonal fail   | pre-24 $+52 t 0.23 | 24-now $-43 t -0.25 | all t 0.03 | 2x $-55 | random  54% | worst $-333 | failed: before_2024, since_2024, whole_t, double_cost, random_timing, worst_drop
+      2013 +0 2014 -15 2015 +0 2016 +0 2017 +0 2018 +78 2019 -67 2020 +0 2021 -26 2022 +200 2023 -116 2024 -33 2025 -46 2026 +36
+O2 oil hedging-pressure change     fail   | pre-24 $+290 t 0.28 | 24-now $-456 t -0.84 | all t -0.14 | 2x $-321 | random  46% | worst $-1503 | failed: before_2024, since_2024, whole_t, double_cost, random_timing, worst_drop
+      2013 +194 2014 +175 2015 -299 2016 -384 2017 -16 2018 +132 2019 -408 2020 +127 2021 -188 2022 +558 2023 +398 2024 -277 2025 -240 2026 +61
+O3 oil inventory surprise          fail   | pre-24 $-30 t -0.03 | 24-now $-638 t -1.18 | all t -0.57 | 2x $-828 | random  36% | worst $-1186 | failed: before_2024, since_2024, whole_t, double_cost, random_timing, worst_drop
+      2013 -10 2014 +211 2015 +53 2016 -391 2017 -24 2018 +385 2019 -178 2020 -182 2021 +385 2022 +45 2023 -324 2024 -71 2025 +314 2026 -881
+O4 oil backwardation + trend       fail   | pre-24 $+0 t 0.00 | 24-now $+277 t 0.68 | all t 0.46 | 2x $+208 | random  68% | worst $-443 | failed: before_2024, since_2024, whole_t, random_timing, worst_drop
+      2013 +16 2014 +30 2015 -30 2016 +20 2017 -3 2018 -60 2019 -140 2020 +87 2021 -45 2022 +249 2023 -124 2024 -123 2025 -80 2026 +479
+
+WORTHY: ['BTC Williams', 'USTEC IBS', 'US500 IBS', 'Coin Williams basket']
+  BTC Williams                             max corr with chosen 0.00 -> DISTINCT
+  USTEC IBS                                max corr with chosen 0.06 -> DISTINCT
+  US500 IBS                                max corr with chosen 0.75 -> near-duplicate
+  Coin Williams basket                     max corr with chosen 0.33 -> DISTINCT
