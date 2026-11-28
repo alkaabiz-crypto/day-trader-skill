@@ -1,11 +1,11 @@
 {
  "start": "2026-11-24",
- "days": 3,
+ "days": 4,
  "equity": 10000.0,
- "hold_btc": 10231.114442369822,
+ "hold_btc": 10136.072257010075,
  "in_btc": false,
  "max_drawdown_pct": 0.0,
- "last_close": 60486.48046875,
- "last_avg": 71920.19671875,
+ "last_close": 59924.58984375,
+ "last_avg": 71811.2193359375,
  "verdict": "PAPER"
 }
